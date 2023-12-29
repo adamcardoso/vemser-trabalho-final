@@ -1,5 +1,7 @@
 package entities;
 
+import entities.enums.TipoUsuario;
+
 import java.util.Date;
 
 public class Usuario {
@@ -11,9 +13,9 @@ public class Usuario {
     private Date dataNascimento;
     private String classeSocial;
     private String generoUsuario;
-    private String tipoUsuario;
+    TipoUsuario tipoUsuario;
 
-    public Usuario(int idUsuario, String nomeUsuario, String numeroCelular, String senhaUsuario, String etniaUsuario, Date dataNascimento, String classeSocial, String generoUsuario, String tipoUsuario) {
+    public Usuario(int idUsuario, String nomeUsuario, String numeroCelular, String senhaUsuario, String etniaUsuario, Date dataNascimento, String classeSocial, String generoUsuario, TipoUsuario tipoUsuario) {
         this.idUsuario = idUsuario;
         this.nomeUsuario = nomeUsuario;
         this.numeroCelular = numeroCelular;
@@ -25,7 +27,10 @@ public class Usuario {
         this.tipoUsuario = tipoUsuario;
     }
 
-    // Método de cadastrar usuario
+    // Método para cadastrar usuário
+    public static Usuario cadastrarUsuario(int idUsuario, String nomeUsuario, String numeroCelular, String senhaUsuario, String etniaUsuario, Date dataNascimento, String classeSocial, String generoUsuario, TipoUsuario tipoUsuario) {
+        return new Usuario(idUsuario, nomeUsuario, numeroCelular, senhaUsuario, etniaUsuario, dataNascimento, classeSocial, generoUsuario, tipoUsuario);
+    }
 
     public int getIdUsuario() {
         return idUsuario;
@@ -91,11 +96,11 @@ public class Usuario {
         this.generoUsuario = generoUsuario;
     }
 
-    public String getTipoUsuario() {
+    public TipoUsuario getTipoUsuario() {
         return tipoUsuario;
     }
 
-    public void setTipoUsuario(String tipoUsuario) {
+    public void setTipoUsuario(TipoUsuario tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
     }
 

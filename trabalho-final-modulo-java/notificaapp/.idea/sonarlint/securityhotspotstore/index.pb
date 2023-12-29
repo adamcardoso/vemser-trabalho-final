@@ -7,3 +7,5 @@ L
 src/application/Usuario.java,9\0\90b58a075a9abcb38c2db54955cbe4112d9f4b75
 I
 src/entities/Usuario.java,b\5\b514305466850a0f1bce94fa4c632183451afbaa
+S
+#src/entities/enums/TipoUsuario.java,d\8\d8ab1585528779ac672414b8d30c27a128159db2
