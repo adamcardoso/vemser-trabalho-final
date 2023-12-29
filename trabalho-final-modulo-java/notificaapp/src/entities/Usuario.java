@@ -13,7 +13,7 @@ public class Usuario {
     private Date dataNascimento;
     private String classeSocial;
     private String generoUsuario;
-    TipoUsuario tipoUsuario;
+    private TipoUsuario tipoUsuario;
 
     public Usuario(int idUsuario, String nomeUsuario, String numeroCelular, String senhaUsuario, String etniaUsuario, Date dataNascimento, String classeSocial, String generoUsuario, TipoUsuario tipoUsuario) {
         this.idUsuario = idUsuario;
