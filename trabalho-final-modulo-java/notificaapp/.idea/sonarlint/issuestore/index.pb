@@ -1,5 +1,7 @@
 
-=
-src/Main.java,9\2\924f089edb4af5ee45c8a9d1129cd28e2b368138
+F
+src/entities/Menu.java,2\0\201a20c85ef9bf2250cb1fe225d5a561a1c52c92
 I
-src/application/Main.java,8\d\8dd39b27bbecf58d30bde4cb59516e5bb7832dd9
+src/entities/Usuario.java,b\5\b514305466850a0f1bce94fa4c632183451afbaa
+S
+#src/entities/enums/TipoUsuario.java,d\8\d8ab1585528779ac672414b8d30c27a128159db2
