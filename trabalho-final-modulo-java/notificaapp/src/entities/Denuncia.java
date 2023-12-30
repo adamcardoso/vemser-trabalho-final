@@ -1,8 +1,6 @@
-package application;
+package entities;
 
-import java.time.DateTimeException;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class Denuncia {
     int idDenuncia;
