@@ -3,8 +3,8 @@ package interfaces;
 import application.Denuncia;
 
 public interface IDenuncia {
-    void CadastrarDenuncia(Denuncia denuncia);
-    void EditarDenuncia(int idDenuncia, Denuncia novaDenuncia);
-    boolean ValidarDenuncia(int idDenuncia);
-    void ExcluirDenuncia(int idDenuncia);
+    void cadastrarDenuncia(Denuncia denuncia);
+    void editarDenuncia(int idDenuncia, Denuncia novaDenuncia);
+    boolean validarDenuncia(int idDenuncia);
+    void excluirDenuncia(int idDenuncia);
 }
