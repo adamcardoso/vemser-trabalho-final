@@ -1,6 +1,6 @@
 package interfaces;
 
-import application.Denuncia;
+import entities.Denuncia;
 
 public interface IDenuncia {
     void cadastrarDenuncia(Denuncia denuncia);
