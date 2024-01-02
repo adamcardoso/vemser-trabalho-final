@@ -1,10 +1,11 @@
 package entities;
 
 import entities.enums.TipoUsuario;
+import interfaces.IUsuario;
 
 import java.util.Date;
 
-public class Usuario {
+public class Usuario implements IUsuario {
     private int idUsuario;
     private String nomeUsuario;
     private String numeroCelular;
@@ -116,4 +117,11 @@ public class Usuario {
     public int hashCode() {
         return idUsuario;
     }
+
+    @Override
+    public void cadastrarUsuario(Usuario usuario) {
+
+    }
+
+
 }
