@@ -28,11 +28,6 @@ public class Usuario implements IUsuario {
         this.tipoUsuario = tipoUsuario;
     }
 
-    // Método para cadastrar usuário
-    public static Usuario cadastrarUsuario(int idUsuario, String nomeUsuario, String numeroCelular, String senhaUsuario, String etniaUsuario, Date dataNascimento, String classeSocial, String generoUsuario, TipoUsuario tipoUsuario) {
-        return new Usuario(idUsuario, nomeUsuario, numeroCelular, senhaUsuario, etniaUsuario, dataNascimento, classeSocial, generoUsuario, tipoUsuario);
-    }
-
     public int getIdUsuario() {
         return idUsuario;
     }
@@ -120,6 +115,7 @@ public class Usuario implements IUsuario {
 
     @Override
     public void cadastrarUsuario(Usuario usuario) {
+
 
     }
     @Override
