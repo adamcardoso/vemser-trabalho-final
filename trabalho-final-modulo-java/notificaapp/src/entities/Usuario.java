@@ -122,6 +122,8 @@ public class Usuario implements IUsuario {
     public void cadastrarUsuario(Usuario usuario) {
 
     }
+    @Override
+    public void excluirUsuario(int idUsuario) {
 
-
+    }
 }
