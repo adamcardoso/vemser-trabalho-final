@@ -12,6 +12,18 @@
 - Denúncia
 - Localização
 - CategoriaProblema
+- Menu
+
+## Enums:
+
+- Categoria
+- Situacao
+- TipoUsuario
+
+## Interfaces: 
+
+- IDenuncia
+- IUsuario
 
 ## Diagrama Link
 
