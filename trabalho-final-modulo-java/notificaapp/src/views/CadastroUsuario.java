@@ -1,8 +1,6 @@
 package views;
 
-import entities.Denuncia;
 import entities.Usuario;
-import interfaces.IUsuario;
 import interfaces.IUsuarioCadastro;
 
 import java.util.ArrayList;
@@ -10,7 +8,7 @@ import java.util.ArrayList;
 public class CadastroUsuario implements IUsuarioCadastro {
 
     @Override
-    public Usuario cadastrarUsuario() {
+    public Usuario cadastrarUsuario(Usuario usuario) {
         return null;
     }
 

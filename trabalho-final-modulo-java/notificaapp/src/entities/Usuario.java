@@ -1,7 +1,6 @@
 package entities;
 
 import entities.enums.TipoUsuario;
-import interfaces.IUsuario;
 
 import java.util.Date;
 

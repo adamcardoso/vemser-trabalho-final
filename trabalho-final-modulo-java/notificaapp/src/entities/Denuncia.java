@@ -1,11 +1,13 @@
 package entities;
 
 import entities.enums.Situacao;
-import interfaces.IDenuncia;
+
+import interfaces.IDenunciaCadastro;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
-public class Denuncia implements IDenuncia {
+public class Denuncia implements IDenunciaCadastro {
     private int idDenuncia;
     private String descricao;
     private Localizacao local;
@@ -81,22 +83,23 @@ public class Denuncia implements IDenuncia {
     }
 
     @Override
-    public void cadastrarDenuncia(Denuncia denuncia) {
-        System.out.println("Cadastrar denuncia");
+    public Denuncia cadastrarDenuncia(Denuncia denuncia) {
+        return null;
     }
 
     @Override
-    public void editarDenuncia(int idDenuncia, Denuncia novaDenuncia) {
-        System.out.println("Editar denuncia");
+    public Denuncia editarDenuncia(int idDenuncia) {
+        return null;
     }
 
     @Override
-    public void excluirDenuncia(int idDenuncia) {
-        System.out.println("Excluir denuncia!");
+    public int excluirDenuncia(ArrayList<Denuncia> denuncia) {
+        return 0;
     }
 
     @Override
-    public boolean validarDenuncia(int idDenuncia) {
-        return false;
+    public void visualizarDenuncia() {
+
     }
+
 }

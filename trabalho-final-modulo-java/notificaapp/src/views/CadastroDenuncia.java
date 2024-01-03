@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class CadastroDenuncia implements IDenunciaCadastro {
 
     @Override
-    public Denuncia cadastrarDenuncia() {
+    public Denuncia cadastrarDenuncia(Denuncia denuncia) {
         return null;
     }
 
