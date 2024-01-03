@@ -125,6 +125,6 @@ public class Usuario implements IUsuario {
 
     @Override
     public void excluirUsuario(int idUsuario) {
-
+        System.out.println("Excluir usuário");
     }
 }
