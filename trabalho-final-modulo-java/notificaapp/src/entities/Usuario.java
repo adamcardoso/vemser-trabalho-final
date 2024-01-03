@@ -118,6 +118,12 @@ public class Usuario implements IUsuario {
 
 
     }
+
+    @Override
+    public void editarUsuario(int idUsuario, Usuario novoUsuario) {
+
+    }
+
     @Override
     public void excluirUsuario(int idUsuario) {
 
