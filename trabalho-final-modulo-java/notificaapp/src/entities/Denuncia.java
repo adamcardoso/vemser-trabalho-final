@@ -1,5 +1,6 @@
 package entities;
 
+import entities.enums.Situacao;
 import interfaces.IDenuncia;
 
 import java.time.LocalDateTime;
@@ -11,14 +12,16 @@ public class Denuncia implements IDenuncia {
     private Usuario usuario;
     private LocalDateTime dataHora;
     private String statusDenuncia;
+    private Situacao situacao;
 
-    public Denuncia(int idDenuncia, String descricao, Localizacao local, Usuario usuario, LocalDateTime dataHora, String statusDenuncia) {
+    public Denuncia(int idDenuncia, String descricao, Localizacao local, Usuario usuario, LocalDateTime dataHora, String statusDenuncia, Situacao situacao) {
         this.idDenuncia = idDenuncia;
         this.descricao = descricao;
         this.local = local;
         this.usuario = usuario;
         this.dataHora = dataHora;
         this.statusDenuncia = statusDenuncia;
+        this.situacao = situacao;
     }
 
     public int getIdDenuncia() {
@@ -67,6 +70,14 @@ public class Denuncia implements IDenuncia {
 
     public void setStatusDenuncia(String statusDenuncia) {
         this.statusDenuncia = statusDenuncia;
+    }
+
+    public Situacao getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(Situacao situacao) {
+        this.situacao = situacao;
     }
 
     @Override

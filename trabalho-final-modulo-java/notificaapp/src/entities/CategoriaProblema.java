@@ -1,13 +1,17 @@
 package entities;
 
+import entities.enums.Categoria;
+
 public class CategoriaProblema {
     private int idCategoriaProblema;
     private String nomeCategoriaProblema;
+    private Categoria categoria;
     private String descricaoCategoriaProblema;
 
-    public CategoriaProblema(int idCategoriaProblema, String nomeCategoriaProblema, String descricaoCategoriaProblema) {
+    public CategoriaProblema(int idCategoriaProblema, String nomeCategoriaProblema, Categoria categoria, String descricaoCategoriaProblema) {
         this.idCategoriaProblema = idCategoriaProblema;
         this.nomeCategoriaProblema = nomeCategoriaProblema;
+        this.categoria = categoria;
         this.descricaoCategoriaProblema = descricaoCategoriaProblema;
     }
 
@@ -33,5 +37,13 @@ public class CategoriaProblema {
 
     public void setDescricaoCategoriaProblema(String descricaoCategoriaProblema) {
         this.descricaoCategoriaProblema = descricaoCategoriaProblema;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 }
