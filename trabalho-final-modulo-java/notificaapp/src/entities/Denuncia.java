@@ -80,12 +80,12 @@ public class Denuncia implements IDenuncia {
     }
 
     @Override
-    public boolean validarDenuncia(int idDenuncia) {
-        return false;
+    public void excluirDenuncia(int idDenuncia) {
+        System.out.println("Excluir denuncia!");
     }
 
     @Override
-    public void excluirDenuncia(int idDenuncia) {
-        System.out.println("Excluir denuncia");
+    public boolean validarDenuncia(int idDenuncia) {
+        return false;
     }
 }
