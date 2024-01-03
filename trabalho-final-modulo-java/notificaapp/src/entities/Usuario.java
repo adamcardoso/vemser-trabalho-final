@@ -27,6 +27,8 @@ public class Usuario {
         this.tipoUsuario = tipoUsuario;
     }
 
+    public Usuario() {}
+
     public int getIdUsuario() {
         return idUsuario;
     }
@@ -111,5 +113,4 @@ public class Usuario {
     public int hashCode() {
         return idUsuario;
     }
-
 }

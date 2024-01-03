@@ -6,11 +6,11 @@ import java.util.ArrayList;
 
 public interface IDenunciaCadastro {
 
-    Denuncia cadastrarDenuncia(Denuncia denuncia);
+    Denuncia cadastrarDenuncia();
 
     Denuncia editarDenuncia(int idDenuncia);
 
     int excluirDenuncia(ArrayList<Denuncia> denuncia);
 
-    void visualizarDenuncia();
+    void visualizarDenuncia(Denuncia denuncia);
 }
