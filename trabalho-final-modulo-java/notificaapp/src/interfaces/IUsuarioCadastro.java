@@ -6,11 +6,11 @@ import java.util.ArrayList;
 
 public interface IUsuarioCadastro {
 
-    Usuario cadastrarUsuario(Usuario usuario);
+    Usuario cadastrarUsuario();
 
     Usuario editarUsuario(int idUsuario);
 
-    int excluirUsuario(ArrayList<Usuario> usuario);
+    void excluirUsuario(Usuario IdUsuarioLogado);
 
-    void visualizarUsuario();
+    void visualizarUsuario(Usuario usuario);
 }
