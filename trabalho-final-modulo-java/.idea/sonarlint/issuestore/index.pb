@@ -1,11 +1,29 @@
 
 U
 %notificaapp/src/entities/Usuario.java,2\f\2f6ec65fa4f735370c815205a4505b3d7488e4a5
-X
-(notificaapp/src/interfaces/IUsuario.java,a\6\a663062f61a0c7008a04a590edd4f9f0e2d9ed51
 ]
 -notificaapp/src/entities/enums/Categoria.java,6\8\68ce0a0e72e5a92787151ef99ea6dd991a12dddf
 \
 ,notificaapp/src/entities/enums/Situacao.java,3\d\3d717e2d4d5e7facb7df13a34e77d301e9501607
 _
 /notificaapp/src/entities/CategoriaProblema.java,8\1\81f76453e4f5cb8c672245859fcc3d2efd0b0aff
+V
+&notificaapp/src/entities/Denuncia.java,3\2\32da97ef7b19d55b19df8ac6002cdec21effe5b0
+Z
+*notificaapp/src/views/CadastroUsuario.java,d\3\d34631cf91d7209015a571a1cba2f16f48b35802
+[
++notificaapp/src/views/CadastroDenuncia.java,c\d\cd07bb0e7c57fbf430c2d870aa1a9bf96392c1f8
+a
+1notificaapp/src/interfaces/IDenunciaCadastro.java,0\6\069885a274c65e1efedff3ad15bc4b85757ecdbf
+O
+notificaapp/src/views/Home.java,5\b\5bbb386af17e2e865a5bd62324bb4a46302e2354
+F
+notificaapp/.gitignore,0\5\053d38eb1fdc643b94d3a897644e1e299f74cc36
+Y
+)notificaapp/src/entities/Localizacao.java,5\9\5904c10c3b127abae50a78506b142d8cc14147e1
+U
+%notificaapp/src/application/Main.java,3\6\36ccbe1e9f2696fb8ba56b718e208dff49c74287
+e
+5notificaapp/src/exceptions/InvalidInputException.java,a\5\a5f54209bc826f5f75d0992feca304022151d569
+i
+9notificaapp/src/exceptions/IndexOutOfBoundsException.java,2\9\2943f79506d46aedf9de8c8e0461557a3a59a594
