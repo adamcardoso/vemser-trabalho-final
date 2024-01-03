@@ -120,7 +120,7 @@ public class Usuario implements IUsuario {
 
     @Override
     public void editarUsuario(int idUsuario, Usuario novoUsuario) {
-
+        System.out.println("Editar usuário");
     }
 
     @Override
