@@ -1,25 +1,31 @@
 package entities;
 
-import interfaces.IDenuncia;
+import entities.enums.Categoria;
+import entities.enums.Situacao;
 
 import java.time.LocalDateTime;
 
-public class Denuncia implements IDenuncia {
+public class Denuncia{
+
     private int idDenuncia;
     private String descricao;
     private Localizacao local;
     private Usuario usuario;
     private LocalDateTime dataHora;
-    private String statusDenuncia;
+    private Situacao statusDenuncia;
+    private Categoria categoria;
 
-    public Denuncia(int idDenuncia, String descricao, Localizacao local, Usuario usuario, LocalDateTime dataHora, String statusDenuncia) {
+    public Denuncia(int idDenuncia, String descricao, Localizacao local, Usuario usuario, LocalDateTime dataHora, Situacao statusDenuncia, Categoria categoria) {
         this.idDenuncia = idDenuncia;
         this.descricao = descricao;
         this.local = local;
         this.usuario = usuario;
         this.dataHora = dataHora;
         this.statusDenuncia = statusDenuncia;
+        this.categoria = categoria;
     }
+
+    public Denuncia() {}
 
     public int getIdDenuncia() {
         return idDenuncia;
@@ -61,31 +67,20 @@ public class Denuncia implements IDenuncia {
         this.dataHora = dataHora;
     }
 
-    public String getStatusDenuncia() {
+
+    public Situacao getStatusDenuncia() {
         return statusDenuncia;
     }
 
-    public void setStatusDenuncia(String statusDenuncia) {
+    public void setStatusDenuncia(Situacao statusDenuncia) {
         this.statusDenuncia = statusDenuncia;
     }
 
-    @Override
-    public void cadastrarDenuncia(Denuncia denuncia) {
-        System.out.println("Cadastrar denuncia");
+    public Categoria getCategoria() {
+        return categoria;
     }
 
-    @Override
-    public void editarDenuncia(int idDenuncia, Denuncia novaDenuncia) {
-        System.out.println("Editar denuncia");
-    }
-
-    @Override
-    public void excluirDenuncia(int idDenuncia) {
-        System.out.println("Excluir denuncia!");
-    }
-
-    @Override
-    public boolean validarDenuncia(int idDenuncia) {
-        return false;
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 }

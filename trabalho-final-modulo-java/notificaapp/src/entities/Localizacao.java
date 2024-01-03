@@ -8,6 +8,8 @@ public class Localizacao {
         this.longitude = longitude;
     }
 
+    public Localizacao() {}
+
     public double getLatitute() {
         return latitute;
     }

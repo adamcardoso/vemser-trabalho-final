@@ -1,11 +1,10 @@
 package entities;
 
 import entities.enums.TipoUsuario;
-import interfaces.IUsuario;
 
 import java.util.Date;
 
-public class Usuario implements IUsuario {
+public class Usuario {
     private int idUsuario;
     private String nomeUsuario;
     private String numeroCelular;
@@ -27,6 +26,8 @@ public class Usuario implements IUsuario {
         this.generoUsuario = generoUsuario;
         this.tipoUsuario = tipoUsuario;
     }
+
+    public Usuario() {}
 
     public int getIdUsuario() {
         return idUsuario;
@@ -111,15 +112,5 @@ public class Usuario implements IUsuario {
     @Override
     public int hashCode() {
         return idUsuario;
-    }
-
-    @Override
-    public void cadastrarUsuario(Usuario usuario) {
-
-
-    }
-    @Override
-    public void excluirUsuario(int idUsuario) {
-
     }
 }
