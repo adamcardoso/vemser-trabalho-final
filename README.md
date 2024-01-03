@@ -27,7 +27,7 @@
 
 ## Diagrama Link
 
-Explore nosso diagrama clicando [aqui](https://lucid.app/lucidchart/e41bfd6f-a5a1-4133-a7b7-5fa85bf7cf64/edit?viewport_loc=-1209%2C-879%2C3940%2C2037%2C0_0&invitationId=inv_3c649ade-ef29-4321-90c6-c55875064a46)!
+Explore nosso diagrama clicando [aqui](https://lucid.app/lucidchart/5adf4b52-d0bf-42fa-be20-9cf1f0ab1121/edit?view_items=URV0b4~lnq6Z&invitationId=inv_7c44ca34-3e04-49e1-b59e-bd1d6714659d)!
 
 ## Nossa Equipe:
 
