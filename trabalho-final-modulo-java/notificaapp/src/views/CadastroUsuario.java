@@ -5,7 +5,6 @@ import entities.enums.TipoUsuario;
 import exceptions.InvalidInputException;
 import interfaces.IUsuarioCadastro;
 
-import java.util.Random;
 import java.util.Scanner;
 public class CadastroUsuario implements IUsuarioCadastro{
     Scanner scanner = new Scanner(System.in);
@@ -13,7 +12,7 @@ public class CadastroUsuario implements IUsuarioCadastro{
 
     @Override
     public Usuario cadastrarUsuario() {
-
+        //CRIADO LOGICA DE CADASTRAR - REVISÃO NECESSÁRIA
         Usuario usuario = new Usuario();
         try {
             int idUsuario = random.nextInt(1000);
@@ -85,6 +84,9 @@ public class CadastroUsuario implements IUsuarioCadastro{
         System.out.println("Senha do Usuário: " + usuario.getSenhaUsuario());
         System.out.println("Etnia do Usuário: " + usuario.getEtniaUsuario());
         System.out.println("Tipo do Usuário: " + usuario.getTipoUsuario());
+        System.out.println("Genero: " + usuario.getGeneroUsuario());
+        System.out.println("Data Nascimento: " + usuario.getDataNascimento());
+        System.out.println("Classe Social: " + usuario.getClasseSocial());
     }
 
 }
