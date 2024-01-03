@@ -1,8 +1,12 @@
 package views;
 
 import entities.Denuncia;
+import entities.Localizacao;
+import entities.Usuario;
+import entities.enums.Situacao;
 import interfaces.IDenunciaCadastro;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class CadastroDenuncia implements IDenunciaCadastro {

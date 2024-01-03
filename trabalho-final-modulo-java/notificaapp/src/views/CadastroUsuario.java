@@ -1,9 +1,11 @@
 package views;
 
 import entities.Usuario;
+import entities.enums.TipoUsuario;
 import interfaces.IUsuarioCadastro;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class CadastroUsuario implements IUsuarioCadastro {
 
@@ -11,7 +13,6 @@ public class CadastroUsuario implements IUsuarioCadastro {
     public Usuario cadastrarUsuario(Usuario usuario) {
         return null;
     }
-
     @Override
     public Usuario editarUsuario(int idUsuario) {
         return null;
