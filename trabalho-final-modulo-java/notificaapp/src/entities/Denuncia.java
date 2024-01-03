@@ -1,8 +1,10 @@
 package entities;
 
+import interfaces.IDenuncia;
+
 import java.time.LocalDateTime;
 
-public class Denuncia {
+public class Denuncia implements IDenuncia {
     private int idDenuncia;
     private String descricao;
     private Localizacao local;
@@ -65,5 +67,25 @@ public class Denuncia {
 
     public void setStatusDenuncia(String statusDenuncia) {
         this.statusDenuncia = statusDenuncia;
+    }
+
+    @Override
+    public void cadastrarDenuncia(Denuncia denuncia) {
+        System.out.println("Cadastrar denuncia");
+    }
+
+    @Override
+    public void editarDenuncia(int idDenuncia, Denuncia novaDenuncia) {
+        System.out.println("Editar denuncia");
+    }
+
+    @Override
+    public boolean validarDenuncia(int idDenuncia) {
+        return false;
+    }
+
+    @Override
+    public void excluirDenuncia(int idDenuncia) {
+        System.out.println("Excluir denuncia");
     }
 }
