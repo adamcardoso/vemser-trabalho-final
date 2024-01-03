@@ -27,3 +27,5 @@ e
 5notificaapp/src/exceptions/InvalidInputException.java,a\5\a5f54209bc826f5f75d0992feca304022151d569
 i
 9notificaapp/src/exceptions/IndexOutOfBoundsException.java,2\9\2943f79506d46aedf9de8c8e0461557a3a59a594
+`
+0notificaapp/src/interfaces/IUsuarioCadastro.java,3\c\3c90abe66bac1398684b539a035b55d251796afb
