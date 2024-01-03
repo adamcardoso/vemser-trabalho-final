@@ -115,7 +115,7 @@ public class Usuario implements IUsuario {
 
     @Override
     public void cadastrarUsuario(Usuario usuario) {
-        System.out.println("Cadastra usuário");
+        System.out.println("Cadastrar usuário");
     }
 
     @Override
