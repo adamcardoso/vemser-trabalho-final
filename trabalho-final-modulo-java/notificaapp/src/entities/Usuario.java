@@ -4,7 +4,7 @@ import entities.enums.TipoUsuario;
 
 import java.util.Date;
 
-public class Usuario implements IUsuario {
+public class Usuario {
     private int idUsuario;
     private String nomeUsuario;
     private String numeroCelular;
@@ -112,18 +112,4 @@ public class Usuario implements IUsuario {
         return idUsuario;
     }
 
-    @Override
-    public void cadastrarUsuario(Usuario usuario) {
-        System.out.println("Cadastrar usuário");
-    }
-
-    @Override
-    public void editarUsuario(int idUsuario, Usuario novoUsuario) {
-        System.out.println("Editar usuário");
-    }
-
-    @Override
-    public void excluirUsuario(int idUsuario) {
-        System.out.println("Excluir usuário");
-    }
 }
