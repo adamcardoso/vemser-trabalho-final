@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public interface IDenunciaCadastro {
 
-    Denuncia cadastrarDenuncia();
+    Denuncia cadastrarDenuncia(Denuncia denuncia);
 
     Denuncia editarDenuncia(int idDenuncia);
 

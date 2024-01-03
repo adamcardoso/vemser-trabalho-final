@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public interface IUsuarioCadastro {
 
-    Usuario cadastrarUsuario();
+    Usuario cadastrarUsuario(Usuario usuario);
 
     Usuario editarUsuario(int idUsuario);
 
