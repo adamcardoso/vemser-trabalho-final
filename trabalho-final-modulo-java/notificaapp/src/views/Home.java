@@ -22,6 +22,7 @@ public class Home {
         Denuncia novaDenuncia = null;
         int opcao = 0;
 
+        //IMPLEMENTANDO MENU NUMERICO
         do {
             System.out.println(" ------------- NOTIFICA -------------");
             System.out.println("1. Usuário");
@@ -130,6 +131,4 @@ public class Home {
 
     }
 
-    // TODO implementar a lógica de cadastro com scanf
-    //  nas classes de cadastroUsuario e cadastroDenuncia
 }
