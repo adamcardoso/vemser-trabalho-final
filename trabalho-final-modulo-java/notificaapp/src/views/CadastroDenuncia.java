@@ -16,6 +16,7 @@ public class CadastroDenuncia implements IDenunciaCadastro {
     @Override
 
     public Denuncia cadastrarDenuncia() {
+        //CRIADO LOGICA DE CADASTRAR - REVISÃO NECESSÁRIA
         Denuncia denuncia = new Denuncia();
         int idDenuncia = (int) (Math.random() * 1000);
         denuncia.setIdDenuncia(idDenuncia);
@@ -63,13 +64,13 @@ public class CadastroDenuncia implements IDenunciaCadastro {
 
     @Override
     public Denuncia editarDenuncia(int idDenuncia) {
-        //ADICIONAR LÓGICA
+        //ADICIONAR LÓGICA DE EDITAR
         return null;
     }
 
     @Override
     public int excluirDenuncia(ArrayList<Denuncia> denuncia) {
-        //ADICIONAR LÓGICA
+        //ADICIONAR LÓGICA DE EXCLUSÃO
         return 0;
     }
 
