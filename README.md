@@ -29,6 +29,29 @@
 
 Explore nosso diagrama clicando [aqui](https://lucid.app/lucidchart/5adf4b52-d0bf-42fa-be20-9cf1f0ab1121/edit?view_items=URV0b4~lnq6Z&invitationId=inv_7c44ca34-3e04-49e1-b59e-bd1d6714659d)!
 
+## Branches
+
+- main
+- develop
+- feat/Cadastrar-ExcluirUsuario
+- feat/CategoriaProblema
+- feat/CriandoInterfaces
+- feat/Denuncia
+- feat/DenunciaEditar
+- feat/Editar-Usuario
+- feat/EnumsCategoriaSituacao
+- feat/Excluir-ExcluirDenuncia
+- feat/FixInterface
+- feat/Localizacao
+- feat/Menu
+- feat/MetodoAcesso
+- feat/Usuario
+- feat/diagrama
+- feat/readme
+- fix/CorrigindoClasses
+- fix/MovendoClasses
+- fix/viewsInterfacesUMLReadme
+
 ## Nossa Equipe:
 
 Esse projeto foi desenvolvido pelos seguintes integrantes:
