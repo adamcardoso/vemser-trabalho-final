@@ -104,7 +104,21 @@ public class Home {
 
                                 break;
                             case 2:
-                                System.out.println("------------- Excluir Denuncia -------------");
+                                System.out.println("------------- Excluir Denúncia -------------");
+
+                                System.out.println("Digite o ID da Denúncia: ");
+
+                                idDenuncia = scanner.nextInt();
+
+                                denuncia = listagemDenuncia.get(idDenuncia);
+
+                                if (denuncia != null) {
+                                    System.out.println("Denúncia encontrada! Excluindo...");
+
+                                    cadastroDenuncia.excluirDenuncia(idDenuncia, listagemDenuncia);
+                                } else {
+                                    System.out.println("Denúncia não encontrada!");
+                                }
                                 break;
                             case 3:
                                 System.out.println("------------- Editar Denuncia -------------");
