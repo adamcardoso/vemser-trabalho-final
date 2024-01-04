@@ -4,6 +4,7 @@ import entities.Denuncia;
 import entities.Usuario;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Home {
@@ -17,9 +18,8 @@ public class Home {
     public void iniciarSistema(){
         Scanner scanner = new Scanner(System.in);
         CadastroUsuario cadastroU = new CadastroUsuario();
-        CadastroDenuncia cadastroD = new CadastroDenuncia();
+        HashMap<Integer, Denuncia> listagemDenuncia = new HashMap<>();
         Usuario novoUsuario = null;
-        Denuncia novaDenuncia = null;
         int opcao = 0;
 
         //IMPLEMENTANDO MENU NUMERICO
@@ -76,7 +76,14 @@ public class Home {
                     break;
                 case 2:
                     do {
+                        CadastroDenuncia cadastroDenuncia = new CadastroDenuncia();
+
+                        Denuncia denuncia = null;
+
+                        int idDenuncia = 0;
+
                         int opDenuncia= 0;
+
                         System.out.println(" ------------- NOTIFICA -------------");
                         System.out.println("1. Cadastrar Denuncia");
                         System.out.println("2. Excluir Denuncia");
@@ -89,8 +96,12 @@ public class Home {
 
                         switch (opDenuncia) {
                             case 1:
-                                System.out.println("------------- Cadastrar Denuncia -------------");
-                                novaDenuncia = cadastroD.cadastrarDenuncia();
+                                System.out.println("------------- Cadastrar Denúncia -------------");
+
+                                denuncia = cadastroDenuncia.cadastrarDenuncia();
+
+                                listagemDenuncia.put(denuncia.getIdDenuncia(), denuncia);
+
                                 break;
                             case 2:
                                 System.out.println("------------- Excluir Denuncia -------------");
@@ -100,11 +111,6 @@ public class Home {
                                 break;
                             case 4:
                                 System.out.println("------------- Visualizar Denuncia -------------");
-                                if (novaDenuncia == null) {
-                                    System.out.println("Nenhuma denúncia cadastrada ainda.");
-                                } else {
-                                    cadastroD.visualizarDenuncia(novaDenuncia);
-                                }
                                 break;
                             case 5:
                                 System.out.println("Saindo...");
@@ -128,7 +134,5 @@ public class Home {
         } while (opcao != 4);
 
         scanner.close();
-
     }
-
 }
