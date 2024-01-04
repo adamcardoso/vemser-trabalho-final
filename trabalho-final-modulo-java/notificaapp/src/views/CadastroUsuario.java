@@ -15,6 +15,165 @@ public class CadastroUsuario implements IUsuarioCadastro{
     Scanner scanner = new Scanner(System.in);
     private static final Random random = new Random();
 
+    private String digitarNomeUsuario(){
+        String nomeUsuario = null;
+        int tentativas = 0;
+        while (tentativas < 3){
+            tentativas++;
+            nomeUsuario = scanner.nextLine();
+
+            if (nomeUsuario.isEmpty()) {
+                System.out.println("Nome do usuário não pode ser vazio.\nVocê possui 3 tentativas, restam: " + (3-tentativas));
+            }else{
+                break;
+            }
+            if(tentativas == 3){
+                throw new InvalidInputException("Você ultrapassou o número de tentativas");
+            }
+        }
+        return nomeUsuario;
+    }
+
+    private String digitarCampoNumeroCelular(){
+        String numeroCelular = null;
+        int tentativas = 0;
+        while (tentativas < 3){
+            tentativas++;
+            numeroCelular = scanner.nextLine();
+
+            if (!numeroCelular.matches("\\d{10}")) {
+                System.out.println("Número de celular inválido. Deve conter 10 dígitos numéricos.\nVocê possui 3 tentativas, restam: " + (3-tentativas));
+            }else{
+                break;
+            }
+            if(tentativas == 3){
+                throw new InvalidInputException("Você ultrapassou o número de tentativas");
+            }
+        }
+        return numeroCelular;
+    }
+
+    private String digitarCampoSenha(){
+        String senhaUsuario = null;
+        int tentativas = 0;
+        while (tentativas < 3){
+            tentativas++;
+            senhaUsuario = scanner.nextLine();
+
+            if (senhaUsuario.length() < 6) {
+                System.out.println("Senha deve conter pelo menos 6 caracteres.\nVocê possui 3 tentativas, restam: " + (3-tentativas));
+            }else{
+                break;
+            }
+            if(tentativas == 3){
+                throw new InvalidInputException("Você ultrapassou o número de tentativas");
+            }
+        }
+        return senhaUsuario;
+    }
+    private String digitarCampoEtnia(){
+        String etnia = null;
+        int tentativas = 0;
+        while (tentativas < 3){
+            tentativas++;
+            etnia = scanner.nextLine();
+
+            if (etnia.isEmpty()) {
+                System.out.println("O campo etnia não pode ser vazio.\nVocê possui 3 tentativas, restam: " + (3-tentativas));
+            }else{
+                break;
+            }
+            if(tentativas == 3){
+                throw new InvalidInputException("Você ultrapassou o número de tentativas");
+            }
+        }
+        return etnia;
+    }
+
+    private Date digitarCampoData(){
+        Date dataNascimento = null;
+        int tentativas = 0;
+        while (tentativas < 3){
+            tentativas++;
+            String data = scanner.nextLine();
+            try {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                dateFormat.setLenient(false);
+
+                dataNascimento = dateFormat.parse(data);
+                return dataNascimento;
+            } catch (Exception e) {
+                System.out.println("Formato de data inválido. Certifique-se de usar o formato dd/MM/yyyy.\nVocê possui 3 tentativas, restam: " + (3-tentativas));
+            }
+            if(tentativas == 3){
+                throw new InvalidInputException("Você ultrapassou o número de tentativas");
+            }
+        }
+        return null;
+    }
+
+    private String digitarCampoClasseSocial(){
+        String classeSocial = null;
+        int tentativas = 0;
+        while (tentativas < 3){
+            tentativas++;
+            classeSocial = scanner.nextLine();
+
+            if (classeSocial.isEmpty()) {
+                System.out.println("O campo classe social não pode ser vazio.\nVocê possui 3 tentativas, restam: " + (3-tentativas));
+            }else{
+                break;
+            }
+            if(tentativas == 3){
+                throw new InvalidInputException("Você ultrapassou o número de tentativas");
+            }
+        }
+        return classeSocial;
+    }
+
+    private String digitarCampoGenero(){
+        String faixaSalarial = null;
+        int tentativas = 0;
+        while (tentativas < 3){
+            tentativas++;
+            faixaSalarial = scanner.nextLine();
+
+            if (faixaSalarial.isEmpty()) {
+                System.out.println("O campo genero não pode ser vazio.\nVocê possui 3 tentativas, restam: " + (3-tentativas));
+            }else{
+                break;
+            }
+            if(tentativas == 3){
+                throw new InvalidInputException("Você ultrapassou o número de tentativas");
+            }
+        }
+        return faixaSalarial;
+    }
+
+    private TipoUsuario digitarCampoTipoDeUsuario(){
+        for (TipoUsuario tipoUsuario : TipoUsuario.values()) {
+            System.out.println(tipoUsuario.ordinal() + " - " + tipoUsuario);
+        }
+
+        int opcaoTipo = 0;
+        int tentativas = 0;
+        while (tentativas < 3){
+            tentativas++;
+            opcaoTipo = scanner.nextInt();
+
+            if (opcaoTipo < 0 || opcaoTipo >= TipoUsuario.values().length) {
+                System.out.println("Opção de tipo de usuário inválida.\nVocê possui 3 tentativas, restam: " + (3-tentativas));
+            }else{
+                break;
+            }
+            if(tentativas == 3){
+                throw new InvalidInputException("Você ultrapassou o número de tentativas");
+            }
+        }
+        TipoUsuario tipo = TipoUsuario.values()[opcaoTipo];
+
+        return tipo;
+    }
     @Override
     public Usuario cadastrarUsuario() {
 
@@ -24,67 +183,39 @@ public class CadastroUsuario implements IUsuarioCadastro{
             usuario.setIdUsuario(idUsuario);
 
             System.out.println("Digite o nome do usuário:");
-            String nomeUsuario = scanner.nextLine();
-            if (nomeUsuario.isEmpty()) {
-                throw new InvalidInputException("Nome do usuário não pode ser vazio.");
-            }
-
+            String nomeUsuario = this.digitarNomeUsuario();
             usuario.setNomeUsuario(nomeUsuario);
 
             System.out.println("Digite o número do celular:");
-            String numeroCelular = scanner.nextLine();
-            if (!numeroCelular.matches("\\d{10}")) {
-                throw new InvalidInputException("Número de celular inválido. Deve conter 10 dígitos numéricos.");
-            }
-
+            String numeroCelular = this.digitarCampoNumeroCelular();
             usuario.setNumeroCelular(numeroCelular);
 
             System.out.println("Digite a senha do usuário:");
-            String senhaUsuario = scanner.nextLine();
-            if (senhaUsuario.length() < 6) {
-                throw new InvalidInputException("Senha deve conter pelo menos 6 caracteres.");
-            }
-
+            String senhaUsuario = this.digitarCampoSenha();
             usuario.setSenhaUsuario(senhaUsuario);
 
             System.out.println("Digite a Etnia:");
-            String etnia = scanner.nextLine();
-            usuario.setEtniaUsuario(etnia);
+            String etnia = this.digitarCampoEtnia();
+            //usuario.setEtniaUsuario(etnia);
 
             System.out.println("Digite sua data de nascimento (dd/MM/yyyy): ");
-            String data = scanner.nextLine();
+            Date dataNascimento = this.digitarCampoData();
+            usuario.setDataNascimento(dataNascimento);
 
-            try {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                dateFormat.setLenient(false);
-
-                Date dataNascimento = dateFormat.parse(data);
-                usuario.setDataNascimento(dataNascimento);
-            } catch (Exception e) {
-                System.out.println("Formato de data inválido. Certifique-se de usar o formato dd/MM/yyyy.");
-            }
 
             System.out.println("Digite sua faixa salárial:");
-            String classesocial = scanner.nextLine();
-            usuario.setEtniaUsuario( classesocial);
+            String classesocial = this.digitarCampoClasseSocial();
+            //usuario.setEtniaUsuario( classesocial);
 
             System.out.println("Digite o Genero:");
-            String genero = scanner.nextLine();
-            usuario.setEtniaUsuario(genero);
+            String genero = this.digitarCampoGenero();
+            //usuario.setEtniaUsuario(genero);
 
 
             System.out.println("Selecione o TipoUsuario:");
-            for (TipoUsuario tipoUsuario : TipoUsuario.values()) {
-                System.out.println(tipoUsuario.ordinal() + " - " + tipoUsuario);
-            }
-
-            int opcaoTipo = scanner.nextInt();
-            if (opcaoTipo < 0 || opcaoTipo >= TipoUsuario.values().length) {
-                throw new InvalidInputException("Opção de tipo de usuário inválida.");
-            }
-
-            TipoUsuario tipo = TipoUsuario.values()[opcaoTipo];
+            TipoUsuario tipo = this.digitarCampoTipoDeUsuario();
             usuario.setTipoUsuario(tipo);
+
         } catch (InvalidInputException e) {
             System.out.println("Tipo de entrada inválida: " + e.getMessage());
         }
@@ -98,67 +229,40 @@ public class CadastroUsuario implements IUsuarioCadastro{
             usuario.setIdUsuario(idUsuario);
             System.out.println("Digite o nome do usuário:");
 
-            String nomeUsuario = scanner.nextLine();
-
-            if (nomeUsuario.isEmpty()) {
-                throw new InvalidInputException("Nome do usuário não pode ser vazio.");
-            }
+            String nomeUsuario = this.digitarNomeUsuario();
 
             usuario.setNomeUsuario(nomeUsuario);
 
             System.out.println("Digite o número do celular:");
-            String numeroCelular = scanner.nextLine();
-            if (!numeroCelular.matches("\\d{10}")) {
-                throw new InvalidInputException("Número de celular inválido. Deve conter 10 dígitos numéricos.");
-            }
+            String numeroCelular = this.digitarCampoNumeroCelular();
 
             usuario.setNumeroCelular(numeroCelular);
 
             System.out.println("Digite a senha do usuário:");
-            String senhaUsuario = scanner.nextLine();
-            if (senhaUsuario.length() < 6) {
-                throw new InvalidInputException("Senha deve conter pelo menos 6 caracteres.");
-            }
+            String senhaUsuario = this.digitarCampoSenha();
 
             usuario.setSenhaUsuario(senhaUsuario);
 
             System.out.println("Digite a Etnia:");
-            String etnia = scanner.nextLine();
+            String etnia = this.digitarCampoEtnia();
             usuario.setEtniaUsuario(etnia);
 
             System.out.println("Digite sua data de nascimento (dd/MM/yyyy): ");
-            String data = scanner.nextLine();
-
-            try {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                dateFormat.setLenient(false);
-
-                Date dataNascimento = dateFormat.parse(data);
-                usuario.setDataNascimento(dataNascimento);
-            } catch (Exception e) {
-                System.out.println("Formato de data inválido. Certifique-se de usar o formato dd/MM/yyyy.");
-            }
+            Date dataNascimento = this.digitarCampoData();
+            usuario.setDataNascimento(dataNascimento);
 
             System.out.println("Digite sua faixa salárial:");
-            String classesocial = scanner.nextLine();
+            String classesocial = this.digitarCampoClasseSocial();
             usuario.setEtniaUsuario(classesocial);
 
             System.out.println("Digite o Genero:");
-            String genero = scanner.nextLine();
+            String genero = this.digitarCampoGenero();
             usuario.setEtniaUsuario(genero);
 
             System.out.println("Selecione o TipoUsuario:");
-            for (TipoUsuario tipoUsuario : TipoUsuario.values()) {
-                System.out.println(tipoUsuario.ordinal() + " - " + tipoUsuario);
-            }
-
-            int opcaoTipo = scanner.nextInt();
-            if (opcaoTipo < 0 || opcaoTipo >= TipoUsuario.values().length) {
-                throw new InvalidInputException("Opção de tipo de usuário inválida.");
-            }
-
-            TipoUsuario tipo = TipoUsuario.values()[opcaoTipo];
+            TipoUsuario tipo = this.digitarCampoTipoDeUsuario();
             usuario.setTipoUsuario(tipo);
+
         } catch (InvalidInputException e) {
             System.out.println("Tipo de entrada inválida: " + e.getMessage());
         }
