@@ -9,7 +9,6 @@ import exceptions.InvalidInputException;
 import interfaces.IDenunciaCadastro;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -170,9 +169,8 @@ public class CadastroDenuncia implements IDenunciaCadastro {
     }
 
     @Override
-    public int excluirDenuncia(ArrayList<Denuncia> denuncia) {
-        //ADICIONAR LÓGICA DE EXCLUSÃO
-        return 0;
+    public void excluirDenuncia(int idDenuncia, HashMap<Integer, Denuncia> denuncias) {
+        denuncias.remove(idDenuncia);
     }
 
     @Override
