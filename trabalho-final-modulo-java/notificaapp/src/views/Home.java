@@ -135,7 +135,9 @@ public class Home {
 
                                     denuncia = cadastroDenuncia.editarDenuncia(idDenuncia, denuncia);
 
-                                    listagemDenuncia.put(idDenuncia, denuncia);
+                                    if (denuncia != null) {
+                                        listagemDenuncia.put(idDenuncia, denuncia);
+                                    }
                                 } else {
                                     System.out.println("Denúncia não encontrada!");
                                 }
