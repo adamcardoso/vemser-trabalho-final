@@ -88,7 +88,7 @@ public class Home {
                         System.out.println("1. Cadastrar Denuncia");
                         System.out.println("2. Excluir Denuncia");
                         System.out.println("3. Editar Denuncia");
-                        System.out.println("4. Visualizar Denuncia");
+                        System.out.println("4. Visualizar Denuncias");
                         System.out.println("5. Sair");
                         System.out.println("Escolha uma opção:");
 
@@ -100,8 +100,9 @@ public class Home {
 
                                 denuncia = cadastroDenuncia.cadastrarDenuncia();
 
-                                listagemDenuncia.put(denuncia.getIdDenuncia(), denuncia);
-
+                                if (denuncia != null) {
+                                    listagemDenuncia.put(denuncia.getIdDenuncia(), denuncia);
+                                }
                                 break;
                             case 2:
                                 System.out.println("------------- Excluir Denúncia -------------");
