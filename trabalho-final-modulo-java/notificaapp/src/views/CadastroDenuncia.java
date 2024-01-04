@@ -181,8 +181,9 @@ public class CadastroDenuncia implements IDenunciaCadastro {
 
             System.out.println("Descrição: " + denuncia.getDescricao());
 
-            System.out.println("Localização - (Latitude): " + denuncia.getLocal().getLatitute() +
-                    ", (Longitude): " + denuncia.getLocal().getLongitude());
+            System.out.println("Localização (Longitude): " + denuncia.getLocal().getLongitude());
+
+            System.out.println("Localização (Latitude): " + denuncia.getLocal().getLatitute());
 
             System.out.println("Status da Denúncia: " + denuncia.getStatusDenuncia());
 
