@@ -1,5 +1,8 @@
 package entities;
 
+import entities.enums.ClasseSocial;
+import entities.enums.Etnia;
+import entities.enums.Genero;
 import entities.enums.TipoUsuario;
 
 import java.util.Date;
@@ -9,13 +12,13 @@ public class Usuario {
     private String nomeUsuario;
     private String numeroCelular;
     private String senhaUsuario;
-    private String etniaUsuario;
+    private Etnia etniaUsuario;
     private Date dataNascimento;
-    private String classeSocial;
-    private String generoUsuario;
+    private ClasseSocial classeSocial;
+    private Genero generoUsuario;
     private TipoUsuario tipoUsuario;
 
-    public Usuario(int idUsuario, String nomeUsuario, String numeroCelular, String senhaUsuario, String etniaUsuario, Date dataNascimento, String classeSocial, String generoUsuario, TipoUsuario tipoUsuario) {
+    public Usuario(int idUsuario, String nomeUsuario, String numeroCelular, String senhaUsuario, Etnia etniaUsuario, Date dataNascimento, ClasseSocial classeSocial, Genero generoUsuario, TipoUsuario tipoUsuario) {
         this.idUsuario = idUsuario;
         this.nomeUsuario = nomeUsuario;
         this.numeroCelular = numeroCelular;
@@ -27,7 +30,8 @@ public class Usuario {
         this.tipoUsuario = tipoUsuario;
     }
 
-    public Usuario() {}
+    public Usuario() {
+    }
 
     public int getIdUsuario() {
         return idUsuario;
@@ -61,11 +65,11 @@ public class Usuario {
         this.senhaUsuario = senhaUsuario;
     }
 
-    public String getEtniaUsuario() {
+    public Etnia getEtniaUsuario() {
         return etniaUsuario;
     }
 
-    public void setEtniaUsuario(String etniaUsuario) {
+    public void setEtniaUsuario(Etnia etniaUsuario) {
         this.etniaUsuario = etniaUsuario;
     }
 
@@ -77,19 +81,19 @@ public class Usuario {
         this.dataNascimento = dataNascimento;
     }
 
-    public String getClasseSocial() {
+    public ClasseSocial getClasseSocial() {
         return classeSocial;
     }
 
-    public void setClasseSocial(String classeSocial) {
+    public void setClasseSocial(ClasseSocial classeSocial) {
         this.classeSocial = classeSocial;
     }
 
-    public String getGeneroUsuario() {
+    public Genero getGeneroUsuario() {
         return generoUsuario;
     }
 
-    public void setGeneroUsuario(String generoUsuario) {
+    public void setGeneroUsuario(Genero generoUsuario) {
         this.generoUsuario = generoUsuario;
     }
 
