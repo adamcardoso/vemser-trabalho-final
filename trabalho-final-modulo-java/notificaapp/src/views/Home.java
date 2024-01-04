@@ -121,7 +121,23 @@ public class Home {
                                 }
                                 break;
                             case 3:
-                                System.out.println("------------- Editar Denuncia -------------");
+                                System.out.println("------------- Editar Denúncia -------------");
+
+                                System.out.println("Digite o ID da Denuncia: ");
+
+                                idDenuncia = scanner.nextInt();
+
+                                denuncia = listagemDenuncia.get(idDenuncia);
+
+                                if (denuncia != null) {
+                                    System.out.println("Denúncia encontrada! Siga as instruções para editar.");
+
+                                    denuncia = cadastroDenuncia.editarDenuncia(idDenuncia, denuncia);
+
+                                    listagemDenuncia.put(idDenuncia, denuncia);
+                                } else {
+                                    System.out.println("Denúncia não encontrada!");
+                                }
                                 break;
                             case 4:
                                 System.out.println("------------- Visualizar Denuncia -------------");
