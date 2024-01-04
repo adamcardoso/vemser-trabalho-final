@@ -140,7 +140,15 @@ public class Home {
                                 }
                                 break;
                             case 4:
-                                System.out.println("------------- Visualizar Denuncia -------------");
+                                System.out.println("------------- Visualizar Denúncias -------------");
+
+                                if (listagemDenuncia.isEmpty()) {
+                                    System.out.println("Nenhuma denúncia cadastrada!");
+                                } else {
+                                    listagemDenuncia.forEach((_index, itemDenuncia) -> {
+                                        cadastroDenuncia.visualizarDenuncia(itemDenuncia);
+                                    });
+                                }
                                 break;
                             case 5:
                                 System.out.println("Saindo...");
