@@ -1,5 +1,6 @@
 package entities;
 
+import entities.enums.ClasseSocial;
 import entities.enums.Etnia;
 import entities.enums.Genero;
 import entities.enums.TipoUsuario;
@@ -13,11 +14,11 @@ public class Usuario {
     private String senhaUsuario;
     private Etnia etniaUsuario;
     private Date dataNascimento;
-    private String classeSocial;
+    private ClasseSocial classeSocial;
     private Genero generoUsuario;
     private TipoUsuario tipoUsuario;
 
-    public Usuario(int idUsuario, String nomeUsuario, String numeroCelular, String senhaUsuario, Etnia etniaUsuario, Date dataNascimento, String classeSocial, Genero generoUsuario, TipoUsuario tipoUsuario) {
+    public Usuario(int idUsuario, String nomeUsuario, String numeroCelular, String senhaUsuario, Etnia etniaUsuario, Date dataNascimento, ClasseSocial classeSocial, Genero generoUsuario, TipoUsuario tipoUsuario) {
         this.idUsuario = idUsuario;
         this.nomeUsuario = nomeUsuario;
         this.numeroCelular = numeroCelular;
@@ -80,11 +81,11 @@ public class Usuario {
         this.dataNascimento = dataNascimento;
     }
 
-    public String getClasseSocial() {
+    public ClasseSocial getClasseSocial() {
         return classeSocial;
     }
 
-    public void setClasseSocial(String classeSocial) {
+    public void setClasseSocial(ClasseSocial classeSocial) {
         this.classeSocial = classeSocial;
     }
 
