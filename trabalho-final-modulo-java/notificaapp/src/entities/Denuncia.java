@@ -6,7 +6,6 @@ import entities.enums.Situacao;
 import java.time.LocalDateTime;
 
 public class Denuncia{
-
     private int idDenuncia;
     private String descricao;
     private Localizacao local;
@@ -66,7 +65,6 @@ public class Denuncia{
     public void setDataHora(LocalDateTime dataHora) {
         this.dataHora = dataHora;
     }
-
 
     public Situacao getStatusDenuncia() {
         return statusDenuncia;
