@@ -135,19 +135,27 @@ public class CadastroDenuncia implements IDenunciaCadastro {
 
             denuncia.setDescricao(descricao);
 
-            System.out.println("Digite a Localização (Longitude):");
-
-            double longitude = scanner.nextDouble();
-
-            System.out.println("Digite a Localização (Latitude):");
-
-            double latitude = scanner.nextDouble();
-
             Localizacao localizacao = new Localizacao();
 
-            localizacao.setLongitude(longitude);
+            try {
+                System.out.println("Digite a Localização (Longitude):");
 
-            localizacao.setLatitute(latitude);
+                double longitude = scanner.nextDouble();
+
+                localizacao.setLongitude(longitude);
+            } catch (Exception e) {
+                throw new InvalidInputException("Valor deve ser numérico.");
+            }
+
+            try {
+                System.out.println("Digite a Localização (Latitude):");
+
+                double latitude = scanner.nextDouble();
+
+                localizacao.setLatitute(latitude);
+            } catch (Exception e) {
+                throw new InvalidInputException("Valor deve ser numérico.");
+            }
 
             denuncia.setLocal(localizacao);
 
@@ -157,11 +165,15 @@ public class CadastroDenuncia implements IDenunciaCadastro {
                 System.out.println(situacao.ordinal() + " - " + situacao);
             }
 
-            int opcaoStatus = scanner.nextInt();
+            try {
+                int opcaoStatus = scanner.nextInt();
 
-            Situacao statusDenuncia = Situacao.values()[opcaoStatus];
+                Situacao statusDenuncia = Situacao.values()[opcaoStatus];
 
-            denuncia.setStatusDenuncia(statusDenuncia);
+                denuncia.setStatusDenuncia(statusDenuncia);
+            } catch (Exception e) {
+                throw new InvalidInputException("Valor inválido.");
+            }
 
             System.out.println("Selecione a Categoria da Denúncia:");
 
@@ -169,17 +181,22 @@ public class CadastroDenuncia implements IDenunciaCadastro {
                 System.out.println(categoria.ordinal() + " - " + categoria);
             }
 
-            int opcaoCategoria = scanner.nextInt();
+            try {
+                int opcaoCategoria = scanner.nextInt();
 
-            Categoria categoriaSelecionada = Categoria.values()[opcaoCategoria];
+                Categoria categoriaSelecionada = Categoria.values()[opcaoCategoria];
 
-            denuncia.setCategoria(categoriaSelecionada);
+                denuncia.setCategoria(categoriaSelecionada);
+            } catch (Exception e) {
+                throw new InvalidInputException("Valor inválido.");
+            }
 
             LocalDateTime dataHora = LocalDateTime.now();
 
             denuncia.setDataHora(dataHora);
         } catch (InvalidInputException e) {
             System.out.println("Tipo de entrada inválida: " + e.getMessage());
+            return null;
         }
 
         return denuncia;
