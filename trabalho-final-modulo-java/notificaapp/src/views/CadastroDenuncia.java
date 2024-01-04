@@ -177,16 +177,21 @@ public class CadastroDenuncia implements IDenunciaCadastro {
 
     @Override
     public void visualizarDenuncia(Denuncia denuncia) {
-        System.out.println("ID da Denúncia: " + denuncia.getIdDenuncia());
-        System.out.println("Nome do Usuário: " + denuncia.getUsuario().getNomeUsuario());
-        System.out.println("Descrição: " + denuncia.getDescricao());
-        System.out.println("Localização: Latitude - " + denuncia.getLocal().getLatitute() +
-                ", Longitude - " + denuncia.getLocal().getLongitude());
-        System.out.println("Status da Denúncia: " + denuncia.getStatusDenuncia());
-        System.out.println("Categoria: " + denuncia.getCategoria());
-        System.out.println("Data e Hora: " + denuncia.getDataHora());
-        System.out.println("--------------------------------------");
+            System.out.println("ID da Denúncia: " + denuncia.getIdDenuncia());
 
+            System.out.println("Nome do Usuário: " + denuncia.getUsuario().getNomeUsuario());
+
+            System.out.println("Descrição: " + denuncia.getDescricao());
+
+            System.out.println("Localização - (Latitude): " + denuncia.getLocal().getLatitute() +
+                    ", (Longitude): " + denuncia.getLocal().getLongitude());
+
+            System.out.println("Status da Denúncia: " + denuncia.getStatusDenuncia());
+
+            System.out.println("Categoria: " + denuncia.getCategoria());
+
+            System.out.println("Data e Hora: " + denuncia.getDataHora());
+
+            System.out.println("--------------------------------------");
     }
-
 }
