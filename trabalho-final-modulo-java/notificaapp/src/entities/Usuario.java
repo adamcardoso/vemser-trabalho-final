@@ -1,5 +1,6 @@
 package entities;
 
+import entities.enums.Genero;
 import entities.enums.TipoUsuario;
 
 import java.util.Date;
@@ -12,10 +13,10 @@ public class Usuario {
     private String etniaUsuario;
     private Date dataNascimento;
     private String classeSocial;
-    private String generoUsuario;
+    private Genero generoUsuario;
     private TipoUsuario tipoUsuario;
 
-    public Usuario(int idUsuario, String nomeUsuario, String numeroCelular, String senhaUsuario, String etniaUsuario, Date dataNascimento, String classeSocial, String generoUsuario, TipoUsuario tipoUsuario) {
+    public Usuario(int idUsuario, String nomeUsuario, String numeroCelular, String senhaUsuario, String etniaUsuario, Date dataNascimento, String classeSocial, Genero generoUsuario, TipoUsuario tipoUsuario) {
         this.idUsuario = idUsuario;
         this.nomeUsuario = nomeUsuario;
         this.numeroCelular = numeroCelular;
@@ -27,7 +28,8 @@ public class Usuario {
         this.tipoUsuario = tipoUsuario;
     }
 
-    public Usuario() {}
+    public Usuario() {
+    }
 
     public int getIdUsuario() {
         return idUsuario;
@@ -85,11 +87,11 @@ public class Usuario {
         this.classeSocial = classeSocial;
     }
 
-    public String getGeneroUsuario() {
+    public Genero getGeneroUsuario() {
         return generoUsuario;
     }
 
-    public void setGeneroUsuario(String generoUsuario) {
+    public void setGeneroUsuario(Genero generoUsuario) {
         this.generoUsuario = generoUsuario;
     }
 
