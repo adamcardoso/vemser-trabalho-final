@@ -4,6 +4,7 @@ import entities.enums.Categoria;
 import entities.enums.Situacao;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class Denuncia{
     private int idDenuncia;
@@ -13,6 +14,8 @@ public class Denuncia{
     private LocalDateTime dataHora;
     private Situacao statusDenuncia;
     private Categoria categoria;
+    private int curtidas;
+    private ArrayList<String> comentarios;
 
     public Denuncia(int idDenuncia, String descricao, Localizacao local, Usuario usuario, LocalDateTime dataHora, Situacao statusDenuncia, Categoria categoria) {
         this.idDenuncia = idDenuncia;
@@ -22,6 +25,31 @@ public class Denuncia{
         this.dataHora = dataHora;
         this.statusDenuncia = statusDenuncia;
         this.categoria = categoria;
+        this.curtidas = 0;
+        this.comentarios = new ArrayList<>();
+    }
+
+
+    public void curtirDenuncia(){
+        this.curtidas++;
+    }
+
+    public void comentar(String comentario){
+        comentarios.add(comentario);
+    }
+
+    public void imprimirDenunciaFeed(){
+        System.out.println(this.usuario.getNomeUsuario());
+        System.out.println("Titulo: " + this.descricao);
+    }
+
+    public void imprimirDetalhesDenunciaFeed(){
+        this.imprimirDenunciaFeed();
+        System.out.println("Total de curtidas: " + this.curtidas);
+        System.out.println("Lista de comentários: ");
+        for (String comentario : comentarios){
+            System.out.println("> " +comentario.indexOf(comentario) + " : " + comentario);
+        }
     }
 
     public Denuncia() {}
@@ -80,5 +108,21 @@ public class Denuncia{
 
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
+    }
+
+    public ArrayList<String> getComentarios() {
+        return comentarios;
+    }
+
+    public void setComentarios(ArrayList<String> comentarios) {
+        this.comentarios = comentarios;
+    }
+
+    public int getCurtidas() {
+        return curtidas;
+    }
+
+    public void setCurtidas(int curtidas) {
+        this.curtidas = curtidas;
     }
 }
