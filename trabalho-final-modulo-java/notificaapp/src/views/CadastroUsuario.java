@@ -2,15 +2,16 @@ package views;
 
 import entities.Denuncia;
 import entities.Usuario;
+import entities.enums.ClasseSocial;
+import entities.enums.Etnia;
+import entities.enums.Genero;
 import entities.enums.TipoUsuario;
 import exceptions.InvalidInputException;
 import interfaces.IUsuarioCadastro;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
+
 public class CadastroUsuario implements IUsuarioCadastro{
     Scanner scanner = new Scanner(System.in);
     private static final Random random = new Random();
@@ -71,23 +72,51 @@ public class CadastroUsuario implements IUsuarioCadastro{
         }
         return senhaUsuario;
     }
-    private String digitarCampoEtnia(){
-        String etnia = null;
+
+    private Etnia digitarCampoEtnia(){
+        System.out.println("""
+                0 - PRETO
+                1 - PARDO
+                2 - BRANCO
+                3 - INDIGENA
+                4 - AMARELO
+                """);
+
         int tentativas = 0;
+
         while (tentativas < 3){
             tentativas++;
-            etnia = scanner.nextLine();
+            String etnia = scanner.nextLine();
 
             if (etnia.isEmpty()) {
-                System.out.println("O campo etnia não pode ser vazio.\nVocê possui 3 tentativas, restam: " + (3-tentativas));
-            }else{
-                break;
+                System.out.println("O campo etnia não pode ser vazio.\nVocê possui 3 tentativas, restam: " + (3 - tentativas));
+            } else if(!this.validaEtnia(etnia)){
+                System.out.printf("""
+                        Digite algum dos valores informados.\nVocê possui 3 tentativas, restam: %s
+                        """, (3 - tentativas));
+            } else{
+                return switch (etnia) {
+                    case "0" -> Etnia.PRETO;
+                    case "1" -> Etnia.PARDO;
+                    case "2" -> Etnia.BRANCO;
+                    case "3" -> Etnia.INDIGENA;
+                    case "4" -> Etnia.AMARELO;
+                    default -> null;
+                };
             }
+
             if(tentativas == 3){
                 throw new InvalidInputException("Você ultrapassou o número de tentativas");
             }
         }
-        return etnia;
+        return null;
+    }
+
+    private boolean validaEtnia(String etnia){
+        for(Etnia e: Etnia.values())
+            if(Objects.equals(e.getValor(), etnia))
+                return true;
+        return false;
     }
 
     private Date digitarCampoData(){
@@ -112,42 +141,92 @@ public class CadastroUsuario implements IUsuarioCadastro{
         return null;
     }
 
-    private String digitarCampoClasseSocial(){
-        String classeSocial = null;
+    private ClasseSocial digitarCampoClasseSocial(){
+        System.out.println("""
+                0 - Até 2
+                1 - De 2 a 4
+                2 - De 4 a 10
+                3 - De 10 a 20
+                4 - Acima de 20
+                """);
         int tentativas = 0;
-        while (tentativas < 3){
-            tentativas++;
-            classeSocial = scanner.nextLine();
 
-            if (classeSocial.isEmpty()) {
-                System.out.println("O campo classe social não pode ser vazio.\nVocê possui 3 tentativas, restam: " + (3-tentativas));
-            }else{
-                break;
+        while(tentativas < 3){
+            tentativas++;
+
+            String faixaSalarial = scanner.nextLine();
+
+            if(faixaSalarial.isEmpty()){
+                System.out.println("O campo faixa salarial não pode ser vazio.\nVocê possui 3 tentativas, restam: " + (3-tentativas));
+            } else if(!this.validaFaixaSalarial(faixaSalarial)){
+                System.out.printf("""
+                        Digite algum dos valores informados.\nVocê possui 3 tentativas, restam: %s
+                        """, (3 - tentativas));
+            } else{
+                return switch (faixaSalarial){
+                    case "0" -> ClasseSocial.E;
+                    case "1" -> ClasseSocial.D;
+                    case "2" -> ClasseSocial.C;
+                    case "3" -> ClasseSocial.B;
+                    case "4" -> ClasseSocial.A;
+                    default -> null;
+                };
             }
+
             if(tentativas == 3){
                 throw new InvalidInputException("Você ultrapassou o número de tentativas");
             }
         }
-        return classeSocial;
+        return null;
     }
 
-    private String digitarCampoGenero(){
-        String faixaSalarial = null;
-        int tentativas = 0;
-        while (tentativas < 3){
-            tentativas++;
-            faixaSalarial = scanner.nextLine();
+    private boolean validaFaixaSalarial(String faixaSalarial){
+        for(ClasseSocial c: ClasseSocial.values())
+            if(Objects.equals(c.getValor(), faixaSalarial))
+                return true;
+        return false;
+    }
 
-            if (faixaSalarial.isEmpty()) {
+    private Genero digitarCampoGenero(){
+        System.out.println("""
+                0 - MASCULINO
+                1 - FEMININO
+                2 - OUTRO
+                """);
+
+        int tentativas = 0;
+
+        while(tentativas < 3){
+            tentativas++;
+            String genero = scanner.nextLine();
+
+            if(genero.isEmpty()){
                 System.out.println("O campo genero não pode ser vazio.\nVocê possui 3 tentativas, restam: " + (3-tentativas));
-            }else{
-                break;
+            } else if(!this.validaGenero(genero)){
+                System.out.printf("""
+                        Digite algum dos valores informados.\nVocê possui 3 tentativas, restam: %s
+                        """, (3 - tentativas));
+            } else{
+                return switch (genero){
+                    case "0" -> Genero.MASCULINO;
+                    case "1" -> Genero.FEMININO;
+                    case "2" -> Genero.OUTRO;
+                    default -> null;
+                };
             }
+
             if(tentativas == 3){
                 throw new InvalidInputException("Você ultrapassou o número de tentativas");
             }
         }
-        return faixaSalarial;
+        return null;
+    }
+
+    private boolean validaGenero(String genero){
+        for(Genero g: Genero.values())
+            if(Objects.equals(g.getValor(), genero))
+                return true;
+        return false;
     }
 
     private TipoUsuario digitarCampoTipoDeUsuario(){
@@ -195,8 +274,8 @@ public class CadastroUsuario implements IUsuarioCadastro{
             usuario.setSenhaUsuario(senhaUsuario);
 
             System.out.println("Digite a Etnia:");
-            String etnia = this.digitarCampoEtnia();
-            //usuario.setEtniaUsuario(etnia);
+            Etnia etnia = this.digitarCampoEtnia();
+            usuario.setEtniaUsuario(etnia);
 
             System.out.println("Digite sua data de nascimento (dd/MM/yyyy): ");
             Date dataNascimento = this.digitarCampoData();
@@ -204,13 +283,12 @@ public class CadastroUsuario implements IUsuarioCadastro{
 
 
             System.out.println("Digite sua faixa salárial:");
-            String classesocial = this.digitarCampoClasseSocial();
-            //usuario.setEtniaUsuario( classesocial);
+            ClasseSocial classesocial = this.digitarCampoClasseSocial();
+            usuario.setClasseSocial(classesocial);
 
             System.out.println("Digite o Genero:");
-            String genero = this.digitarCampoGenero();
-            //usuario.setEtniaUsuario(genero);
-
+            Genero genero = this.digitarCampoGenero();
+            usuario.setGeneroUsuario(genero);
 
             System.out.println("Selecione o TipoUsuario:");
             TipoUsuario tipo = this.digitarCampoTipoDeUsuario();
@@ -244,20 +322,20 @@ public class CadastroUsuario implements IUsuarioCadastro{
             usuario.setSenhaUsuario(senhaUsuario);
 
             System.out.println("Digite a Etnia:");
-            String etnia = this.digitarCampoEtnia();
-            //usuario.setEtniaUsuario(etnia);
+            Etnia etnia = this.digitarCampoEtnia();
+            usuario.setEtniaUsuario(etnia);
 
             System.out.println("Digite sua data de nascimento (dd/MM/yyyy): ");
             Date dataNascimento = this.digitarCampoData();
             usuario.setDataNascimento(dataNascimento);
 
             System.out.println("Digite sua faixa salárial:");
-            String classesocial = this.digitarCampoClasseSocial();
-            //usuario.setEtniaUsuario(classesocial);
+            ClasseSocial classesocial = this.digitarCampoClasseSocial();
+            usuario.setClasseSocial(classesocial);
 
             System.out.println("Digite o Genero:");
-            String genero = this.digitarCampoGenero();
-            //usuario.setEtniaUsuario(genero);
+            Genero genero = this.digitarCampoGenero();
+            usuario.setGeneroUsuario(genero);
 
             System.out.println("Selecione o TipoUsuario:");
             TipoUsuario tipo = this.digitarCampoTipoDeUsuario();
