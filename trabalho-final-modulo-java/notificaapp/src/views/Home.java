@@ -4,6 +4,7 @@ import entities.Denuncia;
 import entities.Localizacao;
 import entities.Usuario;
 import entities.enums.Categoria;
+import entities.enums.Etnia;
 import entities.enums.Situacao;
 import exceptions.InvalidInputException;
 
@@ -13,18 +14,78 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class Home {
-    private ArrayList<Usuario> cadastroUsuario;
+    private ArrayList<Usuario> listagemUsuario;
     private ArrayList<Usuario> cadastroDenuncia;
     private Scanner scanner;
     private CadastroUsuario cadastroU;
     private HashMap<Integer, Denuncia> listagemDenuncia;
+    private boolean usuarioLogado = false;
+    private Usuario loginUsuario;
 
     public Home() {
-        this.cadastroUsuario = new ArrayList<>();
+        this.listagemUsuario = new ArrayList<>();
         this.cadastroDenuncia = new ArrayList<>();
         this.scanner = new Scanner(System.in);
         this.cadastroU = new CadastroUsuario();
         this.listagemDenuncia = new HashMap<>();
+
+    }
+
+    public void login() {
+        Usuario testeUsuario = new Usuario(123, "jean", "12233445", "123", Etnia.INDIGENA, null, null, null, null);
+        listagemUsuario.add(testeUsuario);
+        int opLogin;
+
+        do {
+            System.out.println("1. fazer login no sistema");
+            System.out.println("2. Entrar sem login");
+            System.out.println("3. Sair");
+
+            opLogin = scanner.nextInt();
+
+            switch (opLogin) {
+                case 1:
+                    System.out.println("Digite seu nome: ");
+                    String nomeUsuario = scanner.next();
+                    System.out.println("Digite sua senha: ");
+                    String senhaUsuario = scanner.next();
+                    for (Usuario usuario : listagemUsuario) {
+                        if (usuario.getNomeUsuario().equals(nomeUsuario)) {
+                            if (usuario.getSenhaUsuario().equals(senhaUsuario)) {
+                                System.out.println("Login efetuado com sucesso");
+                                loginUsuario = usuario;
+                                usuarioLogado = true;
+                                this.iniciarSistema();
+                            } else {
+                                System.out.println("Senha incorreta");
+                            }
+                        } else {
+                            System.out.println("Nome do usuario não encontrado");
+                        }
+                    }
+                    break;
+                case 2:
+                    System.out.println("Fazer denuncia sem está logado no sistema");
+                    System.out.println("Digite o nome do usuario");
+                    String nomeUsuarioSemLogin = scanner.next();
+                    usuarioLogado = false;
+                    this.loginUsuario = new Usuario(nomeUsuarioSemLogin);
+                    this.iniciarSistema();
+                    break;
+                case 3:
+                    System.out.println("saindo.............");
+
+                    break;
+                case 4:
+                    System.out.println("Comando inválido");
+                    break;
+
+            }
+
+
+        } while (opLogin != 3);
+
+        scanner.close();
     }
 
 
@@ -36,6 +97,7 @@ public class Home {
         do {
             System.out.println(" ------------- NOTIFICA -------------");
             System.out.println("1. Usuário");
+            ;
             System.out.println("2. Denúncia");
             System.out.println("3. Feed");
             System.out.println("4. Sair");
@@ -44,6 +106,7 @@ public class Home {
             opcao = scanner.nextInt();
 
             switch (opcao) {
+
                 case 1:
                     int opUsuario = 0;
 
@@ -111,6 +174,7 @@ public class Home {
                                 denuncia = cadastroDenuncia.cadastrarDenuncia();
 
                                 if (denuncia != null) {
+                                    denuncia.setUsuario(loginUsuario);
                                     listagemDenuncia.put(denuncia.getIdDenuncia(), denuncia);
                                 }
                                 break;
@@ -146,6 +210,7 @@ public class Home {
                                     denuncia = cadastroDenuncia.editarDenuncia(idDenuncia, denuncia);
 
                                     if (denuncia != null) {
+                                        denuncia.setUsuario(loginUsuario);
                                         listagemDenuncia.put(idDenuncia, denuncia);
                                     }
                                 } else {
@@ -186,10 +251,21 @@ public class Home {
             }
         } while (opcao != 4);
 
-        scanner.close();
+
     }
 
     private void opcaoFeed() {
+
+        listagemDenuncia.put(
+                1, new Denuncia(1, "denuncia1", new Localizacao(123, 123),
+                        new Usuario(12, "usuario1", null, null, null, null, null, null, null),
+                        null, null, null
+                ));
+        listagemDenuncia.put(
+                2, new Denuncia(1, "denuncia2", new Localizacao(123, 123),
+                        new Usuario(12, "usuario2", null, null, null, null, null, null, null),
+                        null, null, null
+                ));
 
         int opFeed;
 
@@ -211,39 +287,74 @@ public class Home {
             if (listagemDenuncia.containsKey(opFeed)) {
 
                 int opReagir;
+                boolean voltar = false;
                 do {
                     System.out.println(" ------------- Detalhes da denuncia -------------");
 
                     listagemDenuncia.get(opFeed).imprimirDetalhesDenunciaFeed();
+                    if (!usuarioLogado) {
+                        System.out.println("1. Curtir denuncia");
+                        System.out.println("2. Escrever um comentário");
+                        System.out.println("3. Sair");
+                        opReagir = scanner.nextInt();
 
-                    System.out.println("1. Curtir denuncia");
-                    System.out.println("2. Escrever um comentário");
-                    System.out.println("3. Sair");
-                    opReagir = scanner.nextInt();
+                        switch (opReagir) {
+                            case 1:
+                                listagemDenuncia.get(opFeed).curtirDenuncia();
+                                break;
+                            case 2:
+                                System.out.println("Digite o comentário que deseja realizar: ");
+                                String comentario = scanner.next();
 
-                    switch (opReagir) {
-                        case 1:
-                            listagemDenuncia.get(opFeed).curtirDenuncia();
-                            break;
-                        case 2:
-                            System.out.println("Digite o comentário que deseja realizar: ");
-                            String comentario = scanner.next();
+                                if (comentario.isEmpty()) {
+                                    System.out.println("O campo comentário não pode estar vazio");
+                                } else {
+                                    listagemDenuncia.get(opFeed).comentar(comentario);
+                                }
+                                break;
+                            case 3:
+                                voltar = true;
+                                System.out.println("Voltando...");
+                                break;
+                            default:
+                                System.out.println("Opção inválida");
+                                break;
+                        }
+                    } else {
+                        System.out.println("1. Curtir denuncia");
+                        System.out.println("2. Escrever um comentário");
+                        System.out.println("3. Validar denúncia");
+                        System.out.println("4. Sair");
+                        opReagir = scanner.nextInt();
 
-                            if (comentario.isEmpty()) {
-                                System.out.println("O campo comentário não pode estar vazio");
-                            }else{
-                                listagemDenuncia.get(opFeed).comentar(comentario);
-                            }
-                            break;
-                        case 3:
-                            System.out.println("Saindo...");
-                            break;
-                        default:
-                            System.out.println("Opção inválida");
-                            break;
+                        switch (opReagir) {
+                            case 1:
+                                listagemDenuncia.get(opFeed).curtirDenuncia();
+                                break;
+                            case 2:
+                                System.out.println("Digite o comentário que deseja realizar: ");
+                                String comentario = scanner.next();
+
+                                if (comentario.isEmpty()) {
+                                    System.out.println("O campo comentário não pode estar vazio");
+                                } else {
+                                    listagemDenuncia.get(opFeed).comentar(comentario);
+                                }
+                                break;
+                            case 3:
+                                listagemDenuncia.get(opFeed).validarDenuncia();
+                            case 4:
+                                System.out.println("Voltando...");
+                                voltar = true;
+                                break;
+                            default:
+                                System.out.println("Opção inválida");
+                                break;
+                        }
                     }
-                } while (opReagir != 3);
-            }else{
+
+                } while (!voltar);
+            } else {
                 System.out.println("Opção inválida");
             }
         } while (opFeed != 0);

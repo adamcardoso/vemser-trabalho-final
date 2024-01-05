@@ -17,6 +17,8 @@ public class Denuncia{
     private int curtidas;
     private ArrayList<String> comentarios;
 
+    private int validarDenuncia;
+
     public Denuncia(int idDenuncia, String descricao, Localizacao local, Usuario usuario, LocalDateTime dataHora, Situacao statusDenuncia, Categoria categoria) {
         this.idDenuncia = idDenuncia;
         this.descricao = descricao;
@@ -26,12 +28,17 @@ public class Denuncia{
         this.statusDenuncia = statusDenuncia;
         this.categoria = categoria;
         this.curtidas = 0;
+        this.validarDenuncia = 0;
         this.comentarios = new ArrayList<>();
     }
 
 
     public void curtirDenuncia(){
         this.curtidas++;
+    }
+
+    public void validarDenuncia(){
+        this.validarDenuncia++;
     }
 
     public void comentar(String comentario){
@@ -41,15 +48,23 @@ public class Denuncia{
     public void imprimirDenunciaFeed(){
         System.out.println(this.usuario.getNomeUsuario());
         System.out.println("Titulo: " + this.descricao);
+        System.out.println("Quantiadde de validações: " + this.validarDenuncia);
     }
 
     public void imprimirDetalhesDenunciaFeed(){
         this.imprimirDenunciaFeed();
         System.out.println("Total de curtidas: " + this.curtidas);
         System.out.println("Lista de comentários: ");
-        for (String comentario : comentarios){
-            System.out.println("> " +comentario.indexOf(comentario) + " : " + comentario);
+        try {
+            for (int i = 0; i < comentarios.size(); i ++){
+                String comentario = comentarios.get(i);
+                System.out.println(" >" + i + ":" + comentario);
+
+            }
+        } catch ( Exception e){
+            System.out.println("Nenhum comentário");
         }
+
     }
 
     public Denuncia() {}
@@ -124,5 +139,13 @@ public class Denuncia{
 
     public void setCurtidas(int curtidas) {
         this.curtidas = curtidas;
+    }
+
+    public int getValidarDenuncia() {
+        return validarDenuncia;
+    }
+
+    public void setValidarDenuncia(int validarDenuncia) {
+        this.validarDenuncia = validarDenuncia;
     }
 }
