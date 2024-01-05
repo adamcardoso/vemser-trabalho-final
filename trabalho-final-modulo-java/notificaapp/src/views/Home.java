@@ -1,24 +1,34 @@
 package views;
 
 import entities.Denuncia;
+import entities.Localizacao;
 import entities.Usuario;
+import entities.enums.Categoria;
+import entities.enums.Situacao;
+import exceptions.InvalidInputException;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class Home {
-    ArrayList<Usuario> cadastroUsuario;
-    ArrayList<Usuario> cadastroDenuncia;
-    public Home(){
+    private ArrayList<Usuario> cadastroUsuario;
+    private ArrayList<Usuario> cadastroDenuncia;
+    private Scanner scanner;
+    private CadastroUsuario cadastroU;
+    private HashMap<Integer, Denuncia> listagemDenuncia;
+
+    public Home() {
         this.cadastroUsuario = new ArrayList<>();
         this.cadastroDenuncia = new ArrayList<>();
+        this.scanner = new Scanner(System.in);
+        this.cadastroU = new CadastroUsuario();
+        this.listagemDenuncia = new HashMap<>();
     }
 
-    public void iniciarSistema(){
-        Scanner scanner = new Scanner(System.in);
-        CadastroUsuario cadastroU = new CadastroUsuario();
-        HashMap<Integer, Denuncia> listagemDenuncia = new HashMap<>();
+
+    public void iniciarSistema() {
         Usuario novoUsuario = null;
         int opcao = 0;
 
@@ -35,8 +45,9 @@ public class Home {
 
             switch (opcao) {
                 case 1:
+                    int opUsuario = 0;
+
                     do {
-                        int opUsuario = 0;
                         System.out.println(" ------------- NOTIFICA -------------");
                         System.out.println("1. Cadastrar Conta");
                         System.out.println("2. Excluir Conta");
@@ -72,17 +83,16 @@ public class Home {
                                 System.out.println("Opção inválida");
                                 break;
                         }
-                    } while (opcao != 5);
+                    } while (opUsuario != 5);
                     break;
                 case 2:
+                    int opDenuncia = 0;
                     do {
                         CadastroDenuncia cadastroDenuncia = new CadastroDenuncia();
 
                         Denuncia denuncia = null;
 
                         int idDenuncia = 0;
-
-                        int opDenuncia= 0;
 
                         System.out.println(" ------------- NOTIFICA -------------");
                         System.out.println("1. Cadastrar Denuncia");
@@ -160,10 +170,12 @@ public class Home {
                                 System.out.println("Opção inválida");
                                 break;
                         }
-                    } while (opcao != 5);
+                    } while (opDenuncia != 5);
                     break;
                 case 3:
                     System.out.println("------------- Feed -------------");
+
+                    this.opcaoFeed();
                     break;
                 case 4:
                     System.out.println("Saindo...");
@@ -175,5 +187,65 @@ public class Home {
         } while (opcao != 4);
 
         scanner.close();
+    }
+
+    private void opcaoFeed() {
+
+        int opFeed;
+
+        do {
+            System.out.println(" ------------- FEED -------------");
+            listagemDenuncia.forEach((_index, itemDenuncia) -> {
+                System.out.print(_index + ": ");
+                itemDenuncia.imprimirDenunciaFeed();
+            });
+
+            System.out.println("Digite o número da denúncia\nque você deseja reagir");
+            System.out.println("0. Sair");
+
+            opFeed = scanner.nextInt();
+
+            if (opFeed == 0)
+                System.out.println("Saindo...");
+
+            if (listagemDenuncia.containsKey(opFeed)) {
+
+                int opReagir;
+                do {
+                    System.out.println(" ------------- Detalhes da denuncia -------------");
+
+                    listagemDenuncia.get(opFeed).imprimirDetalhesDenunciaFeed();
+
+                    System.out.println("1. Curtir denuncia");
+                    System.out.println("2. Escrever um comentário");
+                    System.out.println("3. Sair");
+                    opReagir = scanner.nextInt();
+
+                    switch (opReagir) {
+                        case 1:
+                            listagemDenuncia.get(opFeed).curtirDenuncia();
+                            break;
+                        case 2:
+                            System.out.println("Digite o comentário que deseja realizar: ");
+                            String comentario = scanner.next();
+
+                            if (comentario.isEmpty()) {
+                                System.out.println("O campo comentário não pode estar vazio");
+                            }else{
+                                listagemDenuncia.get(opFeed).comentar(comentario);
+                            }
+                            break;
+                        case 3:
+                            System.out.println("Saindo...");
+                            break;
+                        default:
+                            System.out.println("Opção inválida");
+                            break;
+                    }
+                } while (opReagir != 3);
+            }else{
+                System.out.println("Opção inválida");
+            }
+        } while (opFeed != 0);
     }
 }

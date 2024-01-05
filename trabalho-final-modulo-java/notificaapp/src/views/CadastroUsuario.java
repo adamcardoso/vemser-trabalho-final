@@ -245,7 +245,7 @@ public class CadastroUsuario implements IUsuarioCadastro{
 
             System.out.println("Digite a Etnia:");
             String etnia = this.digitarCampoEtnia();
-            usuario.setEtniaUsuario(etnia);
+            //usuario.setEtniaUsuario(etnia);
 
             System.out.println("Digite sua data de nascimento (dd/MM/yyyy): ");
             Date dataNascimento = this.digitarCampoData();
@@ -253,11 +253,11 @@ public class CadastroUsuario implements IUsuarioCadastro{
 
             System.out.println("Digite sua faixa salárial:");
             String classesocial = this.digitarCampoClasseSocial();
-            usuario.setEtniaUsuario(classesocial);
+            //usuario.setEtniaUsuario(classesocial);
 
             System.out.println("Digite o Genero:");
             String genero = this.digitarCampoGenero();
-            usuario.setEtniaUsuario(genero);
+            //usuario.setEtniaUsuario(genero);
 
             System.out.println("Selecione o TipoUsuario:");
             TipoUsuario tipo = this.digitarCampoTipoDeUsuario();
