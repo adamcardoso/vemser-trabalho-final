@@ -2,6 +2,7 @@ package views;
 
 import entities.Denuncia;
 import entities.Usuario;
+import entities.enums.ClasseSocial;
 import entities.enums.Etnia;
 import entities.enums.Genero;
 import entities.enums.TipoUsuario;
@@ -140,23 +141,50 @@ public class CadastroUsuario implements IUsuarioCadastro{
         return null;
     }
 
-    private String digitarCampoClasseSocial(){
-        String classeSocial = null;
+    private ClasseSocial digitarCampoClasseSocial(){
+        System.out.println("""
+                0 - Até 2
+                1 - De 2 a 4
+                2 - De 4 a 10
+                3 - De 10 a 20
+                4 - Acima de 20
+                """);
         int tentativas = 0;
-        while (tentativas < 3){
-            tentativas++;
-            classeSocial = scanner.nextLine();
 
-            if (classeSocial.isEmpty()) {
-                System.out.println("O campo classe social não pode ser vazio.\nVocê possui 3 tentativas, restam: " + (3-tentativas));
-            }else{
-                break;
+        while(tentativas < 3){
+            tentativas++;
+
+            String faixaSalarial = scanner.nextLine();
+
+            if(faixaSalarial.isEmpty()){
+                System.out.println("O campo faixa salarial não pode ser vazio.\nVocê possui 3 tentativas, restam: " + (3-tentativas));
+            } else if(!this.validaFaixaSalarial(faixaSalarial)){
+                System.out.printf("""
+                        Digite algum dos valores informados.\nVocê possui 3 tentativas, restam: %s
+                        """, (3 - tentativas));
+            } else{
+                return switch (faixaSalarial){
+                    case "0" -> ClasseSocial.E;
+                    case "1" -> ClasseSocial.D;
+                    case "2" -> ClasseSocial.C;
+                    case "3" -> ClasseSocial.B;
+                    case "4" -> ClasseSocial.A;
+                    default -> null;
+                };
             }
+
             if(tentativas == 3){
                 throw new InvalidInputException("Você ultrapassou o número de tentativas");
             }
         }
-        return classeSocial;
+        return null;
+    }
+
+    private boolean validaFaixaSalarial(String faixaSalarial){
+        for(ClasseSocial c: ClasseSocial.values())
+            if(Objects.equals(c.getValor(), faixaSalarial))
+                return true;
+        return false;
     }
 
     private Genero digitarCampoGenero(){
@@ -255,8 +283,8 @@ public class CadastroUsuario implements IUsuarioCadastro{
 
 
             System.out.println("Digite sua faixa salárial:");
-            String classesocial = this.digitarCampoClasseSocial();
-            //usuario.setEtniaUsuario( classesocial);
+            ClasseSocial classesocial = this.digitarCampoClasseSocial();
+            usuario.setClasseSocial(classesocial);
 
             System.out.println("Digite o Genero:");
             Genero genero = this.digitarCampoGenero();
@@ -302,8 +330,8 @@ public class CadastroUsuario implements IUsuarioCadastro{
             usuario.setDataNascimento(dataNascimento);
 
             System.out.println("Digite sua faixa salárial:");
-            String classesocial = this.digitarCampoClasseSocial();
-            //usuario.setEtniaUsuario(classesocial);
+            ClasseSocial classesocial = this.digitarCampoClasseSocial();
+            usuario.setClasseSocial(classesocial);
 
             System.out.println("Digite o Genero:");
             Genero genero = this.digitarCampoGenero();
