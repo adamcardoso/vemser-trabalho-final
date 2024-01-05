@@ -68,6 +68,7 @@ public class Home {
                     System.out.println("Fazer denuncia sem está logado no sistema");
                     System.out.println("Digite o nome do usuario");
                     String nomeUsuarioSemLogin = scanner.next();
+                    usuarioLogado = false;
                     this.loginUsuario = new Usuario(nomeUsuarioSemLogin);
                     this.iniciarSistema();
                     break;
@@ -83,6 +84,8 @@ public class Home {
 
 
         } while (opLogin != 3);
+
+        scanner.close();
     }
 
 
@@ -248,7 +251,7 @@ public class Home {
             }
         } while (opcao != 4);
 
-        scanner.close();
+
     }
 
     private void opcaoFeed() {
@@ -289,7 +292,7 @@ public class Home {
                     System.out.println(" ------------- Detalhes da denuncia -------------");
 
                     listagemDenuncia.get(opFeed).imprimirDetalhesDenunciaFeed();
-                    if(!usuarioLogado){
+                    if (!usuarioLogado) {
                         System.out.println("1. Curtir denuncia");
                         System.out.println("2. Escrever um comentário");
                         System.out.println("3. Sair");
@@ -317,7 +320,7 @@ public class Home {
                                 System.out.println("Opção inválida");
                                 break;
                         }
-                    }else{
+                    } else {
                         System.out.println("1. Curtir denuncia");
                         System.out.println("2. Escrever um comentário");
                         System.out.println("3. Validar denúncia");
