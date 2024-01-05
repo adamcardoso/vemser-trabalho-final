@@ -33,6 +33,10 @@ public class Usuario {
     public Usuario() {
     }
 
+    public Usuario(String nomeUsuario) {
+        this.nomeUsuario = nomeUsuario;
+    }
+
     public int getIdUsuario() {
         return idUsuario;
     }
