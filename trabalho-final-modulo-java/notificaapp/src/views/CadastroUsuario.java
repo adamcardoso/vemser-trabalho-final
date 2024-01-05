@@ -2,15 +2,14 @@ package views;
 
 import entities.Denuncia;
 import entities.Usuario;
+import entities.enums.Etnia;
 import entities.enums.TipoUsuario;
 import exceptions.InvalidInputException;
 import interfaces.IUsuarioCadastro;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
+
 public class CadastroUsuario implements IUsuarioCadastro{
     Scanner scanner = new Scanner(System.in);
     private static final Random random = new Random();
@@ -71,23 +70,51 @@ public class CadastroUsuario implements IUsuarioCadastro{
         }
         return senhaUsuario;
     }
-    private String digitarCampoEtnia(){
-        String etnia = null;
+
+    private Etnia digitarCampoEtnia(){
+        System.out.println("""
+                0 - PRETO
+                1 - PARDO
+                2 - BRANCO
+                3 - INDIGENA
+                4 - AMARELO
+                """);
+
         int tentativas = 0;
+
         while (tentativas < 3){
             tentativas++;
-            etnia = scanner.nextLine();
+            String etnia = scanner.nextLine();
 
             if (etnia.isEmpty()) {
-                System.out.println("O campo etnia não pode ser vazio.\nVocê possui 3 tentativas, restam: " + (3-tentativas));
+                System.out.println("O campo etnia não pode ser vazio.\nVocê possui 3 tentativas, restam: " + (3 - tentativas));
+            } else if(this.etniaValida(etnia)){
+                System.out.printf("""
+                        Digite algum dos valores informados.\nVocê possui 3 tentativas, restam: %s
+                        """, (3 - tentativas));
             }else{
-                break;
+                return switch (etnia) {
+                    case "0" -> Etnia.PRETO;
+                    case "1" -> Etnia.PARDO;
+                    case "2" -> Etnia.BRANCO;
+                    case "3" -> Etnia.INDIGENA;
+                    case "4" -> Etnia.AMARELO;
+                    default -> null;
+                };
             }
+
             if(tentativas == 3){
                 throw new InvalidInputException("Você ultrapassou o número de tentativas");
             }
         }
-        return etnia;
+        return null;
+    }
+
+    private boolean etniaValida(String etnia){
+        for(Etnia e: Etnia.values())
+            if(Objects.equals(e.getValor(), etnia))
+                return true;
+        return false;
     }
 
     private Date digitarCampoData(){
@@ -195,8 +222,8 @@ public class CadastroUsuario implements IUsuarioCadastro{
             usuario.setSenhaUsuario(senhaUsuario);
 
             System.out.println("Digite a Etnia:");
-            String etnia = this.digitarCampoEtnia();
-            //usuario.setEtniaUsuario(etnia);
+            Etnia etnia = this.digitarCampoEtnia();
+            usuario.setEtniaUsuario(etnia);
 
             System.out.println("Digite sua data de nascimento (dd/MM/yyyy): ");
             Date dataNascimento = this.digitarCampoData();
@@ -244,7 +271,7 @@ public class CadastroUsuario implements IUsuarioCadastro{
             usuario.setSenhaUsuario(senhaUsuario);
 
             System.out.println("Digite a Etnia:");
-            String etnia = this.digitarCampoEtnia();
+//            String etnia = this.digitarCampoEtnia();
             //usuario.setEtniaUsuario(etnia);
 
             System.out.println("Digite sua data de nascimento (dd/MM/yyyy): ");
