@@ -11,13 +11,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.Random;
 import java.util.Scanner;
 
-public class CadastroUsuarioHelper {
+public abstract class CadastroUsuarioHelper {
     private static final Scanner scanner = new Scanner(System.in);
     private static final String LIMITE_TENTATIVAS = "Você ultrapassou o número de tentativas";
     private static final Random random = new Random();
+    private static final String MENSAGEM_VALORES_INFORMADOS = "Digite algum dos valores informados.";
+    private static final String MENSAGEM_TENTATIVAS_RESTANTES = "Você possui 3 tentativas, restam: ";
+    private static final int LIMITE_SUPERIOR = 1000;
 
-    protected int gerarNumeroAleatorio(int limiteSuperior) {
-        return random.nextInt(limiteSuperior);
+    protected int gerarNumeroAleatorio() {
+        return random.nextInt(LIMITE_SUPERIOR);
     }
 
     protected String digitarCampo(String regex) throws MaxAttemptsExceededException {
@@ -29,9 +32,9 @@ public class CadastroUsuarioHelper {
             campo = scanner.nextLine();
 
             if (campo.isEmpty()) {
-                System.out.println("Campo não pode ser vazio.\nVocê possui 3 tentativas, restam: " + (3 - tentativas));
+                System.out.println("Campo não pode ser vazio.\n "+ MENSAGEM_TENTATIVAS_RESTANTES + (3 - tentativas));
             } else if (!campo.matches(regex)) {
-                System.out.println("Formato inválido.\nVocê possui 3 tentativas, restam: " + (3 - tentativas));
+                System.out.println("Formato inválido.\n "+ MENSAGEM_TENTATIVAS_RESTANTES + (3 - tentativas));
             } else {
                 return campo;
             }
@@ -53,9 +56,9 @@ public class CadastroUsuarioHelper {
             String dataString = scanner.nextLine();
 
             if (dataString.isEmpty()) {
-                System.out.println("O campo data de nascimento não pode ser vazio.\nVocê possui 3 tentativas, restam: " + (3 - tentativas));
+                System.out.println("O campo data de nascimento não pode ser vazio.\n "+ MENSAGEM_TENTATIVAS_RESTANTES + (3 - tentativas));
             } else if (!validaFormatoDataNascimento(dataString)) {
-                System.out.printf("A data precisa ser inserida no seguinte formato - dd-MM-yyyy.\nVocê possui 3 tentativas, restam: %s%n", (3 - tentativas));
+                System.out.printf("A data precisa ser inserida no seguinte formato - dd-MM-yyyy.%n "+ MENSAGEM_TENTATIVAS_RESTANTES + "%s%n", (3 - tentativas));
             } else {
                 return LocalDate.parse(dataString, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
             }
@@ -69,7 +72,7 @@ public class CadastroUsuarioHelper {
     }
 
     private boolean validaFormatoDataNascimento(String dataNascimento) {
-        return dataNascimento.matches("(?=.*[0-9]).{2}-(?=.*[0-9]).{2}-(?=.*[0-9]).{4}");
+        return dataNascimento.matches("(?=.*\\d).{2}-(?=.*\\d).{2}-(?=.*\\d).{4}");
     }
 
     protected Etnia digitarCampoEtnia() throws MaxAttemptsExceededException {
@@ -82,7 +85,6 @@ public class CadastroUsuarioHelper {
                 """);
 
         String regex = "[0-4]";
-        String mensagem = "Digite algum dos valores informados.";
 
         int tentativas = 0;
         while (tentativas < 3) {
@@ -90,7 +92,7 @@ public class CadastroUsuarioHelper {
             String etnia = digitarCampo(regex);
 
             if (!validaEtnia(etnia)) {
-                System.out.println(mensagem + "\nVocê possui 3 tentativas, restam: " + (3 - tentativas));
+                System.out.println(MENSAGEM_VALORES_INFORMADOS + "\n"+ MENSAGEM_TENTATIVAS_RESTANTES + (3 - tentativas));
             } else {
                 return Etnia.values()[Integer.parseInt(etnia)];
             }
@@ -118,17 +120,17 @@ public class CadastroUsuarioHelper {
     protected String digitarCampoSenha() throws MaxAttemptsExceededException {
         String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{6,18}$";
         String mensagem = """
-            Mínimo 6 e máximo 18 caracteres
-            Pelo menos 1 número
-            Pelo menos 1 letra minúscula
-            Pelo menos 1 letra maiúscula
-            Pelo menos 1 caracter especial (@ # $ % &)
-            """;
+        Mínimo 6 e máximo 18 caracteres
+        Pelo menos 1 número
+        Pelo menos 1 letra minúscula
+        Pelo menos 1 letra maiúscula
+        Pelo menos 1 caracter especial (@ # $ % &)
+        """;
 
-        return digitarCampo(regex, mensagem);
+        return digitarCampoValidado(regex, mensagem);
     }
 
-    protected String digitarCampo(String regex, String mensagem) throws MaxAttemptsExceededException {
+    protected String digitarCampoValidado(String regex, String mensagem) throws MaxAttemptsExceededException {
         String campo;
         int tentativas = 0;
 
@@ -137,9 +139,9 @@ public class CadastroUsuarioHelper {
             campo = scanner.nextLine();
 
             if (campo.isEmpty()) {
-                System.out.println("Campo não pode ser vazio.\nVocê possui 3 tentativas, restam: " + (3 - tentativas));
+                System.out.println("Campo não pode ser vazio.\n" + MENSAGEM_TENTATIVAS_RESTANTES + (3 - tentativas));
             } else if (!campo.matches(regex)) {
-                System.out.println(mensagem + "\nVocê possui 3 tentativas, restam: " + (3 - tentativas));
+                System.out.println(mensagem + "\n" + MENSAGEM_TENTATIVAS_RESTANTES + (3 - tentativas));
             } else {
                 return campo;
             }
@@ -160,7 +162,6 @@ public class CadastroUsuarioHelper {
                 """);
 
         String regex = "[0-2]";
-        String mensagem = "Digite algum dos valores informados.";
 
         int tentativas = 0;
         while (tentativas < 3) {
@@ -168,7 +169,7 @@ public class CadastroUsuarioHelper {
             String classeSocial = digitarCampo(regex);
 
             if (!classeSocial.matches(regex)) {
-                System.out.println(mensagem + "\nVocê possui 3 tentativas, restam: " + (3 - tentativas));
+                System.out.println(MENSAGEM_VALORES_INFORMADOS + MENSAGEM_TENTATIVAS_RESTANTES + (3 - tentativas));
             } else {
                 return ClasseSocial.values()[Integer.parseInt(classeSocial)];
             }
@@ -189,7 +190,6 @@ public class CadastroUsuarioHelper {
                 """);
 
         String regex = "[0-2]";
-        String mensagem = "Digite algum dos valores informados.";
 
         int tentativas = 0;
         while (tentativas < 3) {
@@ -197,7 +197,7 @@ public class CadastroUsuarioHelper {
             String genero = digitarCampo(regex);
 
             if (!genero.matches(regex)) {
-                System.out.println(mensagem + "\nVocê possui 3 tentativas, restam: " + (3 - tentativas));
+                System.out.println(MENSAGEM_VALORES_INFORMADOS + MENSAGEM_TENTATIVAS_RESTANTES + (3 - tentativas));
             } else {
                 return Genero.values()[Integer.parseInt(genero)];
             }
@@ -217,7 +217,6 @@ public class CadastroUsuarioHelper {
                 """);
 
         String regex = "[0-1]";
-        String mensagem = "Digite algum dos valores informados.";
 
         int tentativas = 0;
         while (tentativas < 3) {
@@ -225,7 +224,7 @@ public class CadastroUsuarioHelper {
             String tipoUsuario = digitarCampo(regex);
 
             if (!tipoUsuario.matches(regex)) {
-                System.out.println(mensagem + "\nVocê possui 3 tentativas, restam: " + (3 - tentativas));
+                System.out.println(MENSAGEM_VALORES_INFORMADOS + MENSAGEM_TENTATIVAS_RESTANTES + (3 - tentativas));
             } else {
                 return TipoUsuario.values()[Integer.parseInt(tipoUsuario)];
             }

@@ -11,9 +11,10 @@ public abstract class CadastroDenunciaHelper {
     private static final Pattern DOUBLE_PATTERN = Pattern.compile("^-?\\d*\\.\\d+$" + "|" + "^-?\\d+$");
     private static final String LIMITE_TENTATIVAS = "Você ultrapassou o número de tentativas";
     private static final Random random = new Random();
+    private static final int LIMITE_SUPERIOR = 1000;
 
-    protected int gerarNumeroAleatorio(int limiteSuperior) {
-        return random.nextInt(limiteSuperior);
+    protected int gerarNumeroAleatorio() {
+        return random.nextInt(LIMITE_SUPERIOR);
     }
 
     public String digitarNomeUsuario() throws MaxAttemptsExceededException {

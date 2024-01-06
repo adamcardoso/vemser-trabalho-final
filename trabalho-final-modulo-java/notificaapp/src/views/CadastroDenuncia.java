@@ -17,7 +17,7 @@ public class CadastroDenuncia extends CadastroDenunciaHelper implements IDenunci
     @Override
     public Denuncia cadastrarDenuncia() {
         try {
-            int idDenuncia = gerarNumeroAleatorio(1000);
+            int idDenuncia = gerarNumeroAleatorio();
 
             String nomeUsuario = this.digitarNomeUsuario();
             Usuario usuario = new Usuario(nomeUsuario);
