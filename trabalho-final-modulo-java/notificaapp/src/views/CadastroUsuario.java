@@ -55,22 +55,33 @@ public class CadastroUsuario implements IUsuarioCadastro{
     }
 
     private String digitarCampoSenha(){
-        String senhaUsuario = null;
         int tentativas = 0;
         while (tentativas < 3){
             tentativas++;
-            senhaUsuario = scanner.nextLine();
 
-            if (senhaUsuario.length() < 6) {
-                System.out.println("Senha deve conter pelo menos 6 caracteres.\nVocê possui 3 tentativas, restam: " + (3-tentativas));
+            String senhaUsuario = scanner.nextLine();
+
+            if (!this.validaSenha(senhaUsuario)) {
+                System.out.println("Padrão de senha inválido.\nVocê possui 3 tentativas, restam: " + (3-tentativas));
+                System.out.println("""
+                    entre 6 e 18 caracteres
+                    pelo menos 1 número
+                    pelo menos 1 letra minúscula
+                    pelo menos 1 letra maiúscula
+                    pelo menos 1 caracter especial (@ # $ % &)
+                    """);
             }else{
-                break;
+                return senhaUsuario;
             }
             if(tentativas == 3){
                 throw new InvalidInputException("Você ultrapassou o número de tentativas");
             }
         }
-        return senhaUsuario;
+        return null;
+    }
+
+    private boolean validaSenha(String senhaUsuario){
+        return senhaUsuario.matches("(?=.*[@#$%&])(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,18}");
     }
 
     private Etnia digitarCampoEtnia(){
@@ -270,6 +281,13 @@ public class CadastroUsuario implements IUsuarioCadastro{
             usuario.setNumeroCelular(numeroCelular);
 
             System.out.println("Digite a senha do usuário:");
+            System.out.println("""
+                    mínimo 6 e máximo 18 caracteres
+                    pelo menos 1 número
+                    pelo menos 1 letra minúscula
+                    pelo menos 1 letra maiúscula
+                    pelo menos 1 caracter especial (@ # $ % &)
+                    """);
             String senhaUsuario = this.digitarCampoSenha();
             usuario.setSenhaUsuario(senhaUsuario);
 
@@ -317,8 +335,14 @@ public class CadastroUsuario implements IUsuarioCadastro{
             usuario.setNumeroCelular(numeroCelular);
 
             System.out.println("Digite a senha do usuário:");
+            System.out.println("""
+                    mínimo 6 e máximo 18 caracteres
+                    pelo menos 1 número
+                    pelo menos 1 letra minúscula
+                    pelo menos 1 letra maiúscula
+                    pelo menos 1 caracter especial (@ # $ % &)
+                    """);
             String senhaUsuario = this.digitarCampoSenha();
-
             usuario.setSenhaUsuario(senhaUsuario);
 
             System.out.println("Digite a Etnia:");
