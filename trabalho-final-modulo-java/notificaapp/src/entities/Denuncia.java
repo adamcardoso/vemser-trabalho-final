@@ -4,6 +4,8 @@ import entities.enums.Categoria;
 import entities.enums.Situacao;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Denuncia{
     private int idDenuncia;
@@ -13,6 +15,10 @@ public class Denuncia{
     private LocalDateTime dataHora;
     private Situacao statusDenuncia;
     private Categoria categoria;
+    private int curtidas;
+    private final List<String> comentarios;
+
+    private int validarDenuncia;
 
     public Denuncia(int idDenuncia, String descricao, Localizacao local, Usuario usuario, LocalDateTime dataHora, Situacao statusDenuncia, Categoria categoria) {
         this.idDenuncia = idDenuncia;
@@ -22,9 +28,44 @@ public class Denuncia{
         this.dataHora = dataHora;
         this.statusDenuncia = statusDenuncia;
         this.categoria = categoria;
+        this.curtidas = 0;
+        this.validarDenuncia = 0;
+        this.comentarios = new ArrayList<>();
     }
 
-    public Denuncia() {}
+    public void curtirDenuncia(){
+        this.curtidas++;
+    }
+
+    public void validarDenuncia(){
+        this.validarDenuncia++;
+    }
+
+    public void comentar(String comentario){
+        comentarios.add(comentario);
+    }
+
+    public void imprimirDenunciaFeed(){
+        System.out.println(this.usuario.getNomeUsuario());
+        System.out.println("Titulo: " + this.descricao);
+        System.out.println("Quantiadde de validações: " + this.validarDenuncia);
+    }
+
+    public void imprimirDetalhesDenunciaFeed(){
+        this.imprimirDenunciaFeed();
+        System.out.println("Total de curtidas: " + this.curtidas);
+        System.out.println("Lista de comentários: ");
+        try {
+            for (int i = 0; i < comentarios.size(); i ++){
+                String comentario = comentarios.get(i);
+                System.out.println(" >" + i + ":" + comentario);
+
+            }
+        } catch ( Exception e){
+            System.out.println("Nenhum comentário");
+        }
+
+    }
 
     public int getIdDenuncia() {
         return idDenuncia;

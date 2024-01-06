@@ -5,7 +5,7 @@ import entities.enums.Etnia;
 import entities.enums.Genero;
 import entities.enums.TipoUsuario;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Usuario {
     private int idUsuario;
@@ -13,12 +13,12 @@ public class Usuario {
     private String numeroCelular;
     private String senhaUsuario;
     private Etnia etniaUsuario;
-    private Date dataNascimento;
+    private LocalDate dataNascimento;
     private ClasseSocial classeSocial;
     private Genero generoUsuario;
     private TipoUsuario tipoUsuario;
 
-    public Usuario(int idUsuario, String nomeUsuario, String numeroCelular, String senhaUsuario, Etnia etniaUsuario, Date dataNascimento, ClasseSocial classeSocial, Genero generoUsuario, TipoUsuario tipoUsuario) {
+    public Usuario(int idUsuario, String nomeUsuario, String numeroCelular, String senhaUsuario, Etnia etniaUsuario, LocalDate dataNascimento, ClasseSocial classeSocial, Genero generoUsuario, TipoUsuario tipoUsuario) {
         this.idUsuario = idUsuario;
         this.nomeUsuario = nomeUsuario;
         this.numeroCelular = numeroCelular;
@@ -31,6 +31,10 @@ public class Usuario {
     }
 
     public Usuario() {
+    }
+
+    public Usuario(String nomeUsuario) {
+        this.nomeUsuario = nomeUsuario;
     }
 
     public int getIdUsuario() {
@@ -73,11 +77,11 @@ public class Usuario {
         this.etniaUsuario = etniaUsuario;
     }
 
-    public Date getDataNascimento() {
+    public LocalDate getDataNascimento() {
         return dataNascimento;
     }
 
-    public void setDataNascimento(Date dataNascimento) {
+    public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
 
