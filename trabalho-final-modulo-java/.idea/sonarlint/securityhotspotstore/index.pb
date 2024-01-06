@@ -41,3 +41,5 @@ l
 <notificaapp/src/exceptions/MaxAttemptsExceededException.java,2\5\25b05897b70cc4cd9d854e4da60d73b77814b3f8
 c
 3notificaapp/src/helpers/CadastroDenunciaHelper.java,2\f\2fc94538f4e93f9436b04ed20a2d315c97c61004
+b
+2notificaapp/src/helpers/CadastroUsuarioHelper.java,6\5\655f9ffec5ab5c825414a7c6a062049855d1931b
