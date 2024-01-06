@@ -29,3 +29,17 @@ i
 9notificaapp/src/exceptions/IndexOutOfBoundsException.java,2\9\2943f79506d46aedf9de8c8e0461557a3a59a594
 `
 0notificaapp/src/interfaces/IUsuarioCadastro.java,3\c\3c90abe66bac1398684b539a035b55d251796afb
+Y
+)notificaapp/src/entities/enums/Etnia.java,0\2\028cdc565fe682f8762235377833df130bbaa2d2
+Z
+*notificaapp/src/entities/enums/Genero.java,0\8\083777af7324e7f5bd1fef18fda5fceb33ac6e98
+_
+/notificaapp/src/entities/enums/TipoUsuario.java,6\e\6e2edd6f252831b1b5d69eadc29ee13164489bcf
+`
+0notificaapp/src/entities/enums/ClasseSocial.java,1\4\1495703c2c940afc866591df168a03c4473cc54d
+l
+<notificaapp/src/exceptions/MaxAttemptsExceededException.java,2\5\25b05897b70cc4cd9d854e4da60d73b77814b3f8
+c
+3notificaapp/src/helpers/CadastroDenunciaHelper.java,2\f\2fc94538f4e93f9436b04ed20a2d315c97c61004
+b
+2notificaapp/src/helpers/CadastroUsuarioHelper.java,6\5\655f9ffec5ab5c825414a7c6a062049855d1931b

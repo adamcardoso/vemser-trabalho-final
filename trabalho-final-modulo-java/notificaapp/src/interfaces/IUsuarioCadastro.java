@@ -1,9 +1,7 @@
 package interfaces;
 
-import entities.Denuncia;
 import entities.Usuario;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public interface IUsuarioCadastro {

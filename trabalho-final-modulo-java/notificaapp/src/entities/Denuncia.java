@@ -5,6 +5,7 @@ import entities.enums.Situacao;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Denuncia{
     private int idDenuncia;
@@ -15,7 +16,7 @@ public class Denuncia{
     private Situacao statusDenuncia;
     private Categoria categoria;
     private int curtidas;
-    private ArrayList<String> comentarios;
+    private final List<String> comentarios;
 
     private int validarDenuncia;
 
@@ -31,7 +32,6 @@ public class Denuncia{
         this.validarDenuncia = 0;
         this.comentarios = new ArrayList<>();
     }
-
 
     public void curtirDenuncia(){
         this.curtidas++;
@@ -66,8 +66,6 @@ public class Denuncia{
         }
 
     }
-
-    public Denuncia() {}
 
     public int getIdDenuncia() {
         return idDenuncia;
@@ -123,29 +121,5 @@ public class Denuncia{
 
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
-    }
-
-    public ArrayList<String> getComentarios() {
-        return comentarios;
-    }
-
-    public void setComentarios(ArrayList<String> comentarios) {
-        this.comentarios = comentarios;
-    }
-
-    public int getCurtidas() {
-        return curtidas;
-    }
-
-    public void setCurtidas(int curtidas) {
-        this.curtidas = curtidas;
-    }
-
-    public int getValidarDenuncia() {
-        return validarDenuncia;
-    }
-
-    public void setValidarDenuncia(int validarDenuncia) {
-        this.validarDenuncia = validarDenuncia;
     }
 }
