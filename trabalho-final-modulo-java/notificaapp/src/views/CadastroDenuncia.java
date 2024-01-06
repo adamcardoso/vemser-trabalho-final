@@ -11,121 +11,245 @@ import interfaces.IDenunciaCadastro;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class CadastroDenuncia implements IDenunciaCadastro {
     Scanner scanner = new Scanner(System.in);
-    @Override
-    public Denuncia cadastrarDenuncia() {
 
-        int idDenuncia = (int) (Math.random() * 1000);
-        System.out.println("Digite o nome do usuário:");
-        String nomeUsuario = scanner.nextLine();
+    private static final Pattern INTEGER_PATTERN = Pattern.compile("^-?\\d+$");
+    private static final Pattern DOUBLE_PATTERN = Pattern.compile("^-?\\d*\\.\\d+$" + "|" + "^-?\\d+$");
 
-        if (nomeUsuario.isEmpty()) {
-            throw new InvalidInputException("Nome do usuário não pode ser vazio.");
+
+    private String digitarNomeUsuario(){
+        String nomeUsuario = null;
+        int tentativas = 0;
+
+        while (tentativas < 3){
+            tentativas++;
+            nomeUsuario = scanner.nextLine();
+
+            if (nomeUsuario.isEmpty()) {
+                System.err.println("Nome do usuário não pode ser vazio.\nVocê possui 3 tentativas, restam: " + (3-tentativas));
+            } else {
+                break;
+            }
+            if (tentativas == 3) {
+                throw new InvalidInputException("Você ultrapassou o número de tentativas");
+            }
         }
+        return nomeUsuario;
+    }
 
-        Usuario usuario = new Usuario(nomeUsuario);
+    private String digitarDescricao(){
+        String descricao = null;
+        int tentativas = 0;
 
-        System.out.println("Digite a Descrição:");
-        String descricao = scanner.nextLine();
+        while (tentativas < 3){
+            tentativas++;
+            descricao = scanner.nextLine();
 
-        System.out.println("Digite a Localização (Longitude):");
-        double longitude = scanner.nextDouble();
-
-        System.out.println("Digite a Localização (Latitude):");
-        double latitude = scanner.nextDouble();
-        Localizacao localizacao = new Localizacao(latitude, longitude);
-
-        System.out.println("Selecione o Status da Denúncia:");
-        for (Situacao situacao : Situacao.values()) {
-            System.out.println(situacao.ordinal() + " - " + situacao);
+            if (descricao.isEmpty()) {
+                System.err.println("Descrição não pode ser vazia.\nVocê possui 3 tentativas, restam: " + (3-tentativas));
+            } else {
+                break;
+            }
+            if (tentativas == 3) {
+                throw new InvalidInputException("Você ultrapassou o número de tentativas");
+            }
         }
+        return descricao;
+    }
 
-        int opcaoStatus = scanner.nextInt();
-        Situacao statusDenuncia = Situacao.values()[opcaoStatus];
+    private double digitarLongitude(){
+        String longitude = null;
+        int tentativas = 0;
 
-        System.out.println("Selecione a Categoria da Denúncia:");
-        for (Categoria categoria : Categoria.values()) {
-            System.out.println(categoria.ordinal() + " - " + categoria);
+        while (tentativas < 3){
+            tentativas++;
+
+            longitude = scanner.nextLine();
+
+            if (longitude.isEmpty()) {
+                System.err.println("Longitude não pode ser vazia.\nVocê possui 3 tentativas, restam: " + (3-tentativas));
+            } else if (!DOUBLE_PATTERN.matcher(longitude).find()) {
+                System.err.println("Longitude deve ser um valor numérico.\nVocê possui 3 tentativas, restam: " + (3-tentativas));
+            } else {
+                break;
+            }
+            if (tentativas == 3) {
+                throw new InvalidInputException("Você ultrapassou o número de tentativas");
+            }
         }
+        return Double.parseDouble(longitude);
+    }
 
-        int opcaoCategoria = scanner.nextInt();
-        Categoria categoriaSelecionada = Categoria.values()[opcaoCategoria];
+    private double digitarLatitude(){
+        String latitude = null;
+        int tentativas = 0;
 
-        LocalDateTime dataHora = LocalDateTime.now();
+        while (tentativas < 3){
+            tentativas++;
 
-        Denuncia denuncia = new Denuncia(idDenuncia, descricao, localizacao, usuario, dataHora, statusDenuncia, categoriaSelecionada);
+            latitude = scanner.nextLine();
 
-        return denuncia;
+            if (latitude.isEmpty()) {
+                System.err.println("Latitude não pode ser vazia.\nVocê possui 3 tentativas, restam: " + (3-tentativas));
+            } else if (!DOUBLE_PATTERN.matcher(latitude).find()) {
+                System.err.println("Latitude deve ser um valor numérico.\nVocê possui 3 tentativas, restam: " + (3-tentativas));
+            } else {
+                break;
+            }
+            if (tentativas == 3) {
+                throw new InvalidInputException("Você ultrapassou o número de tentativas");
+            }
+        }
+        return Double.parseDouble(latitude);
+    }
+
+    private int digitarStatus(){
+        String status = null;
+        int tentativas = 0;
+
+        while (tentativas < 3){
+            tentativas++;
+
+            status = scanner.nextLine();
+
+            if (status.isEmpty()) {
+                System.err.println("Status não pode ser vazio.\nVocê possui 3 tentativas, restam: " + (3-tentativas));
+            } else if (!INTEGER_PATTERN.matcher(status).find()) {
+                System.err.println("Status deve ser um valor numérico.\nVocê possui 3 tentativas, restam: " + (3 - tentativas));
+            } else if (Integer.parseInt(status) < 0 || Integer.parseInt(status) >= Situacao.values().length) {
+                System.err.println("Status inválido.\nVocê possui 3 tentativas, restam: " + (3-tentativas));
+            } else {
+                break;
+            }
+            if (tentativas == 3) {
+                throw new InvalidInputException("Você ultrapassou o número de tentativas");
+            }
+        }
+        return Integer.parseInt(status);
+    }
+
+    private int digitarCategoria(){
+        String categoria = null;
+        int tentativas = 0;
+        while (tentativas < 3){
+            tentativas++;
+
+            categoria = scanner.nextLine();
+
+            if (categoria.isEmpty()) {
+                System.err.println("Categoria não pode ser vazia.\nVocê possui 3 tentativas, restam: " + (3-tentativas));
+            } else if (!INTEGER_PATTERN.matcher(categoria).find()) {
+                System.err.println("Categoria deve ser um valor numérico.\nVocê possui 3 tentativas, restam: " + (3 - tentativas));
+            } else if (Integer.parseInt(categoria) < 0 || Integer.parseInt(categoria) >= Categoria.values().length) {
+                System.err.println("Categoria inválida.\nVocê possui 3 tentativas, restam: " + (3-tentativas));
+            } else {
+                break;
+            }
+            if (tentativas == 3) {
+                throw new InvalidInputException("Você ultrapassou o número de tentativas");
+            }
+        }
+        return Integer.parseInt(categoria);
     }
 
     @Override
-    public Denuncia editarDenuncia(int idDenuncia, Denuncia denuncia) {
+    public Denuncia cadastrarDenuncia() {
         try {
-            denuncia.setIdDenuncia(idDenuncia);
+            int idDenuncia = (int) (Math.random() * 1000);
+
             System.out.println("Digite o nome do usuário:");
-            String nomeUsuario = scanner.nextLine();
+            String nomeUsuario = this.digitarNomeUsuario();
 
-            if (nomeUsuario.isEmpty()) {
-                throw new InvalidInputException("Nome do usuário não pode ser vazio.");
-            }
+            Usuario usuario = new Usuario(nomeUsuario);
 
-            Usuario usuario = new Usuario();
-            usuario.setNomeUsuario(nomeUsuario);
-            denuncia.setUsuario(usuario);
             System.out.println("Digite a Descrição:");
-            String descricao = scanner.nextLine();
-            denuncia.setDescricao(descricao);
-            Localizacao localizacao = new Localizacao();
+            String descricao = this.digitarDescricao();
 
-            try {
-                System.out.println("Digite a Localização (Longitude):");
-                double longitude = scanner.nextDouble();
-                localizacao.setLongitude(longitude);
-            } catch (Exception e) {
-                throw new InvalidInputException("Valor deve ser numérico.");
-            }
+            System.out.println("Digite a Localização (Longitude):");
+            double longitude = this.digitarLongitude();
 
-            try {
-                System.out.println("Digite a Localização (Latitude):");
-                double latitude = scanner.nextDouble();
-                localizacao.setLatitute(latitude);
-            } catch (Exception e) {
-                throw new InvalidInputException("Valor deve ser numérico.");
-            }
-            denuncia.setLocal(localizacao);
+            System.out.println("Digite a Localização (Latitude):");
+            double latitude = this.digitarLatitude();
+
+            Localizacao localizacao = new Localizacao(latitude, longitude);
+
             System.out.println("Selecione o Status da Denúncia:");
             for (Situacao situacao : Situacao.values()) {
                 System.out.println(situacao.ordinal() + " - " + situacao);
             }
 
-            try {
-                int opcaoStatus = scanner.nextInt();
-                Situacao statusDenuncia = Situacao.values()[opcaoStatus];
-                denuncia.setStatusDenuncia(statusDenuncia);
-            } catch (Exception e) {
-                throw new InvalidInputException("Valor inválido.");
-            }
+            int opcaoStatus = this.digitarStatus();
+            Situacao statusDenuncia = Situacao.values()[opcaoStatus];
 
             System.out.println("Selecione a Categoria da Denúncia:");
             for (Categoria categoria : Categoria.values()) {
                 System.out.println(categoria.ordinal() + " - " + categoria);
             }
 
-            try {
-                int opcaoCategoria = scanner.nextInt();
-                Categoria categoriaSelecionada = Categoria.values()[opcaoCategoria];
-                denuncia.setCategoria(categoriaSelecionada);
-            } catch (Exception e) {
-                throw new InvalidInputException("Valor inválido.");
+            int opcaoCategoria = this.digitarCategoria();
+            Categoria categoriaSelecionada = Categoria.values()[opcaoCategoria];
+
+            LocalDateTime dataHora = LocalDateTime.now();
+
+            Denuncia denuncia = new Denuncia(idDenuncia, descricao, localizacao, usuario, dataHora, statusDenuncia, categoriaSelecionada);
+
+            return denuncia;
+        } catch (InvalidInputException e) {
+            System.err.println("Tipo de entrada inválida: " + e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public Denuncia editarDenuncia(int idDenuncia, Denuncia denuncia) {
+        try {
+            denuncia.setIdDenuncia(idDenuncia);
+
+            System.out.println("Digite o nome do usuário:");
+            String nomeUsuario = this.digitarNomeUsuario();
+
+            Usuario usuario = new Usuario(nomeUsuario);
+            denuncia.setUsuario(usuario);
+
+            System.out.println("Digite a Descrição:");
+            String descricao = this.digitarDescricao();
+            denuncia.setDescricao(descricao);
+
+            System.out.println("Digite a Localização (Longitude):");
+            double longitude = this.digitarLongitude();
+
+            System.out.println("Digite a Localização (Latitude):");
+            double latitude = this.digitarLatitude();
+
+            Localizacao localizacao = new Localizacao(latitude, longitude);
+            denuncia.setLocal(localizacao);
+
+            System.out.println("Selecione o Status da Denúncia:");
+            for (Situacao situacao : Situacao.values()) {
+                System.out.println(situacao.ordinal() + " - " + situacao);
             }
+
+            int opcaoStatus = this.digitarStatus();
+            Situacao statusDenuncia = Situacao.values()[opcaoStatus];
+            denuncia.setStatusDenuncia(statusDenuncia);
+
+            System.out.println("Selecione a Categoria da Denúncia:");
+            for (Categoria categoria : Categoria.values()) {
+                System.out.println(categoria.ordinal() + " - " + categoria);
+            }
+
+            int opcaoCategoria = this.digitarCategoria();
+            Categoria categoriaSelecionada = Categoria.values()[opcaoCategoria];
+            denuncia.setCategoria(categoriaSelecionada);
 
             LocalDateTime dataHora = LocalDateTime.now();
 
             denuncia.setDataHora(dataHora);
         } catch (InvalidInputException e) {
-            System.out.println("Tipo de entrada inválida: " + e.getMessage());
+            System.err.println("Tipo de entrada inválida: " + e.getMessage());
             return null;
         }
 
