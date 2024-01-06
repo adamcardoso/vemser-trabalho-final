@@ -10,6 +10,8 @@ import exceptions.InvalidInputException;
 import interfaces.IUsuarioCadastro;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class CadastroUsuario implements IUsuarioCadastro{
@@ -130,26 +132,35 @@ public class CadastroUsuario implements IUsuarioCadastro{
         return false;
     }
 
-    private Date digitarCampoData(){
-        Date dataNascimento = null;
+    private LocalDate digitarCampoData(){
         int tentativas = 0;
-        while (tentativas < 3){
-            tentativas++;
-            String data = scanner.nextLine();
-            try {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                dateFormat.setLenient(false);
 
-                dataNascimento = dateFormat.parse(data);
-                return dataNascimento;
-            } catch (Exception e) {
-                System.out.println("Formato de data inválido. Certifique-se de usar o formato dd/MM/yyyy.\nVocê possui 3 tentativas, restam: " + (3-tentativas));
+        while(tentativas < 3){
+            tentativas++;
+
+            String dataString = scanner.nextLine();
+
+            if(dataString.isEmpty()) {
+                System.out.println("O campo faixa salarial não pode ser vazio.\nVocê possui 3 tentativas, restam: " + (3 - tentativas));
+            } else if(!this.validaFormatoDataNascimento(dataString)){
+                System.out.printf("""
+                        A data precisa ser inserida no seguinte formato - dd-MM-yyyy.
+                        Você possui 3 tentativas, restam: %s
+                        """, (3 - tentativas));
+            } else{
+                return LocalDate.parse(dataString, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
             }
+
             if(tentativas == 3){
                 throw new InvalidInputException("Você ultrapassou o número de tentativas");
             }
         }
+
         return null;
+    }
+
+    private boolean validaFormatoDataNascimento(String dataNascimento){
+        return dataNascimento.matches("(?=.*[0-9]).{2}-(?=.*[0-9]).{2}-(?=.*[0-9]).{4}");
     }
 
     private ClasseSocial digitarCampoClasseSocial(){
@@ -266,7 +277,6 @@ public class CadastroUsuario implements IUsuarioCadastro{
     }
     @Override
     public Usuario cadastrarUsuario() {
-
         Usuario usuario = new Usuario();
         try {
             int idUsuario = random.nextInt(1000);
@@ -296,9 +306,8 @@ public class CadastroUsuario implements IUsuarioCadastro{
             usuario.setEtniaUsuario(etnia);
 
             System.out.println("Digite sua data de nascimento (dd/MM/yyyy): ");
-            Date dataNascimento = this.digitarCampoData();
+            LocalDate dataNascimento = this.digitarCampoData();
             usuario.setDataNascimento(dataNascimento);
-
 
             System.out.println("Digite sua faixa salárial:");
             ClasseSocial classesocial = this.digitarCampoClasseSocial();
@@ -324,14 +333,11 @@ public class CadastroUsuario implements IUsuarioCadastro{
         try {
             usuario.setIdUsuario(idUsuario);
             System.out.println("Digite o nome do usuário:");
-
             String nomeUsuario = this.digitarNomeUsuario();
-
             usuario.setNomeUsuario(nomeUsuario);
 
             System.out.println("Digite o número do celular:");
             String numeroCelular = this.digitarCampoNumeroCelular();
-
             usuario.setNumeroCelular(numeroCelular);
 
             System.out.println("Digite a senha do usuário:");
@@ -350,7 +356,7 @@ public class CadastroUsuario implements IUsuarioCadastro{
             usuario.setEtniaUsuario(etnia);
 
             System.out.println("Digite sua data de nascimento (dd/MM/yyyy): ");
-            Date dataNascimento = this.digitarCampoData();
+            LocalDate dataNascimento = this.digitarCampoData();
             usuario.setDataNascimento(dataNascimento);
 
             System.out.println("Digite sua faixa salárial:");
@@ -372,12 +378,8 @@ public class CadastroUsuario implements IUsuarioCadastro{
         return usuario;
     }
 
-
-
     @Override
     public void excluirUsuario(int idUsuario, HashMap<Integer, Usuario> usuario) {
-
-
         if (usuario.containsKey(idUsuario)){
             usuario.remove(idUsuario);
         } else
@@ -395,8 +397,5 @@ public class CadastroUsuario implements IUsuarioCadastro{
         System.out.println("Classe Social: " + usuario.getClasseSocial());
         System.out.println("Genero: " + usuario.getGeneroUsuario());
         System.out.println("Tipo do Usuário: " + usuario.getTipoUsuario());
-
-
     }
-
 }
