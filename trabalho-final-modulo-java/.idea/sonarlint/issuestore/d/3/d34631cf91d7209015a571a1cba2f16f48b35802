@@ -1,0 +1,17 @@
+
+^
+java:S1192n"ADefine a constant instead of duplicating this text block 3 times.(¨Öô¨8šÄñøÍ1
+^
+java:S6353Y"<Use concise character class syntax '\\d' instead of '[0-9]'.(¥÷€øÿÿÿÿ8¿ÅñøÍ1
+E
+java:S5665o"(Remove this unnecessary escape sequence.(¨ê¾ˆ8ÂÅñøÍ1
+_
+java:S6353¦"<Use concise character class syntax '\\d' instead of '[0-9]'.(ÎŠ¤şûÿÿÿÿ8ÈÅñøÍ1
+_
+java:S6353¦"<Use concise character class syntax '\\d' instead of '[0-9]'.(ÎŠ¤şûÿÿÿÿ8ÉÅñøÍ1
+_
+java:S6353¦"<Use concise character class syntax '\\d' instead of '[0-9]'.(ÎŠ¤şûÿÿÿÿ8ÉÅñøÍ1
+F
+java:S5665¼"(Remove this unnecessary escape sequence.(¨ê¾ˆ8ËÅñøÍ1
+F
+java:S5665è"(Remove this unnecessary escape sequence.(¨ê¾ˆ8ÍÅñøÍ1

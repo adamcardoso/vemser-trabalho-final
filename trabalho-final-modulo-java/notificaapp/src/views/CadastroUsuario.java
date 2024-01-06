@@ -1,22 +1,25 @@
 package views;
 
-import entities.Denuncia;
 import entities.Usuario;
 import entities.enums.ClasseSocial;
 import entities.enums.Etnia;
 import entities.enums.Genero;
 import entities.enums.TipoUsuario;
-import exceptions.InvalidInputException;
+import exceptions.MaxAttemptsExceededException;
 import interfaces.IUsuarioCadastro;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.Random;
+import java.util.Scanner;
 
 public class CadastroUsuario implements IUsuarioCadastro{
     Scanner scanner = new Scanner(System.in);
     private static final Random random = new Random();
+
+    private static final String LIMITE_TENTATIVAS = "Você ultrapassou o número de tentativas";
 
     private String digitarNomeUsuario(){
         String nomeUsuario = null;
@@ -31,7 +34,7 @@ public class CadastroUsuario implements IUsuarioCadastro{
                 break;
             }
             if(tentativas == 3){
-                throw new InvalidInputException("Você ultrapassou o número de tentativas");
+                throw new MaxAttemptsExceededException(LIMITE_TENTATIVAS);
             }
         }
         return nomeUsuario;
@@ -50,7 +53,7 @@ public class CadastroUsuario implements IUsuarioCadastro{
                 break;
             }
             if(tentativas == 3){
-                throw new InvalidInputException("Você ultrapassou o número de tentativas");
+                throw new MaxAttemptsExceededException(LIMITE_TENTATIVAS);
             }
         }
         return numeroCelular;
@@ -76,7 +79,7 @@ public class CadastroUsuario implements IUsuarioCadastro{
                 return senhaUsuario;
             }
             if(tentativas == 3){
-                throw new InvalidInputException("Você ultrapassou o número de tentativas");
+                throw new MaxAttemptsExceededException(LIMITE_TENTATIVAS);
             }
         }
         return null;
@@ -119,7 +122,7 @@ public class CadastroUsuario implements IUsuarioCadastro{
             }
 
             if(tentativas == 3){
-                throw new InvalidInputException("Você ultrapassou o número de tentativas");
+                throw new MaxAttemptsExceededException(LIMITE_TENTATIVAS);
             }
         }
         return null;
@@ -152,7 +155,7 @@ public class CadastroUsuario implements IUsuarioCadastro{
             }
 
             if(tentativas == 3){
-                throw new InvalidInputException("Você ultrapassou o número de tentativas");
+                throw new MaxAttemptsExceededException(LIMITE_TENTATIVAS);
             }
         }
 
@@ -196,7 +199,7 @@ public class CadastroUsuario implements IUsuarioCadastro{
             }
 
             if(tentativas == 3){
-                throw new InvalidInputException("Você ultrapassou o número de tentativas");
+                throw new MaxAttemptsExceededException(LIMITE_TENTATIVAS);
             }
         }
         return null;
@@ -238,7 +241,7 @@ public class CadastroUsuario implements IUsuarioCadastro{
             }
 
             if(tentativas == 3){
-                throw new InvalidInputException("Você ultrapassou o número de tentativas");
+                throw new MaxAttemptsExceededException(LIMITE_TENTATIVAS);
             }
         }
         return null;
@@ -268,12 +271,11 @@ public class CadastroUsuario implements IUsuarioCadastro{
                 break;
             }
             if(tentativas == 3){
-                throw new InvalidInputException("Você ultrapassou o número de tentativas");
+                throw new MaxAttemptsExceededException(LIMITE_TENTATIVAS);
             }
         }
-        TipoUsuario tipo = TipoUsuario.values()[opcaoTipo];
 
-        return tipo;
+        return TipoUsuario.values()[opcaoTipo];
     }
     @Override
     public Usuario cadastrarUsuario() {
@@ -321,7 +323,7 @@ public class CadastroUsuario implements IUsuarioCadastro{
             TipoUsuario tipo = this.digitarCampoTipoDeUsuario();
             usuario.setTipoUsuario(tipo);
 
-        } catch (InvalidInputException e) {
+        } catch (MaxAttemptsExceededException e) {
             System.out.println("Tipo de entrada inválida: " + e.getMessage());
         }
 
@@ -371,7 +373,7 @@ public class CadastroUsuario implements IUsuarioCadastro{
             TipoUsuario tipo = this.digitarCampoTipoDeUsuario();
             usuario.setTipoUsuario(tipo);
 
-        } catch (InvalidInputException e) {
+        } catch (MaxAttemptsExceededException e) {
             System.out.println("Tipo de entrada inválida: " + e.getMessage());
         }
 

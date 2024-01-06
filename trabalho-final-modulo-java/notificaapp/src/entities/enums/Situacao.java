@@ -5,5 +5,5 @@ public enum Situacao {
     EM_ANALISE,
     EM_ANDAMENTO,
     RESOLVIDO,
-    FECHADO;
+    FECHADO
 }

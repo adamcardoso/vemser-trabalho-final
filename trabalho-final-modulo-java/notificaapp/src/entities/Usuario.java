@@ -6,7 +6,6 @@ import entities.enums.Genero;
 import entities.enums.TipoUsuario;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class Usuario {
     private int idUsuario;
