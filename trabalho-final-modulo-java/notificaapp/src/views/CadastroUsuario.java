@@ -15,8 +15,6 @@ import java.util.HashMap;
 public class CadastroUsuario extends CadastroUsuarioHelper implements IUsuarioCadastro {
 
     private void lerInformacoesBasicasUsuario(Usuario usuario) throws MaxAttemptsExceededException {
-        int idUsuario = gerarNumeroAleatorio();
-        usuario.setIdUsuario(idUsuario);
 
         System.out.println("Digite o nome do usuário:");
         String nomeUsuario = digitarNomeUsuario();
@@ -61,6 +59,8 @@ public class CadastroUsuario extends CadastroUsuarioHelper implements IUsuarioCa
     @Override
     public Usuario cadastrarUsuario() {
         Usuario usuario = new Usuario();
+        int idUsuario = gerarNumeroAleatorio();
+        usuario.setIdUsuario(idUsuario);
         try {
             lerInformacoesBasicasUsuario(usuario);
         } catch (MaxAttemptsExceededException e) {
@@ -85,6 +85,7 @@ public class CadastroUsuario extends CadastroUsuarioHelper implements IUsuarioCa
     @Override
     public void excluirUsuario(int idUsuario, HashMap<Integer, Usuario> usuarios) {
         if (usuarios.containsKey(idUsuario)) {
+            System.out.println("Usuario "+usuarios.get(idUsuario).getNomeUsuario()+" Removido!");
             usuarios.remove(idUsuario);
         } else {
             System.out.println("Usuário não encontrado");

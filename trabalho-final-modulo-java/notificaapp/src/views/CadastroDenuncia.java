@@ -19,12 +19,16 @@ public class CadastroDenuncia extends CadastroDenunciaHelper implements IDenunci
         try {
             int idDenuncia = gerarNumeroAleatorio();
 
+            System.out.println("Nome: ");
             String nomeUsuario = this.digitarNomeUsuario();
             Usuario usuario = new Usuario(nomeUsuario);
 
+            System.out.println("Descrição: ");
             String descricao = this.digitarDescricao();
 
+            System.out.println("longitute: ");
             double longitude = this.digitarLongitude();
+            System.out.println("latitude: ");
             double latitude = this.digitarLatitude();
             Localizacao localizacao = new Localizacao(latitude, longitude);
 
@@ -100,7 +104,7 @@ public class CadastroDenuncia extends CadastroDenunciaHelper implements IDenunci
         System.out.println("Nome do Usuário: " + denuncia.getUsuario().getNomeUsuario());
         System.out.println("Descrição: " + denuncia.getDescricao());
         System.out.println("Localização (Longitude): " + denuncia.getLocal().longitude());
-        System.out.println("Localização (Latitude): " + denuncia.getLocal().latitute());
+        System.out.println("Localização (Latitude): " + denuncia.getLocal().latitude());
         System.out.println("Status da Denúncia: " + denuncia.getStatusDenuncia());
         System.out.println("Categoria: " + denuncia.getCategoria());
         System.out.println("Data e Hora: " + denuncia.getDataHora());

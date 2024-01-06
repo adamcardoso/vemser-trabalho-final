@@ -1,4 +1,4 @@
 package entities;
 
-public record Localizacao(double latitute, double longitude) {
+public record Localizacao(double latitude, double longitude) {
 }
