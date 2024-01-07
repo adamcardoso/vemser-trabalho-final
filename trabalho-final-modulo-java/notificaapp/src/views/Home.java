@@ -37,6 +37,18 @@ public class Home {
         Usuario testeUsuario = new Usuario(123, "jean", "12233445", "A1@abcd", Etnia.INDIGENA, null, ClasseSocial.A, Genero.MASCULINO, TipoUsuario.INDIVIDUAL);
         loginUsuario = testeUsuario;
         listagemUsuario.put(testeUsuario.getIdUsuario(), testeUsuario);
+
+        // Teste Usuario 1
+        Usuario testeUsuario1 = new Usuario(124, "maria", "12233446", "B2@efgh", Etnia.BRANCO, null, ClasseSocial.B, Genero.FEMININO, TipoUsuario.INDIVIDUAL);
+        listagemUsuario.put(testeUsuario1.getIdUsuario(), testeUsuario1);
+
+        // Teste Usuario 2
+        Usuario testeUsuario2 = new Usuario(125, "joao", "12233447", "C3@ijkl", Etnia.PARDO, null, ClasseSocial.C, Genero.MASCULINO, TipoUsuario.INDIVIDUAL);
+        listagemUsuario.put(testeUsuario2.getIdUsuario(), testeUsuario2);
+
+        // Teste Usuario 3
+        Usuario testeUsuario3 = new Usuario(126, "ana", "12233448", "D4@mnop", Etnia.PRETO, null, ClasseSocial.D, Genero.FEMININO, TipoUsuario.INDIVIDUAL);
+        listagemUsuario.put(testeUsuario3.getIdUsuario(), testeUsuario3);
     }
 
     public void login() {
