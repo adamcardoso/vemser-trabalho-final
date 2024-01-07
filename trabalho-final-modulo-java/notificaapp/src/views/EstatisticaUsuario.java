@@ -16,6 +16,7 @@ public class EstatisticaUsuario {
         Map<Etnia, Integer> etniaCount = new HashMap<>();
         Map<Genero, Integer> generoCount = new HashMap<>();
 
+        System.out.println("------------- NOTIFICA -------------");
         for (Usuario usuario : usuarios) {
             classeSocialCount.put(usuario.getClasseSocial(), classeSocialCount.getOrDefault(usuario.getClasseSocial(), 0) + 1);
             etniaCount.put(usuario.getEtniaUsuario(), etniaCount.getOrDefault(usuario.getEtniaUsuario(), 0) + 1);
@@ -27,12 +28,12 @@ public class EstatisticaUsuario {
             System.out.println(classeSocial + ": " + (classeSocialCount.getOrDefault(classeSocial, 0) * 100.0 / usuarios.size()) + "%");
         }
 
-        System.out.println("Etnia:");
+        System.out.println("\nEtnia:");
         for (Etnia etnia : Etnia.values()) {
             System.out.println(etnia + ": " + (etniaCount.getOrDefault(etnia, 0) * 100.0 / usuarios.size()) + "%");
         }
 
-        System.out.println("Gênero:");
+        System.out.println("\nGênero:");
         for (Genero genero : Genero.values()) {
             System.out.println(genero + ": " + (generoCount.getOrDefault(genero, 0) * 100.0 / usuarios.size()) + "%");
         }
