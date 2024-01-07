@@ -7,6 +7,7 @@ import entities.enums.Etnia;
 import entities.enums.Genero;
 import entities.enums.TipoUsuario;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -18,6 +19,7 @@ public class Home {
     private final HashMap<Integer, Denuncia> listagemDenuncia;
     private boolean usuarioLogado = false;
     private Usuario loginUsuario;
+    private final EstatisticaUsuario estatisticaU;
 
     private static final String OPCAO_INVALIDA_MSG = "Opção inválida!";
     private static final String SAINDO_DO_SISTEMA_MSG = "Saindo do sistema...";
@@ -29,11 +31,24 @@ public class Home {
         this.scanner = new Scanner(System.in);
         this.cadastroU = new CadastroUsuario();
         this.listagemDenuncia = new HashMap<>();
+        this.estatisticaU = new EstatisticaUsuario();
 
         //TESTES
         Usuario testeUsuario = new Usuario(123, "jean", "12233445", "A1@abcd", Etnia.INDIGENA, null, ClasseSocial.A, Genero.MASCULINO, TipoUsuario.INDIVIDUAL);
-        loginUsuario=testeUsuario;
+        loginUsuario = testeUsuario;
         listagemUsuario.put(testeUsuario.getIdUsuario(), testeUsuario);
+
+        // Teste Usuario 1
+        Usuario testeUsuario1 = new Usuario(124, "maria", "12233446", "B2@efgh", Etnia.BRANCO, null, ClasseSocial.B, Genero.FEMININO, TipoUsuario.INDIVIDUAL);
+        listagemUsuario.put(testeUsuario1.getIdUsuario(), testeUsuario1);
+
+        // Teste Usuario 2
+        Usuario testeUsuario2 = new Usuario(125, "joao", "12233447", "C3@ijkl", Etnia.PARDO, null, ClasseSocial.C, Genero.MASCULINO, TipoUsuario.INDIVIDUAL);
+        listagemUsuario.put(testeUsuario2.getIdUsuario(), testeUsuario2);
+
+        // Teste Usuario 3
+        Usuario testeUsuario3 = new Usuario(126, "ana", "12233448", "D4@mnop", Etnia.PRETO, null, ClasseSocial.D, Genero.FEMININO, TipoUsuario.INDIVIDUAL);
+        listagemUsuario.put(testeUsuario3.getIdUsuario(), testeUsuario3);
     }
 
     public void login() {
@@ -108,6 +123,10 @@ public class Home {
         listagemUsuario.put(loginUsuario.getIdUsuario(), loginUsuario);
     }
 
+    private void exibirEstatisticas() {
+        estatisticaU.exibirEstatisticas(new ArrayList<>(listagemUsuario.values()));
+    }
+
     public void iniciarSistema() {
         int opcao;
 
@@ -130,13 +149,16 @@ public class Home {
                     opcaoFeed();
                     break;
                 case 4:
+                    exibirEstatisticas();
+                    break;
+                case 5:
                     System.out.println(SAINDO_DO_SISTEMA_MSG);
                     break;
                 default:
                     System.out.println(OPCAO_INVALIDA_MSG);
                     break;
             }
-        } while (opcao != 4);
+        } while (opcao != 5);
     }
 
     private void exibirMenuPrincipal() {
@@ -146,7 +168,8 @@ public class Home {
         }
         System.out.println("2. Denúncia");
         System.out.println("3. Feed");
-        System.out.println("4. Sair");
+        System.out.println("4. Estatística");
+        System.out.println("5. Sair");
         System.out.println(ESCOLHA_OPCAO_MSG);
     }
 
