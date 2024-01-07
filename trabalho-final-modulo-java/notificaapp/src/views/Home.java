@@ -25,12 +25,11 @@ public class Home {
 
         //TESTES
         Usuario testeUsuario = new Usuario(123, "jean", "12233445", "A1@abcd", Etnia.INDIGENA, null, ClasseSocial.A, Genero.MASCULINO, TipoUsuario.INDIVIDUAL);
-        loginUsuario=testeUsuario;
+        loginUsuario = testeUsuario;
         listagemUsuario.put(testeUsuario.getIdUsuario(), testeUsuario);
     }
 
     public void login() {
-
 
 
         int opLogin;
@@ -50,7 +49,7 @@ public class Home {
                     String nomeUsuario = scanner.next();
                     System.out.println("Digite sua senha: ");
                     String senhaUsuario = scanner.next();
-                    for (Map.Entry <Integer, Usuario> usuario : listagemUsuario.entrySet()) {
+                    for (Map.Entry<Integer, Usuario> usuario : listagemUsuario.entrySet()) {
                         Usuario u = usuario.getValue();
                         if (u.getNomeUsuario().equals(nomeUsuario)) {
                             if (u.getSenhaUsuario().equals(senhaUsuario)) {
@@ -95,7 +94,7 @@ public class Home {
 
         do {
             System.out.println(" ------------- NOTIFICA -------------");
-            if (usuarioLogado){
+            if (usuarioLogado) {
                 System.out.println("1. Usuário");
             }
             System.out.println("2. Denúncia");
@@ -108,7 +107,7 @@ public class Home {
             switch (opcao) {
 
                 case 1:
-                    if(usuarioLogado){
+                    if (usuarioLogado) {
                         int opUsuario;
                         do {
 
@@ -238,7 +237,7 @@ public class Home {
                     } while (opDenuncia != 5);
                     break;
                 case 3:
-                    System.out.println("------------- Feed -------------");
+                    System.out.println("------------- FEED -------------");
                     this.opcaoFeed();
                     break;
                 case 4:
@@ -269,10 +268,11 @@ public class Home {
         int opFeed;
 
         do {
-            System.out.println(" ------------- FEED -------------");
             listagemDenuncia.forEach((_index, itemDenuncia) -> {
                 System.out.print(_index + ": ");
                 itemDenuncia.imprimirDenunciaFeed();
+                System.out.println("................................");
+
             });
 
             System.out.println("Digite o número da denúncia\nque você deseja reagir");
