@@ -1,12 +1,11 @@
 package views;
 
 import entities.Denuncia;
+import entities.Localizacao;
 import entities.Usuario;
-import entities.enums.ClasseSocial;
-import entities.enums.Etnia;
-import entities.enums.Genero;
-import entities.enums.TipoUsuario;
+import entities.enums.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +23,7 @@ public class Home {
     private static final String OPCAO_INVALIDA_MSG = "Opção inválida!";
     private static final String SAINDO_DO_SISTEMA_MSG = "Saindo do sistema...";
     private static final String ESCOLHA_OPCAO_MSG = "Escolha uma opção: ";
+    private static final String VOLTANDO = "Voltando... ";
     private static final String CABECALHO_NOTIFICA_MSG = "------------- NOTIFICA -------------";
 
     public Home() {
@@ -33,22 +33,42 @@ public class Home {
         this.listagemDenuncia = new HashMap<>();
         this.estatisticaU = new EstatisticaUsuario();
 
-        //TESTES
-        Usuario testeUsuario = new Usuario(123, "jean", "12233445", "A1@abcd", Etnia.INDIGENA, null, ClasseSocial.A, Genero.MASCULINO, TipoUsuario.INDIVIDUAL);
-        loginUsuario = testeUsuario;
+        // Usuários
+        Usuario testeUsuario = new Usuario(123, "jean", "122339", "A1@abcd", Etnia.INDIGENA, null, ClasseSocial.E, Genero.MASCULINO, TipoUsuario.INDIVIDUAL);
         listagemUsuario.put(testeUsuario.getIdUsuario(), testeUsuario);
 
-        // Teste Usuario 1
-        Usuario testeUsuario1 = new Usuario(124, "maria", "12233446", "B2@efgh", Etnia.BRANCO, null, ClasseSocial.B, Genero.FEMININO, TipoUsuario.INDIVIDUAL);
+        Usuario testeUsuario1 = new Usuario(124, "maria", "122334469", "B2@efgh", Etnia.PARDO, null, ClasseSocial.E, Genero.FEMININO, TipoUsuario.INDIVIDUAL);
         listagemUsuario.put(testeUsuario1.getIdUsuario(), testeUsuario1);
 
-        // Teste Usuario 2
-        Usuario testeUsuario2 = new Usuario(125, "joao", "12233447", "C3@ijkl", Etnia.PARDO, null, ClasseSocial.C, Genero.MASCULINO, TipoUsuario.INDIVIDUAL);
+        Usuario testeUsuario2 = new Usuario(125, "joao", "122334479", "C3@ijkl", Etnia.PRETO, null, ClasseSocial.C, Genero.MASCULINO, TipoUsuario.INDIVIDUAL);
         listagemUsuario.put(testeUsuario2.getIdUsuario(), testeUsuario2);
 
-        // Teste Usuario 3
-        Usuario testeUsuario3 = new Usuario(126, "ana", "12233448", "D4@mnop", Etnia.PRETO, null, ClasseSocial.D, Genero.FEMININO, TipoUsuario.INDIVIDUAL);
+        Usuario testeUsuario3 = new Usuario(126, "ana", "122334489", "D4@mnop", Etnia.PRETO, null, ClasseSocial.D, Genero.FEMININO, TipoUsuario.INDIVIDUAL);
         listagemUsuario.put(testeUsuario3.getIdUsuario(), testeUsuario3);
+
+        Usuario testeUsuario4 = new Usuario(127, "marta", "122334499", "E4@mnop", Etnia.PRETO, null, ClasseSocial.E, Genero.OUTRO, TipoUsuario.INDIVIDUAL);
+        listagemUsuario.put(testeUsuario4.getIdUsuario(), testeUsuario4);
+
+        Usuario testeUsuario5 = new Usuario(128, "pedro", "122334199", "F4@mnop", Etnia.BRANCO, null, ClasseSocial.D, Genero.MASCULINO, TipoUsuario.INDIVIDUAL);
+        listagemUsuario.put(testeUsuario5.getIdUsuario(), testeUsuario5);
+
+        Usuario testeUsuario6 = new Usuario(129, "hinata", "122334299", "G4@mnop", Etnia.AMARELO, null, ClasseSocial.C, Genero.FEMININO, TipoUsuario.INDIVIDUAL);
+        listagemUsuario.put(testeUsuario6.getIdUsuario(), testeUsuario6);
+
+        // Denúncias associadas aos usuários
+        listagemDenuncia.put(1, new Denuncia(1, "Esgoto ao Ar Livre", new Localizacao(123, 123),
+                testeUsuario5, LocalDateTime.of(2023, 7, 18, 8, 45), Situacao.ABERTO, Categoria.SANEAMENTO_BASICO
+        ));
+        listagemDenuncia.put(2, new Denuncia(2, "Vazamento de óleo", new Localizacao(456, 789),
+                testeUsuario3, LocalDateTime.of(2023, 6, 5, 11, 20), Situacao.ABERTO, Categoria.GESTAO_RESIDUOS
+        ));
+        listagemDenuncia.put(3, new Denuncia(3, "Falta de Água", new Localizacao(111, 333),
+                testeUsuario2, LocalDateTime.of(2023, 8, 20, 9, 0), Situacao.ABERTO, Categoria.AGUA_POTAVEL
+        ));
+        listagemDenuncia.put(4, new Denuncia(4, "Água Suja", new Localizacao(222, 444),
+                testeUsuario6, LocalDateTime.of(2023, 9, 12, 14, 30), Situacao.ABERTO, Categoria.AGUA_POTAVEL
+        ));
+
     }
 
     public void login() {
@@ -114,7 +134,7 @@ public class Home {
         System.out.println("Digite o nome do usuário");
         String nomeUsuarioSemLogin = scanner.next();
         usuarioLogado = false;
-        this.loginUsuario = new Usuario(nomeUsuarioSemLogin);
+        this.loginUsuario = new Usuario(1, nomeUsuarioSemLogin);
         this.iniciarSistema();
     }
 
@@ -125,6 +145,7 @@ public class Home {
 
     private void exibirEstatisticas() {
         estatisticaU.exibirEstatisticas(new ArrayList<>(listagemUsuario.values()));
+        iniciarSistema();
     }
 
     public void iniciarSistema() {
@@ -139,38 +160,62 @@ public class Home {
                 case 1:
                     if (usuarioLogado) {
                         menuUsuario();
+                    }else{
+                        menuDenuncia();
                     }
                     break;
                 case 2:
-                    menuDenuncia();
+                    if (usuarioLogado) {
+                        menuDenuncia();
+                    }else{
+                        opcaoFeed();
+                    }
                     break;
                 case 3:
-                    System.out.println("------------- Feed -------------");
-                    opcaoFeed();
+                    if (usuarioLogado) {
+                        opcaoFeed();
+                    }else {
+                        exibirEstatisticas();
+                    }
                     break;
                 case 4:
-                    exibirEstatisticas();
+                    if (usuarioLogado) {
+                        exibirEstatisticas();
+                    }else {
+                        System.out.println(SAINDO_DO_SISTEMA_MSG);
+                    }
                     break;
                 case 5:
-                    System.out.println(SAINDO_DO_SISTEMA_MSG);
+                    if (usuarioLogado) {
+                        System.out.println(SAINDO_DO_SISTEMA_MSG);
+                    }else {
+                        System.out.println(OPCAO_INVALIDA_MSG);
+                    }
                     break;
                 default:
                     System.out.println(OPCAO_INVALIDA_MSG);
                     break;
             }
-        } while (opcao != 5);
+        } while (usuarioLogado && opcao != 5 || !usuarioLogado && opcao!=4 && opcao<5);
     }
 
     private void exibirMenuPrincipal() {
         System.out.println(CABECALHO_NOTIFICA_MSG);
         if (usuarioLogado) {
             System.out.println("1. Usuário");
+            System.out.println("2. Denúncia");
+            System.out.println("3. Feed");
+            System.out.println("4. Estatística");
+            System.out.println("5. Sair");
+            System.out.println(ESCOLHA_OPCAO_MSG);
+        }else {
+            System.out.println("1. Denúncia");
+            System.out.println("2. Feed");
+            System.out.println("3. Estatística");
+            System.out.println("4. Sair");
+            System.out.println(ESCOLHA_OPCAO_MSG);
         }
-        System.out.println("2. Denúncia");
-        System.out.println("3. Feed");
-        System.out.println("4. Estatística");
-        System.out.println("5. Sair");
-        System.out.println(ESCOLHA_OPCAO_MSG);
+
     }
 
     private void menuUsuario() {
@@ -264,7 +309,7 @@ public class Home {
                     editarDenuncia(cadastroDenuncia);
                     break;
                 case 4:
-                    visualizarDenuncias(cadastroDenuncia);
+                    visualizarDenuncias(cadastroDenuncia, loginUsuario.getIdUsuario());
                     break;
                 case 5:
                     iniciarSistema();
@@ -334,15 +379,22 @@ public class Home {
         }
     }
 
-    private void visualizarDenuncias(CadastroDenuncia cadastroDenuncia) {
+    private void visualizarDenuncias(CadastroDenuncia cadastroDenuncia, int idUsuario) {
         System.out.println("------------- Visualizar Denúncias -------------");
 
-        if (listagemDenuncia.isEmpty()) {
-            System.out.println("Nenhuma denúncia cadastrada!");
-        } else {
-            listagemDenuncia.forEach((index, itemDenuncia) -> cadastroDenuncia.visualizarDenuncia(itemDenuncia));
+        boolean denunciaEncontrada = false;
+        for (Map.Entry<Integer, Denuncia> denunciaEntry : listagemDenuncia.entrySet()) {
+            Denuncia denuncia = denunciaEntry.getValue();
+            if (denuncia.getUsuario().getIdUsuario() == idUsuario) {
+                cadastroDenuncia.visualizarDenuncia(denuncia);
+                denunciaEncontrada = true;
+            }
+        }
+        if (!denunciaEncontrada) {
+            System.out.println("Nenhuma denúncia encontrada para o usuário " + loginUsuario.getNomeUsuario());
         }
     }
+
 
     private void opcaoFeed() {
         int opFeed;
@@ -351,26 +403,27 @@ public class Home {
             imprimirListagemDenuncia();
 
             System.out.println("Digite o número da denúncia\nque você deseja reagir");
-            System.out.println("0. Sair");
+            System.out.println("0. Voltar");
 
             opFeed = scanner.nextInt();
 
             if (opFeed == 0) {
-                System.out.println(SAINDO_DO_SISTEMA_MSG);
-                break; // Esse break é para sair do loop
+                System.out.println(VOLTANDO);
+                this.iniciarSistema();
             } else if (listagemDenuncia.containsKey(opFeed)) {
                 processarDenuncia(opFeed);
             } else {
                 System.out.println(OPCAO_INVALIDA_MSG);
             }
 
-        } while (opFeed != -1); // Muda a condição de saída
+        } while (opFeed != 0);
     }
 
     private void imprimirListagemDenuncia() {
         listagemDenuncia.forEach((index, itemDenuncia) -> {
             System.out.print(index + ": ");
             itemDenuncia.imprimirDenunciaFeed();
+            System.out.println("................................");
         });
     }
 
@@ -398,6 +451,9 @@ public class Home {
                 case 3:
                     if (usuarioLogado) {
                         listagemDenuncia.get(opFeed).validarDenuncia();
+                    }else {
+                        System.out.println("Voltando...");
+                        voltar = true;
                     }
                     break;
                 case 4:
