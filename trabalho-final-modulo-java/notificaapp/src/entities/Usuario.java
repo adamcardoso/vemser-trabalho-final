@@ -37,6 +37,11 @@ public class Usuario {
         this.nomeUsuario = nomeUsuario;
     }
 
+    public Usuario(int idUsuario, String nomeUsuario) {
+        this.idUsuario = idUsuario;
+        this.nomeUsuario = nomeUsuario;
+    }
+
     public int getIdUsuario() {
         return idUsuario;
     }
