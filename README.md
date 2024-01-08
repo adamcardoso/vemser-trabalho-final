@@ -1,5 +1,6 @@
-<h1 align="center"> NOTIFICA </h1>
-
+<h1 align="center" style="color: 
+#2ea06a;"> NOTIFICA </h1>
+<img src="https://notifica-nine.vercel.app/assets/head-img-peoples.png" />
 <p align="center">
   O NOTIFICA é um aplicativo que permite aos usuários relatar problemas no abastecimento de água e saneamento básico. Com recursos como localização geográfica, anexação de imagens e acompanhamento em tempo real, o app capacita os cidadãos a contribuírem para a resolução rápida.<br/>
 </p>
@@ -20,7 +21,7 @@
 - Situacao
 - TipoUsuario
 
-## Interfaces: 
+## Interfaces:
 
 - IDenuncia
 - IUsuario
@@ -56,11 +57,37 @@ Explore nosso diagrama clicando [aqui](https://lucid.app/lucidchart/5adf4b52-d0b
 
 Esse projeto foi desenvolvido pelos seguintes integrantes:
 
-- Assucena Araújo
-- Adam Cardoso
-- Anderson Luiz
-- André Miranda
-- Kevin Matos
-- Lorenzo Panato
-- Renata Schäfer
-- Wesley Alencar
+<div style="display:flex; justify-content:center; gap:4px;">
+  <div>
+  <img width="150px" style="border-radius: 3px;" src="https://avatars.githubusercontent.com/u/45438661?v=4">
+  <p>Adam Cardoso</p>
+  </div>
+  <div>
+   <img width="150px" style="border-radius: 3px;" src="https://avatars.githubusercontent.com/u/83096934?v=4">
+    <p>Renata Schäfer</p>
+  </div>
+  <div>
+   <img width="150px" style="border-radius: 3px;" src="https://avatars.githubusercontent.com/u/78749443?v=4">
+    <p>Anderson Luiz</p>
+  </div>
+  <div>
+   <img width="150px" style="border-radius: 3px;" src="https://avatars.githubusercontent.com/u/66953194?v=4">
+    <p>André Miranda</p>
+  </div>
+  <div>
+   <img width="150px" style="border-radius: 3px;" src="https://avatars.githubusercontent.com/u/118921604?v=4">
+    <p>Assucena Araújo</p>
+  </div>
+  <div>
+   <img width="150px" style="border-radius: 3px;" src="https://avatars.githubusercontent.com/u/47366440?v=4">
+    <p>Wesley Alencar</p>
+  </div>
+  <div>
+   <img width="150px" style="border-radius: 3px;" src="https://avatars.githubusercontent.com/u/132415449?v=4">
+    <p>Lorenzo Panato</p>
+  </div>
+  <div>
+   <img width="150px" style="border-radius: 3px;" src="https://avatars.githubusercontent.com/u/91156133?v=4">
+    <p>Kevin Matos</p>
+  </div>
+</div>
