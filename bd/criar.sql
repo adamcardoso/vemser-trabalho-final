@@ -1,29 +1,28 @@
 CREATE TABLE NOTIFICA.USUARIO (
-    idUsuario NUMBER PRIMARY KEY NOT NULL,
-    nomeUsuario VARCHAR2(255) NOT NULL,
-    numeroCelular VARCHAR2(20) NOT NULL,
-    senhaUsuario VARCHAR2(255) NOT NULL,
-    etniaUsuario VARCHAR2(50),
-    dataNascimento DATE NOT NULL,
-    classeSocial VARCHAR2(50),
-    generoUsuario VARCHAR2(20),
-    tipoUsuario VARCHAR2(50) NOT NULL
+    id_usuario NUMBER PRIMARY KEY NOT NULL,
+    nome_usuario VARCHAR2(255) NOT NULL,
+    numero_celular VARCHAR2(20) NOT NULL,
+    senha_usuario VARCHAR2(255) NOT NULL,
+    etnia_usuario VARCHAR2(50),
+    data_nascimento DATE NOT NULL,
+    classe_social VARCHAR2(50),
+    genero_usuario VARCHAR2(20),
+    tipo_usuario VARCHAR2(50) NOT NULL
 );
 
 CREATE TABLE NOTIFICA.DENUNCIA (
-    idDenuncia NUMBER PRIMARY KEY NOT NULL,
+    id_denuncia NUMBER PRIMARY KEY NOT NULL,
     descricao VARCHAR2(1000) NOT NULL,
     latitude NUMBER NOT NULL,
     longitude NUMBER NOT NULL,
-    usuarioId NUMBER NOT NULL,
-    dataHora TIMESTAMP NOT NULL,
-    statusDenuncia VARCHAR2(20) NOT NULL,
+    usuario_id NUMBER NOT NULL,
+    data_hora TIMESTAMP NOT NULL,
+    status_denuncia VARCHAR2(20) NOT NULL,
     categoria VARCHAR2(20) NOT NULL,
     curtidas NUMBER,
-    validarDenuncia NUMBER,
-    FOREIGN KEY (usuarioId) REFERENCES NOTIFICA.USUARIO(idUsuario)
+    validar_denuncia NUMBER,
+    FOREIGN KEY (usuario_id) REFERENCES NOTIFICA.USUARIO(id_usuario)
 );
-
 
 CREATE SEQUENCE NOTIFICA.SEQ_USUARIO
   START WITH 1
