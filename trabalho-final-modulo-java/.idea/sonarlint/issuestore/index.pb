@@ -5,8 +5,6 @@ U
 -notificaapp/src/entities/enums/Categoria.java,6\8\68ce0a0e72e5a92787151ef99ea6dd991a12dddf
 \
 ,notificaapp/src/entities/enums/Situacao.java,3\d\3d717e2d4d5e7facb7df13a34e77d301e9501607
-_
-/notificaapp/src/entities/CategoriaProblema.java,8\1\81f76453e4f5cb8c672245859fcc3d2efd0b0aff
 V
 &notificaapp/src/entities/Denuncia.java,3\2\32da97ef7b19d55b19df8ac6002cdec21effe5b0
 Z
@@ -25,8 +23,6 @@ U
 %notificaapp/src/application/Main.java,3\6\36ccbe1e9f2696fb8ba56b718e208dff49c74287
 e
 5notificaapp/src/exceptions/InvalidInputException.java,a\5\a5f54209bc826f5f75d0992feca304022151d569
-i
-9notificaapp/src/exceptions/IndexOutOfBoundsException.java,2\9\2943f79506d46aedf9de8c8e0461557a3a59a594
 `
 0notificaapp/src/interfaces/IUsuarioCadastro.java,3\c\3c90abe66bac1398684b539a035b55d251796afb
 Y
@@ -43,3 +39,5 @@ c
 3notificaapp/src/helpers/CadastroDenunciaHelper.java,2\f\2fc94538f4e93f9436b04ed20a2d315c97c61004
 b
 2notificaapp/src/helpers/CadastroUsuarioHelper.java,6\5\655f9ffec5ab5c825414a7c6a062049855d1931b
+]
+-notificaapp/src/views/EstatisticaUsuario.java,8\e\8ea800e8c9730fedf77e5a566f031dc38480e36d
