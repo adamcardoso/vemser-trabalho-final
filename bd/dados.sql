@@ -17,7 +17,18 @@ INSERT INTO NOTIFICA.USUARIO (idUsuario, nomeUsuario, numeroCelular, senhaUsuari
 VALUES (NOTIFICA.SEQ_USUARIO.NEXTVAL, 'Paulo Costa', '11911223344', 'Senha789', 'PRETO', TO_DATE('03-03-1988', 'DD-MM-YYYY'), 'D', 'MASCULINO', 'INDIVIDUAL');
 INSERT INTO NOTIFICA.USUARIO (idUsuario, nomeUsuario, numeroCelular, senhaUsuario, etniaUsuario, dataNascimento, classeSocial, generoUsuario, tipoUsuario)
 VALUES (NOTIFICA.SEQ_USUARIO.NEXTVAL, 'Ana Pereira', '11999887766', 'Senha012', 'PRETO', TO_DATE('04-04-1994', 'DD-MM-YYYY'), 'E', 'OUTRO', 'INDIVIDUAL');
-
+INSERT INTO NOTIFICA.USUARIO (idUsuario, nomeUsuario, numeroCelular, senhaUsuario, etniaUsuario, dataNascimento, classeSocial, generoUsuario, tipoUsuario)
+VALUES (NOTIFICA.SEQ_USUARIO.NEXTVAL, 'Usuario5', '11911111111', 'Senha111', 'AMARELO', TO_DATE('05-05-1995', 'DD-MM-YYYY'), 'A', 'MASCULINO', 'INDIVIDUAL');
+INSERT INTO NOTIFICA.USUARIO (idUsuario, nomeUsuario, numeroCelular, senhaUsuario, etniaUsuario, dataNascimento, classeSocial, generoUsuario, tipoUsuario)
+VALUES (NOTIFICA.SEQ_USUARIO.NEXTVAL, 'Usuario6', '11922222222', 'Senha222', 'BRANCO', TO_DATE('06-06-1996', 'DD-MM-YYYY'), 'B', 'FEMININO', 'INDIVIDUAL');
+INSERT INTO NOTIFICA.USUARIO (idUsuario, nomeUsuario, numeroCelular, senhaUsuario, etniaUsuario, dataNascimento, classeSocial, generoUsuario, tipoUsuario)
+VALUES (NOTIFICA.SEQ_USUARIO.NEXTVAL, 'Usuario7', '11933333333', 'Senha333', 'PARDO', TO_DATE('07-07-1997', 'DD-MM-YYYY'), 'C', 'MASCULINO', 'INDIVIDUAL');
+INSERT INTO NOTIFICA.USUARIO (idUsuario, nomeUsuario, numeroCelular, senhaUsuario, etniaUsuario, dataNascimento, classeSocial, generoUsuario, tipoUsuario)
+VALUES (NOTIFICA.SEQ_USUARIO.NEXTVAL, 'Usuario8', '11944444444', 'Senha444', 'PRETO', TO_DATE('08-08-1998', 'DD-MM-YYYY'), 'D', 'FEMININO', 'INDIVIDUAL');
+INSERT INTO NOTIFICA.USUARIO (idUsuario, nomeUsuario, numeroCelular, senhaUsuario, etniaUsuario, dataNascimento, classeSocial, generoUsuario, tipoUsuario)
+VALUES (NOTIFICA.SEQ_USUARIO.NEXTVAL, 'Usuario9', '11955555555', 'Senha555', 'INDIGENA', TO_DATE('09-09-1999', 'DD-MM-YYYY'), 'E', 'OUTRO', 'INDIVIDUAL');
+INSERT INTO NOTIFICA.USUARIO (idUsuario, nomeUsuario, numeroCelular, senhaUsuario, etniaUsuario, dataNascimento, classeSocial, generoUsuario, tipoUsuario)
+VALUES (NOTIFICA.SEQ_USUARIO.NEXTVAL, 'Usuario10', '11966666666', 'Senha666', 'BRANCO', TO_DATE('10-10-2000', 'DD-MM-YYYY'), 'A', 'MASCULINO', 'INDIVIDUAL');
 INSERT INTO NOTIFICA.DENUNCIA ( 
  	    id_denuncia, descricao, latitude, longitude, id_usuario, dataHora, id_situacao, id_categoria, curtidas, validar_denuncia
 ) VALUES (
