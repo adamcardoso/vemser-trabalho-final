@@ -1,27 +1,27 @@
 package views;
 
-import entities.Denuncia;
-import entities.Localizacao;
-import entities.Usuario;
-import entities.enums.Categoria;
-import entities.enums.Situacao;
+import models.Denuncia;
+import models.Localizacao;
+import models.Usuario;
+import models.enums.Categoria;
+import models.enums.Situacao;
 import exceptions.MaxAttemptsExceededException;
 import helpers.CadastroDenunciaHelper;
-import interfaces.IDenunciaCadastro;
+import views.interfaces.IDenunciaCadastro;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
-public class CadastroDenuncia extends CadastroDenunciaHelper implements IDenunciaCadastro {
+public class CadastroDenuncia extends CadastroDenunciaHelper  {
 
-    @Override
+   /* @Override
     public Denuncia cadastrarDenuncia() {
         try {
             int idDenuncia = gerarNumeroAleatorio();
 
             System.out.println("Nome: ");
             String nomeUsuario = this.digitarNomeUsuario();
-            Usuario usuario = new Usuario(nomeUsuario);
+            //Usuario usuario = new Usuario(nomeUsuario);
 
             System.out.println("Descrição: ");
             String descricao = this.digitarDescricao();
@@ -48,7 +48,7 @@ public class CadastroDenuncia extends CadastroDenunciaHelper implements IDenunci
 
             LocalDateTime dataHora = LocalDateTime.now();
 
-            return new Denuncia(idDenuncia, descricao, localizacao, usuario, dataHora, statusDenuncia, categoriaSelecionada);
+            //return new Denuncia(idDenuncia, descricao, localizacao, usuario, dataHora, statusDenuncia, categoriaSelecionada);
         } catch (MaxAttemptsExceededException e) {
             System.err.println("Tipo de entrada inválida: " + e.getMessage());
             return null;
@@ -60,7 +60,7 @@ public class CadastroDenuncia extends CadastroDenunciaHelper implements IDenunci
         try {
             denuncia.setIdDenuncia(idDenuncia);
 
-            denuncia.setUsuario(new Usuario(this.digitarNomeUsuario()));
+            //denuncia.setUsuario(new Usuario(this.digitarNomeUsuario()));
             denuncia.setDescricao(this.digitarDescricao());
 
             double longitude = this.digitarLongitude();
@@ -109,5 +109,5 @@ public class CadastroDenuncia extends CadastroDenunciaHelper implements IDenunci
         System.out.println("Categoria: " + denuncia.getCategoria());
         System.out.println("Data e Hora: " + denuncia.getDataHora());
         System.out.println("--------------------------------------");
-    }
+    }*/
 }

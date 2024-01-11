@@ -1,9 +1,9 @@
 package views;
 
-import entities.Usuario;
-import entities.enums.ClasseSocial;
-import entities.enums.Etnia;
-import entities.enums.Genero;
+import models.Usuario;
+import models.enums.ClasseSocial;
+import models.enums.Etnia;
+import models.enums.Genero;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;

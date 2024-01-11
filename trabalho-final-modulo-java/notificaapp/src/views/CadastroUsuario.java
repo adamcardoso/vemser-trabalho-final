@@ -1,13 +1,13 @@
 package views;
 
-import entities.Usuario;
-import entities.enums.ClasseSocial;
-import entities.enums.Etnia;
-import entities.enums.Genero;
-import entities.enums.TipoUsuario;
+import models.Usuario;
+import models.enums.ClasseSocial;
+import models.enums.Etnia;
+import models.enums.Genero;
+import models.enums.TipoUsuario;
 import exceptions.MaxAttemptsExceededException;
 import helpers.CadastroUsuarioHelper;
-import interfaces.IUsuarioCadastro;
+import views.interfaces.IUsuarioCadastro;
 
 import java.time.LocalDate;
 import java.util.HashMap;

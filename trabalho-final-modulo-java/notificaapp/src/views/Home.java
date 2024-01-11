@@ -1,9 +1,10 @@
 package views;
 
-import entities.Denuncia;
-import entities.Localizacao;
-import entities.Usuario;
-import entities.enums.*;
+import models.Denuncia;
+import models.Localizacao;
+import models.Usuario;
+import models.enums.*;
+import services.impl.UsuarioServicesImpl;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,7 +13,24 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class Home {
-    private final HashMap<Integer, Usuario> listagemUsuario;
+    Scanner input = new Scanner(System.in);
+
+    UsuarioServicesImpl usuarioServices = new UsuarioServicesImpl();
+    public void menu() {
+        System.out.println("Digite uma opção: ");
+        System.out.println("1 - Listar usuários");
+        int opc = input.nextInt();
+        input.nextLine();
+
+        if (opc == 1){
+            usuarioServices.listarUsuarios();
+        }else {
+            System.out.println("Opção inválida!");
+        }
+    }
+
+
+    /*private final HashMap<Integer, Usuario> listagemUsuario;
     private final Scanner scanner;
     private final CadastroUsuario cadastroU;
     private final HashMap<Integer, Denuncia> listagemDenuncia;
@@ -25,6 +43,8 @@ public class Home {
     private static final String ESCOLHA_OPCAO_MSG = "Escolha uma opção: ";
     private static final String VOLTANDO = "Voltando... ";
     private static final String CABECALHO_NOTIFICA_MSG = "------------- NOTIFICA -------------";
+
+
 
     public Home() {
         this.listagemUsuario = new HashMap<>();
@@ -498,5 +518,5 @@ public class Home {
         } else {
             listagemDenuncia.get(opFeed).comentar(comentario);
         }
-    }
+    }*/
 }
