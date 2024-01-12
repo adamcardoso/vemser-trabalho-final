@@ -15,11 +15,10 @@ public class UsuarioServicesImpl implements UsuarioService {
         this.usuarioRepository = new UsuarioRepositoryImpl();
     }
 
-    @Override
-    public void listarUsuarios() {
+    public void listarUsuario(int idUsuario) {
         try {
-            List<Usuario> listarUsuarios = usuarioRepository.listarUsuariosNoBanco();
-            listarUsuarios.forEach(this::imprimirUsuario);
+            Usuario usuario = usuarioRepository.listarUsuario(idUsuario);
+            imprimirUsuario(usuario);
         } catch (DataBaseException e) {
             e.printStackTrace();
         }
@@ -78,4 +77,13 @@ public class UsuarioServicesImpl implements UsuarioService {
             usuario.setIsAdmin(false);
         }
     }
+
+    public Usuario adicionar(Usuario usuario) {
+
+        return null;
+    }
+
+
 }
+
+

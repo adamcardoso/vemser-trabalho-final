@@ -1,6 +1,7 @@
 package repositories.interfaces;
 
 import exceptions.DataBaseException;
+import models.Usuario;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -16,5 +17,5 @@ public interface Repository<CHAVE, OBJETO> {
 
     boolean editar(CHAVE id, OBJETO objeto) throws DataBaseException;
 
-    List<OBJETO> listarUsuariosNoBanco() throws DataBaseException;
+    Usuario listarUsuario(int idUsuario) throws DataBaseException;
 }

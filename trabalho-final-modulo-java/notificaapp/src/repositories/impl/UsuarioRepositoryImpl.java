@@ -33,21 +33,19 @@ public class UsuarioRepositoryImpl implements Repository<Integer, Usuario> {
     }
 
     @Override
-    public List<Usuario> listarUsuariosNoBanco() throws DataBaseException  {
-        List<Usuario> usuarios = new ArrayList<>();
+    public Usuario listarUsuario(int idUsuario) throws DataBaseException  {
+        Usuario usuario = new Usuario();
         Connection con = null;
 
         try {
             con = ConexaoBancoDeDados.getConnection();
             Statement stmt = con.createStatement();
 
-            String sql = "SELECT * FROM USUARIO";
-
+            String sql = String.format("SELECT * FROM USUARIO WHERE id_usuario = '%d'", idUsuario);
             ResultSet res = stmt.executeQuery(sql);
 
             try {
                 while (res.next()) {
-                    Usuario usuario = new Usuario();
                     usuario.setIdUsuario(res.getInt("id_usuario"));
                     usuario.setNomeUsuario(res.getString("nome_usuario"));
                     usuario.setNumeroCelular(res.getString("numero_celular"));
@@ -57,7 +55,6 @@ public class UsuarioRepositoryImpl implements Repository<Integer, Usuario> {
                     usuario.setClasseSocial(ClasseSocial.fromInt(res.getInt("classe_social")));
                     usuario.setGeneroUsuario(Genero.fromInt(res.getInt("genero_usuario")));
                     usuario.setTipoUsuario(TipoUsuario.fromInt(res.getInt("tipo_usuario")));
-                    usuarios.add(usuario);
                 }
             } catch (SQLException e) {
                 System.out.println("entro try");
@@ -71,7 +68,7 @@ public class UsuarioRepositoryImpl implements Repository<Integer, Usuario> {
                     e.printStackTrace();
                 }
             }
-            return usuarios;
+            return usuario;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -84,7 +81,7 @@ public class UsuarioRepositoryImpl implements Repository<Integer, Usuario> {
             con = ConexaoBancoDeDados.getConnection();
             Statement stmt = con.createStatement();
 
-            String sql = String.format("SELECT nome_usuario, senha_usuario, tipo_usuario FROM USUARIO WHERE nome_usuario = '%s' AND senha_usuario = '%s'", nomeUsuario, senha);
+            String sql = String.format("SELECT * FROM USUARIO WHERE nome_usuario = '%s' AND senha_usuario = '%s'", nomeUsuario, senha);
             ResultSet res = stmt.executeQuery(sql);
 
             try {
@@ -92,7 +89,7 @@ public class UsuarioRepositoryImpl implements Repository<Integer, Usuario> {
                     Usuario usuario = new Usuario();
                     usuario.setNomeUsuario(res.getString("nome_usuario"));
                     usuario.setSenhaUsuario(res.getString("senha_usuario"));
-
+                    usuario.setIdUsuario((res.getInt("id_usuario")));
                     int valorTipoUsuario = res.getInt("tipo_usuario");
                     TipoUsuario tipoUsuario = TipoUsuario.fromInt(valorTipoUsuario);
                     usuario.setTipoUsuario(tipoUsuario);

@@ -10,7 +10,7 @@ public class ConexaoBancoDeDados {
     private static final String DATABASE = "xe";
     private static final String USER = "system";
     private static final String PASS = "oracle";
-    private static final String SCHEMA = "NOTIFICA";
+    private static final String SCHEMA = "VEM_SER";
 
     public static Connection getConnection() throws SQLException {
         String url = "jdbc:oracle:thin:@" + SERVER + ":" + PORT + ":" + DATABASE;

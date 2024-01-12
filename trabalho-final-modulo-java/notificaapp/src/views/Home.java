@@ -34,7 +34,7 @@ public class Home {
 
                     if (this.usuarioLogado != null) {
                         if (this.usuarioLogado.getIsAdmin()) {
-                            this.exibirMenuPrincipalAdmin();
+                            this.exibirMenuAdmin();
                         } else {
                             this.exibirMenuPrincipal();
                         }
@@ -56,6 +56,52 @@ public class Home {
         } while (opMenuLogin != 4);
     }
 
+    private void exibirMenuAdmin() {
+        int opMenuAdmin;
+        System.out.println(CABECALHO_NOTIFICA_MSG);
+        do {
+            System.out.println("----- ADMIN -----");
+            System.out.println("1. Ver usuários");
+            System.out.println("2. Excluir usuários");
+            System.out.println("3. Ver Denuncias");
+            System.out.println("4. Excluir Denuncias");
+            System.out.println("5. Ver Feed");
+            System.out.println("6. Ver Estatísticas");
+            System.out.println("7. Sair");
+            System.out.println(ESCOLHA_OPCAO_MSG);
+            opMenuAdmin = input.nextInt();
+            switch (opMenuAdmin) {
+                case 1:
+                    System.out.println("1. Ver usuários");
+                    break;
+                case 2:
+                    //Lógica funcional, falta criar o método listas Usuarios e chamar aki tmb, mostrando id deles
+                    System.out.println("Digite o Id do Usuário que Deseja Remover: ");
+                    int idUsuario = input.nextInt();
+                    usuarioServices.remover(idUsuario);
+                    break;
+                case 3:
+                    System.out.println("3. Ver Denuncias");
+                    break;
+                case 4:
+                    System.out.println("4. Excluir Denuncias");
+                    break;
+                case 5:
+                    System.out.println("5. Ver Feed");
+                    break;
+                case 6:
+                    System.out.println("6. Ver Estatísticas");
+                    break;
+                case 7:
+                    System.out.println(SAINDO_DO_SISTEMA_MSG);
+                    exibirLoginMenu();
+                    break;
+                default:
+                    System.out.println(OPCAO_INVALIDA_MSG);
+            }
+        } while (opMenuAdmin != 8);
+    }
+
     private void exibirMenuPrincipal() {
         System.out.println(CABECALHO_NOTIFICA_MSG);
 
@@ -66,8 +112,7 @@ public class Home {
                 System.out.println("2. Denúncia");
                 System.out.println("3. Feed");
                 System.out.println("4. Estatística");
-                System.out.println("5. Voltar");
-                System.out.println("6. Sair");
+                System.out.println("5. Sair");
                 System.out.println(ESCOLHA_OPCAO_MSG);
                 opMenuPrincLogado = input.nextInt();
                 switch (opMenuPrincLogado) {
@@ -86,9 +131,6 @@ public class Home {
                     case 5:
                         exibirLoginMenu();
                         System.out.println(VOLTANDO);
-                        break;
-                    case 6:
-                        System.out.println(SAINDO_DO_SISTEMA_MSG);
                         break;
                     default:
                         System.out.println(OPCAO_INVALIDA_MSG);
@@ -103,125 +145,6 @@ public class Home {
                 System.out.println("4. Sair");
                 System.out.println(ESCOLHA_OPCAO_MSG);
                 opMenuPrincNLogado = input.nextInt();
-                switch (opMenuPrincNLogado) {
-                    case 1:
-                        System.out.println("1. Feed");
-                        break;
-                    case 2:
-                        System.out.println("2. Estatística");
-                        break;
-                    case 3:
-                        exibirLoginMenu();
-                        System.out.println(VOLTANDO);
-                        break;
-                    case 4:
-                        System.out.println(SAINDO_DO_SISTEMA_MSG);
-                        break;
-                    default:
-                        System.out.println(OPCAO_INVALIDA_MSG);
-                }
-            } while (opMenuPrincNLogado != 4);
-        }
-    }
-
-    private void exibirPainelAdministrativo() {
-        System.out.println(CABECALHO_NOTIFICA_MSG);
-
-        int opPainelAdministrativo;
-
-        do {
-            System.out.println("1. Ver usuários");
-            System.out.println("2. Excluir usuário");
-            System.out.println("3. Voltar");
-            System.out.println("4. Sair");
-
-            System.out.println(ESCOLHA_OPCAO_MSG);
-
-            opPainelAdministrativo = input.nextInt();
-
-            switch (opPainelAdministrativo) {
-                case 1:
-                    System.out.println("Lista de usuários: ");
-                    usuarioServices.listarUsuarios();
-                    break;
-                case 2:
-                    System.out.println("Digite o ID do usuário para exclusão: ");
-
-                    Integer idUsuario = input.nextInt();
-
-                    usuarioServices.remover(idUsuario);
-                    break;
-                case 3:
-                    System.out.println(VOLTANDO);
-                    exibirMenuPrincipalAdmin();
-                    break;
-                case 4:
-                    System.out.println(SAINDO_DO_SISTEMA_MSG);
-                    exibirLoginMenu();
-                    break;
-                default:
-                    System.out.println(OPCAO_INVALIDA_MSG);
-            }
-        } while (opPainelAdministrativo != 3);
-    }
-
-    private void exibirMenuPrincipalAdmin() {
-        System.out.println(CABECALHO_NOTIFICA_MSG);
-
-        if (usuarioLogado != null) {
-            int opMenuPrincLogado;
-
-            do {
-                System.out.println("1. Usuário");
-                System.out.println("2. Denúncia");
-                System.out.println("3. Feed");
-                System.out.println("4. Estatística");
-                System.out.println("5. Painel Administrativo");
-                System.out.println("6. Voltar");
-                System.out.println("7. Sair");
-                System.out.println(ESCOLHA_OPCAO_MSG);
-                opMenuPrincLogado = input.nextInt();
-                switch (opMenuPrincLogado) {
-                    case 1:
-                        exibirMenuUsuario();
-                        break;
-                    case 2:
-                        exibirMenuDenuncia();
-                        break;
-                    case 3:
-                        System.out.println("3. Feed");
-                        break;
-                    case 4:
-                        System.out.println("4. Estatística");
-                        break;
-                    case 5:
-                        System.out.println("Painel Administrativo");
-                        exibirPainelAdministrativo();
-                        break;
-                    case 6:
-                        System.out.println(VOLTANDO);
-                        exibirLoginMenu();
-                        break;
-                    case 7:
-                        System.out.println(SAINDO_DO_SISTEMA_MSG);
-                        exibirLoginMenu();
-                        break;
-                    default:
-                        System.out.println(OPCAO_INVALIDA_MSG);
-                }
-            } while (opMenuPrincLogado != 7);
-        } else {
-            int opMenuPrincNLogado;
-
-            do {
-                System.out.println("1. Feed");
-                System.out.println("2. Estatística");
-                System.out.println("3. Voltar");
-                System.out.println("4. Sair");
-                System.out.println(ESCOLHA_OPCAO_MSG);
-
-                opMenuPrincNLogado = input.nextInt();
-
                 switch (opMenuPrincNLogado) {
                     case 1:
                         System.out.println("1. Feed");
@@ -259,13 +182,15 @@ public class Home {
 
             switch (opMenuUsuario) {
                 case 1:
-                    System.out.println("1. Excluir Conta");
+                    //funcionando FINALIZADO - NÃO MECHER
+                    usuarioServices.remover(usuarioLogado.getIdUsuario());
                     break;
                 case 2:
                     System.out.println("2. Editar Conta");
                     break;
                 case 3:
-                    System.out.println("3. Visualizar Conta");
+                    //funcionando FINALIZADO - NÃO MECHER
+                    usuarioServices.listarUsuario(usuarioLogado.getIdUsuario());
                     break;
                 case 4:
                     System.out.println(VOLTANDO);
