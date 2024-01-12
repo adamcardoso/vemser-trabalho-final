@@ -9,6 +9,7 @@ import repositories.interfaces.Repository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 public class DenunciaRepositoryImpl implements Repository<Integer, Denuncia> {
     @Override
@@ -41,15 +42,15 @@ public class DenunciaRepositoryImpl implements Repository<Integer, Denuncia> {
             sql.append(" categoria = ?,");
             sql.append(" curtida = ?,");
             sql.append(" validar_denuncia = ?,");
-            sql.append(" fk_id_usuario = ?,");
+            sql.append(" id_usuario = ?,");
             sql.append(" tipo_denuncia = ?,");
-            sql.append(" titulo = ?,");
+            sql.append(" titulo = ?");
             sql.append(" WHERE id_denuncia = ? ");
 
             PreparedStatement stmt = con.prepareStatement(sql.toString());
 
             stmt.setString(1, denuncia.getDescricao());
-            stmt.setString(2, denuncia.getDataHora().toString());
+            stmt.setTimestamp(2, Timestamp.valueOf(denuncia.getDataHora()));
             stmt.setInt(3, denuncia.getStatusDenuncia().getIdSituacao());
             stmt.setInt(4, denuncia.getCategoria().getIdCategoria());
             stmt.setInt(5, denuncia.getCurtidas());

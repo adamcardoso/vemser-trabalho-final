@@ -18,12 +18,12 @@ public class Denuncia{
     private Categoria categoria;
     private int curtidas;
     private final List<String> comentarios;
-
     private boolean tipoDenuncia;
     private int validarDenuncia;
 
-    public Denuncia(int idDenuncia, String descricao, Localizacao local, Usuario usuario, LocalDateTime dataHora, Situacao statusDenuncia, Categoria categoria) {
+    public Denuncia(int idDenuncia, String titulo, String descricao, Localizacao local, Usuario usuario, LocalDateTime dataHora, Situacao statusDenuncia, Categoria categoria) {
         this.idDenuncia = idDenuncia;
+        this.titulo = titulo;
         this.descricao = descricao;
         this.local = local;
         this.usuario = usuario;
