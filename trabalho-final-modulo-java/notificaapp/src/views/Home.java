@@ -1,17 +1,11 @@
 package views;
 
 import exceptions.DataBaseException;
-import models.Denuncia;
-import models.Localizacao;
 import models.Usuario;
-import models.enums.*;
+import models.enums.TipoUsuario;
 import repositories.impl.UsuarioRepositoryImpl;
 import services.impl.UsuarioServicesImpl;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 public class Home {
@@ -24,6 +18,7 @@ public class Home {
     private static final String VOLTANDO = "Voltando... ";
     private static final String CABECALHO_NOTIFICA_MSG = "------------- NOTIFICA -------------";
     private boolean usuarioLogado = false;
+    private boolean isAdmin = false;
 
     public void displayLoginMenu() {
         int opMenuLogin;
@@ -36,7 +31,7 @@ public class Home {
             System.out.println(ESCOLHA_OPCAO_MSG);
             opMenuLogin = input.nextInt();
 
-            switch (opMenuLogin){
+            switch (opMenuLogin) {
                 case 1:
                     fazerLogin();
                     break;
@@ -53,10 +48,11 @@ public class Home {
                 default:
                     System.out.println(OPCAO_INVALIDA_MSG);
             }
-        }while (opMenuLogin != 4);
+        } while (opMenuLogin != 4);
 
 
     }
+
     private void exibirMenuPrincipal() {
         System.out.println(CABECALHO_NOTIFICA_MSG);
         if (usuarioLogado) {
@@ -70,7 +66,7 @@ public class Home {
                 System.out.println("6. Sair");
                 System.out.println(ESCOLHA_OPCAO_MSG);
                 opMenuPrincLogado = input.nextInt();
-                switch (opMenuPrincLogado){
+                switch (opMenuPrincLogado) {
                     case 1:
                         exibirMenuUsuario();
                         break;
@@ -93,8 +89,8 @@ public class Home {
                     default:
                         System.out.println(OPCAO_INVALIDA_MSG);
                 }
-            }while (opMenuPrincLogado != 5);
-        }else {
+            } while (opMenuPrincLogado != 5);
+        } else {
             int opMenuPrincNLogado;
             do {
                 System.out.println("1. Feed");
@@ -103,7 +99,7 @@ public class Home {
                 System.out.println("4. Sair");
                 System.out.println(ESCOLHA_OPCAO_MSG);
                 opMenuPrincNLogado = input.nextInt();
-                switch (opMenuPrincNLogado){
+                switch (opMenuPrincNLogado) {
                     case 1:
                         System.out.println("1. Feed");
                         break;
@@ -120,14 +116,14 @@ public class Home {
                     default:
                         System.out.println(OPCAO_INVALIDA_MSG);
                 }
-            }while (opMenuPrincNLogado != 4);
+            } while (opMenuPrincNLogado != 4);
 
         }
 
 
     }
 
-    private void exibirMenuUsuario(){
+    private void exibirMenuUsuario() {
         int opMenuUsuario;
         do {
             System.out.println(CABECALHO_NOTIFICA_MSG);
@@ -138,7 +134,7 @@ public class Home {
             System.out.println("5. Sair");
             System.out.println(ESCOLHA_OPCAO_MSG);
             opMenuUsuario = input.nextInt();
-            switch (opMenuUsuario){
+            switch (opMenuUsuario) {
                 case 1:
                     System.out.println("1. Excluir Conta");
                     break;
@@ -158,10 +154,11 @@ public class Home {
                 default:
                     System.out.println(OPCAO_INVALIDA_MSG);
             }
-        }while (opMenuUsuario != 5);
+        } while (opMenuUsuario != 5);
 
     }
-    private void exibirMenuDenuncia(){
+
+    private void exibirMenuDenuncia() {
         int opMenuDenuncia;
         do {
             System.out.println(CABECALHO_NOTIFICA_MSG);
@@ -173,7 +170,7 @@ public class Home {
             System.out.println("6. Sair");
             System.out.println(ESCOLHA_OPCAO_MSG);
             opMenuDenuncia = input.nextInt();
-            switch (opMenuDenuncia){
+            switch (opMenuDenuncia) {
                 case 1:
                     System.out.println("1. Cadastrar Denuncia");
                     break;
@@ -193,30 +190,17 @@ public class Home {
                 default:
                     System.out.println(OPCAO_INVALIDA_MSG);
             }
-        }while (opMenuDenuncia != 5);
+        } while (opMenuDenuncia != 5);
     }
 
-    private boolean fazerLogin(){
+    private void fazerLogin() {
         System.out.print("Digite seu nome de usuário: ");
         String nomeUsuario = input.next();
         System.out.print("Digite sua senha: ");
         String senha = input.next();
 
-        try {
-            Usuario usuario = usuarioRepository.fazerLogin(nomeUsuario, senha);
-            if (usuario != null) {
-                System.out.println("Login bem-sucedido!");
-                usuarioLogado = true;
-                exibirMenuPrincipal();
-                return true;
-            } else {
-                System.out.println("Nome de usuário ou senha incorretos. Tente novamente.");
-            }
-        } catch (DataBaseException e) {
-            e.printStackTrace();
-        }
-
-        return false;
+        //ver se está logado e se é admin, e criar menu admin
+        usuarioServices.fazerLogin(nomeUsuario, senha);
     }
 }
 

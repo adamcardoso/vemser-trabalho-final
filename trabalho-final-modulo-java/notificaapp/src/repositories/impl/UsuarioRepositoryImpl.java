@@ -3,8 +3,11 @@ package repositories.impl;
 import config.ConexaoBancoDeDados;
 import exceptions.DataBaseException;
 import models.Usuario;
+import models.enums.ClasseSocial;
 import models.enums.Etnia;
-import repositories.interfaces.UsuarioRepository;
+import models.enums.Genero;
+import models.enums.TipoUsuario;
+import repositories.interfaces.Repository;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -13,7 +16,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario> {
+public class UsuarioRepositoryImpl implements Repository<Integer, Usuario> {
     @Override
     public Integer getProximoId(Connection connection) throws SQLException {
         return null;
@@ -58,6 +61,9 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
                     usuario.setSenhaUsuario(res.getString("senha_usuario"));
                     usuario.setEtniaUsuario(Etnia.fromInt(res.getInt("etnia_usuario")));
                     usuario.setDataNascimento(res.getDate("data_nascimento").toLocalDate());
+                    usuario.setClasseSocial(ClasseSocial.fromInt(res.getInt("classe_social")));
+                    usuario.setGeneroUsuario(Genero.fromInt(res.getInt("genero_usuario")));
+                    usuario.setTipoUsuario(TipoUsuario.fromInt(res.getInt("tipo_usuario")));
                     usuarios.add(usuario);
                 }
             } catch (SQLException e) {
@@ -85,9 +91,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
             con = ConexaoBancoDeDados.getConnection();
             Statement stmt = con.createStatement();
 
-            String sql = String.format("SELECT nome_usuario, senha_usuario FROM USUARIO WHERE nome_usuario = '%s' AND senha_usuario = '%s'", nomeUsuario, senha);
-
-            // Executa-se a consulta
+            String sql = String.format("SELECT nome_usuario, senha_usuario, tipo_usuario FROM USUARIO WHERE nome_usuario = '%s' AND senha_usuario = '%s'", nomeUsuario, senha);
             ResultSet res = stmt.executeQuery(sql);
 
             try {
@@ -95,6 +99,12 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
                     Usuario usuario = new Usuario();
                     usuario.setNomeUsuario(res.getString("nome_usuario"));
                     usuario.setSenhaUsuario(res.getString("senha_usuario"));
+
+                    // Mapear o valor do banco de dados para o enum TipoUsuario
+                    int valorTipoUsuario = res.getInt("tipo_usuario");
+                    TipoUsuario tipoUsuario = TipoUsuario.fromInt(valorTipoUsuario);
+                    usuario.setTipoUsuario(tipoUsuario);
+
                     return usuario;
                 }
             } catch (SQLException e) {
@@ -113,6 +123,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
         }
         return null;
     }
+
 
 
 }

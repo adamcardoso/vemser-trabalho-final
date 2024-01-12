@@ -13,4 +13,13 @@ public enum TipoUsuario {
     public int getIdTipoUsuario() {
         return id;
     }
+
+    public static TipoUsuario fromInt(int value) {
+        for (TipoUsuario tipoUsuario : TipoUsuario.values()) {
+            if (tipoUsuario.getIdTipoUsuario() == value) {
+                return tipoUsuario;
+            }
+        }
+        throw new IllegalArgumentException("Valor inválido para a enumeração tipo Usuario: " + value);
+    }
 }
