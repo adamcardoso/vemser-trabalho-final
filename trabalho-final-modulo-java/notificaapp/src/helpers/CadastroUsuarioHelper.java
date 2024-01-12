@@ -1,9 +1,9 @@
 package helpers;
 
-import entities.enums.ClasseSocial;
-import entities.enums.Etnia;
-import entities.enums.Genero;
-import entities.enums.TipoUsuario;
+import models.enums.ClasseSocial;
+import models.enums.Etnia;
+import models.enums.Genero;
+import models.enums.TipoUsuario;
 import exceptions.MaxAttemptsExceededException;
 
 import java.time.LocalDate;
