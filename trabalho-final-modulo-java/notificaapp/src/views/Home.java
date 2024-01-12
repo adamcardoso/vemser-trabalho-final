@@ -90,7 +90,7 @@ public class Home {
                     System.out.println("5. Ver Feed");
                     break;
                 case 6:
-                    System.out.println("6. Ver Estatísticas");
+                    estatisticas();
                     break;
                 case 7:
                     System.out.println(SAINDO_DO_SISTEMA_MSG);
@@ -126,7 +126,7 @@ public class Home {
                         System.out.println("3. Feed");
                         break;
                     case 4:
-                        System.out.println("4. Estatística");
+                        estatisticas();
                         break;
                     case 5:
                         exibirLoginMenu();
@@ -150,7 +150,7 @@ public class Home {
                         System.out.println("1. Feed");
                         break;
                     case 2:
-                        System.out.println("2. Estatística");
+                        estatisticas();
                         break;
                     case 3:
                         exibirLoginMenu();
@@ -243,6 +243,10 @@ public class Home {
                     System.out.println(OPCAO_INVALIDA_MSG);
             }
         } while (opMenuDenuncia != 5);
+    }
+
+    private void estatisticas(){
+        usuarioServices.exibirEstatisticasUsuarios();
     }
 
     private Usuario fazerLogin() {

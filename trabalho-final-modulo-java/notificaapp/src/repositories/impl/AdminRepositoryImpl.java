@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdminRepositoryImpl {
-    public List<Usuario> listarUsuariosNoBanco() throws DataBaseException {
+    public List<Usuario> listarTodosUsuarios() throws DataBaseException {
         List<Usuario> usuarios = new ArrayList<>();
         Connection con = null;
 
@@ -25,7 +25,6 @@ public class AdminRepositoryImpl {
             Statement stmt = con.createStatement();
 
             String sql = "SELECT * FROM USUARIO";
-
             ResultSet res = stmt.executeQuery(sql);
 
             try {
@@ -40,11 +39,11 @@ public class AdminRepositoryImpl {
                     usuario.setClasseSocial(ClasseSocial.fromInt(res.getInt("classe_social")));
                     usuario.setGeneroUsuario(Genero.fromInt(res.getInt("genero_usuario")));
                     usuario.setTipoUsuario(TipoUsuario.fromInt(res.getInt("tipo_usuario")));
+
                     usuarios.add(usuario);
                 }
             } catch (SQLException e) {
-                System.out.println("entro try");
-                throw new DataBaseException (e.getCause());
+                throw new DataBaseException(e.getCause());
             } finally {
                 try {
                     if (con != null) {
