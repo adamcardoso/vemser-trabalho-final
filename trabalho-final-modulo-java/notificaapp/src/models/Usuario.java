@@ -17,6 +17,7 @@ public class Usuario {
     private ClasseSocial classeSocial;
     private Genero generoUsuario;
     private TipoUsuario tipoUsuario;
+    private boolean isAdmin;
 
     public Usuario(int idUsuario, String nomeUsuario, String numeroCelular, String senhaUsuario, Etnia etniaUsuario, LocalDate dataNascimento, ClasseSocial classeSocial, Genero generoUsuario, TipoUsuario tipoUsuario) {
         this.idUsuario = idUsuario;
@@ -112,6 +113,14 @@ public class Usuario {
 
     public void setTipoUsuario(TipoUsuario tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
+    }
+
+    public boolean getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
 
     @Override

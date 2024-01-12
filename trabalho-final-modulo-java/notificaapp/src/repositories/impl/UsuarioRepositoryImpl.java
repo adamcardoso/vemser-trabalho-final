@@ -24,13 +24,7 @@ public class UsuarioRepositoryImpl implements Repository<Integer, Usuario> {
 
     @Override
     public Usuario adicionar(Usuario object) throws DataBaseException {
-
         return null;
-    }
-
-    @Override
-    public boolean remover(Integer id) throws DataBaseException {
-        return false;
     }
 
     @Override
@@ -49,7 +43,6 @@ public class UsuarioRepositoryImpl implements Repository<Integer, Usuario> {
 
             String sql = "SELECT * FROM USUARIO";
 
-            // Executa-se a consulta
             ResultSet res = stmt.executeQuery(sql);
 
             try {
@@ -100,7 +93,6 @@ public class UsuarioRepositoryImpl implements Repository<Integer, Usuario> {
                     usuario.setNomeUsuario(res.getString("nome_usuario"));
                     usuario.setSenhaUsuario(res.getString("senha_usuario"));
 
-                    // Mapear o valor do banco de dados para o enum TipoUsuario
                     int valorTipoUsuario = res.getInt("tipo_usuario");
                     TipoUsuario tipoUsuario = TipoUsuario.fromInt(valorTipoUsuario);
                     usuario.setTipoUsuario(tipoUsuario);
@@ -124,6 +116,58 @@ public class UsuarioRepositoryImpl implements Repository<Integer, Usuario> {
         return null;
     }
 
+    public boolean usuarioExiste(int idUsuario) {
+        Connection con = null;
 
+        try {
+            String sql =  String.format("SELECT id_usuario FROM USUARIO WHERE id_usuario = '%s'", idUsuario);
 
+            con = ConexaoBancoDeDados.getConnection();
+
+            Statement stmt = con.createStatement();
+
+            ResultSet res = stmt.executeQuery(sql);
+
+            return res.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public boolean remover(Integer id) throws DataBaseException {
+        Connection con = null;
+
+        try {
+            String sql = String.format("DELETE FROM USUARIO WHERE id_usuario = '%s'", id);
+
+            con = ConexaoBancoDeDados.getConnection();
+
+            Statement stmt = con.createStatement();
+
+            ResultSet res = stmt.executeQuery(sql);
+
+            return res.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

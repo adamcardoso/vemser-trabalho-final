@@ -2,13 +2,13 @@ package services.impl;
 
 import exceptions.DataBaseException;
 import models.Usuario;
+import models.enums.TipoUsuario;
 import repositories.impl.UsuarioRepositoryImpl;
 import services.interfaces.UsuarioService;
 
 import java.util.List;
 
 public class UsuarioServicesImpl implements UsuarioService {
-
     private final UsuarioRepositoryImpl usuarioRepository;
 
     public UsuarioServicesImpl() {
@@ -25,19 +25,20 @@ public class UsuarioServicesImpl implements UsuarioService {
         }
     }
 
-    public boolean fazerLogin(String nomeUsuario, String senha){
+    public Usuario fazerLogin(String nomeUsuario, String senha){
         try {
             Usuario usuario = usuarioRepository.fazerLogin(nomeUsuario, senha);
             if (usuario != null) {
                 System.out.println("Login bem-sucedido!");
-                return true;
+                setIsAdmin(usuario);
+                return usuario;
             } else {
                 System.out.println("Nome de usuário ou senha incorretos. Tente novamente.");
             }
         } catch (DataBaseException e) {
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 
     private void imprimirUsuario(Usuario usuario) {
@@ -50,4 +51,31 @@ public class UsuarioServicesImpl implements UsuarioService {
         System.out.println("------------------------");
     }
 
+    public void remover(Integer id) {
+        try {
+            boolean usuarioExiste = usuarioRepository.usuarioExiste(id);
+
+            if (usuarioExiste) {
+                boolean usuarioRemovido = usuarioRepository.remover(id);
+
+                if (usuarioRemovido) {
+                    System.out.println("Usuário removido com sucesso!");
+                } else {
+                    System.out.println("Falha ao remover usuário!");
+                }
+            } else {
+                System.out.println("Usuário não encontrado!");
+            }
+        } catch (DataBaseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setIsAdmin(Usuario usuario) {
+        if(usuario.getTipoUsuario().equals(TipoUsuario.ADMIN)) {
+            usuario.setIsAdmin(true);
+        } else {
+            usuario.setIsAdmin(false);
+        }
+    }
 }
