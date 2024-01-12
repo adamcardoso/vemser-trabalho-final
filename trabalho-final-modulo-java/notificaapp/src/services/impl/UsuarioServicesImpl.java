@@ -3,9 +3,12 @@ package services.impl;
 import exceptions.DataBaseException;
 import models.Usuario;
 import models.enums.TipoUsuario;
+import repositories.impl.AdminRepositoryImpl;
 import repositories.impl.UsuarioRepositoryImpl;
 import services.interfaces.UsuarioService;
+import views.EstatisticaUsuario;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class UsuarioServicesImpl implements UsuarioService {
@@ -83,6 +86,18 @@ public class UsuarioServicesImpl implements UsuarioService {
         return null;
     }
 
+    public void exibirEstatisticasUsuarios() {
+        AdminRepositoryImpl adminRepository = new AdminRepositoryImpl();
+        try {
+            List<Usuario> usuarios = adminRepository.listarTodosUsuarios();
+
+            //Chama a classe de estatísticas e exibe as estatísticas
+            EstatisticaUsuario estatisticaUsuario = new EstatisticaUsuario();
+            estatisticaUsuario.exibirEstatisticas(usuarios);
+        } catch (DataBaseException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
 
