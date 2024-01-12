@@ -10,6 +10,7 @@ import java.util.List;
 public class Denuncia{
     private int idDenuncia;
     private String descricao;
+    private String titulo;
     private Localizacao local;
     private Usuario usuario;
     private LocalDateTime dataHora;
@@ -18,6 +19,7 @@ public class Denuncia{
     private int curtidas;
     private final List<String> comentarios;
 
+    private boolean tipoDenuncia;
     private int validarDenuncia;
 
     public Denuncia(int idDenuncia, String descricao, Localizacao local, Usuario usuario, LocalDateTime dataHora, Situacao statusDenuncia, Categoria categoria) {
@@ -31,8 +33,11 @@ public class Denuncia{
         this.curtidas = 0;
         this.validarDenuncia = 0;
         this.comentarios = new ArrayList<>();
+        this.tipoDenuncia = false;
     }
-
+    public void denunciaAnonima(){
+        this.tipoDenuncia = true;
+    }
     public void curtirDenuncia(){
         this.curtidas++;
     }
@@ -121,5 +126,33 @@ public class Denuncia{
 
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
+    }
+
+    public int getCurtidas() {
+        return curtidas;
+    }
+
+    public List<String> getComentarios() {
+        return comentarios;
+    }
+
+    public int getValidarDenuncia() {
+        return validarDenuncia;
+    }
+
+    public boolean getTipoDenuncia() {
+        return tipoDenuncia;
+    }
+
+    public void setTipoDenuncia(boolean tipoDenuncia) {
+        this.tipoDenuncia = tipoDenuncia;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 }
