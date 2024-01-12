@@ -1,5 +1,5 @@
 package services.interfaces;
 
 public interface UsuarioService {
-    void listarUsuarios();
+    public void listarUsuario(int idUsuario);
 }
