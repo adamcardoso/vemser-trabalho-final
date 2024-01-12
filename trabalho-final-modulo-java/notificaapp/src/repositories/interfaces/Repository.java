@@ -6,7 +6,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface UsuarioRepository <CHAVE, OBJETO> {
+public interface Repository<CHAVE, OBJETO> {
 
     Integer getProximoId(Connection connection) throws SQLException;
 

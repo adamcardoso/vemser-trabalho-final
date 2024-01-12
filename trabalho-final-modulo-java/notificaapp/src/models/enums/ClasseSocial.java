@@ -16,4 +16,13 @@ public enum ClasseSocial {
     public int getIdClasseSocial() {
         return valor;
     }
+
+    public static ClasseSocial fromInt(int value) {
+        for (ClasseSocial classeSocial : ClasseSocial.values()) {
+            if (classeSocial.getIdClasseSocial() == value) {
+                return classeSocial;
+            }
+        }
+        throw new IllegalArgumentException("Valor inválido para a enumeração Classe Social: " + value);
+    }
 }

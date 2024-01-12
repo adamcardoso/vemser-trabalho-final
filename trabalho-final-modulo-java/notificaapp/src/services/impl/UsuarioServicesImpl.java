@@ -1,16 +1,10 @@
 package services.impl;
 
-import config.ConexaoBancoDeDados;
 import exceptions.DataBaseException;
 import models.Usuario;
-import models.enums.Etnia;
 import repositories.impl.UsuarioRepositoryImpl;
 import services.interfaces.UsuarioService;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
 public class UsuarioServicesImpl implements UsuarioService {
@@ -29,6 +23,21 @@ public class UsuarioServicesImpl implements UsuarioService {
         } catch (DataBaseException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean fazerLogin(String nomeUsuario, String senha){
+        try {
+            Usuario usuario = usuarioRepository.fazerLogin(nomeUsuario, senha);
+            if (usuario != null) {
+                System.out.println("Login bem-sucedido!");
+                return true;
+            } else {
+                System.out.println("Nome de usuário ou senha incorretos. Tente novamente.");
+            }
+        } catch (DataBaseException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     private void imprimirUsuario(Usuario usuario) {
