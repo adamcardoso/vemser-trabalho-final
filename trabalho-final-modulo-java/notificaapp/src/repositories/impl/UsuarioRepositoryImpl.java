@@ -21,6 +21,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
 
     @Override
     public Usuario adicionar(Usuario object) throws DataBaseException {
+
         return null;
     }
 
@@ -35,7 +36,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
     }
 
     @Override
-    public List<Usuario> listarUsuariosNoBanco() throws DataBaseException {
+    public List<Usuario> listarUsuariosNoBanco() throws DataBaseException  {
         List<Usuario> usuarios = new ArrayList<>();
         Connection con = null;
 
@@ -43,7 +44,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
             con = ConexaoBancoDeDados.getConnection();
             Statement stmt = con.createStatement();
 
-            String sql = "SELECT * FROM VS_13_EQUIPE_7.USUARIO";
+            String sql = "SELECT * FROM USUARIO";
 
             // Executa-se a consulta
             ResultSet res = stmt.executeQuery(sql);
@@ -60,7 +61,8 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
                     usuarios.add(usuario);
                 }
             } catch (SQLException e) {
-                throw new DataBaseException(e.getCause());
+                System.out.println("entro try");
+                throw new DataBaseException (e.getCause());
             } finally {
                 try {
                     if (con != null) {
@@ -75,4 +77,42 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
             throw new RuntimeException(e);
         }
     }
+
+    public Usuario fazerLogin(String nomeUsuario, String senha) throws DataBaseException {
+        Connection con = null;
+
+        try {
+            con = ConexaoBancoDeDados.getConnection();
+            Statement stmt = con.createStatement();
+
+            String sql = String.format("SELECT nome_usuario, senha_usuario FROM USUARIO WHERE nome_usuario = '%s' AND senha_usuario = '%s'", nomeUsuario, senha);
+
+            // Executa-se a consulta
+            ResultSet res = stmt.executeQuery(sql);
+
+            try {
+                if (res.next()) {
+                    Usuario usuario = new Usuario();
+                    usuario.setNomeUsuario(res.getString("nome_usuario"));
+                    usuario.setSenhaUsuario(res.getString("senha_usuario"));
+                    return usuario;
+                }
+            } catch (SQLException e) {
+                throw new DataBaseException(e.getCause());
+            } finally {
+                try {
+                    if (con != null) {
+                        con.close();
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+
 }
