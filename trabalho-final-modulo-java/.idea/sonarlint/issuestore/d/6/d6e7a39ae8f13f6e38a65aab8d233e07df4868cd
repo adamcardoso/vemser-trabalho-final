@@ -1,0 +1,12 @@
+
+h	java:S112´"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8›÷¢ŠÐ1
+i
+java:S1192:"GDefine a constant instead of duplicating this literal "Erro: " 3 times.(ƒªÉïûÿÿÿÿ8â“¥ŠÐ1
+j
+java:S2095¤"GUse try-with-resources or close this "Statement" in a "finally" clause.(õ½ÛØþÿÿÿÿ8Ü÷¢ŠÐ1
+l
+java:S2095y"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(Î»×Ð8Ý÷¢ŠÐ1
+i
+java:S2095"GUse try-with-resources or close this "Statement" in a "finally" clause.(õ½ÛØþÿÿÿÿ8Ü÷¢ŠÐ1
+q
+java:S2095)"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(À­ñÂùÿÿÿÿ8Ü÷¢ŠÐ1
