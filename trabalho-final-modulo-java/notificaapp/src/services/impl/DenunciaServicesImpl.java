@@ -5,6 +5,9 @@ import models.Denuncia;
 import repositories.impl.DenunciaRepositoryImpl;
 import services.interfaces.DenunciaService;
 
+import java.util.List;
+import java.util.Optional;
+
 public class DenunciaServicesImpl implements DenunciaService {
     private DenunciaRepositoryImpl denunciaRepositoryImpl;
 
@@ -29,5 +32,15 @@ public class DenunciaServicesImpl implements DenunciaService {
             System.out.println(e.getCause());
         }
         return null;
+    }
+
+    @Override
+    public List<Denuncia> obterTodos() {
+        try{
+            return denunciaRepositoryImpl.obterTodos();
+        } catch (Exception e){
+            System.out.println(e.getCause());
+            return null;
+        }
     }
 }

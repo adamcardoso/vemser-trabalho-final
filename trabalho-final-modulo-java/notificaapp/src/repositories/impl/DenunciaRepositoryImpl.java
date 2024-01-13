@@ -5,11 +5,16 @@ import exceptions.DataBaseException;
 import helpers.ConversorDateHelper;
 import models.Denuncia;
 import models.Usuario;
+import models.enums.StatusDenuncia;
+import repositories.interfaces.IDenunciaRepository;
 import repositories.interfaces.Repository;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-public class DenunciaRepositoryImpl implements Repository<Integer, Denuncia> {
+public class DenunciaRepositoryImpl implements Repository<Integer, Denuncia>, IDenunciaRepository {
     @Override
     public Integer getProximoId(Connection connection) throws SQLException {
         String sql = "SELECT seq_pessoa2.nextval mysequence from DUAL";
@@ -96,12 +101,12 @@ public class DenunciaRepositoryImpl implements Repository<Integer, Denuncia> {
 
             stmt.setString(1, denuncia.getDescricao());
             stmt.setTimestamp(2, Timestamp.valueOf(denuncia.getDataHora()));
-//            stmt.setInt(3, denuncia.getStatusDenuncia().getIdSituacao());
-//            stmt.setInt(4, denuncia.getCategoria().getIdCategoria());
+            stmt.setString(3, denuncia.getStatusDenuncia().getValor());
+            stmt.setString(4, denuncia.getCategoria().getValor());
             stmt.setInt(5, denuncia.getCurtidas());
             stmt.setInt(6, denuncia.getValidarDenuncia());
             stmt.setInt(7, denuncia.getUsuario().getIdUsuario());
-//            stmt.setBoolean(8, denuncia.getTipoDenuncia());
+            stmt.setString(8, denuncia.getTipoDenuncia().getValor());
             stmt.setString(9, denuncia.getTitulo());
             stmt.setInt(10, id);
 
@@ -126,5 +131,42 @@ public class DenunciaRepositoryImpl implements Repository<Integer, Denuncia> {
     @Override
     public Usuario listarUsuario(int idUsuario) throws DataBaseException {
         return null;
+    }
+
+    public List<Denuncia> obterTodos() {
+        Connection connection = null;
+        try{
+            connection = ConexaoBancoDeDados.getConnection();
+
+            String sql = """
+                    SELECT * FROM denuncia d
+                    """;
+
+            Statement stmt = connection.createStatement();
+            ResultSet res = stmt.executeQuery(sql);
+
+            List<Denuncia> denuncias = new ArrayList<>();
+
+            while(res.next()){
+                denuncias.add(new Denuncia(
+                        res.getInt("id_denuncia"),
+                        res.getString("titulo"),
+                        res.getString("descricao"),
+                        StatusDenuncia.getEnum(res.getString("status_denuncia"))
+                ));
+            }
+
+            return denuncias;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

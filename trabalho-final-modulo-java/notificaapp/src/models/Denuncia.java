@@ -18,12 +18,18 @@ public class Denuncia{
     private StatusDenuncia statusDenuncia;
     private Categoria categoria;
     private int curtidas;
-    private final List<String> comentarios;
+    private final List<String> comentarios = new ArrayList<>();
     private TipoDenuncia tipoDenuncia;
     private int validarDenuncia;
 
     private Long idUsuario;
 
+    public Denuncia(int idDenuncia, String titulo, String descricao, StatusDenuncia statusDenuncia){
+        this.idDenuncia = idDenuncia;
+        this.titulo = titulo;
+        this.descricao = descricao;
+        this.statusDenuncia = statusDenuncia;
+    }
     public Denuncia(String titulo, String descricao, Categoria categoria, TipoDenuncia tipoDenuncia, Long idUsuario){
         this.titulo = titulo;
         this.descricao = descricao;
@@ -32,10 +38,10 @@ public class Denuncia{
         this.categoria = categoria;
         this.curtidas = 0;
         this.validarDenuncia = 0;
-        this.comentarios = new ArrayList<>();
         this.tipoDenuncia = tipoDenuncia;
         this.idUsuario = idUsuario;
     }
+
 
     public Denuncia(int idDenuncia, String titulo, String descricao, Usuario usuario, Categoria categoria, TipoDenuncia tipoDenuncia, Long idUsuario) {
         this.idDenuncia = idDenuncia;
@@ -47,13 +53,10 @@ public class Denuncia{
         this.categoria = categoria;
         this.curtidas = 0;
         this.validarDenuncia = 0;
-        this.comentarios = new ArrayList<>();
         this.tipoDenuncia = tipoDenuncia;
         this.idUsuario = idUsuario;
     }
-//    public void denunciaAnonima(){
-//        this.tipoDenuncia = true;
-//    }
+
     public void curtirDenuncia(){
         this.curtidas++;
     }
@@ -148,9 +151,6 @@ public class Denuncia{
         return curtidas;
     }
 
-    public List<String> getComentarios() {
-        return comentarios;
-    }
 
     public int getValidarDenuncia() {
         return validarDenuncia;

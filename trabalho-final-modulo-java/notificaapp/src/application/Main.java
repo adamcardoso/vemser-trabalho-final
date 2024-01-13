@@ -6,8 +6,11 @@ import models.Localizacao;
 import models.Usuario;
 import models.enums.Categoria;
 import models.enums.TipoDenuncia;
-import repositories.impl.DenunciaRepositoryImpl;
+import services.impl.DenunciaServicesImpl;
 import views.Home;
+
+import java.util.List;
+import java.util.Optional;
 
 public class Main {
     public static void main(String[] args) throws DataBaseException {

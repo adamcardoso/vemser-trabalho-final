@@ -1,11 +1,10 @@
-package services.interfaces;
+package repositories.interfaces;
 
 import models.Denuncia;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface DenunciaService {
-    Denuncia adicionar(Denuncia denuncia);
+public interface IDenunciaRepository {
     List<Denuncia> obterTodos();
 }
