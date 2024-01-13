@@ -15,7 +15,7 @@ import java.util.List;
 public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denuncia> {
     @Override
     public Integer getProximoIdDaDenuncia(Connection connection) throws SQLException {
-        String sql = "SELECT seq_pessoa2.nextval mysequence from DUAL";
+        String sql = "SELECT SEQ_PESSOA2.NEXTVAL mysequence from DUAL";
 
         Statement stmt = connection.createStatement();
         ResultSet res = stmt.executeQuery(sql);
@@ -33,10 +33,7 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
         try {
             connection = ConexaoBancoDeDados.getConnection();
 
-            String sql = """
-                    INSERT INTO denuncia d (id_denuncia, titulo, descricao, data_hora, status_denuncia, categoria, curtida, validar_denuncia, tipo_denuncia, id_usuario)
-                    VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                    """;
+            String sql = "INSERT INTO DENUNCIA (id_denuncia, titulo, descricao, data_hora, status_denuncia, categoria, curtida, validar_denuncia, tipo_denuncia, id_usuario) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             Integer proximoId = this.getProximoIdDaDenuncia(connection);
             d.setIdDenuncia(proximoId);
@@ -58,7 +55,7 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
             System.out.println("adicionarPessoa.res=" + res);
             return d;
         } catch (SQLException e) {
-            throw new DataBaseException(e.getCause());
+            throw new DataBaseException("Erro: "+ e.getCause());
         } finally {
             try {
                 if (connection != null) {
@@ -88,7 +85,7 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
             }
         } catch (SQLException e) {
             System.err.println("Erro ao remover denúncia!");
-            throw new DataBaseException(e);
+            throw new DataBaseException("Erro: "+ e);
         } finally {
             try {
                 if (con != null) {
@@ -140,7 +137,7 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
 
             return res > 0;
         } catch (SQLException e) {
-            throw new DataBaseException(e.getCause());
+            throw new DataBaseException("Erro: "+ e.getCause());
         } finally {
             try {
                 if (con != null) {
@@ -162,9 +159,7 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
         try{
             connection = ConexaoBancoDeDados.getConnection();
 
-            String sql = """
-                    SELECT * FROM denuncia d
-                    """;
+            String sql = "SELECT * FROM DENUNCIA";
 
             Statement stmt = connection.createStatement();
             ResultSet res = stmt.executeQuery(sql);

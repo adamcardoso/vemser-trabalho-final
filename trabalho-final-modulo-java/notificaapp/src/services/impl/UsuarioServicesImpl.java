@@ -76,11 +76,7 @@ public class UsuarioServicesImpl implements UsuarioService {
     }
 
     private void setIsAdmin(Usuario usuario) {
-        if(usuario.getTipoUsuario().equals(TipoUsuario.ADMIN)) {
-            usuario.setIsAdmin(true);
-        } else {
-            usuario.setIsAdmin(false);
-        }
+        usuario.setIsAdmin(usuario.getTipoUsuario().equals(TipoUsuario.ADMIN));
     }
 
     public Usuario adicionar(Usuario usuario) {
@@ -91,7 +87,8 @@ public class UsuarioServicesImpl implements UsuarioService {
     public void exibirEstatisticasUsuarios() {
         AdminRepositoryImpl adminRepository = new AdminRepositoryImpl();
         try {
-            List<Usuario> usuarios = adminRepository.listarTodosUsuarios();
+            Usuario usuarioExemplo = new Usuario();
+            List<Usuario> usuarios = adminRepository.listarTodosUsuarios(usuarioExemplo);
 
             //Chama a classe de estatísticas e exibe as estatísticas
             EstatisticaUsuario estatisticaUsuario = new EstatisticaUsuario();

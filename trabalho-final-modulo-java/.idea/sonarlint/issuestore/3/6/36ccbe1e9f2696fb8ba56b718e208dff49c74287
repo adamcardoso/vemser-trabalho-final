@@ -1,6 +1,6 @@
 
-—
-java:S1130"uRemove the declaration of thrown exception 'exceptions.DataBaseException', as it cannot be thrown from method's body.(™Øöìùÿÿÿÿ8Ó¡‡Ğ1
+V
+java:S1128"9Remove this unused import 'exceptions.DataBaseException'.(Ò‘ £8‹ûÒŠĞ1
 N
 java:S1128",Remove this unused import 'models.Denuncia'.(®¢…úÿÿÿÿ8Ö¡‡Ğ1
 L

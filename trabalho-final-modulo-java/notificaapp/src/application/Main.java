@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class Main {
-    public static void main(String[] args) throws DataBaseException {
+    public static void main(String[] args){
         Home home = new Home();
         home.exibirLoginMenu();
     }

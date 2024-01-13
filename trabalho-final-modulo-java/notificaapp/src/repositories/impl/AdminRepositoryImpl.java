@@ -30,8 +30,11 @@ public class AdminRepositoryImpl implements AdminRepository {
                 stmt = con.createStatement();
 
                 String sql = "SELECT * FROM USUARIO";
-                try (ResultSet res = stmt.executeQuery(sql)) {
-                    while (res.next()) {
+                ResultSet res = stmt.executeQuery(sql);
+
+                // Verifica se há resultados no ResultSet
+                if (res.next()) {
+                    do {
                         Usuario usuario = new Usuario();
                         usuario.setIdUsuario(res.getInt("id_usuario"));
                         usuario.setNomeUsuario(res.getString("nome_usuario"));
@@ -43,8 +46,14 @@ public class AdminRepositoryImpl implements AdminRepository {
                         usuario.setGeneroUsuario(Genero.fromInt(res.getInt("genero_usuario")));
                         usuario.setTipoUsuario(TipoUsuario.fromInt(res.getInt("tipo_usuario")));
 
+                        int valorTipoUsuario = res.getInt("tipo_usuario");
+                        TipoUsuario tipoUsuario = (res.wasNull()) ? null : TipoUsuario.fromInt(valorTipoUsuario);
+                        usuario.setTipoUsuario(tipoUsuario);
+
                         usuarios.add(usuario);
-                    }
+                    } while (res.next());
+                } else {
+                    System.out.println("A consulta SQL não retornou resultados.");
                 }
 
                 return usuarios;

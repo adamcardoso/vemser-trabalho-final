@@ -75,3 +75,5 @@ $notificaapp/src/models/Denuncia.java,c\6\c604ce5e69d434ce111b48acc50aa8589f42c
 0notificaapp/src/models/enums/StatusDenuncia.java,0\4\0440de4c783c57dde24a92adeed8a52a3de4a7fa
 ^
 .notificaapp/src/models/enums/TipoDenuncia.java,6\a\6a6864e456e891557cc69553cda32803fbcf3258
+Q
+!notificaapp/resources/logback.xml,8\2\82c39f831556ed644879738d9829b2985338996d

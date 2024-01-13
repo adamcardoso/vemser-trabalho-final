@@ -1,6 +1,7 @@
 package services.impl;
 
 import exceptions.DataBaseException;
+import java.util.Collections;
 import models.Denuncia;
 import repositories.impl.DenunciaRepositoryImpl;
 import services.interfaces.DenunciaService;
@@ -19,7 +20,7 @@ public class DenunciaServicesImpl implements DenunciaService {
         try {
             return denunciaRepositoryImpl.adicionar(denuncia);
         } catch (Exception e){
-            System.out.println(e.getCause());
+            System.out.println("Erro: "+ e.getCause());
         }
 
         return null;
@@ -50,8 +51,8 @@ public class DenunciaServicesImpl implements DenunciaService {
         try{
             return denunciaRepositoryImpl.obterTodos();
         } catch (Exception e){
-            System.out.println(e.getCause());
-            return null;
+            System.out.println("Erro: "+ e.getCause());
+            return Collections.emptyList();
         }
     }
 }

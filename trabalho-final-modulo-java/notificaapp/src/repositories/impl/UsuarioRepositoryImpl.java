@@ -53,7 +53,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
                 }
             } catch (SQLException e) {
                 System.out.println("entro try");
-                throw new DataBaseException (e.getCause());
+                throw new DataBaseException ("Erro: "+ e.getCause());
             } finally {
                 try {
                     if (con != null) {
@@ -82,24 +82,29 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
                 stmt.setString(1, nomeUsuario);
                 stmt.setString(2, senha);
 
-                ResultSet res = stmt.executeQuery();
+                // Utilize execute() em vez de executeQuery()
+                boolean resultSet = stmt.execute();
 
-                try {
-                    if (res.next()) {
-                        Usuario usuario = new Usuario();
-                        usuario.setNomeUsuario(res.getString("nome_usuario"));
-                        usuario.setSenhaUsuario(res.getString("senha_usuario"));
-                        usuario.setIdUsuario(res.getInt("id_usuario"));
-                        int valorTipoUsuario = res.getInt("tipo_usuario");
-                        TipoUsuario tipoUsuario = TipoUsuario.fromInt(valorTipoUsuario);
-                        usuario.setTipoUsuario(tipoUsuario);
+                if (resultSet) {
+                    ResultSet res = stmt.getResultSet();
 
-                        System.out.println("Usuário encontrado: " + usuario.getNomeUsuario());
+                    try {
+                        if (res.next()) {
+                            Usuario usuario = new Usuario();
+                            usuario.setNomeUsuario(res.getString("nome_usuario"));
+                            usuario.setSenhaUsuario(res.getString("senha_usuario"));
+                            usuario.setIdUsuario(res.getInt("id_usuario"));
+                            int valorTipoUsuario = res.getInt("tipo_usuario");
+                            TipoUsuario tipoUsuario = TipoUsuario.fromInt(valorTipoUsuario);
+                            usuario.setTipoUsuario(tipoUsuario);
 
-                        return usuario;
+                            System.out.println("Usuário encontrado: " + usuario.getNomeUsuario());
+
+                            return usuario;
+                        }
+                    } catch (SQLException e) {
+                        throw new DataBaseException("Erro: " + e.getCause());
                     }
-                } catch (SQLException e) {
-                    throw new DataBaseException(e.getCause());
                 }
             }
         } catch (SQLException e) {
