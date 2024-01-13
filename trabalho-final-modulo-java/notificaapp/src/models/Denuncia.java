@@ -30,32 +30,6 @@ public class Denuncia{
         this.descricao = descricao;
         this.statusDenuncia = statusDenuncia;
     }
-    public Denuncia(String titulo, String descricao, Categoria categoria, TipoDenuncia tipoDenuncia, Long idUsuario){
-        this.titulo = titulo;
-        this.descricao = descricao;
-        this.dataHora = LocalDateTime.now();
-        this.statusDenuncia = StatusDenuncia.getEnum("1");
-        this.categoria = categoria;
-        this.curtidas = 0;
-        this.validarDenuncia = 0;
-        this.tipoDenuncia = tipoDenuncia;
-        this.idUsuario = idUsuario;
-    }
-
-
-    public Denuncia(int idDenuncia, String titulo, String descricao, Usuario usuario, Categoria categoria, TipoDenuncia tipoDenuncia, Long idUsuario) {
-        this.idDenuncia = idDenuncia;
-        this.titulo = titulo;
-        this.descricao = descricao;
-        this.usuario = usuario;
-        this.dataHora = LocalDateTime.now();
-        this.statusDenuncia = StatusDenuncia.getEnum("1");
-        this.categoria = categoria;
-        this.curtidas = 0;
-        this.validarDenuncia = 0;
-        this.tipoDenuncia = tipoDenuncia;
-        this.idUsuario = idUsuario;
-    }
 
     public void curtirDenuncia(){
         this.curtidas++;
@@ -88,7 +62,6 @@ public class Denuncia{
         } catch ( Exception e){
             System.out.println("Nenhum comentário");
         }
-
     }
 
     public int getIdDenuncia() {

@@ -6,18 +6,16 @@ import helpers.ConversorDateHelper;
 import models.Denuncia;
 import models.Usuario;
 import models.enums.StatusDenuncia;
-import repositories.interfaces.IDenunciaRepository;
-import repositories.interfaces.Repository;
+import repositories.interfaces.DenunciaRepository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-public class DenunciaRepositoryImpl implements Repository<Integer, Denuncia>, IDenunciaRepository {
+public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denuncia> {
     @Override
-    public Integer getProximoId(Connection connection) throws SQLException {
-        String sql = "SELECT seq_pessoa2.nextval mysequence from DUAL";
+    public Integer getProximoIdDaDenuncia(Connection connection) throws SQLException {
+        String sql = "SELECT SEQ_PESSOA2.NEXTVAL mysequence from DUAL";
 
         Statement stmt = connection.createStatement();
         ResultSet res = stmt.executeQuery(sql);
@@ -35,12 +33,9 @@ public class DenunciaRepositoryImpl implements Repository<Integer, Denuncia>, ID
         try {
             connection = ConexaoBancoDeDados.getConnection();
 
-            String sql = """
-                    INSERT INTO denuncia d (id_denuncia, titulo, descricao, data_hora, status_denuncia, categoria, curtida, validar_denuncia, tipo_denuncia, id_usuario)
-                    VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                    """;
+            String sql = "INSERT INTO DENUNCIA (id_denuncia, titulo, descricao, data_hora, status_denuncia, categoria, curtida, validar_denuncia, tipo_denuncia, id_usuario) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-            Integer proximoId = this.getProximoId(connection);
+            Integer proximoId = this.getProximoIdDaDenuncia(connection);
             d.setIdDenuncia(proximoId);
 
             PreparedStatement stmt = connection.prepareStatement(sql);
@@ -60,7 +55,7 @@ public class DenunciaRepositoryImpl implements Repository<Integer, Denuncia>, ID
             System.out.println("adicionarPessoa.res=" + res);
             return d;
         } catch (SQLException e) {
-            throw new DataBaseException(e.getCause());
+            throw new DataBaseException("Erro: "+ e.getCause());
         } finally {
             try {
                 if (connection != null) {
@@ -73,9 +68,35 @@ public class DenunciaRepositoryImpl implements Repository<Integer, Denuncia>, ID
     }
 
     @Override
-    public boolean remover(Integer id) throws DataBaseException {
-        return false;
+    public boolean removerDenuncia(Integer idDenuncia) throws DataBaseException {
+        Connection con = null;
+
+        try {
+            con = ConexaoBancoDeDados.getConnection();
+            String sql = "DELETE FROM DENUNCIA WHERE id_denuncia = ?";
+            System.out.println("SQL Executado: " + sql);
+
+            try (PreparedStatement stmt = con.prepareStatement(sql)) {
+                stmt.setInt(1, idDenuncia);
+
+                int res = stmt.executeUpdate();
+                System.out.println("removerDenunciaPorId.res=" + res);
+                return res > 0;
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao remover denúncia!");
+            throw new DataBaseException("Erro: "+ e);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
+
 
     @Override
     public boolean editar(Integer id, Denuncia denuncia) throws DataBaseException {
@@ -116,7 +137,7 @@ public class DenunciaRepositoryImpl implements Repository<Integer, Denuncia>, ID
 
             return res > 0;
         } catch (SQLException e) {
-            throw new DataBaseException(e.getCause());
+            throw new DataBaseException("Erro: "+ e.getCause());
         } finally {
             try {
                 if (con != null) {
@@ -129,7 +150,7 @@ public class DenunciaRepositoryImpl implements Repository<Integer, Denuncia>, ID
     }
 
     @Override
-    public Usuario listarUsuario(int idUsuario) throws DataBaseException {
+    public Usuario listarUsuarioDaDenuncia(int idUsuario) throws DataBaseException {
         return null;
     }
 
@@ -138,9 +159,7 @@ public class DenunciaRepositoryImpl implements Repository<Integer, Denuncia>, ID
         try{
             connection = ConexaoBancoDeDados.getConnection();
 
-            String sql = """
-                    SELECT * FROM denuncia d
-                    """;
+            String sql = "SELECT * FROM DENUNCIA";
 
             Statement stmt = connection.createStatement();
             ResultSet res = stmt.executeQuery(sql);

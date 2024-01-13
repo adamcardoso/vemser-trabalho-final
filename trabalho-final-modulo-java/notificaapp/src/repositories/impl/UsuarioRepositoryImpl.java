@@ -7,28 +7,23 @@ import models.enums.ClasseSocial;
 import models.enums.Etnia;
 import models.enums.Genero;
 import models.enums.TipoUsuario;
-import repositories.interfaces.Repository;
+import repositories.interfaces.UsuarioRepository;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.*;
 
-public class UsuarioRepositoryImpl implements Repository<Integer, Usuario> {
+public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario> {
     @Override
-    public Integer getProximoId(Connection connection) throws SQLException {
+    public Integer getProximoIdDoUsuario(Connection connection) throws SQLException {
         return null;
     }
 
     @Override
-    public Usuario adicionar(Usuario object) throws DataBaseException {
+    public Usuario adicionarUsuario(Usuario object) throws DataBaseException {
         return null;
     }
 
     @Override
-    public boolean editar(Integer id, Usuario usuario) throws DataBaseException {
+    public boolean editarUsuario(Integer id, Usuario usuario) throws DataBaseException {
         return false;
     }
 
@@ -58,7 +53,7 @@ public class UsuarioRepositoryImpl implements Repository<Integer, Usuario> {
                 }
             } catch (SQLException e) {
                 System.out.println("entro try");
-                throw new DataBaseException (e.getCause());
+                throw new DataBaseException ("Erro: "+ e.getCause());
             } finally {
                 try {
                     if (con != null) {
@@ -74,46 +69,60 @@ public class UsuarioRepositoryImpl implements Repository<Integer, Usuario> {
         }
     }
 
+    @Override
     public Usuario fazerLogin(String nomeUsuario, String senha) throws DataBaseException {
         Connection con = null;
 
         try {
             con = ConexaoBancoDeDados.getConnection();
-            Statement stmt = con.createStatement();
+            String sql = "SELECT * FROM USUARIO WHERE UPPER(TRIM(nome_usuario)) = UPPER(?) AND senha_usuario = ?";
+            System.out.println("Consulta SQL executada!");
 
-            String sql = String.format("SELECT * FROM USUARIO WHERE nome_usuario = '%s' AND senha_usuario = '%s'", nomeUsuario, senha);
-            ResultSet res = stmt.executeQuery(sql);
+            try (PreparedStatement stmt = con.prepareStatement(sql)) {
+                stmt.setString(1, nomeUsuario);
+                stmt.setString(2, senha);
 
-            try {
-                if (res.next()) {
-                    Usuario usuario = new Usuario();
-                    usuario.setNomeUsuario(res.getString("nome_usuario"));
-                    usuario.setSenhaUsuario(res.getString("senha_usuario"));
-                    usuario.setIdUsuario((res.getInt("id_usuario")));
-                    int valorTipoUsuario = res.getInt("tipo_usuario");
-                    TipoUsuario tipoUsuario = TipoUsuario.fromInt(valorTipoUsuario);
-                    usuario.setTipoUsuario(tipoUsuario);
+                // Utilize execute() em vez de executeQuery()
+                boolean resultSet = stmt.execute();
 
-                    return usuario;
-                }
-            } catch (SQLException e) {
-                throw new DataBaseException(e.getCause());
-            } finally {
-                try {
-                    if (con != null) {
-                        con.close();
+                if (resultSet) {
+                    ResultSet res = stmt.getResultSet();
+
+                    try {
+                        if (res.next()) {
+                            Usuario usuario = new Usuario();
+                            usuario.setNomeUsuario(res.getString("nome_usuario"));
+                            usuario.setSenhaUsuario(res.getString("senha_usuario"));
+                            usuario.setIdUsuario(res.getInt("id_usuario"));
+                            int valorTipoUsuario = res.getInt("tipo_usuario");
+                            TipoUsuario tipoUsuario = TipoUsuario.fromInt(valorTipoUsuario);
+                            usuario.setTipoUsuario(tipoUsuario);
+
+                            System.out.println("Usuário encontrado: " + usuario.getNomeUsuario());
+
+                            return usuario;
+                        }
+                    } catch (SQLException e) {
+                        throw new DataBaseException("Erro: " + e.getCause());
                     }
-                } catch (SQLException e) {
-                    e.printStackTrace();
                 }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
 
-    public boolean usuarioExiste(int idUsuario) {
+    @Override
+    public boolean usuarioExiste(int idUsuario) throws DataBaseException {
         Connection con = null;
 
         try {
@@ -141,7 +150,7 @@ public class UsuarioRepositoryImpl implements Repository<Integer, Usuario> {
     }
 
     @Override
-    public boolean remover(Integer id) throws DataBaseException {
+    public boolean removerUsuario(Integer id) throws DataBaseException {
         Connection con = null;
 
         try {

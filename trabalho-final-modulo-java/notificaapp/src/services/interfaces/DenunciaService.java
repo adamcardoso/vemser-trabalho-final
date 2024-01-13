@@ -3,9 +3,13 @@ package services.interfaces;
 import models.Denuncia;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface DenunciaService {
-    Denuncia adicionar(Denuncia denuncia);
+    Denuncia adicionarDenuncia(Denuncia denuncia);
+
+    void editarDenuncia(Integer id, Denuncia denuncia);
+
+    void removerDenuncia(Integer id);
+
     List<Denuncia> obterTodos();
 }
