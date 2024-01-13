@@ -1,16 +1,13 @@
 package views;
 
-import models.Denuncia;
 import models.Usuario;
-import services.impl.DenunciaServicesImpl;
-import services.impl.HomeService;
+import services.impl.HomeServiceImpl;
 import services.impl.UsuarioServicesImpl;
 
-import java.util.List;
 import java.util.Scanner;
 
 public class Home {
-    HomeService homeService = new HomeService();
+    HomeServiceImpl homeServiceImpl = new HomeServiceImpl();
     Scanner input = new Scanner(System.in);
     UsuarioServicesImpl usuarioServices = new UsuarioServicesImpl();
     private static final String OPCAO_INVALIDA_MSG = "Opção inválida!";
@@ -128,7 +125,7 @@ public class Home {
                         exibirMenuDenuncia();
                         break;
                     case 3:
-                        this.homeService.feed();
+                        this.homeServiceImpl.feed();
                         break;
                     case 4:
                         estatisticas();
@@ -152,7 +149,7 @@ public class Home {
                 opMenuPrincNLogado = input.nextInt();
                 switch (opMenuPrincNLogado) {
                     case 1:
-                        this.homeService.feed();
+                        this.homeServiceImpl.feed();
                         break;
                     case 2:
                         estatisticas();

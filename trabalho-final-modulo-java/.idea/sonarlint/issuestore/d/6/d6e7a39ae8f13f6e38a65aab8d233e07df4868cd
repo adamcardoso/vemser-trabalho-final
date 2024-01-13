@@ -1,3 +1,10 @@
 
-X
-java:S2094"BRemove this empty class, write its code or make it an "interface".(á‹ªé
+h	java:S112¹"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8¿±ª‡Ð1
+q
+java:S2095,"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(À­ñÂùÿÿÿÿ8ß²ª‡Ð1
+j
+java:S2095©"GUse try-with-resources or close this "Statement" in a "finally" clause.(õ½ÛØþÿÿÿÿ8ß²ª‡Ð1
+i
+java:S2095"GUse try-with-resources or close this "Statement" in a "finally" clause.(õ½ÛØþÿÿÿÿ8ß²ª‡Ð1
+l
+java:S2095|"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(Î»×Ð8ß²ª‡Ð1

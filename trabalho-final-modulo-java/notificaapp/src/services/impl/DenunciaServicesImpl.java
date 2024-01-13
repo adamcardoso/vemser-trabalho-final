@@ -6,15 +6,26 @@ import repositories.impl.DenunciaRepositoryImpl;
 import services.interfaces.DenunciaService;
 
 import java.util.List;
-import java.util.Optional;
 
 public class DenunciaServicesImpl implements DenunciaService {
-    private DenunciaRepositoryImpl denunciaRepositoryImpl;
+    private final DenunciaRepositoryImpl denunciaRepositoryImpl;
 
     public DenunciaServicesImpl() {
         denunciaRepositoryImpl = new DenunciaRepositoryImpl();
     }
 
+    @Override
+    public Denuncia adicionarDenuncia(Denuncia denuncia) {
+        try {
+            return denunciaRepositoryImpl.adicionar(denuncia);
+        } catch (Exception e){
+            System.out.println(e.getCause());
+        }
+
+        return null;
+    }
+
+    @Override
     public void editarDenuncia(Integer id, Denuncia denuncia) {
         try {
             boolean conseguiuEditar = denunciaRepositoryImpl.editar(id, denuncia);
@@ -25,13 +36,13 @@ public class DenunciaServicesImpl implements DenunciaService {
     }
 
     @Override
-    public Denuncia adicionar(Denuncia denuncia) {
+    public void removerDenuncia(Integer idDenuncia){
         try {
-            return denunciaRepositoryImpl.adicionar(denuncia);
-        } catch (Exception e){
-            System.out.println(e.getCause());
+            boolean conseguiuRemover = denunciaRepositoryImpl.removerDenuncia(idDenuncia);
+            System.out.println("Denúncia removida? " + conseguiuRemover + "| com id=" + idDenuncia);
+        }catch (DataBaseException e) {
+            e.printStackTrace();
         }
-        return null;
     }
 
     @Override
