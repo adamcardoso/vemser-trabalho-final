@@ -7,10 +7,7 @@ import models.Usuario;
 import models.enums.*;
 import repositories.interfaces.AdminRepository;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -124,6 +121,79 @@ public class AdminRepositoryImpl implements AdminRepository {
             }
         } else {
             throw new DataBaseException("Acesso negado. Perfil de administrador requerido.");
+        }
+    }
+
+    @Override
+    public boolean excluirDenuncia(int idDenuncia) throws DataBaseException {
+        Connection con = null;
+
+        try {
+            con = ConexaoBancoDeDados.getConnection();
+            String sql = "DELETE FROM DENUNCIA WHERE id_denuncia = ?";
+            System.out.println("SQL Executado: " + sql);
+
+            try (java.sql.PreparedStatement stmt = con.prepareStatement(sql)) {
+                stmt.setInt(1, idDenuncia);
+
+                int res = stmt.executeUpdate();
+                System.out.println("excluirDenuncia.res=" + res);
+                return res > 0;
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao excluir denúncia!");
+            throw new DataBaseException("Erro: " + e);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public Denuncia obterDenunciaPorId(int idDenuncia) throws DataBaseException {
+        Connection con = null;
+        PreparedStatement stmt = null;
+
+        try {
+            con = ConexaoBancoDeDados.getConnection();
+            String sql = "SELECT * FROM DENUNCIA WHERE id_denuncia = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, idDenuncia);
+
+            ResultSet res = stmt.executeQuery();
+
+            if (res.next()) {
+                Denuncia denuncia = new Denuncia(
+                        res.getInt("id_denuncia"),
+                        res.getString("titulo"),
+                        res.getString("descricao"),
+                        StatusDenuncia.fromInt(res.getInt("status_denuncia")),
+                        Categoria.fromInt(res.getInt("categoria"))
+                );
+
+                return denuncia;
+            } else {
+                return null;
+            }
+
+        } catch (SQLException e) {
+            throw new DataBaseException("Erro ao obter denúncia por ID: " + e.getCause());
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 

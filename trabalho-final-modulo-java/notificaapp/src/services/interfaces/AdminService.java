@@ -6,4 +6,6 @@ public interface AdminService {
     void listarUsuarios(Usuario usuarioLogado);
 
     void listarDenuncias(Usuario usuarioLogado);
+
+    boolean excluirDenuncia(int idDenuncia);
 }
