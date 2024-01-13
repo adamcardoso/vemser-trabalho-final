@@ -20,4 +20,14 @@ public class DenunciaServicesImpl implements DenunciaService {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public Denuncia adicionar(Denuncia denuncia) {
+        try {
+            return denunciaRepositoryImpl.adicionar(denuncia);
+        } catch (Exception e){
+            System.out.println(e.getCause());
+        }
+        return null;
+    }
 }
