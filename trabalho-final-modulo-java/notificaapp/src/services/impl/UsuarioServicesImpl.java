@@ -84,6 +84,15 @@ public class UsuarioServicesImpl implements UsuarioService {
         return null;
     }
 
+    public void editarUsuario(Integer id, Usuario usuario){
+        try {
+            boolean conseguiuEditar = usuarioRepository.editar(id, usuario);
+            System.out.println("pessoa editada? " + conseguiuEditar + "| com id=" + id);
+        } catch (DataBaseException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void exibirEstatisticasUsuarios() {
         AdminRepositoryImpl adminRepository = new AdminRepositoryImpl();
         try {

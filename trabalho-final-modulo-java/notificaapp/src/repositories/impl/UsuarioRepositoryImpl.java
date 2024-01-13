@@ -10,6 +10,8 @@ import models.enums.TipoUsuario;
 import repositories.interfaces.UsuarioRepository;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario> {
     @Override
@@ -23,8 +25,51 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
     }
 
     @Override
-    public boolean editarUsuario(Integer id, Usuario usuario) throws DataBaseException {
-        return false;
+    public boolean editar(Integer id, Usuario usuario) throws DataBaseException {
+        Connection con = null;
+        try {
+            con = ConexaoBancoDeDados.getConnection();
+
+            StringBuilder sql = new StringBuilder();
+            sql.append("UPDATE USUARIO SET ");
+            sql.append(" nome_usuario = ?,");
+            sql.append(" celular_usuario = ?,");
+            sql.append(" senha_usuario = ?,");
+            sql.append(" data_nascimento = ?,");
+            sql.append(" etnia = ?,");
+            sql.append(" classe_social = ?,");
+            sql.append(" genero = ?,");
+            sql.append(" tipo_usuario = ?");
+            sql.append(" WHERE id_usuario = ? ");
+
+            PreparedStatement stmt = con.prepareStatement(sql.toString());
+
+            stmt.setString(1, usuario.getNomeUsuario());
+            stmt.setLong(2, Long.parseLong(usuario.getNumeroCelular()));
+            stmt.setString(3, usuario.getSenhaUsuario());
+            stmt.setDate(4, Date.valueOf(usuario.getDataNascimento()));
+            stmt.setInt(5, usuario.getEtniaUsuario().getIdEtnia());
+            stmt.setInt(6, usuario.getClasseSocial().getIdClasseSocial());
+            stmt.setInt(7, usuario.getGeneroUsuario().getIdGenero());
+            stmt.setInt(8, usuario.getTipoUsuario().getIdTipoUsuario());
+            stmt.setInt(9, id);
+
+            // Executa-se a consulta
+            int res = stmt.executeUpdate();
+            System.out.println("editarUsuario.res=" + res);
+
+            return res > 0;
+        } catch (SQLException e) {
+            throw new DataBaseException(e.getCause());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
