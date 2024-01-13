@@ -78,9 +78,14 @@ public class UsuarioServicesImpl implements UsuarioService {
         }
     }
 
+    @Override
     public Usuario adicionar(Usuario usuario) {
-
-        return null;
+        try {
+            return usuarioRepository.adicionarUsuario(usuario);
+        } catch (DataBaseException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public void editarUsuario(Integer id, Usuario usuario){

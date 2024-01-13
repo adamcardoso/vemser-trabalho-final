@@ -8,4 +8,6 @@ public interface UsuarioService {
     Usuario fazerLogin(String nomeUsuario, String senha);
 
     void remover(Integer id);
+    
+    Usuario adicionar(Usuario usuario);
 }
