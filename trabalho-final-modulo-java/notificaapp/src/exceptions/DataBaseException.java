@@ -11,4 +11,8 @@ public class DataBaseException extends SQLException {
     public DataBaseException(String message, Throwable cause) {
         super(message, cause);
     }
+
+    public DataBaseException(Throwable cause) {
+        super(cause);
+    }
 }

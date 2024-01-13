@@ -33,7 +33,6 @@ public class UsuarioServicesImpl implements UsuarioService {
             Usuario usuario = usuarioRepository.fazerLogin(nomeUsuario, senha);
             if (Objects.nonNull(usuario)) {
                 System.out.println("Login bem-sucedido para: " + usuario.getNomeUsuario());
-                setIsAdmin(usuario);
                 return usuario;
             } else {
                 System.out.println("Nome de usuário ou senha incorretos. Tente novamente.");
@@ -57,15 +56,19 @@ public class UsuarioServicesImpl implements UsuarioService {
     @Override
     public void remover(Integer id) {
         try {
-            boolean usuarioExiste = usuarioRepository.usuarioExiste(id);
+            Usuario usuario = usuarioRepository.getUsuarioPorId(id);
 
-            if (usuarioExiste) {
-                boolean usuarioRemovido = usuarioRepository.removerUsuario(id);
+            if (usuario != null) {
+                if (!usuario.getIsAdmin()) {
+                    boolean usuarioRemovido = usuarioRepository.removerUsuario(id);
 
-                if (usuarioRemovido) {
-                    System.out.println("Usuário removido com sucesso!");
+                    if (usuarioRemovido) {
+                        System.out.println("Usuário removido com sucesso!");
+                    } else {
+                        System.out.println("Falha ao remover usuário!");
+                    }
                 } else {
-                    System.out.println("Falha ao remover usuário!");
+                    System.out.println("Não é possível excluir um usuário administrador!");
                 }
             } else {
                 System.out.println("Usuário não encontrado!");
@@ -73,10 +76,6 @@ public class UsuarioServicesImpl implements UsuarioService {
         } catch (DataBaseException e) {
             e.printStackTrace();
         }
-    }
-
-    private void setIsAdmin(Usuario usuario) {
-        usuario.setIsAdmin(usuario.getTipoUsuario().equals(TipoUsuario.ADMIN));
     }
 
     public Usuario adicionar(Usuario usuario) {
