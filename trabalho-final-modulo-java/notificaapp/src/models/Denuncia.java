@@ -22,13 +22,15 @@ public class Denuncia{
     private TipoDenuncia tipoDenuncia;
     private int validarDenuncia;
 
-    private Long idUsuario;
+    private int idUsuario;
 
-    public Denuncia(int idDenuncia, String titulo, String descricao, StatusDenuncia statusDenuncia){
+    public Denuncia(int idDenuncia, String titulo, String descricao, StatusDenuncia statusDenuncia, Categoria categoria) {
         this.idDenuncia = idDenuncia;
         this.titulo = titulo;
         this.descricao = descricao;
         this.statusDenuncia = statusDenuncia;
+        this.categoria = categoria;
+        this.tipoDenuncia = tipoDenuncia;
     }
 
     public void curtirDenuncia(){
@@ -133,11 +135,12 @@ public class Denuncia{
         return tipoDenuncia;
     }
 
-    public void setIdUsuario(Long idUsuario){
-        this.idUsuario = idUsuario;
-    }
-    public Long getIdUsuario(){
+    public int getIdUsuario() {
         return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public void setTipoDenuncia(TipoDenuncia tipoDenuncia) {

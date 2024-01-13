@@ -84,15 +84,25 @@ public class AdminRepositoryImpl implements AdminRepository {
                 con = ConexaoBancoDeDados.getConnection();
                 stmt = con.createStatement();
 
-                String sql = "SELECT * FROM DENUNCIA";
+                String sql = "SELECT D.id_denuncia, D.titulo, D.descricao, D.status_denuncia, D.categoria, " +
+                        "U.id_usuario, U.nome_usuario " +
+                        "FROM DENUNCIA D " +
+                        "JOIN USUARIO U ON D.id_usuario = U.id_usuario";
+
                 try (ResultSet res = stmt.executeQuery(sql)) {
                     while (res.next()) {
+                        int idUsuario = res.getInt("id_usuario");
+
                         Denuncia denuncia = new Denuncia(
                                 res.getInt("id_denuncia"),
                                 res.getString("titulo"),
                                 res.getString("descricao"),
-                                StatusDenuncia.getEnum(res.getString("status_denuncia"))
+                                StatusDenuncia.fromInt(res.getInt("status_denuncia")),
+                                Categoria.fromInt(res.getInt("categoria"))
                         );
+
+                        denuncia.setIdUsuario(idUsuario);
+
                         denuncias.add(denuncia);
                     }
                 }
@@ -116,4 +126,5 @@ public class AdminRepositoryImpl implements AdminRepository {
             throw new DataBaseException("Acesso negado. Perfil de administrador requerido.");
         }
     }
+
 }

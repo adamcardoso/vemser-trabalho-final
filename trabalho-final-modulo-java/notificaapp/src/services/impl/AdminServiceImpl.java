@@ -28,14 +28,19 @@ public class AdminServiceImpl implements AdminService {
         }
     }
 
-    @Override
     public void listarDenuncias(Usuario usuarioLogado) {
         if (Objects.nonNull(usuarioLogado) && usuarioLogado.getTipoUsuario() == TipoUsuario.ADMIN) {
             AdminRepositoryImpl adminRepository = new AdminRepositoryImpl();
             try {
                 List<Denuncia> denuncias = adminRepository.listarTodasDenuncias(usuarioLogado);
-                for (Denuncia denuncia : denuncias) {
-                    imprimirDenuncia(denuncia);
+
+                if (denuncias.isEmpty()) {
+                    System.out.println("Não há denúncias cadastradas.");
+                } else {
+                    System.out.println("----- Lista de Denúncias -----");
+                    for (Denuncia denuncia : denuncias) {
+                        imprimirTodasDenuncias(denuncia);
+                    }
                 }
             } catch (DataBaseException e) {
                 e.printStackTrace();
@@ -45,18 +50,27 @@ public class AdminServiceImpl implements AdminService {
         }
     }
 
-    private void imprimirDenuncia(Denuncia denuncia) {
+
+
+    private void imprimirTodasDenuncias(Denuncia denuncia) {
         System.out.println("ID: " + denuncia.getIdDenuncia());
         System.out.println("Título: " + denuncia.getTitulo());
         System.out.println("Descrição: " + denuncia.getDescricao());
-        System.out.println("Status: " + denuncia.getStatusDenuncia().getValor());
-        System.out.println("Categoria: " + denuncia.getCategoria().getValor());
+        System.out.println("Status: " + denuncia.getStatusDenuncia());
+        System.out.println("Categoria: " + denuncia.getCategoria());
         System.out.println("Curtidas: " + denuncia.getCurtidas());
         System.out.println("Validar Denúncia: " + denuncia.getValidarDenuncia());
-        System.out.println("Tipo de Denúncia: " + denuncia.getTipoDenuncia().getValor());
+
+        if (denuncia.getTipoDenuncia() != null) {
+            System.out.println("Tipo de Denúncia: " + denuncia.getTipoDenuncia().getIdTipoDenuncia());
+        } else {
+            System.out.println("Tipo de Denúncia: [Tipo não especificado]");
+        }
+
         System.out.println("ID do Usuário: " + denuncia.getIdUsuario());
         System.out.println("------------------------");
     }
+
 
     private void imprimirTodosUsuario(Usuario usuario) {
         System.out.println("ID: " + usuario.getIdUsuario());

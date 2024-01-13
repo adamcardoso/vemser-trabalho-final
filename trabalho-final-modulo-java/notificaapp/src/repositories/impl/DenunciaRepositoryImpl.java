@@ -5,6 +5,7 @@ import exceptions.DataBaseException;
 import helpers.ConversorDateHelper;
 import models.Denuncia;
 import models.Usuario;
+import models.enums.Categoria;
 import models.enums.StatusDenuncia;
 import repositories.interfaces.DenunciaRepository;
 
@@ -44,11 +45,11 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
             stmt.setString(2, d.getTitulo());
             stmt.setString(3, d.getDescricao());
             stmt.setDate(4, ConversorDateHelper.LocalDateTimeToDate(d.getDataHora()));
-            stmt.setString(5, d.getStatusDenuncia().getValor());
-            stmt.setString(6, d.getCategoria().getValor());
+            stmt.setString(5, String.valueOf(d.getStatusDenuncia().getIdStatusDenuncia()));
+            stmt.setString(6, String.valueOf(d.getCategoria().getIdCategoria()));
             stmt.setInt(7, d.getCurtidas());
             stmt.setInt(8, d.getValidarDenuncia());
-            stmt.setString(9, d.getTipoDenuncia().getValor());
+            stmt.setString(9, String.valueOf(d.getTipoDenuncia().getIdTipoDenuncia()));
             stmt.setLong(10, d.getIdUsuario());
 
             int res = stmt.executeUpdate();
@@ -122,14 +123,15 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
 
             stmt.setString(1, denuncia.getDescricao());
             stmt.setTimestamp(2, Timestamp.valueOf(denuncia.getDataHora()));
-            stmt.setString(3, denuncia.getStatusDenuncia().getValor());
-            stmt.setString(4, denuncia.getCategoria().getValor());
+            stmt.setString(3, denuncia.getStatusDenuncia().name());
+            stmt.setString(4, denuncia.getCategoria().name());
             stmt.setInt(5, denuncia.getCurtidas());
             stmt.setInt(6, denuncia.getValidarDenuncia());
             stmt.setInt(7, denuncia.getUsuario().getIdUsuario());
-            stmt.setString(8, denuncia.getTipoDenuncia().getValor());
+            stmt.setString(9, String.valueOf(denuncia.getTipoDenuncia().getIdTipoDenuncia()));
             stmt.setString(9, denuncia.getTitulo());
             stmt.setInt(10, id);
+
 
             // Executa-se a consulta
             int res = stmt.executeUpdate();
@@ -171,9 +173,11 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
                         res.getInt("id_denuncia"),
                         res.getString("titulo"),
                         res.getString("descricao"),
-                        StatusDenuncia.getEnum(res.getString("status_denuncia"))
+                        StatusDenuncia.fromInt(res.getInt("status_denuncia")),
+                        Categoria.fromInt(res.getInt("categoria"))
                 ));
             }
+
 
             return denuncias;
         } catch (SQLException e) {
