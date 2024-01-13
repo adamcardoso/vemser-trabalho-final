@@ -1,7 +1,8 @@
 package models;
 
 import models.enums.Categoria;
-import models.enums.Situacao;
+import models.enums.StatusDenuncia;
+import models.enums.TipoDenuncia;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,30 +15,22 @@ public class Denuncia{
     private Localizacao local;
     private Usuario usuario;
     private LocalDateTime dataHora;
-    private Situacao statusDenuncia;
+    private StatusDenuncia statusDenuncia;
     private Categoria categoria;
     private int curtidas;
-    private final List<String> comentarios;
-    private boolean tipoDenuncia;
+    private final List<String> comentarios = new ArrayList<>();
+    private TipoDenuncia tipoDenuncia;
     private int validarDenuncia;
 
-    public Denuncia(int idDenuncia, String titulo, String descricao, Localizacao local, Usuario usuario, LocalDateTime dataHora, Situacao statusDenuncia, Categoria categoria) {
+    private Long idUsuario;
+
+    public Denuncia(int idDenuncia, String titulo, String descricao, StatusDenuncia statusDenuncia){
         this.idDenuncia = idDenuncia;
         this.titulo = titulo;
         this.descricao = descricao;
-        this.local = local;
-        this.usuario = usuario;
-        this.dataHora = dataHora;
         this.statusDenuncia = statusDenuncia;
-        this.categoria = categoria;
-        this.curtidas = 0;
-        this.validarDenuncia = 0;
-        this.comentarios = new ArrayList<>();
-        this.tipoDenuncia = false;
     }
-    public void denunciaAnonima(){
-        this.tipoDenuncia = true;
-    }
+
     public void curtirDenuncia(){
         this.curtidas++;
     }
@@ -69,7 +62,6 @@ public class Denuncia{
         } catch ( Exception e){
             System.out.println("Nenhum comentário");
         }
-
     }
 
     public int getIdDenuncia() {
@@ -112,11 +104,11 @@ public class Denuncia{
         this.dataHora = dataHora;
     }
 
-    public Situacao getStatusDenuncia() {
+    public StatusDenuncia getStatusDenuncia() {
         return statusDenuncia;
     }
 
-    public void setStatusDenuncia(Situacao statusDenuncia) {
+    public void setStatusDenuncia(StatusDenuncia statusDenuncia) {
         this.statusDenuncia = statusDenuncia;
     }
 
@@ -132,19 +124,23 @@ public class Denuncia{
         return curtidas;
     }
 
-    public List<String> getComentarios() {
-        return comentarios;
-    }
 
     public int getValidarDenuncia() {
         return validarDenuncia;
     }
 
-    public boolean getTipoDenuncia() {
+    public TipoDenuncia getTipoDenuncia() {
         return tipoDenuncia;
     }
 
-    public void setTipoDenuncia(boolean tipoDenuncia) {
+    public void setIdUsuario(Long idUsuario){
+        this.idUsuario = idUsuario;
+    }
+    public Long getIdUsuario(){
+        return idUsuario;
+    }
+
+    public void setTipoDenuncia(TipoDenuncia tipoDenuncia) {
         this.tipoDenuncia = tipoDenuncia;
     }
 

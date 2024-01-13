@@ -1,11 +1,14 @@
 package views;
 
 import models.Usuario;
+import services.impl.AdminServiceImpl;
+import services.impl.HomeServiceImpl;
 import services.impl.UsuarioServicesImpl;
 
 import java.util.Scanner;
 
 public class Home {
+    HomeServiceImpl homeServiceImpl = new HomeServiceImpl();
     Scanner input = new Scanner(System.in);
     UsuarioServicesImpl usuarioServices = new UsuarioServicesImpl();
     private static final String OPCAO_INVALIDA_MSG = "Opção inválida!";
@@ -57,6 +60,8 @@ public class Home {
     }
 
     private void exibirMenuAdmin() {
+        AdminServiceImpl adminService = new AdminServiceImpl();
+
         int opMenuAdmin;
         System.out.println(CABECALHO_NOTIFICA_MSG);
         do {
@@ -73,6 +78,7 @@ public class Home {
             switch (opMenuAdmin) {
                 case 1:
                     System.out.println("1. Ver usuários");
+                    adminService.listarUsuarios(usuarioLogado);
                     break;
                 case 2:
                     //Lógica funcional, falta criar o método listas Usuarios e chamar aki tmb, mostrando id deles
@@ -82,6 +88,7 @@ public class Home {
                     break;
                 case 3:
                     System.out.println("3. Ver Denuncias");
+                    adminService.listarDenuncias(usuarioLogado);
                     break;
                 case 4:
                     System.out.println("4. Excluir Denuncias");
@@ -123,7 +130,7 @@ public class Home {
                         exibirMenuDenuncia();
                         break;
                     case 3:
-                        System.out.println("3. Feed");
+                        this.homeServiceImpl.feed();
                         break;
                     case 4:
                         estatisticas();
@@ -147,7 +154,7 @@ public class Home {
                 opMenuPrincNLogado = input.nextInt();
                 switch (opMenuPrincNLogado) {
                     case 1:
-                        System.out.println("1. Feed");
+                        this.homeServiceImpl.feed();
                         break;
                     case 2:
                         estatisticas();

@@ -8,8 +8,8 @@ import repositories.impl.UsuarioRepositoryImpl;
 import services.interfaces.UsuarioService;
 import views.EstatisticaUsuario;
 
-import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Objects;
 
 public class UsuarioServicesImpl implements UsuarioService {
     private final UsuarioRepositoryImpl usuarioRepository;
@@ -18,6 +18,7 @@ public class UsuarioServicesImpl implements UsuarioService {
         this.usuarioRepository = new UsuarioRepositoryImpl();
     }
 
+    @Override
     public void listarUsuario(int idUsuario) {
         try {
             Usuario usuario = usuarioRepository.listarUsuario(idUsuario);
@@ -27,11 +28,11 @@ public class UsuarioServicesImpl implements UsuarioService {
         }
     }
 
-    public Usuario fazerLogin(String nomeUsuario, String senha){
+    public Usuario fazerLogin(String nomeUsuario, String senha) {
         try {
             Usuario usuario = usuarioRepository.fazerLogin(nomeUsuario, senha);
-            if (usuario != null) {
-                System.out.println("Login bem-sucedido!");
+            if (Objects.nonNull(usuario)) {
+                System.out.println("Login bem-sucedido para: " + usuario.getNomeUsuario());
                 setIsAdmin(usuario);
                 return usuario;
             } else {
@@ -53,12 +54,13 @@ public class UsuarioServicesImpl implements UsuarioService {
         System.out.println("------------------------");
     }
 
+    @Override
     public void remover(Integer id) {
         try {
             boolean usuarioExiste = usuarioRepository.usuarioExiste(id);
 
             if (usuarioExiste) {
-                boolean usuarioRemovido = usuarioRepository.remover(id);
+                boolean usuarioRemovido = usuarioRepository.removerUsuario(id);
 
                 if (usuarioRemovido) {
                     System.out.println("Usuário removido com sucesso!");
@@ -74,11 +76,7 @@ public class UsuarioServicesImpl implements UsuarioService {
     }
 
     private void setIsAdmin(Usuario usuario) {
-        if(usuario.getTipoUsuario().equals(TipoUsuario.ADMIN)) {
-            usuario.setIsAdmin(true);
-        } else {
-            usuario.setIsAdmin(false);
-        }
+        usuario.setIsAdmin(usuario.getTipoUsuario().equals(TipoUsuario.ADMIN));
     }
 
     public Usuario adicionar(Usuario usuario) {
@@ -98,7 +96,8 @@ public class UsuarioServicesImpl implements UsuarioService {
     public void exibirEstatisticasUsuarios() {
         AdminRepositoryImpl adminRepository = new AdminRepositoryImpl();
         try {
-            List<Usuario> usuarios = adminRepository.listarTodosUsuarios();
+            Usuario usuarioExemplo = new Usuario();
+            List<Usuario> usuarios = adminRepository.listarTodosUsuarios(usuarioExemplo);
 
             //Chama a classe de estatísticas e exibe as estatísticas
             EstatisticaUsuario estatisticaUsuario = new EstatisticaUsuario();
@@ -107,7 +106,6 @@ public class UsuarioServicesImpl implements UsuarioService {
             e.printStackTrace();
         }
     }
-
 }
 
 
