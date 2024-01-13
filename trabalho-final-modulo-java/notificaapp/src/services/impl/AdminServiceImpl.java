@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class AdminServiceImpl implements AdminService {
-
-
     @Override
     public void listarUsuarios(Usuario usuarioLogado) {
         if (Objects.nonNull(usuarioLogado) && usuarioLogado.getTipoUsuario() == TipoUsuario.ADMIN) {
@@ -67,6 +65,7 @@ public class AdminServiceImpl implements AdminService {
         System.out.println("Senha: " + usuario.getSenhaUsuario());
         System.out.println("Etnia: " + usuario.getEtniaUsuario());
         System.out.println("Data de Nascimento: " + usuario.getDataNascimento());
+        System.out.println("Admin: " + (usuario.getIsAdmin() ? "Sim" : "Não"));
         System.out.println("------------------------");
     }
 }

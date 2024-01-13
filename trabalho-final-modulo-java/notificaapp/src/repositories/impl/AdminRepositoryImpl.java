@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -32,23 +33,19 @@ public class AdminRepositoryImpl implements AdminRepository {
                 String sql = "SELECT * FROM USUARIO";
                 ResultSet res = stmt.executeQuery(sql);
 
-                // Verifica se há resultados no ResultSet
                 if (res.next()) {
                     do {
-                        Usuario usuario = new Usuario();
-                        usuario.setIdUsuario(res.getInt("id_usuario"));
-                        usuario.setNomeUsuario(res.getString("nome_usuario"));
-                        usuario.setNumeroCelular(res.getString("numero_celular"));
-                        usuario.setSenhaUsuario(res.getString("senha_usuario"));
-                        usuario.setEtniaUsuario(Etnia.fromInt(res.getInt("etnia_usuario")));
-                        usuario.setDataNascimento(res.getDate("data_nascimento").toLocalDate());
-                        usuario.setClasseSocial(ClasseSocial.fromInt(res.getInt("classe_social")));
-                        usuario.setGeneroUsuario(Genero.fromInt(res.getInt("genero_usuario")));
-                        usuario.setTipoUsuario(TipoUsuario.fromInt(res.getInt("tipo_usuario")));
+                        int isUsuario = res.getInt("id_usuario");
+                        String nome = res.getString("nome_usuario");
+                        String numeroCelular = res.getString("celular_usuario");
+                        String senha = res.getString("senha_usuario");
+                        Etnia etinia = Etnia.fromInt(res.getInt("etnia"));
+                        LocalDate dataNascimento = res.getDate("data_nascimento").toLocalDate();
+                        ClasseSocial classeSocial = ClasseSocial.fromInt(res.getInt("classe_social"));
+                        Genero genero = Genero.fromInt(res.getInt("genero"));
+                        TipoUsuario tipo = TipoUsuario.fromInt(res.getInt("tipo_usuario"));
 
-                        int valorTipoUsuario = res.getInt("tipo_usuario");
-                        TipoUsuario tipoUsuario = (res.wasNull()) ? null : TipoUsuario.fromInt(valorTipoUsuario);
-                        usuario.setTipoUsuario(tipoUsuario);
+                        Usuario usuario = new Usuario(isUsuario, nome, numeroCelular, senha, etinia, dataNascimento, classeSocial, genero, tipo);
 
                         usuarios.add(usuario);
                     } while (res.next());

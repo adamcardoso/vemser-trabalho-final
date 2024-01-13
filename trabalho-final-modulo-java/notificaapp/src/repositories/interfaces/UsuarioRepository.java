@@ -16,9 +16,11 @@ public interface UsuarioRepository <CHAVE, OBJETO> {
 
     boolean removerUsuario(CHAVE id) throws DataBaseException;
 
+    boolean editar(Integer id, Usuario usuario) throws DataBaseException;
+
     Usuario listarUsuario(int idUsuario) throws DataBaseException;
 
     Usuario fazerLogin(String nomeUsuario, String senha) throws DataBaseException;
 
-    boolean usuarioExiste(int idUsuario) throws DataBaseException;
+    Usuario getUsuarioPorId(int idUsuario) throws DataBaseException;
 }

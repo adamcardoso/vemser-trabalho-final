@@ -10,8 +10,7 @@ import models.enums.TipoUsuario;
 import repositories.interfaces.UsuarioRepository;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
 
 public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario> {
     @Override
@@ -22,6 +21,11 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
     @Override
     public Usuario adicionarUsuario(Usuario object) throws DataBaseException {
         return null;
+    }
+
+    @Override
+    public boolean editarUsuario(Integer id, Usuario usuario) throws DataBaseException {
+        return false;
     }
 
     @Override
@@ -86,15 +90,17 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
 
             try {
                 while (res.next()) {
-                    usuario.setIdUsuario(res.getInt("id_usuario"));
-                    usuario.setNomeUsuario(res.getString("nome_usuario"));
-                    usuario.setNumeroCelular(res.getString("numero_celular"));
-                    usuario.setSenhaUsuario(res.getString("senha_usuario"));
-                    usuario.setEtniaUsuario(Etnia.fromInt(res.getInt("etnia_usuario")));
-                    usuario.setDataNascimento(res.getDate("data_nascimento").toLocalDate());
-                    usuario.setClasseSocial(ClasseSocial.fromInt(res.getInt("classe_social")));
-                    usuario.setGeneroUsuario(Genero.fromInt(res.getInt("genero_usuario")));
-                    usuario.setTipoUsuario(TipoUsuario.fromInt(res.getInt("tipo_usuario")));
+                    int isUsuario = res.getInt("id_usuario");
+                    String nome = res.getString("nome_usuario");
+                    String numeroCelular = res.getString("celular_usuario");
+                    String senha = res.getString("senha_usuario");
+                    Etnia etinia = Etnia.fromInt(res.getInt("etnia"));
+                    LocalDate dataNascimento = res.getDate("data_nascimento").toLocalDate();
+                    ClasseSocial classeSocial = ClasseSocial.fromInt(res.getInt("classe_social"));
+                    Genero genero = Genero.fromInt(res.getInt("genero"));
+                    TipoUsuario tipo = TipoUsuario.fromInt(res.getInt("tipo_usuario"));
+
+                    usuario = new Usuario(isUsuario, nome, numeroCelular, senha, etinia, dataNascimento, classeSocial, genero, tipo);
                 }
             } catch (SQLException e) {
                 System.out.println("entro try");
@@ -135,13 +141,16 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
 
                     try {
                         if (res.next()) {
-                            Usuario usuario = new Usuario();
-                            usuario.setNomeUsuario(res.getString("nome_usuario"));
-                            usuario.setSenhaUsuario(res.getString("senha_usuario"));
-                            usuario.setIdUsuario(res.getInt("id_usuario"));
-                            int valorTipoUsuario = res.getInt("tipo_usuario");
-                            TipoUsuario tipoUsuario = TipoUsuario.fromInt(valorTipoUsuario);
-                            usuario.setTipoUsuario(tipoUsuario);
+                            int isUsuario = res.getInt("id_usuario");
+                            String nome = res.getString("nome_usuario");
+                            String numeroCelular = res.getString("celular_usuario");
+                            Etnia etinia = Etnia.fromInt(res.getInt("etnia"));
+                            LocalDate dataNascimento = res.getDate("data_nascimento").toLocalDate();
+                            ClasseSocial classeSocial = ClasseSocial.fromInt(res.getInt("classe_social"));
+                            Genero genero = Genero.fromInt(res.getInt("genero"));
+                            TipoUsuario tipo = TipoUsuario.fromInt(res.getInt("tipo_usuario"));
+
+                            Usuario usuario = new Usuario(isUsuario, nome, numeroCelular, senha, etinia, dataNascimento, classeSocial, genero, tipo);
 
                             System.out.println("Usuário encontrado: " + usuario.getNomeUsuario());
 
@@ -167,22 +176,34 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
     }
 
     @Override
-    public boolean usuarioExiste(int idUsuario) throws DataBaseException {
+    public Usuario getUsuarioPorId(int idUsuario) throws DataBaseException {
         Connection con = null;
 
         try {
-            String sql =  String.format("SELECT id_usuario FROM USUARIO WHERE id_usuario = '%s'", idUsuario);
+            String sql =  String.format("SELECT * FROM USUARIO WHERE id_usuario = '%s'", idUsuario);
 
             con = ConexaoBancoDeDados.getConnection();
 
             Statement stmt = con.createStatement();
 
             ResultSet res = stmt.executeQuery(sql);
+            res.next();
+            int isUsuario = res.getInt("id_usuario");
+            String nome = res.getString("nome_usuario");
+            String numeroCelular = res.getString("celular_usuario");
+            String senha = res.getString("senha_usuario");
+            Etnia etinia = Etnia.fromInt(res.getInt("etnia"));
+            LocalDate dataNascimento = res.getDate("data_nascimento").toLocalDate();
+            ClasseSocial classeSocial = ClasseSocial.fromInt(res.getInt("classe_social"));
+            Genero genero = Genero.fromInt(res.getInt("genero"));
+            TipoUsuario tipo = TipoUsuario.fromInt(res.getInt("tipo_usuario"));
 
-            return res.next();
+            Usuario usuario = new Usuario(isUsuario, nome, numeroCelular, senha, etinia, dataNascimento, classeSocial, genero, tipo);
+
+            return usuario;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            System.out.println("Erro durante a busca de usuário.");
+            return null;
         } finally {
             try {
                 if (con != null) {

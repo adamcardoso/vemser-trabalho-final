@@ -29,6 +29,7 @@ public class Usuario {
         this.classeSocial = classeSocial;
         this.generoUsuario = generoUsuario;
         this.tipoUsuario = tipoUsuario;
+        this.isAdmin = tipoUsuario.equals(TipoUsuario.ADMIN);
     }
 
     public Usuario() {
@@ -117,10 +118,6 @@ public class Usuario {
 
     public boolean getIsAdmin() {
         return isAdmin;
-    }
-
-    public void setIsAdmin(boolean isAdmin) {
-        this.isAdmin = isAdmin;
     }
 
     @Override
