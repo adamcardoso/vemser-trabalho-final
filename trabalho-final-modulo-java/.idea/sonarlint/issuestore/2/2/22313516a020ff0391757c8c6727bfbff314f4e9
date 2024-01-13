@@ -1,8 +1,8 @@
 
-i
-java:S2095"GUse try-with-resources or close this "Statement" in a "finally" clause.(ÕÑ˜èÿÿÿÿÿ8š”œÔÏ1
 e
 java:S2095"HUse try-with-resources or close this "Connection" in a "finally" clause.(ÍÇÕ±8›”œÔÏ1
+i
+java:S2095"GUse try-with-resources or close this "Statement" in a "finally" clause.(ÕÑ˜èÿÿÿÿÿ8š”œÔÏ1
 W
 java:S1118":Add a private constructor to hide the implicit public one.(Óƒíê8ĞŒÔÏ1
 S

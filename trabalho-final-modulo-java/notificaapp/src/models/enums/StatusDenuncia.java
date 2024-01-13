@@ -1,24 +1,28 @@
 package models.enums;
 
 public enum StatusDenuncia {
-    ABERTO("1"),
-    EM_ANALISE("2"),
-    EM_ANDAMENTO("3"),
-    RESOLVIDO("4"),
-    FECHADO("5");
+    ABERTO(1),
+    EM_ANALISE(2),
+    EM_ANDAMENTO(3),
+    RESOLVIDO(4),
+    FECHADO(5);
 
-    private final String descricao;
-    StatusDenuncia(String descricao){
-        this.descricao = descricao;
-    }
-    public String getValor(){
-        return descricao;
+    private final int valor;
+
+    StatusDenuncia(int valor) {
+        this.valor = valor;
     }
 
-    public static StatusDenuncia getEnum(String n){
-        for(StatusDenuncia situacao: values())
-            if(situacao.descricao.equals(n))
-                return situacao;
-        return null;
+    public int getIdStatusDenuncia() {
+        return valor;
+    }
+
+    public static StatusDenuncia fromInt(int value) {
+        for (StatusDenuncia statusDenuncia : StatusDenuncia.values()) {
+            if (statusDenuncia.getIdStatusDenuncia() == value) {
+                return statusDenuncia;
+            }
+        }
+        throw new IllegalArgumentException("Valor inválido para a enumeração Status da Denuncia: " + value);
     }
 }
