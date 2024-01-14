@@ -43,7 +43,8 @@ public class AdminServiceImpl implements AdminService {
                 if (denuncias.isEmpty()) {
                     System.out.println("Não há denúncias cadastradas.");
                 } else {
-                    System.out.println("----- Lista de Denúncias -----");
+                    System.out.print("\n");
+                    System.out.println("══════ Lista de Denúncias ══════ ");
                     for (Denuncia denuncia : denuncias) {
                         imprimirTodasDenuncias(denuncia);
                     }
@@ -73,7 +74,7 @@ public class AdminServiceImpl implements AdminService {
         }
 
         System.out.println("ID do Usuário: " + denuncia.getIdUsuario());
-        System.out.println("------------------------");
+        System.out.println("════════════════════════════");
     }
 
     private void imprimirTodosUsuario(Usuario usuario) {
@@ -84,7 +85,7 @@ public class AdminServiceImpl implements AdminService {
         System.out.println("Etnia: " + usuario.getEtniaUsuario());
         System.out.println("Data de Nascimento: " + usuario.getDataNascimento());
         System.out.println("Admin: " + (usuario.getIsAdmin() ? "Sim" : "Não"));
-        System.out.println("------------------------");
+        System.out.println("═════════════════════════════════════");
     }
 
 
