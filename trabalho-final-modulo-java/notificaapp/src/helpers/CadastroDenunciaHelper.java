@@ -48,6 +48,7 @@ public class CadastroDenunciaHelper {
     private String digitarCampo(String mensagem) throws MaxAttemptsExceededException {
         String campo = null;
         int tentativas = 0;
+        System.out.println(mensagem);
 
         while (tentativas < 3) {
             tentativas++;
@@ -69,7 +70,7 @@ public class CadastroDenunciaHelper {
     private String digitarCampoNumerico(String mensagem) throws MaxAttemptsExceededException {
         String campo = null;
         int tentativas = 0;
-
+        System.out.println(mensagem);
         while (tentativas < 3) {
             tentativas++;
             campo = scanner.nextLine();

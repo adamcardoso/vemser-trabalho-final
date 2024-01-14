@@ -68,7 +68,7 @@ public class DenunciaServicesImpl implements DenunciaService {
             boolean conseguiuEditar = denunciaRepositoryImpl.editar(id, denuncia);
 
             if (!conseguiuEditar) {
-                System.out.println("Falha ao remover a denúncia!");
+                System.out.println("Falha ao editar a denúncia!");
                 return;
             }
             System.out.println("Denuncia editada com sucesso!");

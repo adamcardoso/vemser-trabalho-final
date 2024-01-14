@@ -100,7 +100,6 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
 
             // Executa-se a consulta
             int res = stmt.executeUpdate();
-            System.out.println("editarUsuario.res=" + res);
 
             return res > 0;
         } catch (SQLException e) {
