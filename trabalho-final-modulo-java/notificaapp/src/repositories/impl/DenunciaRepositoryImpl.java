@@ -60,7 +60,7 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
             System.out.println("Denúncias cadastradas = " + res);
             return d;
         } catch (SQLException e) {
-            throw new DataBaseException("Erro: "+ e.getCause());
+            throw new DataBaseException("Erro: " + e.getCause());
         } finally {
             try {
                 if (connection != null) {
@@ -90,7 +90,7 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
             }
         } catch (SQLException e) {
             System.err.println("Erro ao remover denúncia!");
-            throw new DataBaseException("Erro: "+ e);
+            throw new DataBaseException("Erro: " + e);
         } finally {
             try {
                 if (con != null) {
@@ -113,37 +113,23 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE DENUNCIA SET ");
             sql.append(" descricao = ?,");
-            sql.append(" data_hora = ?,");
-            sql.append(" status_denuncia = ?,");
             sql.append(" categoria = ?,");
-            sql.append(" curtida = ?,");
-            sql.append(" validar_denuncia = ?,");
-            sql.append(" id_usuario = ?,");
-            sql.append(" tipo_denuncia = ?,");
             sql.append(" titulo = ?");
             sql.append(" WHERE id_denuncia = ? ");
 
             PreparedStatement stmt = con.prepareStatement(sql.toString());
 
             stmt.setString(1, denuncia.getDescricao());
-            stmt.setTimestamp(2, Timestamp.valueOf(denuncia.getDataHora()));
-            stmt.setString(3, denuncia.getStatusDenuncia().name());
-            stmt.setString(4, denuncia.getCategoria().name());
-            stmt.setInt(5, denuncia.getCurtidas());
-            stmt.setInt(6, denuncia.getValidarDenuncia());
-            stmt.setInt(7, denuncia.getUsuario().getIdUsuario());
-            stmt.setString(9, String.valueOf(denuncia.getTipoDenuncia().getIdTipoDenuncia()));
-            stmt.setString(9, denuncia.getTitulo());
-            stmt.setInt(10, id);
+            stmt.setInt(2, denuncia.getCategoria().getIdCategoria());
+            stmt.setString(3, denuncia.getTitulo());
+            stmt.setInt(4, id);
 
 
             // Executa-se a consulta
             int res = stmt.executeUpdate();
-            System.out.println("editarDenuncia.res=" + res);
-
             return res > 0;
         } catch (SQLException e) {
-            throw new DataBaseException("Erro: "+ e.getCause());
+            throw new DataBaseException("Erro: " + e.getCause());
         } finally {
             try {
                 if (con != null) {
@@ -162,7 +148,7 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
 
     public List<Denuncia> obterTodos() {
         Connection connection = null;
-        try{
+        try {
             connection = ConexaoBancoDeDados.getConnection();
 
             String sql = "SELECT * FROM DENUNCIA";
@@ -172,7 +158,7 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
 
             List<Denuncia> denuncias = new ArrayList<>();
 
-            while(res.next()){
+            while (res.next()) {
                 denuncias.add(new Denuncia(
                         res.getInt("id_denuncia"),
                         res.getString("titulo"),

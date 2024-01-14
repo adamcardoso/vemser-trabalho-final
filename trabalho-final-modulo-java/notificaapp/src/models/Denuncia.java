@@ -32,6 +32,7 @@ public class Denuncia{
         this.categoria = categoria;
     }
 
+
     public Denuncia(String titulo, String descricao, Categoria categoria, TipoDenuncia tipoDenuncia, int idUsuario){
         this.titulo = titulo;
         this.descricao = descricao;
@@ -42,6 +43,15 @@ public class Denuncia{
         this.validarDenuncia = 0;
         this.tipoDenuncia = tipoDenuncia;
         this.idUsuario = idUsuario;
+    }
+  
+    public Denuncia(int idDenuncia, String titulo, String descricao, StatusDenuncia statusDenuncia, Categoria categoria, Usuario usuario) {
+        this.idDenuncia = idDenuncia;
+        this.titulo = titulo;
+        this.descricao = descricao;
+        this.statusDenuncia = statusDenuncia;
+        this.categoria = categoria;
+        this.usuario = usuario;
     }
 
     public void curtirDenuncia(){

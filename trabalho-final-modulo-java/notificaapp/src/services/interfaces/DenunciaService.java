@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface DenunciaService {
     Optional<Denuncia> adicionarDenuncia(Denuncia denuncia);
 
-    void editarDenuncia(Integer id, Denuncia denuncia);
+    void editarDenuncia(Integer idDenuncia, Integer idUsuario, Denuncia denuncia);
 
     void removerDenuncia(Integer id);
 
