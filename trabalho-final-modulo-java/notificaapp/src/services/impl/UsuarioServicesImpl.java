@@ -88,10 +88,32 @@ public class UsuarioServicesImpl implements UsuarioService {
         }
     }
 
-    public void editarUsuario(Integer id, Usuario usuario){
+    public void editarUsuario(Integer idUsuarioLogado, Usuario usuario){
         try {
-            boolean conseguiuEditar = usuarioRepository.editar(id, usuario);
-            System.out.println("pessoa editada? " + conseguiuEditar + "| com id=" + id);
+
+            if(idUsuarioLogado == null){
+                System.out.println("O id do usuario logado não pode ser nulo!");
+                return;
+            }
+
+            if(usuario == null){
+                System.out.println("O usuario a ser editado não pode ser nulo!");
+                return;
+            }
+            Usuario usuarioExiste = usuarioRepository.getUsuarioPorId(idUsuarioLogado);
+
+            if(usuarioExiste == null){
+                System.out.println("O Usuário a ser editado não foi encontrado!");
+            }
+
+            boolean conseguiuEditar = usuarioRepository.editar(idUsuarioLogado, usuario);
+
+            if (!conseguiuEditar) {
+                System.out.println("Falha ao editar o usuario!");
+                return;
+            }
+            System.out.println("Usuario editado com sucesso!");
+
         } catch (DataBaseException e) {
             e.printStackTrace();
         }
