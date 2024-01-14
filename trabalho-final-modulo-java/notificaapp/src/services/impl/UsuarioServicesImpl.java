@@ -80,13 +80,13 @@ public class UsuarioServicesImpl implements UsuarioService {
     }
 
     @Override
-    public Usuario adicionar(Usuario usuario) {
+    public Optional<Usuario> adicionar(Usuario usuario) {
         try {
-            return usuarioRepository.adicionarUsuario(usuario);
+            return Optional.of(usuarioRepository.adicionarUsuario(usuario));
         } catch (DataBaseException e) {
-            e.printStackTrace();
-            return null;
+            System.out.println("Erro: "+ e.getCause());
         }
+        return Optional.empty();
     }
 
     public void editarUsuario(Integer idUsuarioLogado, Usuario usuario){

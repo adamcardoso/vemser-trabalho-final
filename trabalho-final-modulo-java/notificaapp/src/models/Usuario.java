@@ -19,6 +19,30 @@ public class Usuario {
     private TipoUsuario tipoUsuario;
     private boolean isAdmin;
 
+    public Usuario() {
+    }
+
+    public Usuario(String nomeUsuario) {
+        this.nomeUsuario = nomeUsuario;
+    }
+
+    public Usuario(int idUsuario, String nomeUsuario) {
+        this.idUsuario = idUsuario;
+        this.nomeUsuario = nomeUsuario;
+    }
+
+
+    public Usuario(String nomeUsuario, String numeroCelular, String senhaUsuario, LocalDate dataNascimento,  Etnia etniaUsuario, ClasseSocial classeSocial, Genero generoUsuario) {
+        this.nomeUsuario = nomeUsuario;
+        this.numeroCelular = numeroCelular;
+        this.senhaUsuario = senhaUsuario;
+        this.etniaUsuario = etniaUsuario;
+        this.dataNascimento = dataNascimento;
+        this.classeSocial = classeSocial;
+        this.generoUsuario = generoUsuario;
+        this.tipoUsuario = TipoUsuario.INDIVIDUAL;
+    }
+
     public Usuario(int idUsuario, String nomeUsuario, String numeroCelular, String senhaUsuario, Etnia etniaUsuario, LocalDate dataNascimento, ClasseSocial classeSocial, Genero generoUsuario, TipoUsuario tipoUsuario) {
         this.idUsuario = idUsuario;
         this.nomeUsuario = nomeUsuario;
@@ -30,18 +54,6 @@ public class Usuario {
         this.generoUsuario = generoUsuario;
         this.tipoUsuario = tipoUsuario;
         this.isAdmin = tipoUsuario.equals(TipoUsuario.ADMIN);
-    }
-
-    public Usuario() {
-    }
-
-    public Usuario(String nomeUsuario) {
-        this.nomeUsuario = nomeUsuario;
-    }
-
-    public Usuario(int idUsuario, String nomeUsuario) {
-        this.idUsuario = idUsuario;
-        this.nomeUsuario = nomeUsuario;
     }
 
     public int getIdUsuario() {
