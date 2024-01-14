@@ -161,19 +161,31 @@ public class AdminRepositoryImpl implements AdminRepository {
 
         try {
             con = ConexaoBancoDeDados.getConnection();
-            String sql = "SELECT * FROM DENUNCIA WHERE id_denuncia = ?";
+            String sql = "SELECT u.ID_USUARIO, " +
+                    "u.NOME_USUARIO, " +
+                    "d.ID_DENUNCIA, " +
+                    "d.TITULO, " +
+                    "d.DESCRICAO, " +
+                    "d.STATUS_DENUNCIA, " +
+                    "d.CATEGORIA " +
+                    "FROM USUARIO u, DENUNCIA d " +
+                    "WHERE d.ID_DENUNCIA = ?" +
+                    "AND u.ID_USUARIO = d.ID_USUARIO ";
+
             stmt = con.prepareStatement(sql);
             stmt.setInt(1, idDenuncia);
 
             ResultSet res = stmt.executeQuery();
 
             if (res.next()) {
+                Usuario usuario = new Usuario(res.getInt("id_usuario"), res.getString("nome_usuario"));
                 Denuncia denuncia = new Denuncia(
                         res.getInt("id_denuncia"),
                         res.getString("titulo"),
                         res.getString("descricao"),
                         StatusDenuncia.fromInt(res.getInt("status_denuncia")),
-                        Categoria.fromInt(res.getInt("categoria"))
+                        Categoria.fromInt(res.getInt("categoria")),
+                        usuario
                 );
 
                 return denuncia;
