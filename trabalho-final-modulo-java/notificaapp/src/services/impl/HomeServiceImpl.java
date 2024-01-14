@@ -3,8 +3,7 @@ package services.impl;
 import helpers.CadastroUsuarioHelper;
 import models.Denuncia;
 import models.Usuario;
-import models.enums.Categoria;
-import models.enums.TipoDenuncia;
+import models.enums.*;
 import services.interfaces.DenunciaService;
 import services.interfaces.HomeService;
 import services.interfaces.UsuarioService;
@@ -20,7 +19,6 @@ public class HomeServiceImpl implements HomeService {
     @Override
     public void feed() {
         DenunciaServicesImpl denunciaServices = new DenunciaServicesImpl();
-        DenunciaService denunciaServices = new DenunciaServicesImpl();
         List<Denuncia> denuncias = denunciaServices.obterTodos();
         System.out.print("\n");
         for (Denuncia d : denuncias)
