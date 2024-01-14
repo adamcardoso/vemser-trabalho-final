@@ -32,6 +32,15 @@ public class Denuncia{
         this.categoria = categoria;
     }
 
+    public Denuncia(int idDenuncia, String titulo, String descricao, StatusDenuncia statusDenuncia, Categoria categoria, Usuario usuario) {
+        this.idDenuncia = idDenuncia;
+        this.titulo = titulo;
+        this.descricao = descricao;
+        this.statusDenuncia = statusDenuncia;
+        this.categoria = categoria;
+        this.usuario = usuario;
+    }
+
     public void curtirDenuncia(){
         this.curtidas++;
     }

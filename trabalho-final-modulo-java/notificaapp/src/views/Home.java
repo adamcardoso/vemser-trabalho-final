@@ -1,7 +1,9 @@
 package views;
 
+import helpers.CadastroDenunciaHelper;
 import models.Denuncia;
 import models.Usuario;
+import models.enums.Categoria;
 import services.impl.*;
 
 import java.util.Scanner;
@@ -11,6 +13,8 @@ public class Home {
     EstatisticaService estatisticaService = new EstatisticaService();
     UsuarioServicesImpl usuarioServices = new UsuarioServicesImpl();
     DenunciaServicesImpl denunciaServices = new DenunciaServicesImpl();
+
+    CadastroDenunciaHelper cadastroDenunciaHelper = new CadastroDenunciaHelper();
     Scanner input = new Scanner(System.in);
 
     private static final String OPCAO_INVALIDA_MSG = "║ Opção inválida!";
@@ -216,7 +220,7 @@ public class Home {
                 default:
                     System.out.println(OPCAO_INVALIDA_MSG);
             }
-        } while (opMenuUsuario != 5 &&opMenuUsuario != 4 );
+        } while (opMenuUsuario != 5 && opMenuUsuario != 4);
     }
 
     private void exibirMenuDenuncia() {
@@ -250,7 +254,7 @@ public class Home {
                     System.out.println("Digite o Id da Denúncia que Deseja Editar: ");
                     int idDenunciaPessoalE = input.nextInt();
                     input.nextLine();
-                    //denunciaServices.editarDenuncia(idDenunciaPessoalE, new Denuncia());
+                    this.editarDenuncia(idDenunciaPessoalE);
                     break;
                 case 4:
                     //denunciaServices.
@@ -268,7 +272,7 @@ public class Home {
         } while (opMenuDenuncia != 5 && opMenuDenuncia != 6);
     }
 
-    private void estatisticas(){
+    private void estatisticas() {
         estatisticaService.exibirEstatisticasUsuarios();
     }
 
@@ -282,5 +286,46 @@ public class Home {
         input.nextLine();
         System.out.println("═════════════════════════════════════");
         return usuarioServices.fazerLogin(nomeUsuario, senha);
+    }
+
+    private void editarDenuncia(int idDenuncia) {
+        int opMenuDenuncia;
+        do {
+            Denuncia editaDenuncia = denunciaServices.obterDenunciaPorId(idDenuncia, usuarioLogado.getIdUsuario());
+
+            System.out.print("\n");
+            System.out.printf("╔═════════ NOTIFICA ════════╗%n");
+            System.out.printf("║ Qual campo deseja editar? ║%n");
+            System.out.printf("║ 1. Titulo                 ║%n");
+            System.out.printf("║ 2. Descricao              ║%n");
+            System.out.printf("║ 3. Categoria              ║%n");
+            System.out.printf("║ 4. Voltar                 ║%n");
+            System.out.printf("╚═══════════════════════════╝%n");
+            System.out.print(ESCOLHA_OPCAO_MSG);
+            opMenuDenuncia = input.nextInt();
+            input.nextLine();
+            switch (opMenuDenuncia) {
+                case 1:
+                    String editaTitulo = cadastroDenunciaHelper.digitarTitulo();
+                    editaDenuncia.setTitulo(editaTitulo);
+                    denunciaServices.editarDenuncia(idDenuncia, usuarioLogado.getIdUsuario(), editaDenuncia);
+                    break;
+                case 2:
+                    String editaDescricao = cadastroDenunciaHelper.digitarDescricao();
+                    editaDenuncia.setDescricao(editaDescricao);
+                    denunciaServices.editarDenuncia(idDenuncia, usuarioLogado.getIdUsuario(), editaDenuncia);
+                    break;
+                case 3:
+                    Categoria editaCategoria = Categoria.fromInt(cadastroDenunciaHelper.digitarCategoria());
+                    editaDenuncia.setCategoria(editaCategoria);
+                    denunciaServices.editarDenuncia(idDenuncia, usuarioLogado.getIdUsuario(), editaDenuncia);
+                    break;
+                case 4:
+                    System.out.println(VOLTANDO);
+                    break;
+                default:
+                    System.out.println(OPCAO_INVALIDA_MSG);
+            }
+        } while (opMenuDenuncia != 4);
     }
 }

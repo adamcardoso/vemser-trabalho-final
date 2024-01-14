@@ -7,7 +7,7 @@ import java.util.List;
 public interface DenunciaService {
     Denuncia adicionarDenuncia(Denuncia denuncia);
 
-    void editarDenuncia(Integer id, Denuncia denuncia);
+    void editarDenuncia(Integer idDenuncia, Integer idUsuario, Denuncia denuncia);
 
     void removerDenuncia(Integer id);
 
