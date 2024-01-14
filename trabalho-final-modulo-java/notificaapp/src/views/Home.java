@@ -237,8 +237,7 @@ public class Home {
             input.nextLine();
             switch (opMenuDenuncia) {
                 case 1:
-                    //Denuncia denuncia = D
-                    //denunciaServices.adicionarDenuncia();
+                    homeServiceImpl.denunciaForm(this.usuarioLogado, input);
                     break;
                 case 2:
                     System.out.println("Digite o Id da Denúncia que Deseja Remover: ");

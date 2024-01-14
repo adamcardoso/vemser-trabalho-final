@@ -32,6 +32,18 @@ public class Denuncia{
         this.categoria = categoria;
     }
 
+    public Denuncia(String titulo, String descricao, Categoria categoria, TipoDenuncia tipoDenuncia, int idUsuario){
+        this.titulo = titulo;
+        this.descricao = descricao;
+        this.statusDenuncia = StatusDenuncia.ABERTO;
+        this.categoria = categoria;
+        this.dataHora = LocalDateTime.now();
+        this.curtidas = 0;
+        this.validarDenuncia = 0;
+        this.tipoDenuncia = tipoDenuncia;
+        this.idUsuario = idUsuario;
+    }
+
     public void curtirDenuncia(){
         this.curtidas++;
     }
