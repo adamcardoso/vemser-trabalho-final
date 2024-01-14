@@ -19,8 +19,48 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
     }
 
     @Override
-    public Usuario adicionarUsuario(Usuario object) throws DataBaseException {
-        return null;
+    public Usuario adicionarUsuario(Usuario usuario) throws DataBaseException {
+        Connection con = null;
+        PreparedStatement stmt = null;
+
+        try {
+            con = ConexaoBancoDeDados.getConnection();
+
+            String sql = "INSERT INTO USUARIO (id_usuario, nome_usuario, celular_usuario, senha_usuario, etnia, data_nascimento, classe_social, genero, tipo_usuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, usuario.getIdUsuario());
+            stmt.setString(2, usuario.getNomeUsuario());
+            stmt.setString(3, usuario.getNumeroCelular());
+            stmt.setString(4, usuario.getSenhaUsuario());
+            stmt.setInt(5, usuario.getEtniaUsuario().getIdEtnia());
+            stmt.setDate(6, Date.valueOf(usuario.getDataNascimento()));
+            stmt.setInt(7, usuario.getClasseSocial().getIdClasseSocial());
+            stmt.setInt(8, usuario.getGeneroUsuario().getIdGenero());
+            stmt.setInt(9, usuario.getTipoUsuario().getIdTipoUsuario());
+
+            int res = stmt.executeUpdate();
+
+            if (res > 0) {
+                return usuario;
+            } else {
+                throw new DataBaseException("Falha ao adicionar usuário.");
+            }
+
+        } catch (SQLException e) {
+            throw new DataBaseException(e.getCause());
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

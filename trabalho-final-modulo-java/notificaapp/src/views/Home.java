@@ -92,6 +92,9 @@ public class Home {
                     break;
                 case 4:
                     System.out.println("4. Excluir Denuncias");
+                    System.out.println("Digite o Id da Denúncia que Deseja Remover: ");
+                    int idDenuncia = input.nextInt();
+                    adminService.excluirDenuncia(idDenuncia);
                     break;
                 case 5:
                     System.out.println("5. Ver Feed");

@@ -11,6 +11,12 @@ import java.util.List;
 import java.util.Objects;
 
 public class AdminServiceImpl implements AdminService {
+    private AdminRepositoryImpl adminRepository;
+
+    public AdminServiceImpl() {
+        this.adminRepository = new AdminRepositoryImpl();
+    }
+
     @Override
     public void listarUsuarios(Usuario usuarioLogado) {
         if (Objects.nonNull(usuarioLogado) && usuarioLogado.getTipoUsuario() == TipoUsuario.ADMIN) {
@@ -51,7 +57,6 @@ public class AdminServiceImpl implements AdminService {
     }
 
 
-
     private void imprimirTodasDenuncias(Denuncia denuncia) {
         System.out.println("ID: " + denuncia.getIdDenuncia());
         System.out.println("Título: " + denuncia.getTitulo());
@@ -71,7 +76,6 @@ public class AdminServiceImpl implements AdminService {
         System.out.println("------------------------");
     }
 
-
     private void imprimirTodosUsuario(Usuario usuario) {
         System.out.println("ID: " + usuario.getIdUsuario());
         System.out.println("Nome: " + usuario.getNomeUsuario());
@@ -82,4 +86,31 @@ public class AdminServiceImpl implements AdminService {
         System.out.println("Admin: " + (usuario.getIsAdmin() ? "Sim" : "Não"));
         System.out.println("------------------------");
     }
+
+
+    @Override
+    public boolean excluirDenuncia(int idDenuncia) {
+        try {
+            Denuncia denuncia = adminRepository.obterDenunciaPorId(idDenuncia);
+
+            if (denuncia != null) {
+                boolean denunciaRemovida = adminRepository.excluirDenuncia(idDenuncia);
+
+                if (denunciaRemovida) {
+                    System.out.println("Denúncia removida com sucesso!");
+                    return true;
+                } else {
+                    System.out.println("Falha ao remover a denúncia!");
+                    return false;
+                }
+            } else {
+                System.out.println("Denúncia não encontrada!");
+                return false;
+            }
+        } catch (DataBaseException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }
