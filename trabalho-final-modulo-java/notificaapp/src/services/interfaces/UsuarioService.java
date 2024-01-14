@@ -2,6 +2,8 @@ package services.interfaces;
 
 import models.Usuario;
 
+import java.util.Optional;
+
 public interface UsuarioService {
     void listarUsuario(int idUsuario);
 
@@ -10,4 +12,6 @@ public interface UsuarioService {
     void remover(Integer id);
     
     Usuario adicionar(Usuario usuario);
+
+    Optional<Usuario> getUsuarioPorId(Integer idUsuario);
 }
