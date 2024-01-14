@@ -14,4 +14,7 @@ public interface UsuarioService {
 
     Optional<Usuario> adicionar(Usuario usuario);
 
+    Usuario adicionar(Usuario usuario);
+
+    Optional<Usuario> getUsuarioPorId(Integer idUsuario);
 }

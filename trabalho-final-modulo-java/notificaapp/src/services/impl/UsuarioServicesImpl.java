@@ -120,6 +120,15 @@ public class UsuarioServicesImpl implements UsuarioService {
         }
     }
 
+    @Override
+    public Optional<Usuario> getUsuarioPorId(Integer idUsuario){
+        try{
+            return Optional.of(usuarioRepository.getUsuarioPorId(idUsuario));
+        } catch (Exception e){
+            System.out.println("Erro: " + e.getCause());
+        }
+        return Optional.empty();
+    }
 }
 
 

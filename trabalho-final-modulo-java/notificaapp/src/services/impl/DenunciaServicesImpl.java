@@ -5,17 +5,21 @@ import exceptions.DataBaseException;
 import java.util.Collections;
 
 import models.Denuncia;
+import models.Usuario;
 import repositories.impl.AdminRepositoryImpl;
 import repositories.impl.DenunciaRepositoryImpl;
+import repositories.impl.UsuarioRepositoryImpl;
+import repositories.interfaces.UsuarioRepository;
 import services.interfaces.DenunciaService;
+import services.interfaces.UsuarioService;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
 public class DenunciaServicesImpl implements DenunciaService {
     private final DenunciaRepositoryImpl denunciaRepositoryImpl;
     private final AdminRepositoryImpl adminRepository;
-
 
     public DenunciaServicesImpl() {
         denunciaRepositoryImpl = new DenunciaRepositoryImpl();
@@ -113,5 +117,21 @@ public class DenunciaServicesImpl implements DenunciaService {
             System.out.println("Erro: " + e.getCause());
             return Collections.emptyList();
         }
+    }
+
+    @Override
+    public Optional<List<Denuncia>> listarDenunciasDoUsuario(Integer idUsuario){
+        try{
+            UsuarioService usuarioService = new UsuarioServicesImpl();
+            Optional<Usuario> uOpt = usuarioService.getUsuarioPorId(idUsuario);
+
+            if(uOpt.isEmpty())
+                return Optional.empty();
+
+            return Optional.of(denunciaRepositoryImpl.listarDenunciasDoUsuario(idUsuario));
+        }  catch (Exception e){
+            System.out.println("Erro: "+ e.getCause());
+        }
+        return Optional.empty();
     }
 }

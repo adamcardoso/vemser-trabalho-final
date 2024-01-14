@@ -10,4 +10,6 @@ public interface HomeService {
     void denunciaForm(Usuario u, Scanner s);
 
     void cadastroUsuarioForm(Scanner s);
+    
+    void listarDenunciasDoUsuario(Usuario u);
 }

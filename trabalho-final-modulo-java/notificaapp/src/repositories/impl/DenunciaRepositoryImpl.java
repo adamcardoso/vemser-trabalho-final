@@ -9,6 +9,7 @@ import models.enums.Categoria;
 import models.enums.StatusDenuncia;
 import repositories.interfaces.DenunciaRepository;
 
+import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,7 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
 
             PreparedStatement stmt = connection.prepareStatement(sql);
 
-            stmt.setLong(1, d.getIdDenuncia());
+            stmt.setInt(1, d.getIdDenuncia());
             stmt.setString(2, d.getTitulo());
             stmt.setString(3, d.getDescricao());
             stmt.setDate(4, ConversorDateHelper.LocalDateTimeToDate(d.getDataHora()));
@@ -54,7 +55,7 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
             stmt.setInt(7, d.getCurtidas());
             stmt.setInt(8, d.getValidarDenuncia());
             stmt.setString(9, String.valueOf(d.getTipoDenuncia().getIdTipoDenuncia()));
-            stmt.setLong(10, d.getIdUsuario());
+            stmt.setInt(10, d.getIdUsuario());
 
             int res = stmt.executeUpdate();
             System.out.println("Denúncias cadastradas = " + res);
@@ -142,7 +143,7 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
     }
 
     @Override
-    public Usuario listarUsuarioDaDenuncia(int idUsuario) throws DataBaseException {
+    public Usuario listarUsuarioDaDenuncia(Integer idUsuario) throws DataBaseException {
         return null;
     }
 
@@ -176,6 +177,49 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
             try {
                 if (connection != null) {
                     connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    @Override
+    public List<Denuncia> listarDenunciasDoUsuario(Integer idUsuario){
+        Connection con = null;
+        try {
+            con = ConexaoBancoDeDados.getConnection();
+
+            String sql = """
+                    SELECT * FROM DENUNCIA d 
+                    WHERE d.id_usuario=?
+                    order by d.id_denuncia asc
+                    """;
+            System.out.println("SQL Executado: " + sql);
+
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, idUsuario);
+
+            ResultSet res = pstmt.executeQuery();
+
+            List<Denuncia> denuncias = new ArrayList<>();
+
+            while (res.next()) {
+                denuncias.add(new Denuncia(
+                        res.getInt("id_denuncia"),
+                        res.getString("titulo"),
+                        res.getString("descricao"),
+                        StatusDenuncia.fromInt(res.getInt("status_denuncia")),
+                        Categoria.fromInt(res.getInt("categoria"))
+                ));
+            }
+
+            return denuncias;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
