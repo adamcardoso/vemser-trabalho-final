@@ -13,4 +13,6 @@ public interface DenunciaService {
     void removerDenuncia(Integer id);
 
     List<Denuncia> obterTodos();
+
+    Optional<List<Denuncia>> listarDenunciasDoUsuario(Integer idUsuario);
 }

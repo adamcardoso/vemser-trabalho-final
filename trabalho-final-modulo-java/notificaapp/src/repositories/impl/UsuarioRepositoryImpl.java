@@ -216,7 +216,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
     }
 
     @Override
-    public Usuario getUsuarioPorId(int idUsuario) throws DataBaseException {
+    public Usuario getUsuarioPorId(Integer idUsuario) throws DataBaseException {
         Connection con = null;
 
         try {

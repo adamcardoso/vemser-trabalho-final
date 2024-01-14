@@ -6,6 +6,7 @@ import repositories.impl.UsuarioRepositoryImpl;
 import services.interfaces.UsuarioService;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class UsuarioServicesImpl implements UsuarioService {
     private final UsuarioRepositoryImpl usuarioRepository;
@@ -97,6 +98,15 @@ public class UsuarioServicesImpl implements UsuarioService {
         }
     }
 
+    @Override
+    public Optional<Usuario> getUsuarioPorId(Integer idUsuario){
+        try{
+            return Optional.of(usuarioRepository.getUsuarioPorId(idUsuario));
+        } catch (Exception e){
+            System.out.println("Erro: " + e.getCause());
+        }
+        return Optional.empty();
+    }
 }
 
 

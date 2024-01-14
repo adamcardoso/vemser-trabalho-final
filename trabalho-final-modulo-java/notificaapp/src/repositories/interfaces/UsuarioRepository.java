@@ -22,5 +22,5 @@ public interface UsuarioRepository <CHAVE, OBJETO> {
 
     Usuario fazerLogin(String nomeUsuario, String senha) throws DataBaseException;
 
-    Usuario getUsuarioPorId(int idUsuario) throws DataBaseException;
+    Usuario getUsuarioPorId(CHAVE idUsuario) throws DataBaseException;
 }

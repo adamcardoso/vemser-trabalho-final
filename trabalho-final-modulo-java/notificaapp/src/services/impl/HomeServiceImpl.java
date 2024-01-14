@@ -4,6 +4,7 @@ import models.Denuncia;
 import models.Usuario;
 import models.enums.Categoria;
 import models.enums.TipoDenuncia;
+import services.interfaces.DenunciaService;
 import services.interfaces.HomeService;
 
 import java.util.InputMismatchException;
@@ -14,7 +15,7 @@ import java.util.Scanner;
 public class HomeServiceImpl implements HomeService {
     @Override
     public void feed(){
-        DenunciaServicesImpl denunciaServices = new DenunciaServicesImpl();
+        DenunciaService denunciaServices = new DenunciaServicesImpl();
         List<Denuncia> denuncias = denunciaServices.obterTodos();
         System.out.print("\n");
         for(Denuncia d: denuncias)
@@ -35,7 +36,7 @@ public class HomeServiceImpl implements HomeService {
         int categoria = 0;
         int tipoDenuncia = 0;
 
-        DenunciaServicesImpl denunciaServices = new DenunciaServicesImpl();
+        DenunciaService denunciaServices = new DenunciaServicesImpl();
         System.out.println("║ Você escolheu '1 - Cadastrar Denúncia'");
         do {
             System.out.println();
@@ -122,5 +123,36 @@ public class HomeServiceImpl implements HomeService {
                         ║ Sua denúncia foi processada corretamente!.                                  ║
                         ╚═════════════════════════════════════════════════════════════════════════════╝
                         %n""");
+    }
+
+    @Override
+    public void listarDenunciasDoUsuario(Usuario usuario){
+        DenunciaService denunciaService = new DenunciaServicesImpl();
+        Optional<List<Denuncia>> dOpt = denunciaService.listarDenunciasDoUsuario(usuario.getIdUsuario());
+
+        if(dOpt.isEmpty())
+            System.out.printf("""
+                        ╔═════════ NOTIFICA ══════════════════════════════════════════════════════════╗
+                        ║ Ocorreu um Erro ao cadastrar a denúncia, tente novamente.                   ║
+                        ╚═════════════════════════════════════════════════════════════════════════════╝
+                        %n""");
+        else {
+            List<Denuncia> denuncias = dOpt.get();
+
+            for (Denuncia d : denuncias)
+                System.out.printf("""
+                        ╔═════════ NOTIFICA ══════════════════════════════════════════════════════════╗
+                        ║ id: %s
+                        ║ título: %s
+                        ║ descrição: %s
+                        ║ status: %s
+                        ╚═════════════════════════════════════════════════════════════════════════════╝
+                        %n""", d.getIdDenuncia(), d.getTitulo(),
+                        this.substring(d.getDescricao()), d.getStatusDenuncia());
+        }
+    }
+
+    private String substring(String str){
+        return str.length() > 60 ? str.substring(0, 60) + "..." : str;
     }
 }

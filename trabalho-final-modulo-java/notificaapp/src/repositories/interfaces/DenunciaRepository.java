@@ -19,5 +19,7 @@ public interface DenunciaRepository<CHAVE, OBJETO> {
 
     boolean removerDenuncia(CHAVE id) throws DataBaseException;
 
-    Usuario listarUsuarioDaDenuncia(int idUsuario) throws DataBaseException;
+    Usuario listarUsuarioDaDenuncia(CHAVE idUsuario) throws DataBaseException;
+
+    List<Denuncia> listarDenunciasDoUsuario(CHAVE id);
 }

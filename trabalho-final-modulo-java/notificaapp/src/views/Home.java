@@ -5,11 +5,12 @@ import models.Denuncia;
 import models.Usuario;
 import models.enums.Categoria;
 import services.impl.*;
+import services.interfaces.HomeService;
 
 import java.util.Scanner;
 
 public class Home {
-    HomeServiceImpl homeServiceImpl = new HomeServiceImpl();
+    HomeService homeServiceImpl = new HomeServiceImpl();
     EstatisticaService estatisticaService = new EstatisticaService();
     UsuarioServicesImpl usuarioServices = new UsuarioServicesImpl();
     DenunciaServicesImpl denunciaServices = new DenunciaServicesImpl();
@@ -256,7 +257,7 @@ public class Home {
                     this.editarDenuncia(idDenunciaPessoalE);
                     break;
                 case 4:
-                    //denunciaServices.
+                    this.homeServiceImpl.listarDenunciasDoUsuario(this.usuarioLogado);
                     break;
                 case 5:
                     exibirMenuPrincipal();
