@@ -25,6 +25,7 @@ public class CadastroUsuarioHelper {
 
     protected String digitarCampo(String regex) throws MaxAttemptsExceededException {
         String campo;
+        System.out.println("Digite o valor: ");
         int tentativas = 0;
 
         while (tentativas < 3) {
@@ -47,8 +48,9 @@ public class CadastroUsuarioHelper {
         return null;
     }
 
-    protected LocalDate digitarCampoData() throws MaxAttemptsExceededException {
+    public LocalDate digitarCampoData() throws MaxAttemptsExceededException {
         int tentativas = 0;
+        System.out.println("Digite o campo data: ");
 
         while (tentativas < 3) {
             tentativas++;
@@ -71,11 +73,11 @@ public class CadastroUsuarioHelper {
         return null;
     }
 
-    private boolean validaFormatoDataNascimento(String dataNascimento) {
+    public boolean validaFormatoDataNascimento(String dataNascimento) {
         return dataNascimento.matches("(?=.*\\d).{2}-(?=.*\\d).{2}-(?=.*\\d).{4}");
     }
 
-    protected Etnia digitarCampoEtnia() throws MaxAttemptsExceededException {
+    public Etnia digitarCampoEtnia() throws MaxAttemptsExceededException {
         System.out.println("""
                 0 - PRETO
                 1 - PARDO
@@ -105,19 +107,19 @@ public class CadastroUsuarioHelper {
         return null;
     }
 
-    protected boolean validaEtnia(String etnia) {
+    public boolean validaEtnia(String etnia) {
         return etnia.matches("[0-4]");
     }
 
-    protected String digitarNomeUsuario() throws MaxAttemptsExceededException {
+    public String digitarNomeUsuario() throws MaxAttemptsExceededException {
         return digitarCampo("[A-Za-zÀ-ÖØ-öø-ÿ ]+");
     }
 
-    protected String digitarCampoNumeroCelular() throws MaxAttemptsExceededException {
+    public String digitarCampoNumeroCelular() throws MaxAttemptsExceededException {
         return digitarCampo("\\d{10,11}");
     }
 
-    protected String digitarCampoSenha() throws MaxAttemptsExceededException {
+    public String digitarCampoSenha() throws MaxAttemptsExceededException {
         String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{6,18}$";
         String mensagem = """
         Mínimo 6 e máximo 18 caracteres
@@ -130,9 +132,10 @@ public class CadastroUsuarioHelper {
         return digitarCampoValidado(regex, mensagem);
     }
 
-    protected String digitarCampoValidado(String regex, String mensagem) throws MaxAttemptsExceededException {
+    public String digitarCampoValidado(String regex, String mensagem) throws MaxAttemptsExceededException {
         String campo;
         int tentativas = 0;
+        System.out.println("Digite o valor: ");
 
         while (tentativas < 3) {
             tentativas++;
@@ -154,11 +157,13 @@ public class CadastroUsuarioHelper {
         return null;
     }
 
-    protected ClasseSocial digitarCampoClasseSocial() throws MaxAttemptsExceededException {
+    public ClasseSocial digitarCampoClasseSocial() throws MaxAttemptsExceededException {
         System.out.println("""
-                0 - BAIXA
-                1 - MÉDIA
-                2 - ALTA
+                0 - CLASSE A
+                1 - CLASSE B
+                2 - CLASSE C
+                3 - CLASSE D
+                4 - CLASSE E
                 """);
 
         String regex = "[0-2]";
@@ -182,11 +187,11 @@ public class CadastroUsuarioHelper {
         return null;
     }
 
-    protected Genero digitarCampoGenero() throws MaxAttemptsExceededException {
+    public Genero digitarCampoGenero() throws MaxAttemptsExceededException {
         System.out.println("""
                 0 - MASCULINO
                 1 - FEMININO
-                2 - NÃO BINÁRIO
+                2 - OUTRO
                 """);
 
         String regex = "[0-2]";
@@ -210,7 +215,7 @@ public class CadastroUsuarioHelper {
         return null;
     }
 
-    protected TipoUsuario digitarCampoTipoDeUsuario() throws MaxAttemptsExceededException {
+    public TipoUsuario digitarCampoTipoDeUsuario() throws MaxAttemptsExceededException {
         System.out.println("""
                 0 - ADMINISTRADOR
                 1 - USUÁRIO COMUM

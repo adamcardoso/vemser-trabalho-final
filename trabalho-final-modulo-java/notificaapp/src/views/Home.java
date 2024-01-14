@@ -1,11 +1,17 @@
 package views;
 
 import helpers.CadastroDenunciaHelper;
+import helpers.CadastroUsuarioHelper;
 import models.Denuncia;
 import models.Usuario;
 import models.enums.Categoria;
+import models.enums.ClasseSocial;
+import models.enums.Etnia;
+import models.enums.Genero;
 import services.impl.*;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.Scanner;
 
 public class Home {
@@ -15,6 +21,8 @@ public class Home {
     DenunciaServicesImpl denunciaServices = new DenunciaServicesImpl();
 
     CadastroDenunciaHelper cadastroDenunciaHelper = new CadastroDenunciaHelper();
+
+    CadastroUsuarioHelper cadastroUsuarioHelper = new CadastroUsuarioHelper();
     Scanner input = new Scanner(System.in);
 
     private static final String OPCAO_INVALIDA_MSG = "║ Opção inválida!";
@@ -204,7 +212,7 @@ public class Home {
                     usuarioServices.remover(usuarioLogado.getIdUsuario());
                     break;
                 case 2:
-                    usuarioServices.editarUsuario(usuarioLogado.getIdUsuario(), usuarioLogado);
+                    this.editarUsuario();
                     break;
                 case 3:
                     //funcionando FINALIZADO - NÃO MECHER
@@ -327,5 +335,73 @@ public class Home {
                     System.out.println(OPCAO_INVALIDA_MSG);
             }
         } while (opMenuDenuncia != 4);
+    }
+
+    private void editarUsuario() {
+        int opMenuDenuncia;
+        Usuario editaUsuario = usuarioLogado;
+        do {
+            System.out.print("\n");
+            System.out.printf("╔═════════ NOTIFICA ════════╗%n");
+            System.out.printf("║ Qual campo deseja editar? ║%n");
+            System.out.printf("║ 1. Nome                   ║%n");
+            System.out.printf("║ 2. Numero celular         ║%n");
+            System.out.printf("║ 3. Senha                  ║%n");
+            System.out.printf("║ 4. Etnia                  ║%n");
+            System.out.printf("║ 5. Data de nascimento     ║%n");
+            System.out.printf("║ 6. Classe social          ║%n");
+            System.out.printf("║ 7. Genero                 ║%n");
+            System.out.printf("║ 8. Voltar                 ║%n");
+            System.out.printf("╚═══════════════════════════╝%n");
+            System.out.print(ESCOLHA_OPCAO_MSG);
+            opMenuDenuncia = input.nextInt();
+            input.nextLine();
+            switch (opMenuDenuncia) {
+                case 1:
+                    String editaNome = cadastroUsuarioHelper.digitarNomeUsuario();
+                    editaUsuario.setNomeUsuario(editaNome);
+                    usuarioServices.editarUsuario(usuarioLogado.getIdUsuario(), editaUsuario);
+                    break;
+                case 2:
+                    String editaNumeroCelular = cadastroUsuarioHelper.digitarCampoNumeroCelular();
+                    editaUsuario.setNumeroCelular(editaNumeroCelular);
+                    usuarioServices.editarUsuario(usuarioLogado.getIdUsuario(), editaUsuario);
+                    break;
+                case 3:
+                    String editaSenha = cadastroUsuarioHelper.digitarCampoSenha();
+                    editaUsuario.setSenhaUsuario(editaSenha);
+                    usuarioServices.editarUsuario(usuarioLogado.getIdUsuario(), editaUsuario);
+                    break;
+                case 4:
+                    Etnia editaEtnia = cadastroUsuarioHelper.digitarCampoEtnia();
+                    editaUsuario.setEtniaUsuario(editaEtnia);
+                    usuarioServices.editarUsuario(usuarioLogado.getIdUsuario(), editaUsuario);
+                    break;
+
+                case 5:
+                    LocalDate editaDataNascimento = cadastroUsuarioHelper.digitarCampoData();
+                    editaUsuario.setDataNascimento(editaDataNascimento);
+                    usuarioServices.editarUsuario(usuarioLogado.getIdUsuario(), editaUsuario);
+                    break;
+
+                case 6:
+                    ClasseSocial editaClasseSocial = cadastroUsuarioHelper.digitarCampoClasseSocial();
+                    editaUsuario.setClasseSocial(editaClasseSocial);
+                    usuarioServices.editarUsuario(usuarioLogado.getIdUsuario(), editaUsuario);
+                    break;
+
+                case 7:
+                    Genero editaGenero = cadastroUsuarioHelper.digitarCampoGenero();
+                    editaUsuario.setGeneroUsuario(editaGenero);
+                    usuarioServices.editarUsuario(usuarioLogado.getIdUsuario(), editaUsuario);
+                    break;
+
+                case 8:
+                    System.out.println(VOLTANDO);
+                    break;
+                default:
+                    System.out.println(OPCAO_INVALIDA_MSG);
+            }
+        } while (opMenuDenuncia != 8);
     }
 }
