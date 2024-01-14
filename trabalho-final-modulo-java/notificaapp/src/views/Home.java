@@ -49,7 +49,8 @@ public class Home {
                     exibirMenuPrincipal();
                     break;
                 case 3:
-                    usuarioServices.adicionar(usuarioLogado);
+                    //Usuario usuario =
+                    //usuarioServices.adicionar(usuario);
                     break;
                 case 4:
                     System.out.println(SAINDO_DO_SISTEMA_MSG);
@@ -253,7 +254,7 @@ public class Home {
                     //denunciaServices.editarDenuncia(idDenunciaPessoalE, new Denuncia());
                     break;
                 case 4:
-                    //denunciaServices.
+                    denunciaServices.obterTodos();
                     break;
                 case 5:
                     exibirMenuPrincipal();
@@ -261,6 +262,7 @@ public class Home {
                     break;
                 case 6:
                     System.out.println(SAINDO_DO_SISTEMA_MSG);
+                    System.exit(0);
                     break;
                 default:
                     System.out.println(OPCAO_INVALIDA_MSG);

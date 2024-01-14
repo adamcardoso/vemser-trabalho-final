@@ -178,7 +178,6 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
                 ));
             }
 
-
             return denuncias;
         } catch (SQLException e) {
             throw new RuntimeException(e);
