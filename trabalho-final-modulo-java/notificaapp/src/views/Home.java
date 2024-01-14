@@ -61,7 +61,7 @@ public class Home {
                     exibirMenuPrincipal();
                     break;
                 case 3:
-                    usuarioServices.adicionar(usuarioLogado);
+                    homeServiceImpl.cadastroUsuarioForm(input);
                     break;
                 case 4:
                     System.out.println(SAINDO_DO_SISTEMA_MSG);

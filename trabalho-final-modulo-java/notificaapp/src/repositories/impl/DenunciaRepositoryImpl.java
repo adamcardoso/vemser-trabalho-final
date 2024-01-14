@@ -16,7 +16,7 @@ import java.util.List;
 public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denuncia> {
     @Override
     public Integer getProximoIdDaDenuncia(Connection connection) throws SQLException {
-        String sql = "SELECT SEQ_PESSOA2.NEXTVAL mysequence from DUAL";
+        String sql = "SELECT SEQ_DENUNCIA.NEXTVAL mysequence from DUAL";
 
         Statement stmt = connection.createStatement();
         ResultSet res = stmt.executeQuery(sql);

@@ -15,6 +15,15 @@ import java.time.LocalDate;
 public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario> {
     @Override
     public Integer getProximoIdDoUsuario(Connection connection) throws SQLException {
+        String sql = "SELECT SEQ_USUARIO.NEXTVAL mysequence from DUAL";
+
+        Statement stmt = connection.createStatement();
+        ResultSet res = stmt.executeQuery(sql);
+
+        if (res.next()) {
+            return res.getInt("mysequence");
+        }
+
         return null;
     }
 
@@ -26,18 +35,25 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
         try {
             con = ConexaoBancoDeDados.getConnection();
 
-            String sql = "INSERT INTO USUARIO (id_usuario, nome_usuario, celular_usuario, senha_usuario, etnia, data_nascimento, classe_social, genero, tipo_usuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = """
+                    INSERT INTO USUARIO
+                    (ID_USUARIO, NOME_USUARIO, CELULAR_USUARIO, SENHA_USUARIO, DATA_NASCIMENTO, ETNIA, CLASSE_SOCIAL, GENERO, TIPO_USUARIO)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""";
+
+
+            Integer proximoId = this.getProximoIdDoUsuario(con);
+            usuario.setIdUsuario(proximoId);
 
             stmt = con.prepareStatement(sql);
             stmt.setInt(1, usuario.getIdUsuario());
             stmt.setString(2, usuario.getNomeUsuario());
             stmt.setString(3, usuario.getNumeroCelular());
             stmt.setString(4, usuario.getSenhaUsuario());
-            stmt.setInt(5, usuario.getEtniaUsuario().getIdEtnia());
-            stmt.setDate(6, Date.valueOf(usuario.getDataNascimento()));
-            stmt.setInt(7, usuario.getClasseSocial().getIdClasseSocial());
-            stmt.setInt(8, usuario.getGeneroUsuario().getIdGenero());
-            stmt.setInt(9, usuario.getTipoUsuario().getIdTipoUsuario());
+            stmt.setDate(5, Date.valueOf(usuario.getDataNascimento()));
+            stmt.setString(6, String.valueOf(usuario.getEtniaUsuario().getIdEtnia()));
+            stmt.setString(7, String.valueOf(usuario.getClasseSocial().getIdClasseSocial()));
+            stmt.setString(8, String.valueOf(usuario.getGeneroUsuario().getIdGenero()));
+            stmt.setString(9, String.valueOf(usuario.getTipoUsuario().getIdTipoUsuario()));
 
             int res = stmt.executeUpdate();
 
@@ -116,7 +132,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
     }
 
     @Override
-    public Usuario listarUsuario(int idUsuario) throws DataBaseException  {
+    public Usuario listarUsuario(int idUsuario) throws DataBaseException {
         Usuario usuario = new Usuario();
         Connection con = null;
 
@@ -143,7 +159,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
                 }
             } catch (SQLException e) {
                 System.out.println("entro try");
-                throw new DataBaseException ("Erro: "+ e.getCause());
+                throw new DataBaseException("Erro: " + e.getCause());
             } finally {
                 try {
                     if (con != null) {
@@ -219,7 +235,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
         Connection con = null;
 
         try {
-            String sql =  String.format("SELECT * FROM USUARIO WHERE id_usuario = '%s'", idUsuario);
+            String sql = String.format("SELECT * FROM USUARIO WHERE id_usuario = '%s'", idUsuario);
 
             con = ConexaoBancoDeDados.getConnection();
 
