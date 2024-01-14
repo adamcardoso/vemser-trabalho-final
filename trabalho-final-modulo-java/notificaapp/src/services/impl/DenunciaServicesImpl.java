@@ -10,6 +10,7 @@ import repositories.impl.DenunciaRepositoryImpl;
 import services.interfaces.DenunciaService;
 
 import java.util.List;
+import java.util.Optional;
 
 public class DenunciaServicesImpl implements DenunciaService {
     private final DenunciaRepositoryImpl denunciaRepositoryImpl;
@@ -22,14 +23,13 @@ public class DenunciaServicesImpl implements DenunciaService {
     }
 
     @Override
-    public Denuncia adicionarDenuncia(Denuncia denuncia) {
+    public Optional<Denuncia> adicionarDenuncia(Denuncia denuncia) {
         try {
-            return denunciaRepositoryImpl.adicionar(denuncia);
-        } catch (Exception e) {
-            System.out.println("Erro: " + e.getCause());
+            return Optional.of(denunciaRepositoryImpl.adicionar(denuncia));
+        } catch (Exception e){
+            System.out.println("Erro: "+ e.getCause());
         }
-
-        return null;
+        return Optional.empty();
     }
 
     @Override
