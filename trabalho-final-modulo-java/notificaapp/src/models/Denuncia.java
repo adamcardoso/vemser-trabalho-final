@@ -30,7 +30,6 @@ public class Denuncia{
         this.descricao = descricao;
         this.statusDenuncia = statusDenuncia;
         this.categoria = categoria;
-        this.tipoDenuncia = tipoDenuncia;
     }
 
     public void curtirDenuncia(){

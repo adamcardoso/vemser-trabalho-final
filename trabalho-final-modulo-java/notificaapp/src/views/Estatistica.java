@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class EstatisticaUsuario {
+public class Estatistica {
 
     public void exibirEstatisticas(List<Usuario> usuarios) {
         Map<ClasseSocial, Integer> classeSocialCount = new HashMap<>();
@@ -19,7 +19,7 @@ public class EstatisticaUsuario {
 
         DecimalFormat df = new DecimalFormat("#.##");
 
-        System.out.println("------------- Estatísticas -------------");
+        System.out.println("\n═══════════════ Estatísticas ═══════════════");
         for (Usuario usuario : usuarios) {
             classeSocialCount.put(usuario.getClasseSocial(), classeSocialCount.getOrDefault(usuario.getClasseSocial(), 0) + 1);
             etniaCount.put(usuario.getEtniaUsuario(), etniaCount.getOrDefault(usuario.getEtniaUsuario(), 0) + 1);
@@ -45,6 +45,6 @@ public class EstatisticaUsuario {
             double porcentagem = (generoCount.getOrDefault(genero, 0) * 100.0 / usuarios.size());
             String formattedporcentagem = df.format(porcentagem);
             System.out.println(genero + ": " + formattedporcentagem + "%");
-        }
+        }System.out.println("══════════════════════════════════════════");
     }
 }

@@ -2,13 +2,9 @@ package services.impl;
 
 import exceptions.DataBaseException;
 import models.Usuario;
-import models.enums.TipoUsuario;
-import repositories.impl.AdminRepositoryImpl;
 import repositories.impl.UsuarioRepositoryImpl;
 import services.interfaces.UsuarioService;
-import views.EstatisticaUsuario;
 
-import java.util.List;
 import java.util.Objects;
 
 public class UsuarioServicesImpl implements UsuarioService {
@@ -33,9 +29,11 @@ public class UsuarioServicesImpl implements UsuarioService {
             Usuario usuario = usuarioRepository.fazerLogin(nomeUsuario, senha);
             if (Objects.nonNull(usuario)) {
                 System.out.println("Login bem-sucedido para: " + usuario.getNomeUsuario());
+                System.out.println("═════════════════════════════════════");
                 return usuario;
             } else {
                 System.out.println("Nome de usuário ou senha incorretos. Tente novamente.");
+                System.out.println("═════════════════════════════════════");
             }
         } catch (DataBaseException e) {
             e.printStackTrace();
@@ -44,20 +42,21 @@ public class UsuarioServicesImpl implements UsuarioService {
     }
 
     private void imprimirUsuario(Usuario usuario) {
+        System.out.println("═════════════════════════════════════");
         System.out.println("ID: " + usuario.getIdUsuario());
         System.out.println("Nome: " + usuario.getNomeUsuario());
         System.out.println("Número de Celular: " + usuario.getNumeroCelular());
         System.out.println("Senha: " + usuario.getSenhaUsuario());
         System.out.println("Etnia: " + usuario.getEtniaUsuario());
         System.out.println("Data de Nascimento: " + usuario.getDataNascimento());
-        System.out.println("------------------------");
+        System.out.println("═════════════════════════════════════");
     }
 
     @Override
     public void remover(Integer id) {
         try {
             Usuario usuario = usuarioRepository.getUsuarioPorId(id);
-
+            System.out.println("═════════════════════════════════════");
             if (usuario != null) {
                 if (!usuario.getIsAdmin()) {
                     boolean usuarioRemovido = usuarioRepository.removerUsuario(id);
@@ -76,6 +75,7 @@ public class UsuarioServicesImpl implements UsuarioService {
         } catch (DataBaseException e) {
             e.printStackTrace();
         }
+        System.out.println("═════════════════════════════════════");
     }
 
     @Override
@@ -97,19 +97,6 @@ public class UsuarioServicesImpl implements UsuarioService {
         }
     }
 
-    public void exibirEstatisticasUsuarios() {
-        AdminRepositoryImpl adminRepository = new AdminRepositoryImpl();
-        try {
-            Usuario usuarioExemplo = new Usuario();
-            List<Usuario> usuarios = adminRepository.listarTodosUsuarios(usuarioExemplo);
-
-            //Chama a classe de estatísticas e exibe as estatísticas
-            EstatisticaUsuario estatisticaUsuario = new EstatisticaUsuario();
-            estatisticaUsuario.exibirEstatisticas(usuarios);
-        } catch (DataBaseException e) {
-            e.printStackTrace();
-        }
-    }
 }
 
 
