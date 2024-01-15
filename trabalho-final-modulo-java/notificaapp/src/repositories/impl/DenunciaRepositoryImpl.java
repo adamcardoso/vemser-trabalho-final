@@ -4,9 +4,9 @@ import config.ConexaoBancoDeDados;
 import exceptions.DataBaseException;
 import helpers.ConversorDateHelper;
 import models.Denuncia;
-import models.Usuario;
 import models.enums.Categoria;
 import models.enums.StatusDenuncia;
+import models.enums.TipoDenuncia;
 import repositories.interfaces.DenunciaRepository;
 
 import java.sql.*;
@@ -14,19 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denuncia> {
-    @Override
-    public Integer getProximoIdDaDenuncia(Connection connection) throws SQLException {
-        String sql = "SELECT SEQ_DENUNCIA.NEXTVAL mysequence from DUAL";
-
-        Statement stmt = connection.createStatement();
-        ResultSet res = stmt.executeQuery(sql);
-
-        if (res.next()) {
-            return res.getInt("mysequence");
-        }
-
-        return null;
-    }
 
     @Override
     public Denuncia adicionarDenuncia(Denuncia d) throws DataBaseException {
@@ -35,7 +22,7 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
             connection = ConexaoBancoDeDados.getConnection();
 
             String sql = """
-                    INSERT INTO DENUNCIA 
+                    INSERT INTO DENUNCIA
                         (id_denuncia, titulo, descricao, data_hora, status_denuncia, categoria, curtida, 
                         validar_denuncia, tipo_denuncia, id_usuario) 
                     VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""";
@@ -167,47 +154,6 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
     }
 
     @Override
-    public Usuario listarUsuarioDaDenuncia(Integer idUsuario) throws DataBaseException {
-        return null;
-    }
-
-    public List<Denuncia> obterTodos() {
-        Connection connection = null;
-        try {
-            connection = ConexaoBancoDeDados.getConnection();
-
-            String sql = "SELECT * FROM DENUNCIA";
-
-            Statement stmt = connection.createStatement();
-            ResultSet res = stmt.executeQuery(sql);
-
-            List<Denuncia> denuncias = new ArrayList<>();
-
-            while (res.next()) {
-                denuncias.add(new Denuncia(
-                        res.getInt("id_denuncia"),
-                        res.getString("titulo"),
-                        res.getString("descricao"),
-                        StatusDenuncia.fromInt(res.getInt("status_denuncia")),
-                        Categoria.fromInt(res.getInt("categoria"))
-                ));
-            }
-
-
-            return denuncias;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    @Override
     public List<Denuncia> listarDenunciasDoUsuario(Integer idUsuario){
         Connection con = null;
         try {
@@ -233,7 +179,8 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
                         res.getString("titulo"),
                         res.getString("descricao"),
                         StatusDenuncia.fromInt(res.getInt("status_denuncia")),
-                        Categoria.fromInt(res.getInt("categoria"))
+                        Categoria.fromInt(res.getInt("categoria")),
+                        TipoDenuncia.fromInt(res.getInt("tipo_denuncia"))
                 ));
             }
 
@@ -250,4 +197,55 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
             }
         }
     }
+    public List<Denuncia> obterTodosFeed() {
+        Connection connection = null;
+        try {
+            connection = ConexaoBancoDeDados.getConnection();
+
+            String sql = "SELECT * FROM DENUNCIA";
+
+            Statement stmt = connection.createStatement();
+            ResultSet res = stmt.executeQuery(sql);
+
+            List<Denuncia> denuncias = new ArrayList<>();
+
+            while (res.next()) {
+                denuncias.add(new Denuncia(
+                        res.getInt("id_denuncia"),
+                        res.getString("titulo"),
+                        res.getString("descricao"),
+                        StatusDenuncia.fromInt(res.getInt("status_denuncia")),
+                        Categoria.fromInt(res.getInt("categoria")),
+                        TipoDenuncia.fromInt(res.getInt("tipo_denuncia"))
+                ));
+            }
+
+
+            return denuncias;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    @Override
+    public Integer getProximoIdDaDenuncia(Connection connection) throws SQLException {
+        String sql = "SELECT SEQ_DENUNCIA.NEXTVAL mysequence from DUAL";
+
+        Statement stmt = connection.createStatement();
+        ResultSet res = stmt.executeQuery(sql);
+
+        if (res.next()) {
+            return res.getInt("mysequence");
+        }
+
+        return null;
+    }
+
 }

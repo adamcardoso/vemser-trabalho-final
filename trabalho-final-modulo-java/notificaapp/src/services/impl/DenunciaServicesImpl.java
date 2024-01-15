@@ -34,6 +34,16 @@ public class DenunciaServicesImpl implements DenunciaService {
     }
 
     @Override
+    public void removerDenuncia(Integer idDenuncia) {
+        try {
+            boolean conseguiuRemover = denunciaRepositoryImpl.removerDenuncia(idDenuncia);
+            System.out.println("Denúncia removida? " + conseguiuRemover + "| com id=" + idDenuncia);
+        } catch (DataBaseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void editarDenuncia(Integer id, Integer idUsuario, Denuncia denuncia) {
         try {
             if(id == null){
@@ -75,47 +85,6 @@ public class DenunciaServicesImpl implements DenunciaService {
         }
     }
 
-    public Denuncia obterDenunciaPorId(Integer id, Integer idUsuario){
-        try{
-            Denuncia denunciaPorId = adminRepository.obterDenunciaPorId(id);
-
-            if (denunciaPorId == null) {
-                System.out.println("Denúncia não encontrada!");
-                return null;
-            }
-
-            if (denunciaPorId.getUsuario().getIdUsuario() != idUsuario) {
-                System.out.println("Você não pode visualizar a denúncia de outro usuário!");
-                return null;
-            }
-            return denunciaPorId;
-        }catch (DataBaseException e){
-            e.printStackTrace();
-
-        }
-        return null;
-    }
-
-    @Override
-    public void removerDenuncia(Integer idDenuncia) {
-        try {
-            boolean conseguiuRemover = denunciaRepositoryImpl.removerDenuncia(idDenuncia);
-            System.out.println("Denúncia removida? " + conseguiuRemover + "| com id=" + idDenuncia);
-        } catch (DataBaseException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public List<Denuncia> obterTodos() {
-        try {
-            return denunciaRepositoryImpl.obterTodos();
-        } catch (Exception e) {
-            System.out.println("Erro: " + e.getCause());
-            return Collections.emptyList();
-        }
-    }
-
     @Override
     public Optional<List<Denuncia>> listarDenunciasDoUsuario(Integer idUsuario){
         try{
@@ -130,5 +99,35 @@ public class DenunciaServicesImpl implements DenunciaService {
             System.out.println("Erro: "+ e.getCause());
         }
         return Optional.empty();
+    }
+    @Override
+    public List<Denuncia> obterTodosFeed() {
+        try {
+            return denunciaRepositoryImpl.obterTodosFeed();
+        } catch (Exception e) {
+            System.out.println("Erro: " + e.getCause());
+            return Collections.emptyList();
+        }
+    }
+
+    public Denuncia obterDenunciaPorId(Integer id, Integer idUsuario){
+        try{
+            Denuncia denunciaPorId = adminRepository.obterDenunciaPorId(id);
+
+            if (denunciaPorId == null) {
+                System.out.println("Denúncia não encontrada!");
+                return null;
+            }
+
+            if (denunciaPorId.getUsuario().getIdUsuario() != idUsuario) {
+                System.out.println("Você não pode visualizar nem editar a denúncia de outro usuário!");
+                return null;
+            }
+            return denunciaPorId;
+        }catch (DataBaseException e){
+            e.printStackTrace();
+
+        }
+        return null;
     }
 }

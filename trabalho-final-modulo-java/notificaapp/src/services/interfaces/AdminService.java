@@ -9,5 +9,5 @@ public interface AdminService {
 
     boolean editarDadosDoAdmin(Integer id, Usuario usuario);
 
-    boolean excluirDenuncia(int idDenuncia);
+    void excluirDenuncia(int idDenuncia);
 }

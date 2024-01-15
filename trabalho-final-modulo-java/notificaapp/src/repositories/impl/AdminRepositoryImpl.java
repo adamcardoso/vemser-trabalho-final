@@ -15,7 +15,6 @@ import java.util.Objects;
 
 public class AdminRepositoryImpl implements AdminRepository {
 
-
     @Override
     public List<Usuario> listarTodosUsuarios(Usuario usuarioLogado) throws DataBaseException {
         if (Objects.nonNull(usuarioLogado) && usuarioLogado.getTipoUsuario() == TipoUsuario.ADMIN) {
@@ -81,7 +80,7 @@ public class AdminRepositoryImpl implements AdminRepository {
                 con = ConexaoBancoDeDados.getConnection();
                 stmt = con.createStatement();
 
-                String sql = "SELECT D.id_denuncia, D.titulo, D.descricao, D.status_denuncia, D.categoria, " +
+                String sql = "SELECT D.id_denuncia, D.titulo, D.descricao, D.status_denuncia, D.categoria, D.tipo_denuncia, " +
                         "U.id_usuario, U.nome_usuario " +
                         "FROM DENUNCIA D " +
                         "JOIN USUARIO U ON D.id_usuario = U.id_usuario";
@@ -95,7 +94,8 @@ public class AdminRepositoryImpl implements AdminRepository {
                                 res.getString("titulo"),
                                 res.getString("descricao"),
                                 StatusDenuncia.fromInt(res.getInt("status_denuncia")),
-                                Categoria.fromInt(res.getInt("categoria"))
+                                Categoria.fromInt(res.getInt("categoria")),
+                                TipoDenuncia.fromInt(res.getInt("tipo_denuncia"))
                         );
 
                         denuncia.setIdUsuario(idUsuario);
