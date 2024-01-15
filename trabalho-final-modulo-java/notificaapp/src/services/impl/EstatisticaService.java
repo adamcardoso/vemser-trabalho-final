@@ -12,8 +12,7 @@ public class EstatisticaService {
     public void exibirEstatisticasUsuarios() {
         EstatisticaRepositoryImpl estatisticaRepository = new EstatisticaRepositoryImpl();
         try {
-            Usuario usuarioExemplo = new Usuario();
-            List<Usuario> usuarios = estatisticaRepository.listarTodosUsuarios(usuarioExemplo);
+            List<Usuario> usuarios = estatisticaRepository.listarTodosUsuarios();
 
             Estatistica estatistica = new Estatistica();
             estatistica.exibirEstatisticas(usuarios);

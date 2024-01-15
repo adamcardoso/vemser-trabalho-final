@@ -34,6 +34,26 @@ public class AdminServiceImpl implements AdminService {
         }
     }
 
+    @Override
+    public void excluirDenuncia(int idDenuncia) {
+        try {
+            Denuncia denuncia = adminRepository.obterDenunciaPorId(idDenuncia);
+
+            if (denuncia != null) {
+                boolean denunciaRemovida = adminRepository.excluirDenuncia(idDenuncia);
+
+                if (denunciaRemovida) {
+                    System.out.println("Denúncia removida com sucesso!");
+                } else {
+                    System.out.println("Falha ao remover a denúncia!");
+                }
+            } else {
+                System.out.println("Denúncia não encontrada!");
+            }
+        } catch (DataBaseException e) {
+            e.printStackTrace();
+        }
+    }
     public void listarDenuncias(Usuario usuarioLogado) {
         if (Objects.nonNull(usuarioLogado) && usuarioLogado.getTipoUsuario() == TipoUsuario.ADMIN) {
             AdminRepositoryImpl adminRepository = new AdminRepositoryImpl();
@@ -82,7 +102,7 @@ public class AdminServiceImpl implements AdminService {
         System.out.println("Validar Denúncia: " + denuncia.getValidarDenuncia());
 
         if (denuncia.getTipoDenuncia() != null) {
-            System.out.println("Tipo de Denúncia: " + denuncia.getTipoDenuncia().getIdTipoDenuncia());
+            System.out.println("Tipo de Denúncia: " + denuncia.getTipoDenuncia());
         } else {
             System.out.println("Tipo de Denúncia: [Tipo não especificado]");
         }
@@ -100,32 +120,6 @@ public class AdminServiceImpl implements AdminService {
         System.out.println("Data de Nascimento: " + usuario.getDataNascimento());
         System.out.println("Admin: " + (usuario.getIsAdmin() ? "Sim" : "Não"));
         System.out.println("═════════════════════════════════════");
-    }
-
-
-    @Override
-    public boolean excluirDenuncia(int idDenuncia) {
-        try {
-            Denuncia denuncia = adminRepository.obterDenunciaPorId(idDenuncia);
-
-            if (denuncia != null) {
-                boolean denunciaRemovida = adminRepository.excluirDenuncia(idDenuncia);
-
-                if (denunciaRemovida) {
-                    System.out.println("Denúncia removida com sucesso!");
-                    return true;
-                } else {
-                    System.out.println("Falha ao remover a denúncia!");
-                    return false;
-                }
-            } else {
-                System.out.println("Denúncia não encontrada!");
-                return false;
-            }
-        } catch (DataBaseException e) {
-            e.printStackTrace();
-            return false;
-        }
     }
 
 }

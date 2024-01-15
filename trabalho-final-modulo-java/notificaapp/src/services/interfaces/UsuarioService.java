@@ -1,6 +1,5 @@
 package services.interfaces;
 
-import models.Denuncia;
 import models.Usuario;
 
 import java.util.Optional;
@@ -10,9 +9,9 @@ public interface UsuarioService {
 
     Usuario fazerLogin(String nomeUsuario, String senha);
 
-    void remover(Integer id);
+    void removerUsuario(Integer id);
 
-    Optional<Usuario> adicionar(Usuario usuario);
+    Optional<Usuario> adicionarUsuario(Usuario usuario);
 
     Optional<Usuario> getUsuarioPorId(Integer idUsuario);
 }

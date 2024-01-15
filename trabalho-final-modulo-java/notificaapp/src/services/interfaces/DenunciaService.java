@@ -12,7 +12,7 @@ public interface DenunciaService {
 
     void removerDenuncia(Integer id);
 
-    List<Denuncia> obterTodos();
+    List<Denuncia> obterTodosFeed();
 
     Optional<List<Denuncia>> listarDenunciasDoUsuario(Integer idUsuario);
 }

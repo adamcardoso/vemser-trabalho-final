@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EstatisticaRepositoryImpl {
-    public List<Usuario> listarTodosUsuarios(Usuario usuarioLogado) throws DataBaseException {
+    public List<Usuario> listarTodosUsuarios() throws DataBaseException {
             List<Usuario> usuarios = new ArrayList<>();
             Connection con = null;
             Statement stmt = null;

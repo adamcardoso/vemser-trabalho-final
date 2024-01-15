@@ -16,45 +16,17 @@ public class UsuarioServicesImpl implements UsuarioService {
     }
 
     @Override
-    public void listarUsuario(int idUsuario) {
+    public Optional<Usuario> adicionarUsuario(Usuario usuario) {
         try {
-            Usuario usuario = usuarioRepository.listarUsuario(idUsuario);
-            imprimirUsuario(usuario);
+            return Optional.of(usuarioRepository.adicionarUsuario(usuario));
         } catch (DataBaseException e) {
-            e.printStackTrace();
+            System.out.println("Erro: "+ e.getCause());
         }
-    }
-
-    public Usuario fazerLogin(String nomeUsuario, String senha) {
-        try {
-            Usuario usuario = usuarioRepository.fazerLogin(nomeUsuario, senha);
-            if (Objects.nonNull(usuario)) {
-                System.out.println("Login bem-sucedido para: " + usuario.getNomeUsuario());
-                System.out.println("═════════════════════════════════════");
-                return usuario;
-            } else {
-                System.out.println("Nome de usuário ou senha incorretos. Tente novamente.");
-                System.out.println("═════════════════════════════════════");
-            }
-        } catch (DataBaseException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private void imprimirUsuario(Usuario usuario) {
-        System.out.println("═════════════════════════════════════");
-        System.out.println("ID: " + usuario.getIdUsuario());
-        System.out.println("Nome: " + usuario.getNomeUsuario());
-        System.out.println("Número de Celular: " + usuario.getNumeroCelular());
-        System.out.println("Senha: " + usuario.getSenhaUsuario());
-        System.out.println("Etnia: " + usuario.getEtniaUsuario());
-        System.out.println("Data de Nascimento: " + usuario.getDataNascimento());
-        System.out.println("═════════════════════════════════════");
+        return Optional.empty();
     }
 
     @Override
-    public void remover(Integer id) {
+    public void removerUsuario(Integer id) {
         try {
             Usuario usuario = usuarioRepository.getUsuarioPorId(id);
             System.out.println("═════════════════════════════════════");
@@ -79,16 +51,6 @@ public class UsuarioServicesImpl implements UsuarioService {
         System.out.println("═════════════════════════════════════");
     }
 
-    @Override
-    public Optional<Usuario> adicionar(Usuario usuario) {
-        try {
-            return Optional.of(usuarioRepository.adicionarUsuario(usuario));
-        } catch (DataBaseException e) {
-            System.out.println("Erro: "+ e.getCause());
-        }
-        return Optional.empty();
-    }
-
     public void editarUsuario(Integer idUsuarioLogado, Usuario usuario){
         try {
 
@@ -107,7 +69,7 @@ public class UsuarioServicesImpl implements UsuarioService {
                 System.out.println("O Usuário a ser editado não foi encontrado!");
             }
 
-            boolean conseguiuEditar = usuarioRepository.editar(idUsuarioLogado, usuario);
+            boolean conseguiuEditar = usuarioRepository.editarUsuario(idUsuarioLogado, usuario);
 
             if (!conseguiuEditar) {
                 System.out.println("Falha ao editar o usuario!");
@@ -121,6 +83,27 @@ public class UsuarioServicesImpl implements UsuarioService {
     }
 
     @Override
+    public void listarUsuario(int idUsuario) {
+        try {
+            Usuario usuario = usuarioRepository.listarUsuario(idUsuario);
+            imprimirUsuario(usuario);
+        } catch (DataBaseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void imprimirUsuario(Usuario usuario) {
+        System.out.println("═════════════════════════════════════");
+        System.out.println("ID: " + usuario.getIdUsuario());
+        System.out.println("Nome: " + usuario.getNomeUsuario());
+        System.out.println("Número de Celular: " + usuario.getNumeroCelular());
+        System.out.println("Senha: " + usuario.getSenhaUsuario());
+        System.out.println("Etnia: " + usuario.getEtniaUsuario());
+        System.out.println("Data de Nascimento: " + usuario.getDataNascimento());
+        System.out.println("═════════════════════════════════════");
+    }
+
+    @Override
     public Optional<Usuario> getUsuarioPorId(Integer idUsuario){
         try{
             return Optional.of(usuarioRepository.getUsuarioPorId(idUsuario));
@@ -128,6 +111,23 @@ public class UsuarioServicesImpl implements UsuarioService {
             System.out.println("Erro: " + e.getCause());
         }
         return Optional.empty();
+    }
+
+    public Usuario fazerLogin(String nomeUsuario, String senha) {
+        try {
+            Usuario usuario = usuarioRepository.fazerLogin(nomeUsuario, senha);
+            if (Objects.nonNull(usuario)) {
+                System.out.println("Login bem-sucedido para: " + usuario.getNomeUsuario());
+                System.out.println("═════════════════════════════════════");
+                return usuario;
+            } else {
+                System.out.println("Nome de usuário ou senha incorretos. Tente novamente.");
+                System.out.println("═════════════════════════════════════");
+            }
+        } catch (DataBaseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
 

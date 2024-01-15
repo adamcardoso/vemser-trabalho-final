@@ -124,10 +124,6 @@ public class Usuario {
         return tipoUsuario;
     }
 
-    public void setTipoUsuario(TipoUsuario tipoUsuario) {
-        this.tipoUsuario = tipoUsuario;
-    }
-
     public boolean getIsAdmin() {
         return isAdmin;
     }

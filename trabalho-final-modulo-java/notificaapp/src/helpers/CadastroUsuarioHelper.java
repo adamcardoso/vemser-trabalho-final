@@ -3,12 +3,10 @@ package helpers;
 import models.enums.ClasseSocial;
 import models.enums.Etnia;
 import models.enums.Genero;
-import models.enums.TipoUsuario;
 import exceptions.MaxAttemptsExceededException;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Random;
 import java.util.Scanner;
 
 public class CadastroUsuarioHelper {
@@ -16,7 +14,6 @@ public class CadastroUsuarioHelper {
     private static final String LIMITE_TENTATIVAS = "Você ultrapassou o número de tentativas";
     private static final String MENSAGEM_VALORES_INFORMADOS = "Digite algum dos valores informados.";
     private static final String MENSAGEM_TENTATIVAS_RESTANTES = "Você possui 3 tentativas, restam: ";
-    private static final int LIMITE_SUPERIOR = 1000;
 
     protected String digitarCampo(String regex) throws MaxAttemptsExceededException {
         String campo;
@@ -210,30 +207,4 @@ public class CadastroUsuarioHelper {
         return null;
     }
 
-    public TipoUsuario digitarCampoTipoDeUsuario() throws MaxAttemptsExceededException {
-        System.out.println("""
-                0 - ADMINISTRADOR
-                1 - USUÁRIO COMUM
-                """);
-
-        String regex = "[0-1]";
-
-        int tentativas = 0;
-        while (tentativas < 3) {
-            tentativas++;
-            String tipoUsuario = digitarCampo(regex);
-
-            if (!tipoUsuario.matches(regex)) {
-                System.out.println(MENSAGEM_VALORES_INFORMADOS + MENSAGEM_TENTATIVAS_RESTANTES + (3 - tentativas));
-            } else {
-                return TipoUsuario.values()[Integer.parseInt(tipoUsuario)];
-            }
-
-            if (tentativas == 3) {
-                throw new MaxAttemptsExceededException(LIMITE_TENTATIVAS);
-            }
-        }
-
-        return null;
-    }
 }
