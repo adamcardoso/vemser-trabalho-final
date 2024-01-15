@@ -13,9 +13,9 @@ public interface DenunciaRepository<CHAVE, OBJETO> {
 
     Integer getProximoIdDaDenuncia(Connection connection) throws SQLException;
 
-    OBJETO adicionar(OBJETO object) throws DataBaseException;
+    OBJETO adicionarDenuncia(OBJETO object) throws DataBaseException;
 
-    boolean editar(CHAVE id, OBJETO objeto) throws DataBaseException;
+    boolean editarDenuncia(CHAVE id, OBJETO objeto) throws DataBaseException;
 
     boolean removerDenuncia(CHAVE id) throws DataBaseException;
 
