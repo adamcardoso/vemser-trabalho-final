@@ -38,7 +38,8 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public boolean excluirDenuncia(int idDenuncia) {
+    public void excluirDenuncia(int idDenuncia) {
+
         try {
             Denuncia denuncia = adminRepository.obterDenunciaPorId(idDenuncia);
 
@@ -47,18 +48,14 @@ public class AdminServiceImpl implements AdminService {
 
                 if (denunciaRemovida) {
                     System.out.println("Denúncia removida com sucesso!");
-                    return true;
                 } else {
                     System.out.println("Falha ao remover a denúncia!");
-                    return false;
                 }
             } else {
                 System.out.println("Denúncia não encontrada!");
-                return false;
             }
         } catch (DataBaseException e) {
             e.printStackTrace();
-            return false;
         }
     }
 
@@ -137,4 +134,5 @@ public class AdminServiceImpl implements AdminService {
         System.out.println("Admin: " + (usuario.getIsAdmin() ? "Sim" : "Não"));
         System.out.println("═════════════════════════════════════");
     }
+
 }

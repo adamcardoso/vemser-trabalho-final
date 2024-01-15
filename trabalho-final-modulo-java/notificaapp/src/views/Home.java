@@ -12,7 +12,6 @@ import services.impl.*;
 import services.interfaces.HomeService;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Scanner;
 
 public class Home {
@@ -20,9 +19,7 @@ public class Home {
     EstatisticaService estatisticaService = new EstatisticaService();
     UsuarioServicesImpl usuarioServices = new UsuarioServicesImpl();
     DenunciaServicesImpl denunciaServices = new DenunciaServicesImpl();
-
     CadastroDenunciaHelper cadastroDenunciaHelper = new CadastroDenunciaHelper();
-
     CadastroUsuarioHelper cadastroUsuarioHelper = new CadastroUsuarioHelper();
     Scanner input = new Scanner(System.in);
 
@@ -104,7 +101,7 @@ public class Home {
                     System.out.println("Digite o Id do Usuário que Deseja Remover: ");
                     int idUsuario = input.nextInt();
                     input.nextLine();
-                    usuarioServices.remover(idUsuario);
+                    usuarioServices.removerUsuario(idUsuario);
                     break;
                 case 3:
                     adminService.listarDenuncias(usuarioLogado);
@@ -219,7 +216,7 @@ public class Home {
             input.nextLine();
             switch (opMenuUsuario) {
                 case 1:
-                    usuarioServices.remover(usuarioLogado.getIdUsuario());
+                    usuarioServices.removerUsuario(usuarioLogado.getIdUsuario());
                     break;
                 case 2:
                     this.editarUsuario();
@@ -270,6 +267,7 @@ public class Home {
                 case 3:
                     System.out.println("Digite o Id da Denúncia que Deseja Editar: ");
                     int idDenunciaPessoalE = input.nextInt();
+
                     input.nextLine();
                     this.editarDenuncia(idDenunciaPessoalE);
                     break;
@@ -309,6 +307,9 @@ public class Home {
         int opMenuDenuncia;
         do {
             Denuncia editaDenuncia = denunciaServices.obterDenunciaPorId(idDenuncia, usuarioLogado.getIdUsuario());
+            if(editaDenuncia == null){
+                return;
+            }
 
             System.out.print("\n");
             System.out.printf("╔═════════ NOTIFICA ════════╗%n");

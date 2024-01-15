@@ -18,7 +18,6 @@ import java.util.Objects;
 public class AdminRepositoryImpl extends UsuarioRepositoryImpl implements AdminRepository {
     public Integer getProximoIdDaDenuncia(Connection connection) throws SQLException {
         String sql = "SELECT SEQ_USUARIO.NEXTVAL mysequence from DUAL";
-
         Statement stmt = connection.createStatement();
         ResultSet res = stmt.executeQuery(sql);
 
@@ -28,6 +27,7 @@ public class AdminRepositoryImpl extends UsuarioRepositoryImpl implements AdminR
 
         return null;
     }
+
     @Override
     public List<Usuario> listarTodosUsuarios(Usuario usuarioLogado) throws DataBaseException {
         if (Objects.nonNull(usuarioLogado) && usuarioLogado.getTipoUsuario() == TipoUsuario.ADMIN) {
@@ -135,7 +135,7 @@ public class AdminRepositoryImpl extends UsuarioRepositoryImpl implements AdminR
                 con = ConexaoBancoDeDados.getConnection();
                 stmt = con.createStatement();
 
-                String sql = "SELECT D.id_denuncia, D.titulo, D.descricao, D.status_denuncia, D.categoria, " +
+                String sql = "SELECT D.id_denuncia, D.titulo, D.descricao, D.status_denuncia, D.categoria, D.tipo_denuncia, " +
                         "U.id_usuario, U.nome_usuario " +
                         "FROM DENUNCIA D " +
                         "JOIN USUARIO U ON D.id_usuario = U.id_usuario";
@@ -149,7 +149,8 @@ public class AdminRepositoryImpl extends UsuarioRepositoryImpl implements AdminR
                                 res.getString("titulo"),
                                 res.getString("descricao"),
                                 StatusDenuncia.fromInt(res.getInt("status_denuncia")),
-                                Categoria.fromInt(res.getInt("categoria"))
+                                Categoria.fromInt(res.getInt("categoria")),
+                                TipoDenuncia.fromInt(res.getInt("tipo_denuncia"))
                         );
 
                         denuncia.setIdUsuario(idUsuario);

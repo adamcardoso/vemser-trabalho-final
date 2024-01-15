@@ -1,6 +1,5 @@
 package services.impl;
 
-import helpers.CadastroUsuarioHelper;
 import models.Denuncia;
 import models.Usuario;
 import models.enums.*;
@@ -20,7 +19,7 @@ public class HomeServiceImpl implements HomeService {
     @Override
     public void feed() {
         DenunciaServicesImpl denunciaServices = new DenunciaServicesImpl();
-        List<Denuncia> denuncias = denunciaServices.obterTodos();
+        List<Denuncia> denuncias = denunciaServices.obterTodosFeed();
         System.out.print("\n");
         for (Denuncia d : denuncias)
             System.out.printf("""
@@ -28,15 +27,15 @@ public class HomeServiceImpl implements HomeService {
                     ║ id: %s
                     ║ titulo: %s
                     ║ descrição: %s
-                    ║ status: %s
+                    ║ status: %s | categoria: %s
                     ╚═════════════════════════════════════════════════════════════════════════════╝
                     %n""", d.getIdDenuncia(), d.getTitulo(), this.substring(d.getDescricao()), d.getStatusDenuncia());
     }
 
     @Override
     public void denunciaForm(Usuario u, Scanner input) {
-        String titulo = "";
-        String descricao = "";
+        String titulo;
+        String descricao;
         int categoria = 0;
         int tipoDenuncia = 0;
 
@@ -67,7 +66,7 @@ public class HomeServiceImpl implements HomeService {
                 categoria = input.nextInt();
 
                 if (categoria < 1 || categoria > 4)
-                    System.out.printf("""
+                    System.out.print("""
                                                         
                             ║ Opção não existente.
                             """);
@@ -94,7 +93,7 @@ public class HomeServiceImpl implements HomeService {
                 tipoDenuncia = input.nextInt();
 
                 if (tipoDenuncia != 1 && tipoDenuncia != 2)
-                    System.out.printf("""
+                    System.out.print("""
                                                         
                             ║ Opção não existente.
                             """);
@@ -131,12 +130,10 @@ public class HomeServiceImpl implements HomeService {
 
     @Override
     public void cadastroUsuarioForm(Scanner input) {
-        CadastroUsuarioHelper cadastroUsuarioHelper = new CadastroUsuarioHelper();
-
-        String nome = "";
-        String celular = "";
-        String senha = "";
-        String data = "";
+        String nome;
+        String celular;
+        String senha;
+        String data;
         int etnia = -1;
         int classeSocial = -1;
         int genero = -1;
@@ -181,7 +178,7 @@ public class HomeServiceImpl implements HomeService {
                 etnia = input.nextInt() - 1;
 
                 if (etnia < 0 || etnia > 4)
-                    System.out.printf("""
+                    System.out.print("""
                             ║ Opção não existente.
                             """);
             } catch (InputMismatchException e) {
@@ -210,7 +207,7 @@ public class HomeServiceImpl implements HomeService {
                 classeSocial = input.nextInt() - 1;
 
                 if (classeSocial < 0 || classeSocial > 4)
-                    System.out.printf("""
+                    System.out.print("""
                             ║ Opção não existente.
                             """);
             } catch (InputMismatchException e) {
@@ -238,7 +235,7 @@ public class HomeServiceImpl implements HomeService {
                 genero = input.nextInt() - 1;
 
                 if (genero < 0 || genero > 2)
-                    System.out.printf("""
+                    System.out.print("""
                             ║ Opção não existente.
                             """);
             } catch (InputMismatchException e) {
@@ -254,7 +251,7 @@ public class HomeServiceImpl implements HomeService {
         } while (genero < 0 || genero > 2);
 
 
-        Optional<Usuario> uOpt = usuarioService.adicionar(
+        Optional<Usuario> uOpt = usuarioService.adicionarUsuario(
                 new Usuario(
                         nome, celular, senha,
                         LocalDate.parse(data, DateTimeFormatter.ofPattern("dd-MM-yyyy")),
