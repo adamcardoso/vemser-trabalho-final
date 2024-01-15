@@ -110,7 +110,7 @@ public class Home {
                     System.out.println("Digite o Id da Denúncia que Deseja Remover: ");
                     int idDenuncia = input.nextInt();
                     input.nextLine();
-                    adminService.excluirDenuncia(idDenuncia);
+                    adminService.removerDenuncia(idDenuncia);
                     break;
                 case 5:
                     this.homeServiceImpl.feed();
@@ -263,7 +263,7 @@ public class Home {
                     System.out.println("Digite o Id da Denúncia que Deseja Remover: ");
                     int idDenunciaPessoal = input.nextInt();
                     input.nextLine();
-                    denunciaServices.removerDenuncia(idDenunciaPessoal);
+                    denunciaServices.removerDenuncia(idDenunciaPessoal, usuarioLogado.getIdUsuario());
                     break;
                 case 3:
                     System.out.println("Digite o Id da Denúncia que Deseja Editar: ");

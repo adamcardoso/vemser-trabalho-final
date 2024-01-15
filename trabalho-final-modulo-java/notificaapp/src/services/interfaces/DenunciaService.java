@@ -10,7 +10,7 @@ public interface DenunciaService {
 
     void editarDenuncia(Integer idDenuncia, Integer idUsuario, Denuncia denuncia);
 
-    void removerDenuncia(Integer id);
+    void removerDenuncia(Integer idDenuncia, Integer idUsuario);
 
     List<Denuncia> obterTodosFeed();
 

@@ -228,23 +228,48 @@ public class AdminRepositoryImpl extends UsuarioRepositoryImpl implements AdminR
 
 
     @Override
-    public boolean excluirDenuncia(int idDenuncia) throws DataBaseException {
+    public boolean removerDenuncia(int idDenuncia) throws DataBaseException {
         Connection con = null;
 
         try {
             con = ConexaoBancoDeDados.getConnection();
-            String sql = "DELETE FROM DENUNCIA WHERE id_denuncia = ?";
-            System.out.println("SQL Executado: " + sql);
+            con.setAutoCommit(false);
 
-            try (java.sql.PreparedStatement stmt = con.prepareStatement(sql)) {
-                stmt.setInt(1, idDenuncia);
+            // Exclui registros dependentes em COMENTARIO
+            String sqlDeleteComentario = "DELETE FROM COMENTARIO WHERE id_denuncia = ?";
+            try (PreparedStatement stmtComentario = con.prepareStatement(sqlDeleteComentario)) {
+                stmtComentario.setInt(1, idDenuncia);
+                stmtComentario.executeUpdate();
+            }
 
-                int res = stmt.executeUpdate();
-                System.out.println("excluirDenuncia.res=" + res);
+            // Exclui registros dependentes em LOCALIZACAO
+            String sqlDeleteLocalizacao = "DELETE FROM LOCALIZACAO WHERE id_denuncia = ?";
+            try (PreparedStatement stmtLocalizacao = con.prepareStatement(sqlDeleteLocalizacao)) {
+                stmtLocalizacao.setInt(1, idDenuncia);
+                stmtLocalizacao.executeUpdate();
+            }
+
+            // Exclui o registro principal em DENUNCIA
+            String sqlDeleteDenuncia = "DELETE FROM DENUNCIA WHERE id_denuncia = ?";
+            try (PreparedStatement stmtDenuncia = con.prepareStatement(sqlDeleteDenuncia)) {
+                stmtDenuncia.setInt(1, idDenuncia);
+                int res = stmtDenuncia.executeUpdate();
+
+                // Confirma as alterações no banco de dados
+                con.commit();
+
                 return res > 0;
             }
         } catch (SQLException e) {
-            System.err.println("Erro ao excluir denúncia!");
+            // Em caso de erro, faz rollback das alterações no banco de dados
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            System.err.println("Erro ao remover denúncia!");
             throw new DataBaseException("Erro: " + e);
         } finally {
             try {
