@@ -7,28 +7,83 @@
 
 # TIME NOTIFICA
 
-## Classes:
+## Application:
+
+- Main
+
+## Config:
+
+- ConexaoBancoDeDados
+
+## Exceptions:
+
+- DataBaseException
+- MaxAttemptsExceedeException
+
+## Helpers:
+
+- CadstroUsuarioHelper
+- CadastroDenunciaHelper
+- ConversosDateHelper
+
+## Models:
 
 - Usuário
 - Denúncia
 - Localização
-- CategoriaProblema
-- Menu
 
 ## Enums:
 
 - Categoria
 - Situacao
+- Etnia
+- Genero
+- Classe Social
 - TipoUsuario
+- TipoDenuncia
 
-## Interfaces:
+## Repositories.impl:
 
-- IDenuncia
-- IUsuario
+- AdminRepositoryImpl
+- DenunciaRepositoryImpl
+- EstatisticaRepositoryImpl
+- UsuarioRepositoryImpl
+
+## Repository.interfaces:
+
+- AdminRepository
+- DenunciaRepository
+- EstatisticaRepository
+- UsuarioRepository
+
+## Services.impl:
+
+- AdminServiceImpl
+- DenunciaServiceImpl
+- EstatisticaServiceImpl
+- UsuarioServiceImpl
+- HomeServiceImpl
+
+## Services.interfaces:
+
+- AdminService
+- DenunciaService
+- EstatisticaService
+- UsuarioService
+- HomeService
+
+## Views:
+
+- Estatistica
+- Home
 
 ## Diagrama Link
 
 Explore nosso diagrama clicando [aqui](https://lucid.app/lucidchart/5adf4b52-d0bf-42fa-be20-9cf1f0ab1121/edit?view_items=URV0b4~lnq6Z&invitationId=inv_7c44ca34-3e04-49e1-b59e-bd1d6714659d)!
+
+## Diagrama ER Link
+
+Explore nosso diagrama ER clicando [aqui](https://miro.com/app/board/uXjVN7EHcdY=/?share_link_id=613380518636)!
 
 ## Branches
 
