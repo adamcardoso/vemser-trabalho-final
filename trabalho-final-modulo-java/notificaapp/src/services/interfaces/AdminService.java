@@ -7,5 +7,7 @@ public interface AdminService {
 
     void listarDenuncias(Usuario usuarioLogado);
 
+    boolean editarDadosDoAdmin(Integer id, Usuario usuario);
+
     boolean excluirDenuncia(int idDenuncia);
 }

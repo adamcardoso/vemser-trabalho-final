@@ -57,6 +57,20 @@ public class AdminServiceImpl implements AdminService {
         }
     }
 
+    @Override
+    public boolean editarDadosDoAdmin(Integer id, Usuario usuario) {
+        try {
+            if (Objects.nonNull(usuario) && Objects.nonNull(usuario.getTipoUsuario()) && usuario.getTipoUsuario() == TipoUsuario.ADMIN) {
+                return adminRepository.editarDadosDoAdmin(id, usuario);
+            } else {
+                System.out.println("Acesso negado. Perfil de administrador requerido.");
+                return false;
+            }
+        } catch (DataBaseException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     private void imprimirTodasDenuncias(Denuncia denuncia) {
         System.out.println("ID: " + denuncia.getIdDenuncia());
