@@ -33,25 +33,30 @@ Explore nosso diagrama clicando [aqui](https://lucid.app/lucidchart/5adf4b52-d0b
 ## Branches
 
 - main
-- develop
-- feat/Cadastrar-ExcluirUsuario
-- feat/CategoriaProblema
-- feat/CriandoInterfaces
-- feat/Denuncia
-- feat/DenunciaEditar
-- feat/Editar-Usuario
-- feat/EnumsCategoriaSituacao
-- feat/Excluir-ExcluirDenuncia
-- feat/FixInterface
-- feat/Localizacao
-- feat/Menu
-- feat/MetodoAcesso
-- feat/Usuario
-- feat/diagrama
-- feat/readme
+- default
 - fix/CorrigindoClasses
-- fix/MovendoClasses
-- fix/viewsInterfacesUMLReadme
+- fix/CorrigindoBugExcluirDenuncia
+- fix/CorrigindoBugDeListarDenuncias
+- fix/CadastrarDenuncia
+- fix/BancoDeDados
+- feat/readme
+- feat/enumEtnia
+- feat/diagrama
+- feat/atualiza-CRUD-Denuncia
+- feat/VizualizarDenunciaUsuario
+- feat/Usuario
+- feat/ExcluirVisualizarDados
+- feat/Excluir-ExcluirDenuncia
+- feat/Exceptions
+- feat/EstatisticaUsuario
+- feat/EnumsCategoriaSituacao
+- feat/EnumGeneros
+- feat/EnumClasseSocial
+- feat/EditarUsuarioRepositoryService
+- feat/EditarDenunciaServiceRepository
+- feat/Editar-Usuario
+- feat/EditandoPerfilAdmin
+- feat/DiagramaER
 
 ## Nossa Equipe:
 
