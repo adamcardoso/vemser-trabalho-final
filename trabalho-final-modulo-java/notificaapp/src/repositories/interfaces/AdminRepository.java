@@ -14,7 +14,7 @@ public interface AdminRepository {
 
     boolean editarDadosDoAdmin(Integer id, Usuario usuario) throws DataBaseException;
 
-    boolean excluirDenuncia(int idDenuncia) throws DataBaseException;
+    boolean removerDenuncia(int idDenuncia) throws DataBaseException;
 
     Denuncia obterDenunciaPorId(int idDenuncia) throws DataBaseException;
 }

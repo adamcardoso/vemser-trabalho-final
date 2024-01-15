@@ -34,9 +34,9 @@ public class DenunciaServicesImpl implements DenunciaService {
     }
 
     @Override
-    public void removerDenuncia(Integer idDenuncia) {
+    public void removerDenuncia(Integer idDenuncia, Integer idUsuario) {
         try {
-            boolean conseguiuRemover = denunciaRepositoryImpl.removerDenuncia(idDenuncia);
+            boolean conseguiuRemover = denunciaRepositoryImpl.removerDenuncia(idDenuncia, idUsuario);
             System.out.println("Denúncia removida? " + conseguiuRemover + "| com id=" + idDenuncia);
         } catch (DataBaseException e) {
             e.printStackTrace();

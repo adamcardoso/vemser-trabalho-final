@@ -21,15 +21,22 @@ public class HomeServiceImpl implements HomeService {
         DenunciaServicesImpl denunciaServices = new DenunciaServicesImpl();
         List<Denuncia> denuncias = denunciaServices.obterTodosFeed();
         System.out.print("\n");
-        for (Denuncia d : denuncias)
+        String nome;
+        for (Denuncia d : denuncias) {
+            if (d.getTipoDenuncia() == TipoDenuncia.ANONIMA) {
+                nome = "Denuncia Anônima";
+            } else {
+                nome = d.getUsuario().getNomeUsuario();
+            }
             System.out.printf("""
                     ╔═════════════════════════════════════════════════════════════════════════════╗
-                    ║ id: %s
+                    ║ id: %s     | de: %s
                     ║ titulo: %s
                     ║ descrição: %s
                     ║ status: %s | categoria: %s
                     ╚═════════════════════════════════════════════════════════════════════════════╝
-                    %n""", d.getIdDenuncia(), d.getTitulo(), this.substring(d.getDescricao()), d.getStatusDenuncia(), d.getCategoria());
+                    %n""", d.getIdDenuncia(), nome, d.getTitulo(), this.substring(d.getDescricao()), d.getStatusDenuncia(), d.getCategoria());
+        }
     }
 
     @Override
@@ -274,13 +281,12 @@ public class HomeServiceImpl implements HomeService {
 
     @Override
     public void cadastroUsuarioFormByAdmin(Usuario u, Scanner input) {
-        String nome = "";
+        String nome;
         int etnia = -1;
         int classeSocial = -1;
         int genero = -1;
         int tipoUsuario = 0;
 
-        UsuarioService usuarioService = new UsuarioServicesImpl();
         System.out.println("║ Você escolheu '2 - Cadastrar Usuario'");
         do {
             System.out.println();
@@ -302,7 +308,7 @@ public class HomeServiceImpl implements HomeService {
                 etnia = input.nextInt() - 1;
 
                 if (etnia < 0 || etnia > 4)
-                    System.out.printf("""
+                    System.out.print("""
                             ║ Opção não existente.
                             """);
             } catch (InputMismatchException e) {
@@ -331,7 +337,7 @@ public class HomeServiceImpl implements HomeService {
                 classeSocial = input.nextInt() - 1;
 
                 if (classeSocial < 0 || classeSocial > 4)
-                    System.out.printf("""
+                    System.out.print("""
                             ║ Opção não existente.
                             """);
             } catch (InputMismatchException e) {
@@ -359,7 +365,7 @@ public class HomeServiceImpl implements HomeService {
                 genero = input.nextInt() - 1;
 
                 if (genero < 0 || genero > 2)
-                    System.out.printf("""
+                    System.out.print("""
                             ║ Opção não existente.
                             """);
             } catch (InputMismatchException e) {
@@ -382,10 +388,10 @@ public class HomeServiceImpl implements HomeService {
                 System.out.printf("║ 1. ADMIN                  ║%n");
                 System.out.printf("║ 2. INDIVIDUAL             ║%n");
                 System.out.printf("╚═══════════════════════════╝%n");
-                tipoUsuario = input.nextInt() - 1;
+                tipoUsuario = input.nextInt();
 
-                if (tipoUsuario < 0 || tipoUsuario > 2)
-                    System.out.printf("""
+                if (tipoUsuario < 1 || tipoUsuario > 2)
+                    System.out.print("""
                             ║ Opção não existente.
                             """);
             } catch (InputMismatchException e) {
@@ -439,10 +445,10 @@ public class HomeServiceImpl implements HomeService {
                         ║ id: %s
                         ║ título: %s
                         ║ descrição: %s
-                        ║ status: %s
+                        ║ status: %s | categoria: %s
                         ╚═════════════════════════════════════════════════════════════════════════════╝
                         %n""", d.getIdDenuncia(), d.getTitulo(),
-                        this.substring(d.getDescricao()), d.getStatusDenuncia());
+                        this.substring(d.getDescricao()), d.getStatusDenuncia(), d.getCategoria());
         }
     }
 

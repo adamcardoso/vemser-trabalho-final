@@ -4,6 +4,7 @@ import config.ConexaoBancoDeDados;
 import exceptions.DataBaseException;
 import helpers.ConversorDateHelper;
 import models.Denuncia;
+import models.Usuario;
 import models.enums.Categoria;
 import models.enums.StatusDenuncia;
 import models.enums.TipoDenuncia;
@@ -60,12 +61,30 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
     }
 
     @Override
-    public boolean removerDenuncia(Integer idDenuncia) throws DataBaseException {
+    public boolean removerDenuncia(Integer idDenuncia, Integer idUsuario) throws DataBaseException {
         Connection con = null;
 
         try {
             con = ConexaoBancoDeDados.getConnection();
-            con.setAutoCommit(false);  // Desativa o modo de confirmação automática
+            con.setAutoCommit(false);
+
+            String sqlVerificarUsuario = "SELECT id_usuario FROM DENUNCIA WHERE id_denuncia = ?";
+            try (PreparedStatement stmtVerificarUsuario = con.prepareStatement(sqlVerificarUsuario)) {
+                stmtVerificarUsuario.setInt(1, idDenuncia);
+                try (ResultSet rs = stmtVerificarUsuario.executeQuery()) {
+                    if (rs.next()) {
+                        int idUsuarioDenuncia = rs.getInt("id_usuario");
+
+                        if (idUsuarioDenuncia != idUsuario) {
+                            System.err.println("Denúncia não encontrada no seu Perfil!");
+                            return false;
+                        }
+                    } else {
+                        System.err.println("Denúncia não encontrada!");
+                        return false;
+                    }
+                }
+            }
 
             // Exclui registros dependentes em COMENTARIO
             String sqlDeleteComentario = "DELETE FROM COMENTARIO WHERE id_denuncia = ?";
@@ -113,6 +132,7 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
             }
         }
     }
+
 
 
     @Override
@@ -202,7 +222,7 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
         try {
             connection = ConexaoBancoDeDados.getConnection();
 
-            String sql = "SELECT * FROM DENUNCIA";
+            String sql = "SELECT D.*, U.nome_usuario FROM DENUNCIA D LEFT JOIN USUARIO U ON D.id_usuario = U.id_usuario";
 
             Statement stmt = connection.createStatement();
             ResultSet res = stmt.executeQuery(sql);
@@ -210,17 +230,23 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
             List<Denuncia> denuncias = new ArrayList<>();
 
             while (res.next()) {
-                denuncias.add(new Denuncia(
+                Denuncia denuncia = new Denuncia(
                         res.getInt("id_denuncia"),
                         res.getString("titulo"),
                         res.getString("descricao"),
                         StatusDenuncia.fromInt(res.getInt("status_denuncia")),
                         Categoria.fromInt(res.getInt("categoria")),
                         TipoDenuncia.fromInt(res.getInt("tipo_denuncia"))
-                ));
+                );
+
+                Usuario usuario = new Usuario();
+                usuario.setIdUsuario(res.getInt("id_usuario"));
+                usuario.setNomeUsuario(res.getString("nome_usuario"));
+
+                denuncia.setUsuario(usuario);
+
+                denuncias.add(denuncia);
             }
-
-
             return denuncias;
         } catch (SQLException e) {
             throw new RuntimeException(e);

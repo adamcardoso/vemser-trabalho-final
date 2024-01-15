@@ -16,7 +16,7 @@ public interface DenunciaRepository<CHAVE, OBJETO> {
 
     boolean editarDenuncia(CHAVE id, OBJETO objeto) throws DataBaseException;
 
-    boolean removerDenuncia(CHAVE id) throws DataBaseException;
+    boolean removerDenuncia(CHAVE id1, CHAVE id2) throws DataBaseException;
 
     List<Denuncia> listarDenunciasDoUsuario(CHAVE id);
 }
