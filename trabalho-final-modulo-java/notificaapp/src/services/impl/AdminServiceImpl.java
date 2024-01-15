@@ -5,10 +5,13 @@ import models.Denuncia;
 import models.Usuario;
 import models.enums.TipoUsuario;
 import repositories.impl.AdminRepositoryImpl;
+import repositories.interfaces.AdminRepository;
 import services.interfaces.AdminService;
+import services.interfaces.UsuarioService;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class AdminServiceImpl implements AdminService {
     private AdminRepositoryImpl adminRepository;
@@ -36,6 +39,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void excluirDenuncia(int idDenuncia) {
+
         try {
             Denuncia denuncia = adminRepository.obterDenunciaPorId(idDenuncia);
 
@@ -54,6 +58,7 @@ public class AdminServiceImpl implements AdminService {
             e.printStackTrace();
         }
     }
+
     public void listarDenuncias(Usuario usuarioLogado) {
         if (Objects.nonNull(usuarioLogado) && usuarioLogado.getTipoUsuario() == TipoUsuario.ADMIN) {
             AdminRepositoryImpl adminRepository = new AdminRepositoryImpl();
@@ -77,6 +82,14 @@ public class AdminServiceImpl implements AdminService {
         }
     }
 
+    public Optional<Usuario> adicionarUsuario(Usuario u) {
+        try {
+            return Optional.of(adminRepository.adicionarUsuario(u));
+        } catch (Exception e) {
+            System.out.println(e.getCause());
+        }
+        return Optional.empty();
+    }
     @Override
     public boolean editarDadosDoAdmin(Integer id, Usuario usuario) {
         try {

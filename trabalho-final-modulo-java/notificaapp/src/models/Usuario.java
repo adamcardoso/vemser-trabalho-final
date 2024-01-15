@@ -5,6 +5,7 @@ import models.enums.Etnia;
 import models.enums.Genero;
 import models.enums.TipoUsuario;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 public class Usuario {
@@ -43,6 +44,15 @@ public class Usuario {
         this.tipoUsuario = TipoUsuario.INDIVIDUAL;
     }
 
+    public Usuario(String nomeUsuario, Etnia etniaUsuario, ClasseSocial classeSocial, Genero generoUsuario, TipoUsuario tipoUsuario){
+        this.nomeUsuario = nomeUsuario;
+        this.etniaUsuario = etniaUsuario;
+        this.classeSocial = classeSocial;
+        this.generoUsuario = generoUsuario;
+        this.tipoUsuario = tipoUsuario;
+        this.senhaUsuario = this.senhaHash();
+    }
+
     public Usuario(int idUsuario, String nomeUsuario, String numeroCelular, String senhaUsuario, Etnia etniaUsuario, LocalDate dataNascimento, ClasseSocial classeSocial, Genero generoUsuario, TipoUsuario tipoUsuario) {
         this.idUsuario = idUsuario;
         this.nomeUsuario = nomeUsuario;
@@ -54,6 +64,11 @@ public class Usuario {
         this.generoUsuario = generoUsuario;
         this.tipoUsuario = tipoUsuario;
         this.isAdmin = tipoUsuario.equals(TipoUsuario.ADMIN);
+    }
+
+    private String senhaHash(){
+        double d = Math.random() * 100 - 0;
+        return Integer.toString((Double.toString(d)).hashCode());
     }
 
     public int getIdUsuario() {

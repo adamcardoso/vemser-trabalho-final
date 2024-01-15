@@ -3,6 +3,7 @@ package services.impl;
 import models.Denuncia;
 import models.Usuario;
 import models.enums.*;
+import services.interfaces.AdminService;
 import services.interfaces.DenunciaService;
 import services.interfaces.HomeService;
 import services.interfaces.UsuarioService;
@@ -28,7 +29,7 @@ public class HomeServiceImpl implements HomeService {
                     ║ descrição: %s
                     ║ status: %s | categoria: %s
                     ╚═════════════════════════════════════════════════════════════════════════════╝
-                    %n""", d.getIdDenuncia(), d.getTitulo(), d.getDescricao(), d.getStatusDenuncia(), d.getCategoria());
+                    %n""", d.getIdDenuncia(), d.getTitulo(), this.substring(d.getDescricao()), d.getStatusDenuncia());
     }
 
     @Override
@@ -267,6 +268,155 @@ public class HomeServiceImpl implements HomeService {
             System.out.printf("""
                     ╔═════════ NOTIFICA ══════════════════════════════════════════════════════════╗
                     ║ Seu Usuario foi cadastrado corretamente!.                                   ║
+                    ╚═════════════════════════════════════════════════════════════════════════════╝
+                    %n""");
+    }
+
+    @Override
+    public void cadastroUsuarioFormByAdmin(Usuario u, Scanner input) {
+        CadastroUsuarioHelper cadastroUsuarioHelper = new CadastroUsuarioHelper();
+
+        String nome = "";
+        int etnia = -1;
+        int classeSocial = -1;
+        int genero = -1;
+        int tipoUsuario = 0;
+
+        UsuarioService usuarioService = new UsuarioServicesImpl();
+        System.out.println("║ Você escolheu '2 - Cadastrar Usuario'");
+        do {
+            System.out.println();
+            System.out.println("║ Digite nome do usuário: ");
+            nome = input.nextLine();
+        } while (nome.isEmpty());
+
+        do {
+            try {
+                System.out.println();
+                System.out.println("║ Insira a etnia do usuário: ");
+                System.out.printf("╔═════════ NOTIFICA ════════╗%n");
+                System.out.printf("║ 1. PRETO                  ║%n");
+                System.out.printf("║ 2. PARDO                  ║%n");
+                System.out.printf("║ 3. BRANCO                 ║%n");
+                System.out.printf("║ 4. INDIGENA               ║%n");
+                System.out.printf("║ 5. AMARELO                ║%n");
+                System.out.printf("╚═══════════════════════════╝%n");
+                etnia = input.nextInt() - 1;
+
+                if (etnia < 0 || etnia > 4)
+                    System.out.printf("""
+                            ║ Opção não existente.
+                            """);
+            } catch (InputMismatchException e) {
+                System.out.println();
+                System.out.println("║ Houve um erro de digitação. Tente novamente.");
+                input.nextLine();
+            } catch (Exception e) {
+                System.out.println();
+                System.out.println("║ Houve um erro imprevisto. Tente novamente.");
+                input.nextLine();
+            }
+
+        } while (etnia < 0 || etnia > 4);
+
+        do {
+            try {
+                System.out.println();
+                System.out.println("║ Insira a classe social do usuário: ");
+                System.out.printf("╔═════════ NOTIFICA ════════╗%n");
+                System.out.printf("║ 1. A                      ║%n");
+                System.out.printf("║ 2. B                      ║%n");
+                System.out.printf("║ 3. C                      ║%n");
+                System.out.printf("║ 4. D                      ║%n");
+                System.out.printf("║ 5. E                      ║%n");
+                System.out.printf("╚═══════════════════════════╝%n");
+                classeSocial = input.nextInt() - 1;
+
+                if (classeSocial < 0 || classeSocial > 4)
+                    System.out.printf("""
+                            ║ Opção não existente.
+                            """);
+            } catch (InputMismatchException e) {
+                System.out.println();
+                System.out.println("║ Houve um erro de digitação. Tente novamente.");
+                input.nextLine();
+            } catch (Exception e) {
+                System.out.println();
+                System.out.println("║ Houve um erro imprevisto. Tente novamente.");
+                input.nextLine();
+            }
+
+        } while (classeSocial < 0 || classeSocial > 4);
+
+
+        do {
+            try {
+                System.out.println();
+                System.out.println("║ Insira o gênero do usuário: ");
+                System.out.printf("╔═════════ NOTIFICA ════════╗%n");
+                System.out.printf("║ 1. MASCULINO              ║%n");
+                System.out.printf("║ 2. FEMININO               ║%n");
+                System.out.printf("║ 3. OUTRO                  ║%n");
+                System.out.printf("╚═══════════════════════════╝%n");
+                genero = input.nextInt() - 1;
+
+                if (genero < 0 || genero > 2)
+                    System.out.printf("""
+                            ║ Opção não existente.
+                            """);
+            } catch (InputMismatchException e) {
+                System.out.println();
+                System.out.println("║ Houve um erro de digitação. Tente novamente.");
+                input.nextLine();
+            } catch (Exception e) {
+                System.out.println();
+                System.out.println("║ Houve um erro imprevisto. Tente novamente.");
+                input.nextLine();
+            }
+
+        } while (genero < 0 || genero > 2);
+
+        do {
+            try {
+                System.out.println();
+                System.out.println("║ Insira o tipo do usuário: ");
+                System.out.printf("╔═════════ NOTIFICA ════════╗%n");
+                System.out.printf("║ 1. ADMIN                  ║%n");
+                System.out.printf("║ 2. INDIVIDUAL             ║%n");
+                System.out.printf("╚═══════════════════════════╝%n");
+                tipoUsuario = input.nextInt() - 1;
+
+                if (tipoUsuario < 0 || tipoUsuario > 2)
+                    System.out.printf("""
+                            ║ Opção não existente.
+                            """);
+            } catch (InputMismatchException e) {
+                System.out.println();
+                System.out.println("║ Houve um erro de digitação. Tente novamente.");
+                input.nextLine();
+            } catch (Exception e) {
+                System.out.println();
+                System.out.println("║ Houve um erro imprevisto. Tente novamente.");
+                input.nextLine();
+            }
+
+        } while (tipoUsuario < 0 || tipoUsuario > 2);
+
+        AdminService adminService = new AdminServiceImpl();
+        Optional<Usuario> uOpt = adminService.adicionarUsuario(
+                new Usuario(nome, Etnia.fromInt(etnia), ClasseSocial.fromInt(classeSocial), Genero.fromInt(genero), TipoUsuario.fromInt(tipoUsuario)));
+
+
+        if (uOpt.isEmpty())
+            System.out.printf("""
+                    ╔═════════ NOTIFICA ══════════════════════════════════════════════════════════╗
+                    ║ Ocorreu um Erro ao cadastrar o novo Usuario, tente novamente.               ║
+                    ╚═════════════════════════════════════════════════════════════════════════════╝
+                    %n""");
+        else
+            System.out.printf("""
+                    ╔═════════ NOTIFICA ══════════════════════════════════════════════════════════╗
+                    ║ Usuário foi cadastrado corretamente!.                                       ║
                     ╚═════════════════════════════════════════════════════════════════════════════╝
                     %n""");
     }

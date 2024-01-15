@@ -85,7 +85,7 @@ public class Home {
             System.out.printf("║5. Ver Feed               ║%n");
             System.out.printf("║6. Ver Estatísticas       ║%n");
             System.out.printf("║7. Editar dados           ║%n");
-            System.out.printf("║8. Adicionar outro Admin  ║%n");
+            System.out.printf("║8. Adicionar usuário      ║%n");
             System.out.printf("║9. Sair                   ║%n");
             System.out.printf("╚══════════════════════════╝%n");
             System.out.print(ESCOLHA_OPCAO_MSG);
@@ -122,7 +122,8 @@ public class Home {
                     editarDadosDoAdmin();
                     break;
                 case 8:
-
+                    System.out.println("\n═══════ Adicionar Usuário ═══════");
+                    this.homeServiceImpl.cadastroUsuarioFormByAdmin(this.usuarioLogado, input);
                     break;
                 case 9:
                     System.out.println(SAINDO_DO_SISTEMA_MSG);
