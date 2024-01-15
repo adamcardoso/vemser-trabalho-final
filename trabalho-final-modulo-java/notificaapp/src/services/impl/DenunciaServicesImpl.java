@@ -8,12 +8,9 @@ import models.Denuncia;
 import models.Usuario;
 import repositories.impl.AdminRepositoryImpl;
 import repositories.impl.DenunciaRepositoryImpl;
-import repositories.impl.UsuarioRepositoryImpl;
-import repositories.interfaces.UsuarioRepository;
 import services.interfaces.DenunciaService;
 import services.interfaces.UsuarioService;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +26,7 @@ public class DenunciaServicesImpl implements DenunciaService {
     @Override
     public Optional<Denuncia> adicionarDenuncia(Denuncia denuncia) {
         try {
-            return Optional.of(denunciaRepositoryImpl.adicionar(denuncia));
+            return Optional.of(denunciaRepositoryImpl.adicionarDenuncia(denuncia));
         } catch (Exception e){
             System.out.println("Erro: "+ e.getCause());
         }
@@ -65,7 +62,7 @@ public class DenunciaServicesImpl implements DenunciaService {
                 System.out.println("Você não pode editar a denúncia de outro usuário!");
                 return;
             }
-            boolean conseguiuEditar = denunciaRepositoryImpl.editar(id, denuncia);
+            boolean conseguiuEditar = denunciaRepositoryImpl.editarDenuncia(id, denuncia);
 
             if (!conseguiuEditar) {
                 System.out.println("Falha ao editar a denúncia!");

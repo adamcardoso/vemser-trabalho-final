@@ -82,13 +82,14 @@ public class Home {
             System.out.print("\n");
             System.out.printf("╔══════════ ADMIN ═════════╗%n");
             System.out.printf("║1. Ver usuários           ║%n");
-            System.out.printf("║2. Adicionar usuário      ║%n");
-            System.out.printf("║3. Excluir usuários       ║%n");
-            System.out.printf("║4. Ver Denuncias          ║%n");
-            System.out.printf("║5. Excluir Denuncias      ║%n");
-            System.out.printf("║6. Ver Feed               ║%n");
-            System.out.printf("║7. Ver Estatísticas       ║%n");
-            System.out.printf("║8. Sair                   ║%n");
+            System.out.printf("║2. Excluir usuários       ║%n");
+            System.out.printf("║3. Ver Denuncias          ║%n");
+            System.out.printf("║4. Excluir Denuncias      ║%n");
+            System.out.printf("║5. Ver Feed               ║%n");
+            System.out.printf("║6. Ver Estatísticas       ║%n");
+            System.out.printf("║7. Editar dados           ║%n");
+            System.out.printf("║8. Adicionar usuário      ║%n");
+            System.out.printf("║9. Sair                   ║%n");
             System.out.printf("╚══════════════════════════╝%n");
             System.out.print(ESCOLHA_OPCAO_MSG);
             opMenuAdmin = input.nextInt();
@@ -100,31 +101,34 @@ public class Home {
                     adminService.listarUsuarios(usuarioLogado);
                     break;
                 case 2:
-                    System.out.println("\n═══════ Adicionar Usuário ═══════");
-                    this.homeServiceImpl.cadastroUsuarioFormByAdmin(this.usuarioLogado, input);
-                    break;
-                case 3:
                     System.out.println("Digite o Id do Usuário que Deseja Remover: ");
                     int idUsuario = input.nextInt();
                     input.nextLine();
                     usuarioServices.remover(idUsuario);
                     break;
-                case 4:
+                case 3:
                     adminService.listarDenuncias(usuarioLogado);
                     break;
-                case 5:
+                case 4:
                     System.out.println("Digite o Id da Denúncia que Deseja Remover: ");
                     int idDenuncia = input.nextInt();
                     input.nextLine();
-                    denunciaServices.removerDenuncia(idDenuncia);
+                    adminService.excluirDenuncia(idDenuncia);
                     break;
-                case 6:
+                case 5:
                     this.homeServiceImpl.feed();
                     break;
-                case 7:
+                case 6:
                     estatisticas();
                     break;
+                case 7:
+                    editarDadosDoAdmin();
+                    break;
                 case 8:
+                    System.out.println("\n═══════ Adicionar Usuário ═══════");
+                    this.homeServiceImpl.cadastroUsuarioFormByAdmin(this.usuarioLogado, input);
+                    break;
+                case 9:
                     System.out.println(SAINDO_DO_SISTEMA_MSG);
                     exibirLoginMenu();
                     break;
@@ -409,4 +413,78 @@ public class Home {
             }
         } while (opMenuDenuncia != 8);
     }
+
+    private void editarDadosDoAdmin() {
+        int opMenuDenuncia;
+        Usuario editaUsuario = usuarioLogado;
+        AdminServiceImpl adminService = new AdminServiceImpl();
+
+
+        do {
+            System.out.print("\n");
+            System.out.printf("╔═════════ NOTIFICA ════════╗%n");
+            System.out.printf("║ Qual campo deseja editar? ║%n");
+            System.out.printf("║ 1. Nome                   ║%n");
+            System.out.printf("║ 2. Numero celular         ║%n");
+            System.out.printf("║ 3. Senha                  ║%n");
+            System.out.printf("║ 4. Etnia                  ║%n");
+            System.out.printf("║ 5. Data de nascimento     ║%n");
+            System.out.printf("║ 6. Classe social          ║%n");
+            System.out.printf("║ 7. Genero                 ║%n");
+            System.out.printf("║ 8. Voltar                 ║%n");
+            System.out.printf("╚═══════════════════════════╝%n");
+            System.out.print(ESCOLHA_OPCAO_MSG);
+            opMenuDenuncia = input.nextInt();
+            input.nextLine();
+
+            switch (opMenuDenuncia) {
+                case 1:
+                    String editaNome = cadastroUsuarioHelper.digitarNomeUsuario();
+                    editaUsuario.setNomeUsuario(editaNome);
+                    break;
+                case 2:
+                    String editaNumeroCelular = cadastroUsuarioHelper.digitarCampoNumeroCelular();
+                    editaUsuario.setNumeroCelular(editaNumeroCelular);
+                    break;
+                case 3:
+                    String editaSenha = cadastroUsuarioHelper.digitarCampoSenha();
+                    editaUsuario.setSenhaUsuario(editaSenha);
+                    break;
+                case 4:
+                    Etnia editaEtnia = cadastroUsuarioHelper.digitarCampoEtnia();
+                    editaUsuario.setEtniaUsuario(editaEtnia);
+                    break;
+                case 5:
+                    LocalDate editaDataNascimento = cadastroUsuarioHelper.digitarCampoData();
+                    editaUsuario.setDataNascimento(editaDataNascimento);
+                    break;
+                case 6:
+                    ClasseSocial editaClasseSocial = cadastroUsuarioHelper.digitarCampoClasseSocial();
+                    editaUsuario.setClasseSocial(editaClasseSocial);
+                    break;
+                case 7:
+                    Genero editaGenero = cadastroUsuarioHelper.digitarCampoGenero();
+                    editaUsuario.setGeneroUsuario(editaGenero);
+                    break;
+                case 8:
+                    System.out.println(VOLTANDO);
+                    break;
+                default:
+                    System.out.println(OPCAO_INVALIDA_MSG);
+            }
+
+            // Chamada do método para editar no serviço AdminService
+            if (opMenuDenuncia >= 1 && opMenuDenuncia <= 7) {
+                boolean sucessoEdicao = adminService.editarDadosDoAdmin(usuarioLogado.getIdUsuario(), editaUsuario);
+
+                if (sucessoEdicao) {
+                    System.out.println("Dados do admin editados com sucesso!");
+                } else {
+                    System.out.println("Falha ao editar os dados do admin.");
+                }
+            }
+
+        } while (opMenuDenuncia != 8);
+    }
+
 }

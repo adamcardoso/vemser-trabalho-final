@@ -37,69 +37,6 @@ public class AdminServiceImpl implements AdminService {
         }
     }
 
-    public void listarDenuncias(Usuario usuarioLogado) {
-        if (Objects.nonNull(usuarioLogado) && usuarioLogado.getTipoUsuario() == TipoUsuario.ADMIN) {
-            AdminRepositoryImpl adminRepository = new AdminRepositoryImpl();
-            try {
-                List<Denuncia> denuncias = adminRepository.listarTodasDenuncias(usuarioLogado);
-
-                if (denuncias.isEmpty()) {
-                    System.out.println("Não há denúncias cadastradas.");
-                } else {
-                    System.out.print("\n");
-                    System.out.println("══════ Lista de Denúncias ══════ ");
-                    for (Denuncia denuncia : denuncias) {
-                        imprimirTodasDenuncias(denuncia);
-                    }
-                }
-            } catch (DataBaseException e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("Acesso negado. Perfil de administrador requerido.");
-        }
-    }
-
-    public Optional<Usuario> adicionarUsuario(Usuario u){
-        try{
-            return Optional.of(adminRepository.adicionarUsuario(u));
-        } catch (Exception e){
-            System.out.println(e.getCause());
-        }
-        return Optional.empty();
-    }
-
-    private void imprimirTodasDenuncias(Denuncia denuncia) {
-        System.out.println("ID: " + denuncia.getIdDenuncia());
-        System.out.println("Título: " + denuncia.getTitulo());
-        System.out.println("Descrição: " + denuncia.getDescricao());
-        System.out.println("Status: " + denuncia.getStatusDenuncia());
-        System.out.println("Categoria: " + denuncia.getCategoria());
-        System.out.println("Curtidas: " + denuncia.getCurtidas());
-        System.out.println("Validar Denúncia: " + denuncia.getValidarDenuncia());
-
-        if (denuncia.getTipoDenuncia() != null) {
-            System.out.println("Tipo de Denúncia: " + denuncia.getTipoDenuncia().getIdTipoDenuncia());
-        } else {
-            System.out.println("Tipo de Denúncia: [Tipo não especificado]");
-        }
-
-        System.out.println("ID do Usuário: " + denuncia.getIdUsuario());
-        System.out.println("════════════════════════════");
-    }
-
-    private void imprimirTodosUsuario(Usuario usuario) {
-        System.out.println("ID: " + usuario.getIdUsuario());
-        System.out.println("Nome: " + usuario.getNomeUsuario());
-        System.out.println("Número de Celular: " + usuario.getNumeroCelular());
-        System.out.println("Senha: " + usuario.getSenhaUsuario());
-        System.out.println("Etnia: " + usuario.getEtniaUsuario());
-        System.out.println("Data de Nascimento: " + usuario.getDataNascimento());
-        System.out.println("Admin: " + (usuario.getIsAdmin() ? "Sim" : "Não"));
-        System.out.println("═════════════════════════════════════");
-    }
-
-
     @Override
     public boolean excluirDenuncia(int idDenuncia) {
         try {
@@ -125,4 +62,79 @@ public class AdminServiceImpl implements AdminService {
         }
     }
 
+    public void listarDenuncias(Usuario usuarioLogado) {
+        if (Objects.nonNull(usuarioLogado) && usuarioLogado.getTipoUsuario() == TipoUsuario.ADMIN) {
+            AdminRepositoryImpl adminRepository = new AdminRepositoryImpl();
+            try {
+                List<Denuncia> denuncias = adminRepository.listarTodasDenuncias(usuarioLogado);
+
+                if (denuncias.isEmpty()) {
+                    System.out.println("Não há denúncias cadastradas.");
+                } else {
+                    System.out.print("\n");
+                    System.out.println("══════ Lista de Denúncias ══════ ");
+                    for (Denuncia denuncia : denuncias) {
+                        imprimirTodasDenuncias(denuncia);
+                    }
+                }
+            } catch (DataBaseException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Acesso negado. Perfil de administrador requerido.");
+        }
+    }
+
+    public Optional<Usuario> adicionarUsuario(Usuario u) {
+        try {
+            return Optional.of(adminRepository.adicionarUsuario(u));
+        } catch (Exception e) {
+            System.out.println(e.getCause());
+        }
+        return Optional.empty();
+    }
+    @Override
+    public boolean editarDadosDoAdmin(Integer id, Usuario usuario) {
+        try {
+            if (Objects.nonNull(usuario) && Objects.nonNull(usuario.getTipoUsuario()) && usuario.getTipoUsuario() == TipoUsuario.ADMIN) {
+                return adminRepository.editarDadosDoAdmin(id, usuario);
+            } else {
+                System.out.println("Acesso negado. Perfil de administrador requerido.");
+                return false;
+            }
+        } catch (DataBaseException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private void imprimirTodasDenuncias(Denuncia denuncia) {
+        System.out.println("ID: " + denuncia.getIdDenuncia());
+        System.out.println("Título: " + denuncia.getTitulo());
+        System.out.println("Descrição: " + denuncia.getDescricao());
+        System.out.println("Status: " + denuncia.getStatusDenuncia());
+        System.out.println("Categoria: " + denuncia.getCategoria());
+        System.out.println("Curtidas: " + denuncia.getCurtidas());
+        System.out.println("Validar Denúncia: " + denuncia.getValidarDenuncia());
+
+        if (denuncia.getTipoDenuncia() != null) {
+            System.out.println("Tipo de Denúncia: " + denuncia.getTipoDenuncia());
+        } else {
+            System.out.println("Tipo de Denúncia: [Tipo não especificado]");
+        }
+
+        System.out.println("ID do Usuário: " + denuncia.getIdUsuario());
+        System.out.println("════════════════════════════");
+    }
+
+    private void imprimirTodosUsuario(Usuario usuario) {
+        System.out.println("ID: " + usuario.getIdUsuario());
+        System.out.println("Nome: " + usuario.getNomeUsuario());
+        System.out.println("Número de Celular: " + usuario.getNumeroCelular());
+        System.out.println("Senha: " + usuario.getSenhaUsuario());
+        System.out.println("Etnia: " + usuario.getEtniaUsuario());
+        System.out.println("Data de Nascimento: " + usuario.getDataNascimento());
+        System.out.println("Admin: " + (usuario.getIsAdmin() ? "Sim" : "Não"));
+        System.out.println("═════════════════════════════════════");
+    }
 }

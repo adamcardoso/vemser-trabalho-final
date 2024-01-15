@@ -30,7 +30,7 @@ public class HomeServiceImpl implements HomeService {
                     ║ descrição: %s
                     ║ status: %s
                     ╚═════════════════════════════════════════════════════════════════════════════╝
-                    %n""", d.getIdDenuncia(), d.getTitulo(), d.getDescricao(), d.getStatusDenuncia());
+                    %n""", d.getIdDenuncia(), d.getTitulo(), this.substring(d.getDescricao()), d.getStatusDenuncia());
     }
 
     @Override
