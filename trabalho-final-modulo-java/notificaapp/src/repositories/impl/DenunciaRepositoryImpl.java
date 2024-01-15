@@ -9,7 +9,6 @@ import models.enums.Categoria;
 import models.enums.StatusDenuncia;
 import repositories.interfaces.DenunciaRepository;
 
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +29,7 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
     }
 
     @Override
-    public Denuncia adicionar(Denuncia d) throws DataBaseException {
+    public Denuncia adicionarDenuncia(Denuncia d) throws DataBaseException {
         Connection connection = null;
         try {
             connection = ConexaoBancoDeDados.getConnection();
@@ -79,17 +78,42 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
 
         try {
             con = ConexaoBancoDeDados.getConnection();
-            String sql = "DELETE FROM DENUNCIA WHERE id_denuncia = ?";
-            System.out.println("SQL Executado: " + sql);
+            con.setAutoCommit(false);  // Desativa o modo de confirmação automática
 
-            try (PreparedStatement stmt = con.prepareStatement(sql)) {
-                stmt.setInt(1, idDenuncia);
+            // Exclui registros dependentes em COMENTARIO
+            String sqlDeleteComentario = "DELETE FROM COMENTARIO WHERE id_denuncia = ?";
+            try (PreparedStatement stmtComentario = con.prepareStatement(sqlDeleteComentario)) {
+                stmtComentario.setInt(1, idDenuncia);
+                stmtComentario.executeUpdate();
+            }
 
-                int res = stmt.executeUpdate();
-                System.out.println("removerDenunciaPorId.res=" + res);
+            // Exclui registros dependentes em LOCALIZACAO
+            String sqlDeleteLocalizacao = "DELETE FROM LOCALIZACAO WHERE id_denuncia = ?";
+            try (PreparedStatement stmtLocalizacao = con.prepareStatement(sqlDeleteLocalizacao)) {
+                stmtLocalizacao.setInt(1, idDenuncia);
+                stmtLocalizacao.executeUpdate();
+            }
+
+            // Exclui o registro principal em DENUNCIA
+            String sqlDeleteDenuncia = "DELETE FROM DENUNCIA WHERE id_denuncia = ?";
+            try (PreparedStatement stmtDenuncia = con.prepareStatement(sqlDeleteDenuncia)) {
+                stmtDenuncia.setInt(1, idDenuncia);
+                int res = stmtDenuncia.executeUpdate();
+
+                // Confirma as alterações no banco de dados
+                con.commit();
+
                 return res > 0;
             }
         } catch (SQLException e) {
+            // Em caso de erro, faz rollback das alterações no banco de dados
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
             System.err.println("Erro ao remover denúncia!");
             throw new DataBaseException("Erro: " + e);
         } finally {
@@ -105,7 +129,7 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
 
 
     @Override
-    public boolean editar(Integer id, Denuncia denuncia) throws DataBaseException {
+    public boolean editarDenuncia(Integer id, Denuncia denuncia) throws DataBaseException {
 
         Connection con = null;
         try {
