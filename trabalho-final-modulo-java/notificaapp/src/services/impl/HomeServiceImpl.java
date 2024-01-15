@@ -29,7 +29,7 @@ public class HomeServiceImpl implements HomeService {
                     ║ descrição: %s
                     ║ status: %s | categoria: %s
                     ╚═════════════════════════════════════════════════════════════════════════════╝
-                    %n""", d.getIdDenuncia(), d.getTitulo(), this.substring(d.getDescricao()), d.getStatusDenuncia());
+                    %n""", d.getIdDenuncia(), d.getTitulo(), this.substring(d.getDescricao()), d.getStatusDenuncia(), d.getCategoria());
     }
 
     @Override
@@ -274,8 +274,6 @@ public class HomeServiceImpl implements HomeService {
 
     @Override
     public void cadastroUsuarioFormByAdmin(Usuario u, Scanner input) {
-        CadastroUsuarioHelper cadastroUsuarioHelper = new CadastroUsuarioHelper();
-
         String nome = "";
         int etnia = -1;
         int classeSocial = -1;
