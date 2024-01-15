@@ -5,10 +5,13 @@ import models.Denuncia;
 import models.Usuario;
 import models.enums.TipoUsuario;
 import repositories.impl.AdminRepositoryImpl;
+import repositories.interfaces.AdminRepository;
 import services.interfaces.AdminService;
+import services.interfaces.UsuarioService;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class AdminServiceImpl implements AdminService {
     private AdminRepositoryImpl adminRepository;
@@ -57,6 +60,14 @@ public class AdminServiceImpl implements AdminService {
         }
     }
 
+    public Optional<Usuario> adicionarUsuario(Usuario u){
+        try{
+            return Optional.of(adminRepository.adicionarUsuario(u));
+        } catch (Exception e){
+            System.out.println(e.getCause());
+        }
+        return Optional.empty();
+    }
 
     private void imprimirTodasDenuncias(Denuncia denuncia) {
         System.out.println("ID: " + denuncia.getIdDenuncia());

@@ -82,12 +82,13 @@ public class Home {
             System.out.print("\n");
             System.out.printf("╔══════════ ADMIN ═════════╗%n");
             System.out.printf("║1. Ver usuários           ║%n");
-            System.out.printf("║2. Excluir usuários       ║%n");
-            System.out.printf("║3. Ver Denuncias          ║%n");
-            System.out.printf("║4. Excluir Denuncias      ║%n");
-            System.out.printf("║5. Ver Feed               ║%n");
-            System.out.printf("║6. Ver Estatísticas       ║%n");
-            System.out.printf("║7. Sair                   ║%n");
+            System.out.printf("║2. Adicionar usuário      ║%n");
+            System.out.printf("║3. Excluir usuários       ║%n");
+            System.out.printf("║4. Ver Denuncias          ║%n");
+            System.out.printf("║5. Excluir Denuncias      ║%n");
+            System.out.printf("║6. Ver Feed               ║%n");
+            System.out.printf("║7. Ver Estatísticas       ║%n");
+            System.out.printf("║8. Sair                   ║%n");
             System.out.printf("╚══════════════════════════╝%n");
             System.out.print(ESCOLHA_OPCAO_MSG);
             opMenuAdmin = input.nextInt();
@@ -99,27 +100,31 @@ public class Home {
                     adminService.listarUsuarios(usuarioLogado);
                     break;
                 case 2:
+                    System.out.println("\n═══════ Adicionar Usuário ═══════");
+                    this.homeServiceImpl.cadastroUsuarioFormByAdmin(this.usuarioLogado, input);
+                    break;
+                case 3:
                     System.out.println("Digite o Id do Usuário que Deseja Remover: ");
                     int idUsuario = input.nextInt();
                     input.nextLine();
                     usuarioServices.remover(idUsuario);
                     break;
-                case 3:
+                case 4:
                     adminService.listarDenuncias(usuarioLogado);
                     break;
-                case 4:
+                case 5:
                     System.out.println("Digite o Id da Denúncia que Deseja Remover: ");
                     int idDenuncia = input.nextInt();
                     input.nextLine();
                     denunciaServices.removerDenuncia(idDenuncia);
                     break;
-                case 5:
+                case 6:
                     this.homeServiceImpl.feed();
                     break;
-                case 6:
+                case 7:
                     estatisticas();
                     break;
-                case 7:
+                case 8:
                     System.out.println(SAINDO_DO_SISTEMA_MSG);
                     exibirLoginMenu();
                     break;

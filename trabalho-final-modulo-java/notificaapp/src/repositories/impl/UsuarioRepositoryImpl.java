@@ -40,7 +40,6 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
                     (ID_USUARIO, NOME_USUARIO, CELULAR_USUARIO, SENHA_USUARIO, DATA_NASCIMENTO, ETNIA, CLASSE_SOCIAL, GENERO, TIPO_USUARIO)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""";
 
-
             Integer proximoId = this.getProximoIdDoUsuario(con);
             usuario.setIdUsuario(proximoId);
 

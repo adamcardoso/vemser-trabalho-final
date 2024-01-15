@@ -2,10 +2,12 @@ package repositories.impl;
 
 import config.ConexaoBancoDeDados;
 import exceptions.DataBaseException;
+import helpers.ConversorDateHelper;
 import models.Denuncia;
 import models.Usuario;
 import models.enums.*;
 import repositories.interfaces.AdminRepository;
+import repositories.interfaces.UsuarioRepository;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -13,9 +15,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class AdminRepositoryImpl implements AdminRepository {
+public class AdminRepositoryImpl extends UsuarioRepositoryImpl implements AdminRepository {
+    public Integer getProximoIdDaDenuncia(Connection connection) throws SQLException {
+        String sql = "SELECT SEQ_USUARIO.NEXTVAL mysequence from DUAL";
 
+        Statement stmt = connection.createStatement();
+        ResultSet res = stmt.executeQuery(sql);
 
+        if (res.next()) {
+            return res.getInt("mysequence");
+        }
+
+        return null;
+    }
     @Override
     public List<Usuario> listarTodosUsuarios(Usuario usuarioLogado) throws DataBaseException {
         if (Objects.nonNull(usuarioLogado) && usuarioLogado.getTipoUsuario() == TipoUsuario.ADMIN) {
@@ -37,7 +49,7 @@ public class AdminRepositoryImpl implements AdminRepository {
                         String numeroCelular = res.getString("celular_usuario");
                         String senha = res.getString("senha_usuario");
                         Etnia etinia = Etnia.fromInt(res.getInt("etnia"));
-                        LocalDate dataNascimento = res.getDate("data_nascimento").toLocalDate();
+                        LocalDate dataNascimento = res.getDate("data_nascimento") == null ? null : res.getDate("data_nascimento").toLocalDate();
                         ClasseSocial classeSocial = ClasseSocial.fromInt(res.getInt("classe_social"));
                         Genero genero = Genero.fromInt(res.getInt("genero"));
                         TipoUsuario tipo = TipoUsuario.fromInt(res.getInt("tipo_usuario"));
@@ -67,6 +79,48 @@ public class AdminRepositoryImpl implements AdminRepository {
             }
         } else {
             throw new DataBaseException("Acesso negado. Perfil de administrador requerido.");
+        }
+    }
+
+    public Usuario adicionarUsuario(Usuario u) throws DataBaseException {
+        Connection connection = null;
+        try {
+            connection = ConexaoBancoDeDados.getConnection();
+
+            String sql = """
+                    INSERT INTO USUARIO u
+                        (id_usuario, nome_usuario, celular_usuario, senha_usuario, data_nascimento, etnia,
+                        classe_social, genero, tipo_usuario)
+                    VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)""";
+
+            Integer proximoId = this.getProximoIdDaDenuncia(connection);
+            u.setIdUsuario(proximoId);
+
+            PreparedStatement stmt = connection.prepareStatement(sql);
+
+            stmt.setInt(1, u.getIdUsuario());
+            stmt.setString(2, u.getNomeUsuario());
+            stmt.setString(3, null);
+            stmt.setString(4, u.getSenhaUsuario());
+            stmt.setDate(5, null);
+            stmt.setString(6, String.valueOf(u.getEtniaUsuario().getIdEtnia()));
+            stmt.setString(7, String.valueOf(u.getClasseSocial().getIdClasseSocial()));
+            stmt.setString(8, String.valueOf(u.getGeneroUsuario().getIdGenero()));
+            stmt.setString(9, String.valueOf(u.getTipoUsuario().getIdTipoUsuario()));
+
+            int res = stmt.executeUpdate();
+            System.out.println("Usuários cadastrados = " + res);
+            return u;
+        } catch (SQLException e) {
+            throw new DataBaseException("Erro: " + e.getCause());
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -208,5 +262,6 @@ public class AdminRepositoryImpl implements AdminRepository {
             }
         }
     }
+
 
 }
