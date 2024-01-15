@@ -14,14 +14,9 @@ import java.util.Scanner;
 public class CadastroUsuarioHelper {
     private static final Scanner scanner = new Scanner(System.in);
     private static final String LIMITE_TENTATIVAS = "Você ultrapassou o número de tentativas";
-    private static final Random random = new Random();
     private static final String MENSAGEM_VALORES_INFORMADOS = "Digite algum dos valores informados.";
     private static final String MENSAGEM_TENTATIVAS_RESTANTES = "Você possui 3 tentativas, restam: ";
     private static final int LIMITE_SUPERIOR = 1000;
-
-    protected int gerarNumeroAleatorio() {
-        return random.nextInt(LIMITE_SUPERIOR);
-    }
 
     protected String digitarCampo(String regex) throws MaxAttemptsExceededException {
         String campo;
