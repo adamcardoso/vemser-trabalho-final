@@ -5,6 +5,7 @@ import models.Denuncia;
 import models.Usuario;
 import models.enums.TipoUsuario;
 import repositories.impl.AdminRepositoryImpl;
+import repositories.impl.DenunciaRepositoryImpl;
 import repositories.interfaces.AdminRepository;
 import services.interfaces.AdminService;
 import services.interfaces.UsuarioService;
@@ -42,9 +43,10 @@ public class AdminServiceImpl implements AdminService {
 
         try {
             Denuncia denuncia = adminRepository.obterDenunciaPorId(idDenuncia);
+            DenunciaRepositoryImpl denunciaRepository = new DenunciaRepositoryImpl();
 
             if (denuncia != null) {
-                boolean denunciaRemovida = adminRepository.excluirDenuncia(idDenuncia);
+                boolean denunciaRemovida = denunciaRepository.removerDenuncia(idDenuncia);
 
                 if (denunciaRemovida) {
                     System.out.println("Denúncia removida com sucesso!");

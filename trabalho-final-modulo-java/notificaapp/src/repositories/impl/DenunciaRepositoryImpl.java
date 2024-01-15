@@ -4,6 +4,7 @@ import config.ConexaoBancoDeDados;
 import exceptions.DataBaseException;
 import helpers.ConversorDateHelper;
 import models.Denuncia;
+import models.Usuario;
 import models.enums.Categoria;
 import models.enums.StatusDenuncia;
 import models.enums.TipoDenuncia;
@@ -202,7 +203,7 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
         try {
             connection = ConexaoBancoDeDados.getConnection();
 
-            String sql = "SELECT * FROM DENUNCIA";
+            String sql = "SELECT D.*, U.nome_usuario FROM DENUNCIA D LEFT JOIN USUARIO U ON D.id_usuario = U.id_usuario";
 
             Statement stmt = connection.createStatement();
             ResultSet res = stmt.executeQuery(sql);
@@ -210,17 +211,23 @@ public class DenunciaRepositoryImpl implements DenunciaRepository<Integer, Denun
             List<Denuncia> denuncias = new ArrayList<>();
 
             while (res.next()) {
-                denuncias.add(new Denuncia(
+                Denuncia denuncia = new Denuncia(
                         res.getInt("id_denuncia"),
                         res.getString("titulo"),
                         res.getString("descricao"),
                         StatusDenuncia.fromInt(res.getInt("status_denuncia")),
                         Categoria.fromInt(res.getInt("categoria")),
                         TipoDenuncia.fromInt(res.getInt("tipo_denuncia"))
-                ));
+                );
+
+                Usuario usuario = new Usuario();
+                usuario.setIdUsuario(res.getInt("id_usuario"));
+                usuario.setNomeUsuario(res.getString("nome_usuario"));
+
+                denuncia.setUsuario(usuario);
+
+                denuncias.add(denuncia);
             }
-
-
             return denuncias;
         } catch (SQLException e) {
             throw new RuntimeException(e);
