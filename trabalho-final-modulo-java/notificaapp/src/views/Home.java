@@ -1,40 +1,51 @@
 package views;
 
+import helpers.CadastroDenunciaHelper;
+import helpers.CadastroUsuarioHelper;
+import models.Denuncia;
 import models.Usuario;
-import services.impl.AdminServiceImpl;
-import services.impl.HomeServiceImpl;
-import services.impl.UsuarioServicesImpl;
+import models.enums.Categoria;
+import models.enums.ClasseSocial;
+import models.enums.Etnia;
+import models.enums.Genero;
+import services.impl.*;
+import services.interfaces.HomeService;
 
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class Home {
-    HomeServiceImpl homeServiceImpl = new HomeServiceImpl();
-    Scanner input = new Scanner(System.in);
+    HomeService homeServiceImpl = new HomeServiceImpl();
+    EstatisticaService estatisticaService = new EstatisticaService();
     UsuarioServicesImpl usuarioServices = new UsuarioServicesImpl();
-    private static final String OPCAO_INVALIDA_MSG = "Opção inválida!";
-    private static final String SAINDO_DO_SISTEMA_MSG = "Saindo do sistema...";
-    private static final String ESCOLHA_OPCAO_MSG = "Escolha uma opção: ";
-    private static final String VOLTANDO = "Voltando... ";
-    private static final String CABECALHO_NOTIFICA_MSG = "------------- NOTIFICA -------------";
+    DenunciaServicesImpl denunciaServices = new DenunciaServicesImpl();
+    CadastroDenunciaHelper cadastroDenunciaHelper = new CadastroDenunciaHelper();
+    CadastroUsuarioHelper cadastroUsuarioHelper = new CadastroUsuarioHelper();
+    Scanner input = new Scanner(System.in);
 
+    private static final String OPCAO_INVALIDA_MSG = "║ Opção inválida!";
+    private static final String SAINDO_DO_SISTEMA_MSG = "║ Saindo do sistema...";
+    private static final String ESCOLHA_OPCAO_MSG = "║ Escolha uma opção: ";
+    private static final String VOLTANDO = "║ Voltando... ";
     private Usuario usuarioLogado = null;
 
     public void exibirLoginMenu() {
         int opMenuLogin;
-
         do {
-            System.out.println("\n\n" + CABECALHO_NOTIFICA_MSG);
-            System.out.println("1. Fazer login no sistema");
-            System.out.println("2. Entrar sem login");
-            System.out.println("3. Cadastrar");
-            System.out.println("4. Sair");
-            System.out.println(ESCOLHA_OPCAO_MSG);
+            System.out.print("\n");
+            System.out.printf("╔═════════ NOTIFICA ════════╗%n");
+            System.out.printf("║ 1. Fazer login no sistema ║%n");
+            System.out.printf("║ 2. Entrar sem login       ║%n");
+            System.out.printf("║ 3. Cadastrar              ║%n");
+            System.out.printf("║ 4. Sair                   ║%n");
+            System.out.printf("╚═══════════════════════════╝%n");
+            System.out.print(ESCOLHA_OPCAO_MSG);
             opMenuLogin = input.nextInt();
+            input.nextLine();
 
             switch (opMenuLogin) {
                 case 1:
                     this.usuarioLogado = fazerLogin();
-
                     if (this.usuarioLogado != null) {
                         if (this.usuarioLogado.getIsAdmin()) {
                             this.exibirMenuAdmin();
@@ -48,10 +59,11 @@ public class Home {
                     exibirMenuPrincipal();
                     break;
                 case 3:
-                    System.out.println("3. Cadastrar");
+                    homeServiceImpl.cadastroUsuarioForm(input);
                     break;
                 case 4:
                     System.out.println(SAINDO_DO_SISTEMA_MSG);
+                    System.exit(0);
                     break;
                 default:
                     System.out.println(OPCAO_INVALIDA_MSG);
@@ -63,65 +75,81 @@ public class Home {
         AdminServiceImpl adminService = new AdminServiceImpl();
 
         int opMenuAdmin;
-        System.out.println(CABECALHO_NOTIFICA_MSG);
         do {
-            System.out.println("----- ADMIN -----");
-            System.out.println("1. Ver usuários");
-            System.out.println("2. Excluir usuários");
-            System.out.println("3. Ver Denuncias");
-            System.out.println("4. Excluir Denuncias");
-            System.out.println("5. Ver Feed");
-            System.out.println("6. Ver Estatísticas");
-            System.out.println("7. Sair");
-            System.out.println(ESCOLHA_OPCAO_MSG);
+            System.out.print("\n");
+            System.out.printf("╔══════════ ADMIN ═════════╗%n");
+            System.out.printf("║1. Ver usuários           ║%n");
+            System.out.printf("║2. Excluir usuários       ║%n");
+            System.out.printf("║3. Ver Denuncias          ║%n");
+            System.out.printf("║4. Excluir Denuncias      ║%n");
+            System.out.printf("║5. Ver Feed               ║%n");
+            System.out.printf("║6. Ver Estatísticas       ║%n");
+            System.out.printf("║7. Editar dados           ║%n");
+            System.out.printf("║8. Adicionar usuário      ║%n");
+            System.out.printf("║9. Sair                   ║%n");
+            System.out.printf("╚══════════════════════════╝%n");
+            System.out.print(ESCOLHA_OPCAO_MSG);
             opMenuAdmin = input.nextInt();
+            input.nextLine();
+
             switch (opMenuAdmin) {
                 case 1:
-                    System.out.println("1. Ver usuários");
+                    System.out.println("\n═══════ Lista de Todos Usuários ═══════");
                     adminService.listarUsuarios(usuarioLogado);
                     break;
                 case 2:
-                    //Lógica funcional, falta criar o método listas Usuarios e chamar aki tmb, mostrando id deles
                     System.out.println("Digite o Id do Usuário que Deseja Remover: ");
                     int idUsuario = input.nextInt();
-                    usuarioServices.remover(idUsuario);
+                    input.nextLine();
+                    usuarioServices.removerUsuario(idUsuario);
                     break;
                 case 3:
-                    System.out.println("3. Ver Denuncias");
                     adminService.listarDenuncias(usuarioLogado);
                     break;
                 case 4:
-                    System.out.println("4. Excluir Denuncias");
+                    System.out.println("Digite o Id da Denúncia que Deseja Remover: ");
+                    int idDenuncia = input.nextInt();
+                    input.nextLine();
+                    adminService.excluirDenuncia(idDenuncia);
                     break;
                 case 5:
-                    System.out.println("5. Ver Feed");
+                    this.homeServiceImpl.feed();
                     break;
                 case 6:
                     estatisticas();
                     break;
                 case 7:
+                    editarDadosDoAdmin();
+                    break;
+                case 8:
+                    System.out.println("\n═══════ Adicionar Usuário ═══════");
+                    this.homeServiceImpl.cadastroUsuarioFormByAdmin(this.usuarioLogado, input);
+                    break;
+                case 9:
                     System.out.println(SAINDO_DO_SISTEMA_MSG);
                     exibirLoginMenu();
                     break;
                 default:
                     System.out.println(OPCAO_INVALIDA_MSG);
             }
-        } while (opMenuAdmin != 8);
+        } while (opMenuAdmin != 7);
     }
 
     private void exibirMenuPrincipal() {
-        System.out.println(CABECALHO_NOTIFICA_MSG);
-
         if (usuarioLogado != null) {
             int opMenuPrincLogado;
             do {
-                System.out.println("1. Usuário");
-                System.out.println("2. Denúncia");
-                System.out.println("3. Feed");
-                System.out.println("4. Estatística");
-                System.out.println("5. Sair");
-                System.out.println(ESCOLHA_OPCAO_MSG);
+                System.out.print("\n");
+                System.out.printf("╔═══════ NOTIFICA ═════╗%n");
+                System.out.printf("║ 1. Usuário           ║%n");
+                System.out.printf("║ 2. Denúncia          ║%n");
+                System.out.printf("║ 3. Feed              ║%n");
+                System.out.printf("║ 4. Estatística       ║%n");
+                System.out.printf("║ 5. Sair              ║%n");
+                System.out.printf("╚══════════════════════╝%n");
+                System.out.print(ESCOLHA_OPCAO_MSG);
                 opMenuPrincLogado = input.nextInt();
+                input.nextLine();
                 switch (opMenuPrincLogado) {
                     case 1:
                         exibirMenuUsuario();
@@ -136,8 +164,8 @@ public class Home {
                         estatisticas();
                         break;
                     case 5:
-                        exibirLoginMenu();
                         System.out.println(VOLTANDO);
+                        exibirLoginMenu();
                         break;
                     default:
                         System.out.println(OPCAO_INVALIDA_MSG);
@@ -146,12 +174,15 @@ public class Home {
         } else {
             int opMenuPrincNLogado;
             do {
-                System.out.println("1. Feed");
-                System.out.println("2. Estatística");
-                System.out.println("3. Voltar");
-                System.out.println("4. Sair");
-                System.out.println(ESCOLHA_OPCAO_MSG);
+                System.out.print("\n");
+                System.out.printf("╔══════ NOTIFICA ════╗%n");
+                System.out.printf("║ 1. Feed            ║%n");
+                System.out.printf("║ 2. Estatística     ║%n");
+                System.out.printf("║ 3. Sair            ║%n");
+                System.out.printf("╚════════════════════╝%n");
+                System.out.print(ESCOLHA_OPCAO_MSG);
                 opMenuPrincNLogado = input.nextInt();
+                input.nextLine();
                 switch (opMenuPrincNLogado) {
                     case 1:
                         this.homeServiceImpl.feed();
@@ -160,40 +191,36 @@ public class Home {
                         estatisticas();
                         break;
                     case 3:
-                        exibirLoginMenu();
                         System.out.println(VOLTANDO);
-                        break;
-                    case 4:
-                        System.out.println(SAINDO_DO_SISTEMA_MSG);
                         break;
                     default:
                         System.out.println(OPCAO_INVALIDA_MSG);
                 }
-            } while (opMenuPrincNLogado != 4);
+            } while (opMenuPrincNLogado != 3);
         }
     }
 
     private void exibirMenuUsuario() {
         int opMenuUsuario;
-
         do {
-            System.out.println(CABECALHO_NOTIFICA_MSG);
-            System.out.println("1. Excluir Conta");
-            System.out.println("2. Editar Conta");
-            System.out.println("3. Visualizar Conta");
-            System.out.println("4. Voltar");
-            System.out.println("5. Sair");
-            System.out.println(ESCOLHA_OPCAO_MSG);
-
+            System.out.print("\n");
+            System.out.printf("╔═══════ NOTIFICA ═════╗%n");
+            System.out.printf("║ 1. Excluir Conta     ║%n");
+            System.out.printf("║ 2. Editar Conta      ║%n");
+            System.out.printf("║ 3. Visualizar Conta  ║%n");
+            System.out.printf("║ 4. Voltar            ║%n");
+            System.out.printf("║ 5. Sair              ║%n");
+            System.out.printf("╚══════════════════════╝%n");
+            System.out.print(ESCOLHA_OPCAO_MSG);
             opMenuUsuario = input.nextInt();
-
+            input.nextLine();
             switch (opMenuUsuario) {
                 case 1:
-                    //funcionando FINALIZADO - NÃO MECHER
-                    usuarioServices.remover(usuarioLogado.getIdUsuario());
+                    usuarioServices.removerUsuario(usuarioLogado.getIdUsuario());
+                    exibirLoginMenu();
                     break;
                 case 2:
-                    System.out.println("2. Editar Conta");
+                    this.editarUsuario();
                     break;
                 case 3:
                     //funcionando FINALIZADO - NÃO MECHER
@@ -205,63 +232,261 @@ public class Home {
                     break;
                 case 5:
                     System.out.println(SAINDO_DO_SISTEMA_MSG);
-                    exibirLoginMenu();
                     break;
                 default:
                     System.out.println(OPCAO_INVALIDA_MSG);
             }
-        } while (opMenuUsuario != 5);
+        } while (opMenuUsuario != 5 && opMenuUsuario != 4);
     }
 
     private void exibirMenuDenuncia() {
         int opMenuDenuncia;
 
         do {
-            System.out.println(CABECALHO_NOTIFICA_MSG);
-            System.out.println("1. Cadastrar Denuncia");
-            System.out.println("2. Excluir Denuncia");
-            System.out.println("3. Editar Denuncia");
-            System.out.println("4. Visualizar Denuncias");
-            System.out.println("5. Voltar");
-            System.out.println("6. Sair");
-            System.out.println(ESCOLHA_OPCAO_MSG);
-
+            System.out.print("\n");
+            System.out.printf("╔═════════ NOTIFICA ═══════╗%n");
+            System.out.printf("║ 1. Cadastrar Denuncia    ║%n");
+            System.out.printf("║ 2. Excluir Denuncia      ║%n");
+            System.out.printf("║ 3. Editar Denuncia       ║%n");
+            System.out.printf("║ 4. Visualizar Denuncias  ║%n");
+            System.out.printf("║ 5. Voltar                ║%n");
+            System.out.printf("║ 6. Sair                  ║%n");
+            System.out.printf("╚══════════════════════════╝%n");
+            System.out.print(ESCOLHA_OPCAO_MSG);
             opMenuDenuncia = input.nextInt();
-
+            input.nextLine();
             switch (opMenuDenuncia) {
                 case 1:
-                    System.out.println("1. Cadastrar Denuncia");
+                    homeServiceImpl.denunciaForm(this.usuarioLogado, input);
                     break;
                 case 2:
-                    System.out.println("2. Excluir Denuncia");
+                    System.out.println("Digite o Id da Denúncia que Deseja Remover: ");
+                    int idDenunciaPessoal = input.nextInt();
+                    input.nextLine();
+                    denunciaServices.removerDenuncia(idDenunciaPessoal);
                     break;
                 case 3:
-                    System.out.println("3. Editar Denuncia");
+                    System.out.println("Digite o Id da Denúncia que Deseja Editar: ");
+                    int idDenunciaPessoalE = input.nextInt();
+
+                    input.nextLine();
+                    this.editarDenuncia(idDenunciaPessoalE);
                     break;
                 case 4:
+                    this.homeServiceImpl.listarDenunciasDoUsuario(this.usuarioLogado);
+                    break;
+                case 5:
                     exibirMenuPrincipal();
                     System.out.println(VOLTANDO);
                     break;
-                case 5:
+                case 6:
                     System.out.println(SAINDO_DO_SISTEMA_MSG);
-                    exibirLoginMenu();
                     break;
                 default:
                     System.out.println(OPCAO_INVALIDA_MSG);
             }
-        } while (opMenuDenuncia != 5);
+        } while (opMenuDenuncia != 5 && opMenuDenuncia != 6);
     }
 
-    private void estatisticas(){
-        usuarioServices.exibirEstatisticasUsuarios();
+    private void estatisticas() {
+        estatisticaService.exibirEstatisticasUsuarios();
     }
 
     private Usuario fazerLogin() {
+        System.out.println("\n═══════════════ Login ═══════════════");
         System.out.print("Digite seu nome de usuário: ");
         String nomeUsuario = input.next();
+        input.nextLine();
         System.out.print("Digite sua senha: ");
         String senha = input.next();
-
+        input.nextLine();
+        System.out.println("═════════════════════════════════════");
         return usuarioServices.fazerLogin(nomeUsuario, senha);
     }
+
+    private void editarDenuncia(int idDenuncia) {
+        int opMenuDenuncia;
+        do {
+            Denuncia editaDenuncia = denunciaServices.obterDenunciaPorId(idDenuncia, usuarioLogado.getIdUsuario());
+            if(editaDenuncia == null){
+                return;
+            }
+
+            System.out.print("\n");
+            System.out.printf("╔═════════ NOTIFICA ════════╗%n");
+            System.out.printf("║ Qual campo deseja editar? ║%n");
+            System.out.printf("║ 1. Titulo                 ║%n");
+            System.out.printf("║ 2. Descricao              ║%n");
+            System.out.printf("║ 3. Categoria              ║%n");
+            System.out.printf("║ 4. Voltar                 ║%n");
+            System.out.printf("╚═══════════════════════════╝%n");
+            System.out.print(ESCOLHA_OPCAO_MSG);
+            opMenuDenuncia = input.nextInt();
+            input.nextLine();
+            switch (opMenuDenuncia) {
+                case 1:
+                    String editaTitulo = cadastroDenunciaHelper.digitarTitulo();
+                    editaDenuncia.setTitulo(editaTitulo);
+                    denunciaServices.editarDenuncia(idDenuncia, usuarioLogado.getIdUsuario(), editaDenuncia);
+                    break;
+                case 2:
+                    String editaDescricao = cadastroDenunciaHelper.digitarDescricao();
+                    editaDenuncia.setDescricao(editaDescricao);
+                    denunciaServices.editarDenuncia(idDenuncia, usuarioLogado.getIdUsuario(), editaDenuncia);
+                    break;
+                case 3:
+                    Categoria editaCategoria = Categoria.fromInt(cadastroDenunciaHelper.digitarCategoria());
+                    editaDenuncia.setCategoria(editaCategoria);
+                    denunciaServices.editarDenuncia(idDenuncia, usuarioLogado.getIdUsuario(), editaDenuncia);
+                    break;
+                case 4:
+                    System.out.println(VOLTANDO);
+                    break;
+                default:
+                    System.out.println(OPCAO_INVALIDA_MSG);
+            }
+        } while (opMenuDenuncia != 4);
+    }
+
+    private void editarUsuario() {
+        int opMenuDenuncia;
+        Usuario editaUsuario = usuarioLogado;
+        do {
+            System.out.print("\n");
+            System.out.printf("╔═════════ NOTIFICA ════════╗%n");
+            System.out.printf("║ Qual campo deseja editar? ║%n");
+            System.out.printf("║ 1. Nome                   ║%n");
+            System.out.printf("║ 2. Numero celular         ║%n");
+            System.out.printf("║ 3. Senha                  ║%n");
+            System.out.printf("║ 4. Etnia                  ║%n");
+            System.out.printf("║ 5. Data de nascimento     ║%n");
+            System.out.printf("║ 6. Classe social          ║%n");
+            System.out.printf("║ 7. Genero                 ║%n");
+            System.out.printf("║ 8. Voltar                 ║%n");
+            System.out.printf("╚═══════════════════════════╝%n");
+            System.out.print(ESCOLHA_OPCAO_MSG);
+            opMenuDenuncia = input.nextInt();
+            input.nextLine();
+            switch (opMenuDenuncia) {
+                case 1:
+                    String editaNome = cadastroUsuarioHelper.digitarNomeUsuario();
+                    editaUsuario.setNomeUsuario(editaNome);
+                    usuarioServices.editarUsuario(usuarioLogado.getIdUsuario(), editaUsuario);
+                    break;
+                case 2:
+                    String editaNumeroCelular = cadastroUsuarioHelper.digitarCampoNumeroCelular();
+                    editaUsuario.setNumeroCelular(editaNumeroCelular);
+                    usuarioServices.editarUsuario(usuarioLogado.getIdUsuario(), editaUsuario);
+                    break;
+                case 3:
+                    String editaSenha = cadastroUsuarioHelper.digitarCampoSenha();
+                    editaUsuario.setSenhaUsuario(editaSenha);
+                    usuarioServices.editarUsuario(usuarioLogado.getIdUsuario(), editaUsuario);
+                    break;
+                case 4:
+                    Etnia editaEtnia = cadastroUsuarioHelper.digitarCampoEtnia();
+                    editaUsuario.setEtniaUsuario(editaEtnia);
+                    usuarioServices.editarUsuario(usuarioLogado.getIdUsuario(), editaUsuario);
+                    break;
+
+                case 5:
+                    LocalDate editaDataNascimento = cadastroUsuarioHelper.digitarCampoData();
+                    editaUsuario.setDataNascimento(editaDataNascimento);
+                    usuarioServices.editarUsuario(usuarioLogado.getIdUsuario(), editaUsuario);
+                    break;
+
+                case 6:
+                    ClasseSocial editaClasseSocial = cadastroUsuarioHelper.digitarCampoClasseSocial();
+                    editaUsuario.setClasseSocial(editaClasseSocial);
+                    usuarioServices.editarUsuario(usuarioLogado.getIdUsuario(), editaUsuario);
+                    break;
+
+                case 7:
+                    Genero editaGenero = cadastroUsuarioHelper.digitarCampoGenero();
+                    editaUsuario.setGeneroUsuario(editaGenero);
+                    usuarioServices.editarUsuario(usuarioLogado.getIdUsuario(), editaUsuario);
+                    break;
+
+                case 8:
+                    System.out.println(VOLTANDO);
+                    break;
+                default:
+                    System.out.println(OPCAO_INVALIDA_MSG);
+            }
+        } while (opMenuDenuncia != 8);
+    }
+
+    private void editarDadosDoAdmin() {
+        int opMenuDenuncia;
+        Usuario editaUsuario = usuarioLogado;
+        AdminServiceImpl adminService = new AdminServiceImpl();
+
+
+        do {
+            System.out.print("\n");
+            System.out.printf("╔═════════ NOTIFICA ════════╗%n");
+            System.out.printf("║ Qual campo deseja editar? ║%n");
+            System.out.printf("║ 1. Nome                   ║%n");
+            System.out.printf("║ 2. Numero celular         ║%n");
+            System.out.printf("║ 3. Senha                  ║%n");
+            System.out.printf("║ 4. Etnia                  ║%n");
+            System.out.printf("║ 5. Data de nascimento     ║%n");
+            System.out.printf("║ 6. Classe social          ║%n");
+            System.out.printf("║ 7. Genero                 ║%n");
+            System.out.printf("║ 8. Voltar                 ║%n");
+            System.out.printf("╚═══════════════════════════╝%n");
+            System.out.print(ESCOLHA_OPCAO_MSG);
+            opMenuDenuncia = input.nextInt();
+            input.nextLine();
+
+            switch (opMenuDenuncia) {
+                case 1:
+                    String editaNome = cadastroUsuarioHelper.digitarNomeUsuario();
+                    editaUsuario.setNomeUsuario(editaNome);
+                    break;
+                case 2:
+                    String editaNumeroCelular = cadastroUsuarioHelper.digitarCampoNumeroCelular();
+                    editaUsuario.setNumeroCelular(editaNumeroCelular);
+                    break;
+                case 3:
+                    String editaSenha = cadastroUsuarioHelper.digitarCampoSenha();
+                    editaUsuario.setSenhaUsuario(editaSenha);
+                    break;
+                case 4:
+                    Etnia editaEtnia = cadastroUsuarioHelper.digitarCampoEtnia();
+                    editaUsuario.setEtniaUsuario(editaEtnia);
+                    break;
+                case 5:
+                    LocalDate editaDataNascimento = cadastroUsuarioHelper.digitarCampoData();
+                    editaUsuario.setDataNascimento(editaDataNascimento);
+                    break;
+                case 6:
+                    ClasseSocial editaClasseSocial = cadastroUsuarioHelper.digitarCampoClasseSocial();
+                    editaUsuario.setClasseSocial(editaClasseSocial);
+                    break;
+                case 7:
+                    Genero editaGenero = cadastroUsuarioHelper.digitarCampoGenero();
+                    editaUsuario.setGeneroUsuario(editaGenero);
+                    break;
+                case 8:
+                    System.out.println(VOLTANDO);
+                    break;
+                default:
+                    System.out.println(OPCAO_INVALIDA_MSG);
+            }
+
+            // Chamada do método para editar no serviço AdminService
+            if (opMenuDenuncia >= 1 && opMenuDenuncia <= 7) {
+                boolean sucessoEdicao = adminService.editarDadosDoAdmin(usuarioLogado.getIdUsuario(), editaUsuario);
+
+                if (sucessoEdicao) {
+                    System.out.println("Dados do admin editados com sucesso!");
+                } else {
+                    System.out.println("Falha ao editar os dados do admin.");
+                }
+            }
+
+        } while (opMenuDenuncia != 8);
+    }
+
 }

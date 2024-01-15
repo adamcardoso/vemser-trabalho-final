@@ -2,14 +2,11 @@ package services.impl;
 
 import exceptions.DataBaseException;
 import models.Usuario;
-import models.enums.TipoUsuario;
-import repositories.impl.AdminRepositoryImpl;
 import repositories.impl.UsuarioRepositoryImpl;
 import services.interfaces.UsuarioService;
-import views.EstatisticaUsuario;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class UsuarioServicesImpl implements UsuarioService {
     private final UsuarioRepositoryImpl usuarioRepository;
@@ -19,45 +16,20 @@ public class UsuarioServicesImpl implements UsuarioService {
     }
 
     @Override
-    public void listarUsuario(int idUsuario) {
+    public Optional<Usuario> adicionarUsuario(Usuario usuario) {
         try {
-            Usuario usuario = usuarioRepository.listarUsuario(idUsuario);
-            imprimirUsuario(usuario);
+            return Optional.of(usuarioRepository.adicionarUsuario(usuario));
         } catch (DataBaseException e) {
-            e.printStackTrace();
+            System.out.println("Erro: "+ e.getCause());
         }
-    }
-
-    public Usuario fazerLogin(String nomeUsuario, String senha) {
-        try {
-            Usuario usuario = usuarioRepository.fazerLogin(nomeUsuario, senha);
-            if (Objects.nonNull(usuario)) {
-                System.out.println("Login bem-sucedido para: " + usuario.getNomeUsuario());
-                return usuario;
-            } else {
-                System.out.println("Nome de usuário ou senha incorretos. Tente novamente.");
-            }
-        } catch (DataBaseException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private void imprimirUsuario(Usuario usuario) {
-        System.out.println("ID: " + usuario.getIdUsuario());
-        System.out.println("Nome: " + usuario.getNomeUsuario());
-        System.out.println("Número de Celular: " + usuario.getNumeroCelular());
-        System.out.println("Senha: " + usuario.getSenhaUsuario());
-        System.out.println("Etnia: " + usuario.getEtniaUsuario());
-        System.out.println("Data de Nascimento: " + usuario.getDataNascimento());
-        System.out.println("------------------------");
+        return Optional.empty();
     }
 
     @Override
-    public void remover(Integer id) {
+    public void removerUsuario(Integer id) {
         try {
             Usuario usuario = usuarioRepository.getUsuarioPorId(id);
-
+            System.out.println("═════════════════════════════════════");
             if (usuario != null) {
                 if (!usuario.getIsAdmin()) {
                     boolean usuarioRemovido = usuarioRepository.removerUsuario(id);
@@ -76,34 +48,86 @@ public class UsuarioServicesImpl implements UsuarioService {
         } catch (DataBaseException e) {
             e.printStackTrace();
         }
+        System.out.println("═════════════════════════════════════");
     }
 
-    public Usuario adicionar(Usuario usuario) {
+    public void editarUsuario(Integer idUsuarioLogado, Usuario usuario){
+        try {
 
+            if(idUsuarioLogado == null){
+                System.out.println("O id do usuario logado não pode ser nulo!");
+                return;
+            }
+
+            if(usuario == null){
+                System.out.println("O usuario a ser editado não pode ser nulo!");
+                return;
+            }
+            Usuario usuarioExiste = usuarioRepository.getUsuarioPorId(idUsuarioLogado);
+
+            if(usuarioExiste == null){
+                System.out.println("O Usuário a ser editado não foi encontrado!");
+            }
+
+            boolean conseguiuEditar = usuarioRepository.editarUsuario(idUsuarioLogado, usuario);
+
+            if (!conseguiuEditar) {
+                System.out.println("Falha ao editar o usuario!");
+                return;
+            }
+            System.out.println("Usuario editado com sucesso!");
+
+        } catch (DataBaseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void listarUsuario(int idUsuario) {
+        try {
+            Usuario usuario = usuarioRepository.listarUsuario(idUsuario);
+            imprimirUsuario(usuario);
+        } catch (DataBaseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void imprimirUsuario(Usuario usuario) {
+        System.out.println("═════════════════════════════════════");
+        System.out.println("ID: " + usuario.getIdUsuario());
+        System.out.println("Nome: " + usuario.getNomeUsuario());
+        System.out.println("Número de Celular: " + usuario.getNumeroCelular());
+        System.out.println("Senha: " + usuario.getSenhaUsuario());
+        System.out.println("Etnia: " + usuario.getEtniaUsuario());
+        System.out.println("Data de Nascimento: " + usuario.getDataNascimento());
+        System.out.println("═════════════════════════════════════");
+    }
+
+    @Override
+    public Optional<Usuario> getUsuarioPorId(Integer idUsuario){
+        try{
+            return Optional.of(usuarioRepository.getUsuarioPorId(idUsuario));
+        } catch (Exception e){
+            System.out.println("Erro: " + e.getCause());
+        }
+        return Optional.empty();
+    }
+
+    public Usuario fazerLogin(String nomeUsuario, String senha) {
+        try {
+            Usuario usuario = usuarioRepository.fazerLogin(nomeUsuario, senha);
+            if (Objects.nonNull(usuario)) {
+                System.out.println("Login bem-sucedido para: " + usuario.getNomeUsuario());
+                System.out.println("═════════════════════════════════════");
+                return usuario;
+            } else {
+                System.out.println("Nome de usuário ou senha incorretos. Tente novamente.");
+                System.out.println("═════════════════════════════════════");
+            }
+        } catch (DataBaseException e) {
+            e.printStackTrace();
+        }
         return null;
-    }
-
-    public void editarUsuario(Integer id, Usuario usuario){
-        try {
-            boolean conseguiuEditar = usuarioRepository.editar(id, usuario);
-            System.out.println("pessoa editada? " + conseguiuEditar + "| com id=" + id);
-        } catch (DataBaseException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void exibirEstatisticasUsuarios() {
-        AdminRepositoryImpl adminRepository = new AdminRepositoryImpl();
-        try {
-            Usuario usuarioExemplo = new Usuario();
-            List<Usuario> usuarios = adminRepository.listarTodosUsuarios(usuarioExemplo);
-
-            //Chama a classe de estatísticas e exibe as estatísticas
-            EstatisticaUsuario estatisticaUsuario = new EstatisticaUsuario();
-            estatisticaUsuario.exibirEstatisticas(usuarios);
-        } catch (DataBaseException e) {
-            e.printStackTrace();
-        }
     }
 }
 

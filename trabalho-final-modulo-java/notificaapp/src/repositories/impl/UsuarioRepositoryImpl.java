@@ -13,23 +13,122 @@ import java.sql.*;
 import java.time.LocalDate;
 
 public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario> {
+
     @Override
-    public Integer getProximoIdDoUsuario(Connection connection) throws SQLException {
-        return null;
+    public Usuario adicionarUsuario(Usuario usuario) throws DataBaseException {
+        Connection con = null;
+        PreparedStatement stmt = null;
+
+        try {
+            con = ConexaoBancoDeDados.getConnection();
+
+            String sql = """
+                    INSERT INTO USUARIO
+                    (ID_USUARIO, NOME_USUARIO, CELULAR_USUARIO, SENHA_USUARIO, DATA_NASCIMENTO, ETNIA, CLASSE_SOCIAL, GENERO, TIPO_USUARIO)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""";
+
+            Integer proximoId = this.getProximoIdDoUsuario(con);
+            usuario.setIdUsuario(proximoId);
+
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, usuario.getIdUsuario());
+            stmt.setString(2, usuario.getNomeUsuario());
+            stmt.setString(3, usuario.getNumeroCelular());
+            stmt.setString(4, usuario.getSenhaUsuario());
+            stmt.setDate(5, Date.valueOf(usuario.getDataNascimento()));
+            stmt.setString(6, String.valueOf(usuario.getEtniaUsuario().getIdEtnia()));
+            stmt.setString(7, String.valueOf(usuario.getClasseSocial().getIdClasseSocial()));
+            stmt.setString(8, String.valueOf(usuario.getGeneroUsuario().getIdGenero()));
+            stmt.setString(9, String.valueOf(usuario.getTipoUsuario().getIdTipoUsuario()));
+
+            int res = stmt.executeUpdate();
+
+            if (res > 0) {
+                return usuario;
+            } else {
+                throw new DataBaseException("Falha ao adicionar usuário.");
+            }
+
+        } catch (SQLException e) {
+            throw new DataBaseException(e.getCause());
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
-    public Usuario adicionarUsuario(Usuario object) throws DataBaseException {
-        return null;
-    }
+    public boolean removerUsuario(Integer idUsuario) throws DataBaseException {
+        Connection con = null;
 
+        try {
+            con = ConexaoBancoDeDados.getConnection();
+            con.setAutoCommit(false);  // Desativa o modo de confirmação automática
+
+
+            // Exclui registros dependentes em COMENTARIO
+            String sqlDeleteComentario = "DELETE FROM COMENTARIO WHERE id_usuario = ?";
+            try (PreparedStatement stmtComentario = con.prepareStatement(sqlDeleteComentario)) {
+                stmtComentario.setInt(1, idUsuario);
+                stmtComentario.executeUpdate();
+
+            }
+
+            // Exclui registros dependentes em LOCALIZACAO
+            String sqlDeleteLocalizacao = "DELETE FROM LOCALIZACAO WHERE id_usuario = ?";
+            try (PreparedStatement stmtLocalizacao = con.prepareStatement(sqlDeleteLocalizacao)) {
+                stmtLocalizacao.setInt(1, idUsuario);
+                stmtLocalizacao.executeUpdate();
+            }
+
+            // Exclui o registro principal em DENUNCIA
+            String sqlDeleteDenuncia = "DELETE FROM DENUNCIA WHERE id_usuario = ?";
+            try (PreparedStatement stmtDenuncia = con.prepareStatement(sqlDeleteDenuncia)) {
+                stmtDenuncia.setInt(1, idUsuario);
+                stmtDenuncia.executeUpdate();
+            }
+
+            String sqlDeleteUsuario = "DELETE FROM USUARIO WHERE id_usuario = ?";
+            try (PreparedStatement stmtDenuncia = con.prepareStatement(sqlDeleteUsuario)) {
+                stmtDenuncia.setInt(1, idUsuario);
+                int res = stmtDenuncia.executeUpdate();
+
+                // Confirma as alterações no banco de dados
+                con.commit();
+
+                return res > 0;
+            }
+        } catch (SQLException e) {
+            // Em caso de erro, faz rollback das alterações no banco de dados
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            System.err.println("Erro ao remover Usuário!");
+            throw new DataBaseException("Erro: " + e);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     @Override
     public boolean editarUsuario(Integer id, Usuario usuario) throws DataBaseException {
-        return false;
-    }
-
-    @Override
-    public boolean editar(Integer id, Usuario usuario) throws DataBaseException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.getConnection();
@@ -60,7 +159,6 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
 
             // Executa-se a consulta
             int res = stmt.executeUpdate();
-            System.out.println("editarUsuario.res=" + res);
 
             return res > 0;
         } catch (SQLException e) {
@@ -77,7 +175,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
     }
 
     @Override
-    public Usuario listarUsuario(int idUsuario) throws DataBaseException  {
+    public Usuario listarUsuario(int idUsuario) throws DataBaseException {
         Usuario usuario = new Usuario();
         Connection con = null;
 
@@ -104,7 +202,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
                 }
             } catch (SQLException e) {
                 System.out.println("entro try");
-                throw new DataBaseException ("Erro: "+ e.getCause());
+                throw new DataBaseException("Erro: " + e.getCause());
             } finally {
                 try {
                     if (con != null) {
@@ -126,7 +224,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
 
         try {
             con = ConexaoBancoDeDados.getConnection();
-            String sql = "SELECT * FROM USUARIO WHERE UPPER(TRIM(nome_usuario)) = UPPER(?) AND senha_usuario = ?";
+            String sql = "SELECT * FROM USUARIO WHERE nome_usuario = ? AND senha_usuario = ?";
             System.out.println("Consulta SQL executada!");
 
             try (PreparedStatement stmt = con.prepareStatement(sql)) {
@@ -176,11 +274,11 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
     }
 
     @Override
-    public Usuario getUsuarioPorId(int idUsuario) throws DataBaseException {
+    public Usuario getUsuarioPorId(Integer idUsuario) throws DataBaseException {
         Connection con = null;
 
         try {
-            String sql =  String.format("SELECT * FROM USUARIO WHERE id_usuario = '%s'", idUsuario);
+            String sql = String.format("SELECT * FROM USUARIO WHERE id_usuario = '%s'", idUsuario);
 
             con = ConexaoBancoDeDados.getConnection();
 
@@ -216,30 +314,16 @@ public class UsuarioRepositoryImpl implements UsuarioRepository<Integer, Usuario
     }
 
     @Override
-    public boolean removerUsuario(Integer id) throws DataBaseException {
-        Connection con = null;
+    public Integer getProximoIdDoUsuario(Connection connection) throws SQLException {
+        String sql = "SELECT SEQ_USUARIO.NEXTVAL mysequence from DUAL";
 
-        try {
-            String sql = String.format("DELETE FROM USUARIO WHERE id_usuario = '%s'", id);
+        Statement stmt = connection.createStatement();
+        ResultSet res = stmt.executeQuery(sql);
 
-            con = ConexaoBancoDeDados.getConnection();
-
-            Statement stmt = con.createStatement();
-
-            ResultSet res = stmt.executeQuery(sql);
-
-            return res.next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        if (res.next()) {
+            return res.getInt("mysequence");
         }
+
+        return null;
     }
 }

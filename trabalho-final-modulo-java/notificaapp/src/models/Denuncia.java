@@ -22,13 +22,36 @@ public class Denuncia{
     private TipoDenuncia tipoDenuncia;
     private int validarDenuncia;
 
-    private Long idUsuario;
+    private int idUsuario;
 
-    public Denuncia(int idDenuncia, String titulo, String descricao, StatusDenuncia statusDenuncia){
+    public Denuncia(int idDenuncia, String titulo, String descricao, StatusDenuncia statusDenuncia, Categoria categoria, TipoDenuncia tipoDenuncia) {
         this.idDenuncia = idDenuncia;
         this.titulo = titulo;
         this.descricao = descricao;
         this.statusDenuncia = statusDenuncia;
+        this.categoria = categoria;
+        this.tipoDenuncia = tipoDenuncia;
+    }
+
+    public Denuncia(String titulo, String descricao, Categoria categoria, TipoDenuncia tipoDenuncia, int idUsuario){
+        this.titulo = titulo;
+        this.descricao = descricao;
+        this.statusDenuncia = StatusDenuncia.ABERTO;
+        this.categoria = categoria;
+        this.dataHora = LocalDateTime.now();
+        this.curtidas = 0;
+        this.validarDenuncia = 0;
+        this.tipoDenuncia = tipoDenuncia;
+        this.idUsuario = idUsuario;
+    }
+  
+    public Denuncia(int idDenuncia, String titulo, String descricao, StatusDenuncia statusDenuncia, Categoria categoria, Usuario usuario) {
+        this.idDenuncia = idDenuncia;
+        this.titulo = titulo;
+        this.descricao = descricao;
+        this.statusDenuncia = statusDenuncia;
+        this.categoria = categoria;
+        this.usuario = usuario;
     }
 
     public void curtirDenuncia(){
@@ -80,14 +103,6 @@ public class Denuncia{
         this.descricao = descricao;
     }
 
-    public Localizacao getLocal() {
-        return local;
-    }
-
-    public void setLocal(Localizacao local) {
-        this.local = local;
-    }
-
     public Usuario getUsuario() {
         return usuario;
     }
@@ -100,16 +115,8 @@ public class Denuncia{
         return dataHora;
     }
 
-    public void setDataHora(LocalDateTime dataHora) {
-        this.dataHora = dataHora;
-    }
-
     public StatusDenuncia getStatusDenuncia() {
         return statusDenuncia;
-    }
-
-    public void setStatusDenuncia(StatusDenuncia statusDenuncia) {
-        this.statusDenuncia = statusDenuncia;
     }
 
     public Categoria getCategoria() {
@@ -133,15 +140,12 @@ public class Denuncia{
         return tipoDenuncia;
     }
 
-    public void setIdUsuario(Long idUsuario){
-        this.idUsuario = idUsuario;
-    }
-    public Long getIdUsuario(){
+    public int getIdUsuario() {
         return idUsuario;
     }
 
-    public void setTipoDenuncia(TipoDenuncia tipoDenuncia) {
-        this.tipoDenuncia = tipoDenuncia;
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public String getTitulo() {

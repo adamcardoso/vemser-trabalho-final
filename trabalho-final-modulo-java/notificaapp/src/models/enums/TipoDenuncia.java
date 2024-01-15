@@ -1,20 +1,24 @@
 package models.enums;
 
 public enum TipoDenuncia {
-    PUBLICA("1"),
-    ANONIMA("2");
-    private final String descricao;
-    TipoDenuncia(String descricao){
-        this.descricao = descricao;
-    }
-    public String getValor(){
-        return descricao;
+    PUBLICA(1),
+    ANONIMA(2);
+    private final int valor;
+
+    TipoDenuncia(int valor) {
+        this.valor = valor;
     }
 
-    public static TipoDenuncia getEnum(String n){
-        for(TipoDenuncia tipoDenuncia: values())
-            if(tipoDenuncia.descricao.equals(n))
+    public int getIdTipoDenuncia() {
+        return valor;
+    }
+
+    public static TipoDenuncia fromInt(int value) {
+        for (TipoDenuncia tipoDenuncia : TipoDenuncia.values()) {
+            if (tipoDenuncia.getIdTipoDenuncia() == value) {
                 return tipoDenuncia;
-        return null;
+            }
+        }
+        throw new IllegalArgumentException("Valor inválido para a enumeração TipoDenuncia: " + value);
     }
 }

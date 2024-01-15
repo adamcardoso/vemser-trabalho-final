@@ -5,6 +5,7 @@ import models.enums.Etnia;
 import models.enums.Genero;
 import models.enums.TipoUsuario;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 public class Usuario {
@@ -19,6 +20,39 @@ public class Usuario {
     private TipoUsuario tipoUsuario;
     private boolean isAdmin;
 
+    public Usuario() {
+    }
+
+    public Usuario(String nomeUsuario) {
+        this.nomeUsuario = nomeUsuario;
+    }
+
+    public Usuario(int idUsuario, String nomeUsuario) {
+        this.idUsuario = idUsuario;
+        this.nomeUsuario = nomeUsuario;
+    }
+
+
+    public Usuario(String nomeUsuario, String numeroCelular, String senhaUsuario, LocalDate dataNascimento,  Etnia etniaUsuario, ClasseSocial classeSocial, Genero generoUsuario) {
+        this.nomeUsuario = nomeUsuario;
+        this.numeroCelular = numeroCelular;
+        this.senhaUsuario = senhaUsuario;
+        this.etniaUsuario = etniaUsuario;
+        this.dataNascimento = dataNascimento;
+        this.classeSocial = classeSocial;
+        this.generoUsuario = generoUsuario;
+        this.tipoUsuario = TipoUsuario.INDIVIDUAL;
+    }
+
+    public Usuario(String nomeUsuario, Etnia etniaUsuario, ClasseSocial classeSocial, Genero generoUsuario, TipoUsuario tipoUsuario){
+        this.nomeUsuario = nomeUsuario;
+        this.etniaUsuario = etniaUsuario;
+        this.classeSocial = classeSocial;
+        this.generoUsuario = generoUsuario;
+        this.tipoUsuario = tipoUsuario;
+        this.senhaUsuario = this.senhaHash();
+    }
+
     public Usuario(int idUsuario, String nomeUsuario, String numeroCelular, String senhaUsuario, Etnia etniaUsuario, LocalDate dataNascimento, ClasseSocial classeSocial, Genero generoUsuario, TipoUsuario tipoUsuario) {
         this.idUsuario = idUsuario;
         this.nomeUsuario = nomeUsuario;
@@ -32,16 +66,9 @@ public class Usuario {
         this.isAdmin = tipoUsuario.equals(TipoUsuario.ADMIN);
     }
 
-    public Usuario() {
-    }
-
-    public Usuario(String nomeUsuario) {
-        this.nomeUsuario = nomeUsuario;
-    }
-
-    public Usuario(int idUsuario, String nomeUsuario) {
-        this.idUsuario = idUsuario;
-        this.nomeUsuario = nomeUsuario;
+    private String senhaHash(){
+        double d = Math.random() * 100 - 0;
+        return Integer.toString((Double.toString(d)).hashCode());
     }
 
     public int getIdUsuario() {
@@ -110,10 +137,6 @@ public class Usuario {
 
     public TipoUsuario getTipoUsuario() {
         return tipoUsuario;
-    }
-
-    public void setTipoUsuario(TipoUsuario tipoUsuario) {
-        this.tipoUsuario = tipoUsuario;
     }
 
     public boolean getIsAdmin() {
