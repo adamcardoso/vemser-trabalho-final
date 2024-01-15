@@ -217,6 +217,7 @@ public class Home {
             switch (opMenuUsuario) {
                 case 1:
                     usuarioServices.removerUsuario(usuarioLogado.getIdUsuario());
+                    exibirLoginMenu();
                     break;
                 case 2:
                     this.editarUsuario();
