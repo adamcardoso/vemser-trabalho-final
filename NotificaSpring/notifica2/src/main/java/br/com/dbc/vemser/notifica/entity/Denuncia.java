@@ -4,6 +4,8 @@ import br.com.dbc.vemser.notifica.entity.enums.Categoria;
 import br.com.dbc.vemser.notifica.entity.enums.StatusDenuncia;
 import br.com.dbc.vemser.notifica.entity.enums.TipoDenuncia;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +13,11 @@ import java.util.List;
 public class Denuncia{
     private int idDenuncia;
     private String descricao;
+    @NotNull
     private String titulo;
     private Localizacao local;
+    @NotNull
+    @NotEmpty
     private Usuario usuario;
     private LocalDateTime dataHora;
     private StatusDenuncia statusDenuncia;
@@ -20,12 +25,21 @@ public class Denuncia{
     private int curtidas;
     private final List<String> comentarios = new ArrayList<>();
     private TipoDenuncia tipoDenuncia;
-    private int validarDenuncia;
 
+    public Denuncia() {
+
+    }
+
+    public int getValidarDenuncia() {return validarDenuncia;}
+
+    public void setValidarDenuncia(int validarDenuncia) {this.validarDenuncia = validarDenuncia;}
+
+    private int validarDenuncia;
     private int idUsuario;
 
-    public Denuncia(int idDenuncia, String titulo, String descricao, StatusDenuncia statusDenuncia, Categoria categoria, TipoDenuncia tipoDenuncia) {
+    public Denuncia(int idDenuncia, int idUsuario, String titulo, String descricao, StatusDenuncia statusDenuncia, Categoria categoria, TipoDenuncia tipoDenuncia) {
         this.idDenuncia = idDenuncia;
+        this.idUsuario = idUsuario;
         this.titulo = titulo;
         this.descricao = descricao;
         this.statusDenuncia = statusDenuncia;
@@ -40,7 +54,6 @@ public class Denuncia{
         this.categoria = categoria;
         this.dataHora = LocalDateTime.now();
         this.curtidas = 0;
-        this.validarDenuncia = 0;
         this.tipoDenuncia = tipoDenuncia;
         this.idUsuario = idUsuario;
     }
@@ -56,10 +69,6 @@ public class Denuncia{
 
     public void curtirDenuncia(){
         this.curtidas++;
-    }
-
-    public void validarDenuncia(){
-        this.validarDenuncia++;
     }
 
     public void comentar(String comentario){
@@ -129,11 +138,6 @@ public class Denuncia{
 
     public int getCurtidas() {
         return curtidas;
-    }
-
-
-    public int getValidarDenuncia() {
-        return validarDenuncia;
     }
 
     public TipoDenuncia getTipoDenuncia() {
