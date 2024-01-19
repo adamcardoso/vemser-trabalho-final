@@ -9,5 +9,5 @@ public interface AdminService {
     void listarDenuncias(Usuario usuarioLogado);
     Optional<Usuario> adicionarUsuario(Usuario u);
     boolean editarDadosDoAdmin(Integer id, Usuario usuario);
-    void excluirDenuncia(int idDenuncia);
+    void removerDenuncia(int idDenuncia);
 }
