@@ -8,7 +8,6 @@ import javax.sql.DataSource;
 
 @Configuration
 public class DataSourceConfig {
-
     private static final String SERVER = "vemser-dbc.dbccompany.com.br";
     private static final String PORT = "25000";
     private static final String DATABASE = "xe";
