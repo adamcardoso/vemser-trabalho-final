@@ -68,15 +68,15 @@ public class ComentarioRepository {
 
             List<Comentario> comentarios = new ArrayList<>();
 
-            while (resultSet.next()) {
+            while (resultSet.next())
                 comentarios.add(
                         new Comentario(resultSet.getInt("ID_COMENTARIO"), resultSet.getString("COMENTARIO"),
                                 resultSet.getInt("CURTIDA"), resultSet.getInt("ID_DENUNCIA"), resultSet.getInt("ID_USUARIO")));
-            }
+
             return Optional.of(comentarios);
 
         } catch (Exception e) {
-            throw new Exception("");
+            throw new Exception(e);
         } finally {
             try{
                 if(stmt != null)
@@ -114,8 +114,8 @@ public class ComentarioRepository {
 
             if (res > 0)
                 return Optional.of(comentario);
-            else
-                throw new Exception("Falha ao adicionar usuário.");
+
+            throw new Exception("Falha ao adicionar usuário.");
 
         } catch (Exception e){
             throw new Exception(e);
@@ -154,11 +154,10 @@ public class ComentarioRepository {
 
             if (res > 0)
                 return this.obterComentarioById(id);
-            else
-                throw new Exception("Falha ao atualizar comentário.");
+
+            throw new Exception("Falha ao atualizar comentário.");
 
         } catch (Exception e){
-            e.printStackTrace();
             throw new Exception();
         } finally {
             try{
@@ -207,7 +206,7 @@ public class ComentarioRepository {
     }
 
     public Integer getProximoIdDoUsuario(Connection connection) throws SQLException {
-        String sql = "SELECT SEQ_USUARIO.NEXTVAL mysequence from DUAL";
+        String sql = "SELECT SEQ_COMENTARIO.NEXTVAL mysequence from DUAL";
 
         Statement stmt = connection.createStatement();
         ResultSet res = stmt.executeQuery(sql);
