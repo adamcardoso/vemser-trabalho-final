@@ -1,9 +1,8 @@
 package br.com.dbc.vemser.notifica.controller;
 
-import br.com.dbc.vemser.notifica.dto.comentario.ComentarioDto;
+
 import br.com.dbc.vemser.notifica.dto.estatistica.EstatisticaDto;
 import br.com.dbc.vemser.notifica.entity.Response;
-import br.com.dbc.vemser.notifica.repository.EstatisticaRepository;
 import br.com.dbc.vemser.notifica.service.EstatisticaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController

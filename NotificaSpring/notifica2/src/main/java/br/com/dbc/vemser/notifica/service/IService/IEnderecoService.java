@@ -1,11 +1,8 @@
 package br.com.dbc.vemser.notifica.service.IService;
 
-import br.com.dbc.vemser.notifica.dto.comentario.ComentarioDto;
-import br.com.dbc.vemser.notifica.dto.comentario.CreateComentarioDto;
 import br.com.dbc.vemser.notifica.dto.endereco.CreateEnderecoDto;
 import br.com.dbc.vemser.notifica.dto.endereco.EnderecoDto;
 import br.com.dbc.vemser.notifica.dto.endereco.UpdateEnderecoDto;
-import br.com.dbc.vemser.notifica.entity.Endereco;
 
 import java.util.List;
 import java.util.Optional;

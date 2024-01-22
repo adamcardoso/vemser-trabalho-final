@@ -1,13 +1,9 @@
 package br.com.dbc.vemser.notifica.service;
 
-import br.com.dbc.vemser.notifica.dto.comentario.ComentarioDto;
-import br.com.dbc.vemser.notifica.dto.comentario.UpdateComentarioDto;
 import br.com.dbc.vemser.notifica.dto.endereco.CreateEnderecoDto;
 import br.com.dbc.vemser.notifica.dto.endereco.EnderecoDto;
 import br.com.dbc.vemser.notifica.dto.endereco.UpdateEnderecoDto;
-import br.com.dbc.vemser.notifica.entity.Comentario;
 import br.com.dbc.vemser.notifica.entity.Endereco;
-import br.com.dbc.vemser.notifica.entity.Usuario;
 import br.com.dbc.vemser.notifica.repository.IRepository.IEnderecoRepository;
 import br.com.dbc.vemser.notifica.service.IService.IEnderecoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
