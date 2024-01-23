@@ -1,49 +1,119 @@
 package br.com.dbc.vemser.notifica.service;
 
+import br.com.dbc.vemser.notifica.dto.comentario.ComentarioDto;
+import br.com.dbc.vemser.notifica.dto.comentario.UpdateComentarioDto;
+import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaCreateDTO;
+import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
+import br.com.dbc.vemser.notifica.entity.Comentario;
 import br.com.dbc.vemser.notifica.entity.Denuncia;
-import br.com.dbc.vemser.notifica.entity.Usuario;
-import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.repository.DenunciaRepository;
-import org.springframework.http.ResponseEntity;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class DenunciaService {
-    private DenunciaRepository denunciaRepository;
+    private final DenunciaRepository denunciaRepository;
+    private final ObjectMapper objectMapper;
 
-    public DenunciaService(DenunciaRepository denunciaRepository) {
-        this.denunciaRepository = denunciaRepository;
+    public Optional<List<DenunciaDTO>> listarTodasDenuncias() throws Exception {
+        try {
+            Optional<List<DenunciaDTO>> denunciaDTOS = denunciaRepository.listarTodasDenuncias();
+            return denunciaDTOS;
+        } catch (Exception e) {
+            throw new Exception("Erro ao listar as denúncias", e);
+        }
     }
 
-    public List<Denuncia> list() {
-        return denunciaRepository.list();
+    public Optional<List<DenunciaDTO>> listByTitulo(String titulo) throws Exception {
+        try{
+            Optional<List<Denuncia>> denunciasopt = denunciaRepository.listByTitulo(titulo);
+
+            if(denunciasopt.isPresent()){
+                List<Denuncia> denuncias = denunciasopt.get();
+                List<DenunciaDTO> denunciaDTOS = new ArrayList<>();
+
+                for(Denuncia d: denuncias)
+                    denunciaDTOS.add(objectMapper.convertValue(d, DenunciaDTO.class));
+
+                return Optional.of(denunciaDTOS);
+            }
+            return Optional.empty();
+        } catch (Exception e){
+            throw new Exception();
+        }
     }
 
-    public List<Denuncia> listByTitulo(String titulo) {
-        return denunciaRepository.listByTitulo(titulo);
+    public Optional<List<DenunciaDTO>> listByIdUsuario(Integer idUsuario) throws Exception {
+        try {
+            Optional<List<Denuncia>> denunciasOpt = denunciaRepository.ListByIdUsuario(idUsuario);
+
+            if (denunciasOpt.isPresent()) {
+                List<Denuncia> denuncias = denunciasOpt.get();
+                List<DenunciaDTO> denunciaDTOS = new ArrayList<>();
+
+                for (Denuncia d : denuncias)
+                    denunciaDTOS.add(objectMapper.convertValue(d, DenunciaDTO.class));
+
+                return Optional.of(denunciaDTOS);
+            }
+            return Optional.empty();
+        } catch (Exception e) {
+            throw new Exception("Erro ao listar as denúncias do usuário.", e);
+        }
     }
 
-    public Denuncia criarDenuncia(Denuncia denuncia, int idUsuario) throws RegraDeNegocioException {
-        return denunciaRepository.criarDenuncia(denuncia, idUsuario);
+    public Optional<DenunciaDTO> obterDenunciaById(Integer idDenuncia) throws Exception {
+        try {
+            Optional<Denuncia> denunciaOpt = denunciaRepository.obterDenunciaById(idDenuncia);
 
+            if (denunciaOpt.isPresent()) {
+                Denuncia denuncia = denunciaOpt.get();
+                DenunciaDTO dDto = objectMapper.convertValue(denuncia, DenunciaDTO.class);
+
+                return Optional.of(dDto);
+            }
+            return Optional.empty();
+        } catch (Exception e) {
+            throw new Exception("Falha ao obter a denúncia pelo ID.", e);
+        }
     }
 
-    private Denuncia getIdUsuario(Integer id) throws Exception {
-        Denuncia denunciaIdUsuario = denunciaRepository.list().stream()
-                .filter(denuncia -> denuncia.getIdUsuario() == id)
-                .findFirst()
-                .orElseThrow(() -> new RegraDeNegocioException("Impossível criar Denúncia em um Usuário não encontrado!"));
-        return denunciaIdUsuario;
+    public Optional<DenunciaDTO> criarDenuncia(DenunciaCreateDTO denunciaDTO, int idUsuario) throws Exception {
+        try {
+            Denuncia d = objectMapper.convertValue(denunciaDTO, Denuncia.class);
+            return Optional.of(objectMapper.convertValue(denunciaRepository.criarDenuncia(d, idUsuario), DenunciaDTO.class));
+        } catch (Exception e){
+            throw new Exception();
+        }
     }
 
-    public List<Denuncia> ListByIdUsuario(String idUsuario) {
-        return denunciaRepository.ListByIdUsuario(idUsuario);
+    public Optional<DenunciaDTO> editarDenuncia(DenunciaCreateDTO denunciaCreateDTO, Integer idDenuncia) throws Exception {
+        try {
+            Optional<Denuncia> denunciaOpt = denunciaRepository.obterDenunciaById(idDenuncia);
+
+            if (denunciaOpt.isPresent()) {
+                Denuncia d = objectMapper.convertValue(denunciaCreateDTO, Denuncia.class);
+                return Optional.of(objectMapper.convertValue(denunciaRepository.editarDenuncia(idDenuncia, d), DenunciaDTO.class));
+            }
+
+            return Optional.empty();
+        } catch (Exception e) {
+            throw new Exception("Falha ao editar a denúncia.", e);
+        }
+    }
+
+    public Optional<Boolean> deletarDenuncia(Integer id) throws Exception{
+        try {
+            return denunciaRepository.deletarDenuncia(id);
+        } catch (Exception e){
+            throw new Exception();
+        }
     }
 }

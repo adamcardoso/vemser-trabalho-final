@@ -1,49 +1,89 @@
 package br.com.dbc.vemser.notifica.controller;
-import br.com.dbc.vemser.notifica.entity.Denuncia;
-import br.com.dbc.vemser.notifica.entity.Usuario;
-import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
+
+import br.com.dbc.vemser.notifica.dto.comentario.ComentarioDto;
+import br.com.dbc.vemser.notifica.dto.comentario.CreateComentarioDto;
+import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaCreateDTO;
+import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
+import br.com.dbc.vemser.notifica.entity.Response;
 import br.com.dbc.vemser.notifica.service.DenunciaService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Past;
 import java.util.List;
 
 @RestController
-@RequestMapping("/denuncia") // localhost:8080/pessoa
+@RequiredArgsConstructor
+@RequestMapping("/denuncia")
 public class DenunciaController {
 
-    private DenunciaService denunciaService;
+    private final DenunciaService denunciaService;
 
-    public DenunciaController(DenunciaService denunciaService) {
-        this.denunciaService = denunciaService;
+    @GetMapping
+    public ResponseEntity<Response<List<DenunciaDTO>>> listarTodasDenuncias() {
+        try {
+            return denunciaService.listarTodasDenuncias()
+                    .map(denuncias -> new ResponseEntity<>(new Response<>(denuncias, 200, "Todas as denúncias obtidas com sucesso!"), HttpStatus.OK))
+                    .orElseGet(() -> new ResponseEntity<>(new Response<>(null, 404, "Denúncias não encontradas!"), HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            return new ResponseEntity<>(new Response<>(null, 400, e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
-    @GetMapping // GET localhost:8080/denuncia
-    public List<Denuncia> list() {
-        return denunciaService.list();
+    @GetMapping("/{id}")
+    public ResponseEntity<Response<DenunciaDTO>> obterDenunciaById(@PathVariable("id") Integer id) {
+        try {
+            return denunciaService.obterDenunciaById(id)
+                    .map(d -> new ResponseEntity<>(new Response<>(d, 200, "Denúncia obtida com sucesso!"), HttpStatus.OK))
+                    .orElseGet(() -> new ResponseEntity<>(new Response<>(null, 404, "Denúncia não encontrada!"), HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            return new ResponseEntity<>(new Response<>(null, 400, e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
-    @GetMapping("/bytitulo") // GET localhost:8080/denuncia/bytitulo?titulo=Título da Denúncia 1
-    public List<Denuncia> listByTitulo(@NotBlank @RequestParam("titulo") String titulo) {
-        return denunciaService.listByTitulo(titulo);
-    }
-
-    @GetMapping("/{idUsuario}") // GET localhost:8080/denuncia/1
-    public List<Denuncia> ListByIdUsuario(@PathVariable("idUsuario") String idUsuario) {
-        return denunciaService.ListByIdUsuario(idUsuario);
+    @GetMapping("/usuario/{idUsuario}")
+    public ResponseEntity<Response<List<DenunciaDTO>>> listByIdUsuario(@PathVariable("idUsuario") Integer idUsuario) {
+        try {
+            return denunciaService.listByIdUsuario(idUsuario)
+                    .map(denuncias -> new ResponseEntity<>(new Response<>(denuncias, 200, "Denúncias obtidas com sucesso!"), HttpStatus.OK))
+                    .orElseGet(() -> new ResponseEntity<>(new Response<>(null, 404, "Denúncias não encontradas!"), HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            return new ResponseEntity<>(new Response<>(null, 400, e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/{idUsuario}")
-    public ResponseEntity<Denuncia> criarDenuncia(@PathVariable("idUsuario") Integer idUsuario, @RequestBody Denuncia denuncia) throws RegraDeNegocioException {
-        return ResponseEntity.ok(denunciaService.criarDenuncia(denuncia, idUsuario));
+    public ResponseEntity<Response<DenunciaDTO>> criarDenuncia(@PathVariable("idUsuario") Integer idUsuario, @RequestBody DenunciaCreateDTO denunciaCreateDTO) {
+        try {
+            return denunciaService.criarDenuncia(denunciaCreateDTO, idUsuario)
+                    .map(d-> new ResponseEntity<>(new Response<>(d, 201, "Denúncia criada com sucesso!"), HttpStatus.CREATED))
+                    .orElseGet(() -> new ResponseEntity<>(new Response<>(null, 400, "Ocorreu um problema ao criar a denúncia!"), HttpStatus.BAD_REQUEST));
+        } catch (Exception e) {
+            return new ResponseEntity<>(new Response<>(null, 400, e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
+    @PutMapping("/{idDenuncia}")
+    public ResponseEntity<Response<DenunciaDTO>> editarDenuncia(@PathVariable("idDenuncia") Integer idDenuncia, @RequestBody DenunciaCreateDTO denunciaCreateDTO) {
+        try {
+            return denunciaService.editarDenuncia(denunciaCreateDTO, idDenuncia)
+                    .map(d -> new ResponseEntity<>(new Response<>(d, 200, "Denúncia editada com sucesso!"), HttpStatus.OK))
+                    .orElseGet(() -> new ResponseEntity<>(new Response<>(null, 404, "Denúncia não encontrada!"), HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            return new ResponseEntity<>(new Response<>(null, 400, e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
 
+    @DeleteMapping("/{idDenuncia}")
+    public ResponseEntity<Response<Object>> deletarDenuncia(@PathVariable("idDenuncia") Integer idDenuncia) {
+        try {
+            return denunciaService.deletarDenuncia(idDenuncia)
+                    .map(d -> new ResponseEntity<>(new Response<>(null, 200, "Denúncia deletada com sucesso!"), HttpStatus.OK))
+                    .orElseGet(() -> new ResponseEntity<>(new Response<>(null, 404, "Denúncia não encontrada!"), HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            return new ResponseEntity<>(new Response<>(null, 400, e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

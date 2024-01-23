@@ -88,7 +88,7 @@ public class ComentarioRepository {
             }
         }
     }
-    public Optional<Comentario> adicionarComentario(Comentario comentario) throws Exception {
+    public Optional<Comentario> criarComentario(Comentario comentario) throws Exception {
         Connection con = null;
         PreparedStatement stmt = null;
 
@@ -115,7 +115,7 @@ public class ComentarioRepository {
             if (res > 0)
                 return Optional.of(comentario);
 
-            throw new Exception("Falha ao adicionar usuário.");
+            throw new Exception("Falha ao adicionar comentario.");
 
         } catch (Exception e){
             throw new Exception(e);
@@ -131,7 +131,7 @@ public class ComentarioRepository {
         }
     }
 
-    public Optional<Comentario> atualizarComentario(Integer id, Comentario comentario) throws Exception{
+    public Optional<Comentario> editarComentario(Integer id, Comentario comentario) throws Exception{
         Connection con = null;
         PreparedStatement stmt = null;
 
@@ -171,7 +171,7 @@ public class ComentarioRepository {
         }
     }
 
-    public Optional<Boolean> removerComentario(Integer id) throws Exception{
+    public Optional<Boolean> deletarComentario(Integer id) throws Exception{
         Connection con = null;
         PreparedStatement stmt = null;
 
