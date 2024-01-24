@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.notifica.controller;
 
+import br.com.dbc.vemser.notifica.controller.documentacao.IEnderecoController;
 import br.com.dbc.vemser.notifica.dto.endereco.CreateEnderecoDto;
 import br.com.dbc.vemser.notifica.dto.endereco.EnderecoDto;
 import br.com.dbc.vemser.notifica.dto.endereco.UpdateEnderecoDto;
@@ -15,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/endereco")
-public class EnderecoController {
+public class EnderecoController implements IEnderecoController {
     private final IEnderecoService enderecoService;
     @GetMapping("/{id}")
     public ResponseEntity<Response<EnderecoDto>> obterEnderecoById(@PathVariable Integer id){
@@ -30,7 +31,7 @@ public class EnderecoController {
     }
 
     @GetMapping("/{id}/usuario")
-    public ResponseEntity<Response<List<EnderecoDto>>> listarComentariosByIdDenuncia(@PathVariable("id") Integer id){
+    public ResponseEntity<Response<List<EnderecoDto>>> obterEnderecosByIdUsuario(@PathVariable("id") Integer id){
         try{
             return enderecoService.obterEnderecosByIdUsuario(id)
                     .map(e -> new ResponseEntity<>(new Response<>(e, 200, "Endereços obtidos com sucesso!"), HttpStatus.OK))

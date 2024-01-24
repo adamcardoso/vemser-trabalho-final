@@ -1,6 +1,7 @@
 package br.com.dbc.vemser.notifica.controller;
 
 
+import br.com.dbc.vemser.notifica.controller.documentacao.IEstatisticaController;
 import br.com.dbc.vemser.notifica.dto.estatistica.EstatisticaDto;
 import br.com.dbc.vemser.notifica.entity.Response;
 import br.com.dbc.vemser.notifica.service.EstatisticaService;
@@ -15,11 +16,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/estatistica")
-public class EstatisticaController {
+public class EstatisticaController implements IEstatisticaController {
     public final EstatisticaService estatisticaService;
 
     @GetMapping("/bycolumn")
-    public ResponseEntity<Response<HashMap<String, List<EstatisticaDto>>>> obterEstatistica(@RequestParam("coluna") List<String> colunas) throws Exception{
+    public ResponseEntity<Response<HashMap<String, List<EstatisticaDto>>>> obterEstatistica(@RequestParam("coluna") List<String> colunas) {
         try{
             return estatisticaService.obterEstatistica(colunas)
                     .map(c -> new ResponseEntity<>(

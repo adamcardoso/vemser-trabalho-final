@@ -1,6 +1,7 @@
 package br.com.dbc.vemser.notifica.controller;
 
 
+import br.com.dbc.vemser.notifica.controller.documentacao.IComentarioController;
 import br.com.dbc.vemser.notifica.dto.comentario.ComentarioDto;
 import br.com.dbc.vemser.notifica.dto.comentario.CreateComentarioDto;
 import br.com.dbc.vemser.notifica.dto.comentario.UpdateComentarioDto;
@@ -16,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/comentario")
-public class ComentarioController {
+public class ComentarioController implements IComentarioController {
     private final ComentarioService comentarioService;
 
     @GetMapping("/{id}")

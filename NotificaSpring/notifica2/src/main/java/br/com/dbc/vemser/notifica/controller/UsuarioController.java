@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.notifica.controller;
 
+import br.com.dbc.vemser.notifica.controller.documentacao.IUsuarioController;
 import br.com.dbc.vemser.notifica.dto.usuario.CreateUsuarioDto;
 import br.com.dbc.vemser.notifica.dto.usuario.UpdateUsuarioDto;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDto;
@@ -17,7 +18,7 @@ import java.util.List;
 @RequestMapping("/usuario")
 @AllArgsConstructor
 @Validated
-public class UsuarioController {
+public class UsuarioController implements IUsuarioController {
     private UsuarioService usuarioService;
 
     @GetMapping("/{idUsuario}")
