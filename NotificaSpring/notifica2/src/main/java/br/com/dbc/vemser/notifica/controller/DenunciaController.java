@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.notifica.controller;
 
+import br.com.dbc.vemser.notifica.controller.documentacao.IDenunciaController;
 import br.com.dbc.vemser.notifica.dto.comentario.ComentarioDto;
 import br.com.dbc.vemser.notifica.dto.comentario.CreateComentarioDto;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaCreateDTO;
@@ -17,7 +18,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/denuncia")
-public class DenunciaController {
+public class DenunciaController implements IDenunciaController {
 
     private final DenunciaService denunciaService;
 

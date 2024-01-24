@@ -22,6 +22,8 @@ public class UpdateUsuarioDto {
     @NotBlank
     private String nomeUsuario;
 
+    private String emailUsuario;
+
     @NotNull
     @NotEmpty
     @NotBlank

@@ -5,6 +5,7 @@ import br.com.dbc.vemser.notifica.entity.Usuario;
 import br.com.dbc.vemser.notifica.entity.enums.Categoria;
 import br.com.dbc.vemser.notifica.entity.enums.StatusDenuncia;
 import br.com.dbc.vemser.notifica.entity.enums.TipoDenuncia;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,16 +18,37 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DenunciaCreateDTO {
+    @Schema(description = "ID da Denúncia", example = "1")
     private int idDenuncia;
+
+    @Schema(description = "Descrição da Denúncia", example = "Isso é uma denúncia")
     private String descricao;
+
     @NotNull(message = "A Denúncia precisa ter um Título!")
+    @Schema(description = "Título da Denúncia", required = true, example = "Título da Denúncia")
     private String titulo;
+
+    @Schema(description = "Localização da Denúncia")
     private Localizacao local;
+
+    @Schema(description = "Data e Hora da Denúncia", example = "2024-01-24T10:30:00")
     private LocalDateTime dataHora;
+
+    @Schema(description = "Status da Denúncia", example = "ABERTO", allowableValues = {"ABERTO", "EM_ANALISE", "EM_ANDAMENTO", "RESOLVIDO", "FECHADO"})
     private StatusDenuncia statusDenuncia;
+
+    @Schema(description = "Categoria da Denúncia", example = "AGUA_POTAVEL", allowableValues = {"AGUA_POTAVEL", "SANEAMENTO_BASICO", "GESTAO_RESIDUOS", "EDUCACAO_HIGIENE"})
     private Categoria categoria;
+
+    @Schema(description = "Número de Curtidas da Denúncia", example = "10")
     private int curtidas;
+
+    @Schema(description = "Lista de Comentários da Denúncia")
     private final List<String> comentarios = new ArrayList<>();
+
+    @Schema(description = "Tipo da Denúncia", example = "ANONIMA", allowableValues = {"PUBLICA", "ANONIMA"})
     private TipoDenuncia tipoDenuncia;
+
+    @Schema(description = "ID do Usuário que fez a Denúncia", example = "1")
     private int idUsuario;
 }

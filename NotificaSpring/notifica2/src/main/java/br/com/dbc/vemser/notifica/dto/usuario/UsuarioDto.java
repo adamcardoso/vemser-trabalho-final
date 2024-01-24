@@ -15,6 +15,7 @@ import java.time.LocalDate;
 public class UsuarioDto {
     private int idUsuario;
     private String nomeUsuario;
+    private String emailUsuario;
     private String numeroCelular;
 
     @ToString.Exclude
