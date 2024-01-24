@@ -36,6 +36,7 @@ public class UsuarioRepository {
                 String nomeUsuario = resultSet.getString("NOME_USUARIO");
                 String celularUsuario = resultSet.getString("CELULAR_USUARIO");
                 String senhaUsuario = resultSet.getString("SENHA_USUARIO");
+                String emailUsuario = resultSet.getString("EMAIL_USUARIO");
                 Etnia etnia = Etnia.fromInt(resultSet.getInt("ETNIA"));
                 LocalDate dataNascimento = resultSet.getDate("DATA_NASCIMENTO").toLocalDate();
                 ClasseSocial classeSocial = ClasseSocial.fromInt(resultSet.getInt("CLASSE_SOCIAL"));
@@ -43,7 +44,7 @@ public class UsuarioRepository {
                 TipoUsuario tipoUsuario = TipoUsuario.fromInt(resultSet.getInt("TIPO_USUARIO"));
                 Boolean isAdmin = TipoUsuario.fromInt(resultSet.getInt("TIPO_USUARIO")).equals(TipoUsuario.ADMIN);
 
-                usuario = new Usuario(idUsuario, nomeUsuario, celularUsuario, senhaUsuario, etnia, dataNascimento, classeSocial, genero, tipoUsuario, isAdmin);
+                usuario = new Usuario(idUsuario, nomeUsuario, emailUsuario, celularUsuario, senhaUsuario, etnia, dataNascimento, classeSocial, genero, tipoUsuario, isAdmin);
             }
 
             return usuario;
@@ -80,6 +81,7 @@ public class UsuarioRepository {
             while (resultSet.next()) {
                 Integer idUsuario = resultSet.getInt("ID_USUARIO");
                 String nomeUsuario = resultSet.getString("NOME_USUARIO");
+                String emailUsuario = resultSet.getString("EMAIL_USUARIO");
                 String celularUsuario = resultSet.getString("CELULAR_USUARIO");
                 String senhaUsuario = resultSet.getString("SENHA_USUARIO");
                 Etnia etnia = Etnia.fromInt(resultSet.getInt("ETNIA"));
@@ -89,7 +91,7 @@ public class UsuarioRepository {
                 TipoUsuario tipoUsuario = TipoUsuario.fromInt(resultSet.getInt("TIPO_USUARIO"));
                 Boolean isAdmin = TipoUsuario.fromInt(resultSet.getInt("TIPO_USUARIO")).equals(TipoUsuario.ADMIN);
 
-                usuarios.add(new Usuario(idUsuario, nomeUsuario, celularUsuario, senhaUsuario, etnia, dataNascimento, classeSocial, genero, tipoUsuario, isAdmin));
+                usuarios.add(new Usuario(idUsuario, nomeUsuario, emailUsuario, celularUsuario, senhaUsuario, etnia, dataNascimento, classeSocial, genero, tipoUsuario, isAdmin));
             }
             return usuarios;
         } catch (Exception e) {
@@ -116,8 +118,8 @@ public class UsuarioRepository {
 
             String sql = """
                     INSERT INTO USUARIO
-                    (ID_USUARIO, NOME_USUARIO, CELULAR_USUARIO, SENHA_USUARIO, DATA_NASCIMENTO, ETNIA, CLASSE_SOCIAL, GENERO, TIPO_USUARIO)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""";
+                    (ID_USUARIO, NOME_USUARIO, EMAIL_USUARIO, CELULAR_USUARIO, SENHA_USUARIO, DATA_NASCIMENTO, ETNIA, CLASSE_SOCIAL, GENERO, TIPO_USUARIO)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""";
 
             Integer proximoId = this.getProximoIdDoUsuario(con);
             usuario.setIdUsuario(proximoId);
@@ -125,13 +127,14 @@ public class UsuarioRepository {
             stmt = con.prepareStatement(sql);
             stmt.setInt(1, usuario.getIdUsuario());
             stmt.setString(2, usuario.getNomeUsuario());
-            stmt.setString(3, usuario.getNumeroCelular());
-            stmt.setString(4, usuario.getSenhaUsuario());
-            stmt.setDate(5, Date.valueOf(usuario.getDataNascimento()));
-            stmt.setString(6, String.valueOf(usuario.getEtniaUsuario().getIdEtnia()));
-            stmt.setString(7, String.valueOf(usuario.getClasseSocial().getIdClasseSocial()));
-            stmt.setString(8, String.valueOf(usuario.getGeneroUsuario().getIdGenero()));
-            stmt.setString(9, String.valueOf(usuario.getTipoUsuario().getIdTipoUsuario()));
+            stmt.setString(3, usuario.getEmailUsuario());
+            stmt.setString(4, usuario.getNumeroCelular());
+            stmt.setString(5, usuario.getSenhaUsuario());
+            stmt.setDate(6, Date.valueOf(usuario.getDataNascimento()));
+            stmt.setString(7, String.valueOf(usuario.getEtniaUsuario().getIdEtnia()));
+            stmt.setString(8, String.valueOf(usuario.getClasseSocial().getIdClasseSocial()));
+            stmt.setString(9, String.valueOf(usuario.getGeneroUsuario().getIdGenero()));
+            stmt.setString(10, String.valueOf(usuario.getTipoUsuario().getIdTipoUsuario()));
 
             int res = stmt.executeUpdate();
 

@@ -24,6 +24,11 @@ public class CreateUsuarioDto {
     @Schema(description = "Nome do Usuário", required = true, example = "John Doe")
     private String nomeUsuario;
 
+    @NotNull
+    @NotEmpty
+    @Schema(description = "E-mail do Usuário", required = true, example = "nome.sobrenome@gmail.com")
+    private String emailUsuario;
+
     @NotBlank
     @Schema(description = "Número de Celular do Usuário", required = true, example = "123456789")
     private String numeroCelular;
