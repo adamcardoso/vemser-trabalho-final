@@ -46,7 +46,7 @@ public class ComentarioController {
     @PostMapping
     public ResponseEntity<Response<ComentarioDto>> adicionarComentario(@RequestBody CreateComentarioDto comentarioDto) {
         try{
-            return comentarioService.adicionarComentario(comentarioDto)
+            return comentarioService.criarComentario(comentarioDto)
                     .map(c -> new ResponseEntity<>(new Response<>(c, 201, "Comentário criado com sucesso!"), HttpStatus.CREATED))
                     .orElseGet(() -> new ResponseEntity<>(new Response<>(null, 400, "Ocorreu um problema!"), HttpStatus.BAD_REQUEST));
         } catch(Exception e){
@@ -57,7 +57,7 @@ public class ComentarioController {
     @PutMapping("/{id}")
     public ResponseEntity<Response<ComentarioDto>> atualizarComentario(@PathVariable("id") Integer id, @RequestBody UpdateComentarioDto comentarioDto){
         try{
-            return comentarioService.atualizarComentario(id, comentarioDto)
+            return comentarioService.editarComentario(id, comentarioDto)
                     .map(c -> new ResponseEntity<>(new Response<>(c, 200, "Comentário atualizado com sucesso!"), HttpStatus.CREATED))
                     .orElseGet(() -> new ResponseEntity<>(new Response<>(null, 404, "Comentário não encontrado!"), HttpStatus.NOT_FOUND));
         } catch(Exception e){
@@ -66,9 +66,9 @@ public class ComentarioController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Response<Object>> removerComentario(@PathVariable("id") Integer id) {
+    public ResponseEntity<Response<Object>> deletarComentario(@PathVariable("id") Integer id) {
         try{
-            return comentarioService.removerComentario(id)
+            return comentarioService.deletarComentario(id)
                     .map(c -> new ResponseEntity<>(new Response<>(null, 200, "Comentário deletado com sucesso!"), HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(new Response<>(null, 404, "Comentário não encontrado!"), HttpStatus.NOT_FOUND));
         } catch(Exception e){

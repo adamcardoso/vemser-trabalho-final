@@ -54,22 +54,22 @@ public class ComentarioService {
         }
     }
 
-    public Optional<ComentarioDto> adicionarComentario(CreateComentarioDto comentarioDto) throws Exception{
+    public Optional<ComentarioDto> criarComentario(CreateComentarioDto comentarioDto) throws Exception{
         try {
             Comentario c = objectMapper.convertValue(comentarioDto, Comentario.class);
-            return Optional.of(objectMapper.convertValue(comentarioRepository.adicionarComentario(c), ComentarioDto.class));
+            return Optional.of(objectMapper.convertValue(comentarioRepository.criarComentario(c), ComentarioDto.class));
         } catch (Exception e){
             throw new Exception();
         }
     }
 
-    public Optional<ComentarioDto> atualizarComentario(Integer id, UpdateComentarioDto comentarioDto) throws Exception{
+    public Optional<ComentarioDto> editarComentario(Integer id, UpdateComentarioDto comentarioDto) throws Exception{
         try {
             Optional<Comentario> cOpt = comentarioRepository.obterComentarioById(id);
 
             if(cOpt.isPresent()){
                 Comentario c = objectMapper.convertValue(comentarioDto, Comentario.class);
-                return Optional.of(objectMapper.convertValue(comentarioRepository.atualizarComentario(id, c), ComentarioDto.class));
+                return Optional.of(objectMapper.convertValue(comentarioRepository.editarComentario(id, c), ComentarioDto.class));
             }
             return Optional.empty();
         } catch (Exception e){
@@ -77,9 +77,9 @@ public class ComentarioService {
         }
     }
 
-    public Optional<Boolean> removerComentario(Integer id) throws Exception{
+    public Optional<Boolean> deletarComentario(Integer id) throws Exception{
         try {
-            return comentarioRepository.removerComentario(id);
+            return comentarioRepository.deletarComentario(id);
         } catch (Exception e){
             throw new Exception();
         }
