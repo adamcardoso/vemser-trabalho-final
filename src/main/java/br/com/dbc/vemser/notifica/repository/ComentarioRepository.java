@@ -1,6 +1,6 @@
 package br.com.dbc.vemser.notifica.repository;
 
-import br.com.dbc.vemser.notifica.config.DataSourceConfig;
+import br.com.dbc.vemser.notifica.config.ConexaoBancoDeDados;
 import br.com.dbc.vemser.notifica.entity.Comentario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -13,14 +13,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Repository
 public class ComentarioRepository {
-    private final DataSourceConfig dataSourceConfig;
+    private final ConexaoBancoDeDados conexaoBancoDeDados;
 
     public Optional<Comentario> obterComentarioById(Integer id) throws Exception{
         Connection con = null;
         PreparedStatement stmt = null;
 
         try{
-            con = dataSourceConfig.dataSource().getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = """
                    SELECT * FROM COMENTARIO c WHERE ID_COMENTARIO = ?
@@ -55,7 +55,7 @@ public class ComentarioRepository {
         PreparedStatement stmt = null;
 
         try{
-            con = dataSourceConfig.dataSource().getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = """
                    SELECT * FROM COMENTARIO c WHERE ID_DENUNCIA = ?
@@ -93,7 +93,7 @@ public class ComentarioRepository {
         PreparedStatement stmt = null;
 
         try{
-            con = dataSourceConfig.dataSource().getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = """
                     INSERT INTO COMENTARIO c (ID_COMENTARIO, COMENTARIO, CURTIDA, ID_DENUNCIA, ID_USUARIO)
@@ -136,7 +136,7 @@ public class ComentarioRepository {
         PreparedStatement stmt = null;
 
         try{
-            con = dataSourceConfig.dataSource().getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = """
                     UPDATE COMENTARIO c
@@ -176,7 +176,7 @@ public class ComentarioRepository {
         PreparedStatement stmt = null;
 
         try {
-            con = dataSourceConfig.dataSource().getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = """
                     DELETE FROM COMENTARIO c WHERE c.ID_COMENTARIO = ?

@@ -1,7 +1,6 @@
 package br.com.dbc.vemser.notifica.repository;
 
-import br.com.dbc.vemser.notifica.config.DataSourceConfig;
-import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaCreateDTO;
+import br.com.dbc.vemser.notifica.config.ConexaoBancoDeDados;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
 import br.com.dbc.vemser.notifica.entity.Denuncia;
 import br.com.dbc.vemser.notifica.entity.enums.Categoria;
@@ -11,7 +10,6 @@ import br.com.dbc.vemser.notifica.entity.enums.TipoDenuncia;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import javax.validation.Valid;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +19,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class DenunciaRepository {
 
-    private final DataSourceConfig dataSourceConfig;
+    private final ConexaoBancoDeDados conexaoBancoDeDados;
 
     public Optional<List<DenunciaDTO>> listarTodasDenuncias() {
-        try (Connection connection = dataSourceConfig.dataSource().getConnection()) {
+        try (Connection connection = conexaoBancoDeDados.getConnection()) {
             String sql = "SELECT * FROM DENUNCIA";
 
             try (Statement stmt = connection.createStatement();
@@ -52,7 +50,7 @@ public class DenunciaRepository {
     }
 
     public Optional<List<Denuncia>> listByTitulo(String titulo) {
-        try (Connection connection = dataSourceConfig.dataSource().getConnection()) {
+        try (Connection connection = conexaoBancoDeDados.getConnection()) {
             String sql = "SELECT * FROM DENUNCIA WHERE titulo LIKE ?";
 
             try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -82,7 +80,7 @@ public class DenunciaRepository {
     }
 
     public Optional<List<Denuncia>> ListByIdUsuario(Integer idUsuario) {
-        try (Connection connection = dataSourceConfig.dataSource().getConnection()) {
+        try (Connection connection = conexaoBancoDeDados.getConnection()) {
             String sql = "SELECT * FROM DENUNCIA WHERE id_usuario = ?";
 
             try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -112,7 +110,7 @@ public class DenunciaRepository {
     }
 
     public Optional<Denuncia> obterDenunciaById(Integer idDenuncia) {
-        try (Connection connection = dataSourceConfig.dataSource().getConnection()) {
+        try (Connection connection = conexaoBancoDeDados.getConnection()) {
             String sql = "SELECT * FROM DENUNCIA WHERE id_denuncia = ?";
 
             try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -144,7 +142,7 @@ public class DenunciaRepository {
         PreparedStatement stmt = null;
 
         try {
-            con = dataSourceConfig.dataSource().getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = "INSERT INTO DENUNCIA (id_denuncia, titulo, descricao, data_hora, status_denuncia, categoria, curtida, tipo_denuncia, id_usuario) VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?)";
 
@@ -190,7 +188,7 @@ public class DenunciaRepository {
         PreparedStatement stmt = null;
 
         try {
-            con = dataSourceConfig.dataSource().getConnection();
+            con = conexaoBancoDeDados.getConnection();
             String sql = "UPDATE DENUNCIA SET titulo = ?, descricao = ?, status_denuncia = ?, categoria = ?, curtida = ?, tipo_denuncia = ? WHERE id_denuncia = ?";
 
             stmt = con.prepareStatement(sql);
@@ -230,7 +228,7 @@ public class DenunciaRepository {
         PreparedStatement stmt = null;
 
         try {
-            con = dataSourceConfig.dataSource().getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sqlVerificarUsuario = "SELECT id_usuario FROM DENUNCIA WHERE id_denuncia = ?";
             try (PreparedStatement stmtVerificarUsuario = con.prepareStatement(sqlVerificarUsuario)) {
@@ -241,11 +239,11 @@ public class DenunciaRepository {
 
                         if (idUsuarioDenuncia != idUsuario) {
                             System.err.println("Denúncia não encontrada no seu Perfil!");
-                            return Optional.of(false);
+                            return Optional.empty();
                         }
                     } else {
                         System.err.println("Denúncia não encontrada!");
-                        return Optional.of(false);
+                        return Optional.empty();
                     }
                 }
             }
@@ -290,7 +288,7 @@ public class DenunciaRepository {
                 e.printStackTrace();
             }
         }
-        return Optional.of(false);
+        return Optional.of(true);
     }
 
 

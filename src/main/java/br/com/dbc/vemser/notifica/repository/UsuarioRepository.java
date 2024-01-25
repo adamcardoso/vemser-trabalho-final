@@ -1,6 +1,6 @@
 package br.com.dbc.vemser.notifica.repository;
 
-import br.com.dbc.vemser.notifica.config.DataSourceConfig;
+import br.com.dbc.vemser.notifica.config.ConexaoBancoDeDados;
 import br.com.dbc.vemser.notifica.entity.Usuario;
 import br.com.dbc.vemser.notifica.entity.enums.*;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
@@ -15,7 +15,7 @@ import java.util.List;
 @Repository
 @AllArgsConstructor
 public class UsuarioRepository {
-    private final DataSourceConfig dataSourceConfig;
+    private final ConexaoBancoDeDados conexaoBancoDeDados;
 
     public Usuario obterUsuarioById(int idUsuario) throws Exception {
         Usuario usuario = new Usuario();
@@ -23,7 +23,7 @@ public class UsuarioRepository {
         PreparedStatement stmt = null;
 
         try{
-            con = dataSourceConfig.dataSource().getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = "SELECT * FROM USUARIO WHERE id_usuario = ?";
 
@@ -68,7 +68,7 @@ public class UsuarioRepository {
         PreparedStatement stmt = null;
 
         try{
-            con = dataSourceConfig.dataSource().getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = "SELECT * FROM USUARIO";
 
@@ -114,7 +114,7 @@ public class UsuarioRepository {
         PreparedStatement stmt = null;
 
         try {
-            con = dataSourceConfig.dataSource().getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = """
                     INSERT INTO USUARIO
@@ -165,7 +165,7 @@ public class UsuarioRepository {
         PreparedStatement stmt = null;
 
         try {
-            con = dataSourceConfig.dataSource().getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE USUARIO SET ");
@@ -218,7 +218,7 @@ public class UsuarioRepository {
         PreparedStatement stmt = null;
 
         try {
-            con = dataSourceConfig.dataSource().getConnection();
+            con = conexaoBancoDeDados.getConnection();
             con.setAutoCommit(false);
 
 

@@ -1,4 +1,4 @@
-package br.com.dbc.vemser.notifica.repository.IRepository;
+package br.com.dbc.vemser.notifica.repository.irepository;
 
 import br.com.dbc.vemser.notifica.entity.Endereco;
 

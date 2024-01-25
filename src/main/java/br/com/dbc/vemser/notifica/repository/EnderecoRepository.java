@@ -1,9 +1,9 @@
 package br.com.dbc.vemser.notifica.repository;
 
-import br.com.dbc.vemser.notifica.config.DataSourceConfig;
+import br.com.dbc.vemser.notifica.config.ConexaoBancoDeDados;
 import br.com.dbc.vemser.notifica.entity.Endereco;
 import br.com.dbc.vemser.notifica.entity.enums.TipoEndereco;
-import br.com.dbc.vemser.notifica.repository.IRepository.IEnderecoRepository;
+import br.com.dbc.vemser.notifica.repository.irepository.IEnderecoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
@@ -18,14 +18,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Repository
 public class EnderecoRepository implements IEnderecoRepository {
-    private final DataSourceConfig dataSourceConfig;
+    private final ConexaoBancoDeDados conexaoBancoDeDados;
 
     public Optional<Endereco> obterEnderecoById(Integer id) throws Exception{
         Connection con = null;
         PreparedStatement stmt = null;
 
         try {
-            con = dataSourceConfig.dataSource().getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = """
                     SELECT * FROM ENDERECO e WHERE E.ID_ENDERECO = ?
@@ -62,7 +62,7 @@ public class EnderecoRepository implements IEnderecoRepository {
         PreparedStatement stmt = null;
 
         try{
-            con = dataSourceConfig.dataSource().getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = """
                    SELECT * FROM ENDERECO e WHERE e.ID_USUARIO = ?
@@ -100,7 +100,7 @@ public class EnderecoRepository implements IEnderecoRepository {
         PreparedStatement stmt = null;
 
         try{
-            con = dataSourceConfig.dataSource().getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = """
                     INSERT INTO ENDERECO c (ID_ENDERECO, TIPO_ENDERECO, LOGRADOURO, NUMERO, COMPLEMENTO,
@@ -153,7 +153,7 @@ public class EnderecoRepository implements IEnderecoRepository {
         PreparedStatement stmt = null;
 
         try{
-            con = dataSourceConfig.dataSource().getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = """
                     UPDATE ENDERECO e
@@ -202,7 +202,7 @@ public class EnderecoRepository implements IEnderecoRepository {
         PreparedStatement stmt = null;
 
         try {
-            con = dataSourceConfig.dataSource().getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = """
                     DELETE FROM ENDERECO e WHERE e.ID_ENDERECO = ?

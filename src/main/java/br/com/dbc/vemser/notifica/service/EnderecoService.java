@@ -4,7 +4,7 @@ import br.com.dbc.vemser.notifica.dto.endereco.CreateEnderecoDto;
 import br.com.dbc.vemser.notifica.dto.endereco.EnderecoDto;
 import br.com.dbc.vemser.notifica.dto.endereco.UpdateEnderecoDto;
 import br.com.dbc.vemser.notifica.entity.Endereco;
-import br.com.dbc.vemser.notifica.repository.IRepository.IEnderecoRepository;
+import br.com.dbc.vemser.notifica.repository.irepository.IEnderecoRepository;
 import br.com.dbc.vemser.notifica.service.IService.IEnderecoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

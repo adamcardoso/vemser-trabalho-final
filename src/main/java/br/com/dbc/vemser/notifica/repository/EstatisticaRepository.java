@@ -1,6 +1,6 @@
 package br.com.dbc.vemser.notifica.repository;
 
-import br.com.dbc.vemser.notifica.config.DataSourceConfig;
+import br.com.dbc.vemser.notifica.config.ConexaoBancoDeDados;
 import br.com.dbc.vemser.notifica.entity.Estatistica;
 import br.com.dbc.vemser.notifica.entity.enums.ClasseSocial;
 import br.com.dbc.vemser.notifica.entity.enums.Etnia;
@@ -20,14 +20,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Repository
 public class EstatisticaRepository {
-    private final DataSourceConfig dataSourceConfig;
+    private final ConexaoBancoDeDados conexaoBancoDeDados;
 
     public Optional<HashMap<String, List<Estatistica>>> obterEstatistica(List<String> colunas) throws Exception{
         Connection con = null;
         PreparedStatement stmt = null;
 
         try{
-            con = dataSourceConfig.dataSource().getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             HashMap<String, List<Estatistica>> map = new HashMap<>();
             for (String coluna : colunas) {
