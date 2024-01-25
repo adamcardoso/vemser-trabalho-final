@@ -3,7 +3,7 @@ package br.com.dbc.vemser.notifica.controller;
 
 import br.com.dbc.vemser.notifica.controller.documentacao.IEstatisticaController;
 import br.com.dbc.vemser.notifica.dto.estatistica.EstatisticaDto;
-import br.com.dbc.vemser.notifica.entity.Response;
+import br.com.dbc.vemser.notifica.exceptions.Response;
 import br.com.dbc.vemser.notifica.service.EstatisticaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

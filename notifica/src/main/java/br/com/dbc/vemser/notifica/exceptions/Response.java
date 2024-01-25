@@ -1,4 +1,4 @@
-package br.com.dbc.vemser.notifica.entity;
+package br.com.dbc.vemser.notifica.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

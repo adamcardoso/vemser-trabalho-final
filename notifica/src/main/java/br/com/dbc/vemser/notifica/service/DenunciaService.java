@@ -109,9 +109,10 @@ public class DenunciaService {
         }
     }
 
-    public Optional<Boolean> deletarDenuncia(Integer id) throws Exception{
+    public Optional<Boolean> deletarDenuncia(Integer idDenuncia, Integer idUsuario) throws Exception{
         try {
-            return denunciaRepository.deletarDenuncia(id);
+
+            return denunciaRepository.deletarDenuncia(idDenuncia, idUsuario);
         } catch (Exception e){
             throw new Exception();
         }

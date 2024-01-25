@@ -5,7 +5,7 @@ import br.com.dbc.vemser.notifica.controller.documentacao.IComentarioController;
 import br.com.dbc.vemser.notifica.dto.comentario.ComentarioDto;
 import br.com.dbc.vemser.notifica.dto.comentario.CreateComentarioDto;
 import br.com.dbc.vemser.notifica.dto.comentario.UpdateComentarioDto;
-import br.com.dbc.vemser.notifica.entity.Response;
+import br.com.dbc.vemser.notifica.exceptions.Response;
 import br.com.dbc.vemser.notifica.service.ComentarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

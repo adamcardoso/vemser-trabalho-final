@@ -1,18 +1,15 @@
 package br.com.dbc.vemser.notifica.controller;
 
 import br.com.dbc.vemser.notifica.controller.documentacao.IDenunciaController;
-import br.com.dbc.vemser.notifica.dto.comentario.ComentarioDto;
-import br.com.dbc.vemser.notifica.dto.comentario.CreateComentarioDto;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaCreateDTO;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
-import br.com.dbc.vemser.notifica.entity.Response;
+import br.com.dbc.vemser.notifica.exceptions.Response;
 import br.com.dbc.vemser.notifica.service.DenunciaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -77,10 +74,10 @@ public class DenunciaController implements IDenunciaController {
         }
     }
 
-    @DeleteMapping("/{idDenuncia}")
-    public ResponseEntity<Response<Object>> deletarDenuncia(@PathVariable("idDenuncia") Integer idDenuncia) {
+    @DeleteMapping("/{idDenuncia}/{idUsuario}")
+    public ResponseEntity<Response<Object>> deletarDenuncia(@PathVariable("idDenuncia") Integer idDenuncia, @PathVariable("idUsuario") Integer idUsuario) {
         try {
-            return denunciaService.deletarDenuncia(idDenuncia)
+            return denunciaService.deletarDenuncia(idDenuncia, idUsuario)
                     .map(d -> new ResponseEntity<>(new Response<>(null, 200, "Denúncia deletada com sucesso!"), HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(new Response<>(null, 404, "Denúncia não encontrada!"), HttpStatus.NOT_FOUND));
         } catch (Exception e) {

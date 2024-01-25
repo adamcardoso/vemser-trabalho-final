@@ -3,7 +3,7 @@ package br.com.dbc.vemser.notifica.controller.documentacao;
 import br.com.dbc.vemser.notifica.dto.endereco.CreateEnderecoDto;
 import br.com.dbc.vemser.notifica.dto.endereco.EnderecoDto;
 import br.com.dbc.vemser.notifica.dto.endereco.UpdateEnderecoDto;
-import br.com.dbc.vemser.notifica.entity.Response;
+import br.com.dbc.vemser.notifica.exceptions.Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

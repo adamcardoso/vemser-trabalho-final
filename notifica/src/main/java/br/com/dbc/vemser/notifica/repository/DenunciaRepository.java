@@ -225,38 +225,72 @@ public class DenunciaRepository {
         }
     }
 
-    public Optional<Boolean> deletarDenuncia(Integer id) throws Exception{
+    public Optional<Boolean> deletarDenuncia(Integer idDenuncia, Integer idUsuario) throws Exception{
         Connection con = null;
         PreparedStatement stmt = null;
 
         try {
             con = dataSourceConfig.dataSource().getConnection();
 
-            String sql = """
-                    DELETE FROM DENUNCIA c WHERE c.ID_DENUNCIA = ?
-                    """;
+            String sqlVerificarUsuario = "SELECT id_usuario FROM DENUNCIA WHERE id_denuncia = ?";
+            try (PreparedStatement stmtVerificarUsuario = con.prepareStatement(sqlVerificarUsuario)) {
+                stmtVerificarUsuario.setInt(1, idDenuncia);
+                try (ResultSet rs = stmtVerificarUsuario.executeQuery()) {
+                    if (rs.next()) {
+                        int idUsuarioDenuncia = rs.getInt("id_usuario");
 
-            stmt = con.prepareStatement(sql);
+                        if (idUsuarioDenuncia != idUsuario) {
+                            System.err.println("Denúncia não encontrada no seu Perfil!");
+                            return Optional.of(false);
+                        }
+                    } else {
+                        System.err.println("Denúncia não encontrada!");
+                        return Optional.of(false);
+                    }
+                }
+            }
 
-            stmt.setInt(1, id);
-            ResultSet resultSet = stmt.executeQuery();
+            String sqlDeleteComentario = "DELETE FROM COMENTARIO WHERE id_denuncia = ?";
+            try (PreparedStatement stmtComentario = con.prepareStatement(sqlDeleteComentario)) {
+                stmtComentario.setInt(1, idDenuncia);
+                stmtComentario.executeUpdate();
+            }
 
-            if(resultSet.next())
-                return Optional.of(true);
+            // Exclui registros dependentes em LOCALIZACAO
+            String sqlDeleteLocalizacao = "DELETE FROM LOCALIZACAO WHERE id_denuncia = ?";
+            try (PreparedStatement stmtLocalizacao = con.prepareStatement(sqlDeleteLocalizacao)) {
+                stmtLocalizacao.setInt(1, idDenuncia);
+                stmtLocalizacao.executeUpdate();
+            }
 
-            return Optional.empty();
-        } catch (Exception e){
-            throw new Exception(e);
+            // Exclui o registro principal em DENUNCIA
+            String sqlDeleteDenuncia = "DELETE FROM DENUNCIA WHERE id_denuncia = ?";
+            try (PreparedStatement stmtDenuncia = con.prepareStatement(sqlDeleteDenuncia)) {
+                stmtDenuncia.setInt(1, idDenuncia);
+                int res = stmtDenuncia.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            // Em caso de erro, faz rollback das alterações no banco de dados
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            System.err.println("Erro ao remover denúncia!");
+            throw new Exception("Erro: " + e);
         } finally {
-            try{
-                if(stmt != null)
-                    stmt.close();
-                if(con != null)
+            try {
+                if (con != null) {
                     con.close();
-            } catch (SQLException e){
+                }
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
+        return Optional.of(false);
     }
 
 

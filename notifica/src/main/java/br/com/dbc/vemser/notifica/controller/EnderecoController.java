@@ -4,7 +4,7 @@ import br.com.dbc.vemser.notifica.controller.documentacao.IEnderecoController;
 import br.com.dbc.vemser.notifica.dto.endereco.CreateEnderecoDto;
 import br.com.dbc.vemser.notifica.dto.endereco.EnderecoDto;
 import br.com.dbc.vemser.notifica.dto.endereco.UpdateEnderecoDto;
-import br.com.dbc.vemser.notifica.entity.Response;
+import br.com.dbc.vemser.notifica.exceptions.Response;
 import br.com.dbc.vemser.notifica.service.IService.IEnderecoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
