@@ -38,5 +38,6 @@ public class Denuncia{
         this.idUsuario = idUsuario;
     }
 
-    //public Denuncia(int idDenuncia, int idUsuario, String titulo, String descricao, StatusDenuncia statusDenuncia, Categoria categoria, TipoDenuncia tipoDenuncia)
+
+
 }
