@@ -15,7 +15,7 @@ public class EstatisticaDto {
     private String classificacao;
 
     @Schema(description = "Total da Estatística", example = "100")
-    private int total;
+    private Integer total;
 
     @Schema(description = "Percentual da Estatística", example = "25.5")
     private double percentual;

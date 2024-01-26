@@ -4,6 +4,7 @@ import br.com.dbc.vemser.notifica.dto.usuario.CreateUsuarioDto;
 import br.com.dbc.vemser.notifica.dto.usuario.UpdateUsuarioDto;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDto;
 import br.com.dbc.vemser.notifica.entity.Usuario;
+import br.com.dbc.vemser.notifica.entity.enums.TipoUsuario;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.repository.UsuarioAdminRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,13 +30,16 @@ public class UsuarioAdminService {
     }
 
     public UsuarioDto criarUsuarioAdmin(CreateUsuarioDto novoUsuario) throws Exception {
-        Usuario novoUsuarioEntity = objectMapper.convertValue(novoUsuario, Usuario.class);
-        Usuario usuarioCriado = usuarioAdminRepository.criarUsuarioAdmin(novoUsuarioEntity);
-
-        return objectMapper.convertValue(usuarioCriado, UsuarioDto.class);
+        if(novoUsuario.getTipoUsuario() == TipoUsuario.ADMIN){
+            Usuario novoUsuarioEntity = objectMapper.convertValue(novoUsuario, Usuario.class);
+            Usuario usuarioCriado = usuarioAdminRepository.criarUsuarioAdmin(novoUsuarioEntity);
+            return objectMapper.convertValue(usuarioCriado, UsuarioDto.class);
+        }
+        throw new RegraDeNegocioException("O usuário não é ADMIN!");
     }
 
     public UsuarioDto atualizarUsuario(Integer idUsuario, UpdateUsuarioDto novoUsuario) throws Exception {
+        //TODO Será verificado se o usuario editado é o mesmo que o usuario logado
         Usuario novoUsuarioEntity = objectMapper.convertValue(novoUsuario, Usuario.class);
         Usuario usuarioAtualizado = usuarioAdminRepository.atualizarUsuario(idUsuario, novoUsuarioEntity);
 

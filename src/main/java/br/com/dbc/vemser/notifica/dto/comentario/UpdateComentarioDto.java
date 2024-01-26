@@ -12,7 +12,7 @@ import lombok.Setter;
 public class UpdateComentarioDto {
     private Integer idComentario;
     private String comentario;
-    private int curtida;
+    private Integer curtida;
     private Integer idDenuncia;
     private Integer idUsuario;
 

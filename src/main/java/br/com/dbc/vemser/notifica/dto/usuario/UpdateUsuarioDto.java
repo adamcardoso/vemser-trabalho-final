@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Data
 public class UpdateUsuarioDto {
-    private int idUsuario;
+    private Integer idUsuario;
 
     @NotNull
     @NotEmpty

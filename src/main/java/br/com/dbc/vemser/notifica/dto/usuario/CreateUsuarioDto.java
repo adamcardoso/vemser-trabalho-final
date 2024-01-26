@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @Data
 public class CreateUsuarioDto {
     @Schema(description = "ID do Usuário", example = "1")
-    private int idUsuario;
+    private Integer idUsuario;
 
     @NotNull
     @NotEmpty

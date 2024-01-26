@@ -18,22 +18,22 @@ import java.util.List;
 @AllArgsConstructor
 public class DenunciaDTO {
         @NotNull(message = "O Id não pode ser nulo!")
-        private int idDenuncia;
+        private Integer idDenuncia;
         private String descricao;
         @NotNull(message = "A Denúncia precisa ter um Título!")
         private String titulo;
         //private Localizacao local;
         //private LocalDateTime dataHora;
         private StatusDenuncia statusDenuncia;
-        private int curtidas;
+        private Integer curtidas;
         private Categoria categoria;
-        //private int curtidas;
+        //private Integer curtidas;
         //private final List<String> comentarios = new ArrayList<>();
         private TipoDenuncia tipoDenuncia;
-        private int idUsuario;
+        private Integer idUsuario;
 
 
-        public DenunciaDTO(int idDenuncia, int idUsuario, String descricao, String titulo, StatusDenuncia statusDenuncia, Categoria categoria, TipoDenuncia tipoDenuncia) {
+        public DenunciaDTO(Integer idDenuncia, Integer idUsuario, String descricao, String titulo, StatusDenuncia statusDenuncia, Categoria categoria, TipoDenuncia tipoDenuncia) {
                 this.idDenuncia = idDenuncia;
                 this.idUsuario = idUsuario;
                 this.descricao = descricao;
