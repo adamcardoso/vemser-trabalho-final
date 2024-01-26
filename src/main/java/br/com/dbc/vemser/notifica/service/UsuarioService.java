@@ -17,14 +17,10 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
 
-    public UsuarioDto obterUsuarioById(Integer idUsuario) throws Exception {
-        Usuario usuario = usuarioRepository.obterUsuarioById(idUsuario);
+    public UsuarioDto obterUsuario(Integer idUsuario) throws Exception {
+        //TODO Será ajustado para mostrar somento o usuario
+        Usuario usuario = usuarioRepository.obterUsuario(idUsuario);
         return objectMapper.convertValue(usuario, UsuarioDto.class);
-    }
-
-    public List<UsuarioDto> listarUsuarios() throws Exception {
-        List<Usuario> usuarios = usuarioRepository.listarUsuarios();
-        return objectMapper.convertValue(usuarios, objectMapper.getTypeFactory().constructCollectionType(List.class, UsuarioDto.class));
     }
 
     public UsuarioDto criarUsuario(CreateUsuarioDto novoUsuario) throws Exception {
@@ -35,6 +31,7 @@ public class UsuarioService {
     }
 
     public UsuarioDto atualizarUsuario(Integer idUsuario, UpdateUsuarioDto novoUsuario) throws Exception {
+        //TODO Será verificado se o usuario editado é o mesmo que o usuario logado
         Usuario novoUsuarioEntity = objectMapper.convertValue(novoUsuario, Usuario.class);
         Usuario usuarioAtualizado = usuarioRepository.atualizarUsuario(idUsuario, novoUsuarioEntity);
 
@@ -42,6 +39,7 @@ public class UsuarioService {
     }
 
     public void removerUsuario(Integer idUsuario) throws Exception {
+        //TODO Será verificado se o usuario deletado é o mesmo que o usuario logado
         usuarioRepository.removerUsuario(idUsuario);
     }
 }
