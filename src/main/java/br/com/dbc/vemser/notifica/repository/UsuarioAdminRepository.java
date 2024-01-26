@@ -2,20 +2,25 @@ package br.com.dbc.vemser.notifica.repository;
 
 import br.com.dbc.vemser.notifica.config.ConexaoBancoDeDados;
 import br.com.dbc.vemser.notifica.entity.Usuario;
-import br.com.dbc.vemser.notifica.entity.enums.*;
+import br.com.dbc.vemser.notifica.entity.enums.ClasseSocial;
+import br.com.dbc.vemser.notifica.entity.enums.Etnia;
+import br.com.dbc.vemser.notifica.entity.enums.Genero;
+import br.com.dbc.vemser.notifica.entity.enums.TipoUsuario;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 @AllArgsConstructor
-public class UsuarioRepository {
+public class UsuarioAdminRepository {
     private final ConexaoBancoDeDados dataSourceConfig;
 
-    public Usuario obterUsuario(int idUsuario) throws Exception {
+    public Usuario obterUsuarioById(int idUsuario) throws Exception {
         Usuario usuario = new Usuario();
         Connection con = null;
         PreparedStatement stmt = null;
@@ -59,8 +64,7 @@ public class UsuarioRepository {
             }
         }
     }
-
-    public Usuario criarUsuario(Usuario usuario) throws RegraDeNegocioException {
+    public Usuario criarUsuarioAdmin(Usuario usuario) throws RegraDeNegocioException {
         Connection con = null;
         PreparedStatement stmt = null;
 
@@ -106,6 +110,51 @@ public class UsuarioRepository {
                     con.close();
                 }
             } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public List<Usuario> listarUsuarios() throws Exception {
+        Connection con = null;
+        PreparedStatement stmt = null;
+
+        try{
+            con = dataSourceConfig.getConnection();
+
+            String sql = "SELECT * FROM USUARIO WHERE TIPO_USUARIO = 2";
+
+            stmt = con.prepareStatement(sql);
+
+            ResultSet resultSet = stmt.executeQuery();
+
+            List<Usuario> usuarios = new ArrayList<>();
+
+            while (resultSet.next()) {
+                Integer idUsuario = resultSet.getInt("ID_USUARIO");
+                String nomeUsuario = resultSet.getString("NOME_USUARIO");
+                String emailUsuario = resultSet.getString("EMAIL_USUARIO");
+                String celularUsuario = resultSet.getString("CELULAR_USUARIO");
+                String senhaUsuario = resultSet.getString("SENHA_USUARIO");
+                Etnia etnia = Etnia.fromInt(resultSet.getInt("ETNIA"));
+                LocalDate dataNascimento = resultSet.getDate("DATA_NASCIMENTO").toLocalDate();
+                ClasseSocial classeSocial = ClasseSocial.fromInt(resultSet.getInt("CLASSE_SOCIAL"));
+                Genero genero = Genero.fromInt(resultSet.getInt("GENERO"));
+                TipoUsuario tipoUsuario = TipoUsuario.fromInt(resultSet.getInt("TIPO_USUARIO"));
+                Boolean isAdmin = TipoUsuario.fromInt(resultSet.getInt("TIPO_USUARIO")).equals(TipoUsuario.ADMIN);
+
+                usuarios.add(new Usuario(idUsuario, nomeUsuario, emailUsuario, celularUsuario, senhaUsuario, etnia, dataNascimento, classeSocial, genero, tipoUsuario, isAdmin));
+            }
+            return usuarios;
+        } catch (Exception e) {
+            throw new Exception(e);
+        } finally {
+            try{
+                if(stmt != null)
+                    stmt.close();
+                if(con != null)
+                    con.close();
+            } catch (SQLException e){
                 e.printStackTrace();
             }
         }
