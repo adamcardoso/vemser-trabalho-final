@@ -4,8 +4,10 @@ import br.com.dbc.vemser.notifica.dto.comentario.ComentarioDto;
 import br.com.dbc.vemser.notifica.dto.comentario.UpdateComentarioDto;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaCreateDTO;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
+import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDto;
 import br.com.dbc.vemser.notifica.entity.Comentario;
 import br.com.dbc.vemser.notifica.entity.Denuncia;
+import br.com.dbc.vemser.notifica.entity.Usuario;
 import br.com.dbc.vemser.notifica.repository.DenunciaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class DenunciaService {
     private final DenunciaRepository denunciaRepository;
+    private final EmailService emailService;
+    private final UsuarioService usuarioService;
     private final ObjectMapper objectMapper;
 
     public Optional<List<DenunciaDTO>> listarTodasDenuncias() throws Exception {
@@ -88,19 +92,25 @@ public class DenunciaService {
     public Optional<DenunciaDTO> criarDenuncia(DenunciaCreateDTO denunciaDTO, int idUsuario) throws Exception {
         try {
             Denuncia d = objectMapper.convertValue(denunciaDTO, Denuncia.class);
-            return Optional.of(objectMapper.convertValue(denunciaRepository.criarDenuncia(d, idUsuario), DenunciaDTO.class));
+            UsuarioDto usuario = usuarioService.obterUsuarioById(idUsuario);
+            DenunciaDTO denuncia = objectMapper.convertValue(denunciaRepository.criarDenuncia(d, idUsuario), DenunciaDTO.class);
+            emailService.enviarEmailCriacaoDenuncia(usuario.getEmailUsuario(), usuario.getNomeUsuario(), denuncia.getIdDenuncia());
+            return Optional.of(denuncia);
         } catch (Exception e){
             throw new Exception();
         }
     }
 
-    public Optional<DenunciaDTO> editarDenuncia(DenunciaCreateDTO denunciaCreateDTO, Integer idDenuncia) throws Exception {
+    public Optional<DenunciaDTO> editarDenuncia(DenunciaCreateDTO denunciaCreateDTO, Integer idDenuncia, Integer idUsuario) throws Exception {
         try {
             Optional<Denuncia> denunciaOpt = denunciaRepository.obterDenunciaById(idDenuncia);
 
             if (denunciaOpt.isPresent()) {
                 Denuncia d = objectMapper.convertValue(denunciaCreateDTO, Denuncia.class);
-                return Optional.of(objectMapper.convertValue(denunciaRepository.editarDenuncia(idDenuncia, d), DenunciaDTO.class));
+                UsuarioDto usuario = usuarioService.obterUsuarioById(idUsuario);
+                DenunciaDTO denuncia = objectMapper.convertValue(denunciaRepository.editarDenuncia(idDenuncia, d, idUsuario), DenunciaDTO.class);
+                emailService.enviarEmailEdicaoEndereco(usuario.getEmailUsuario(), usuario.getNomeUsuario(), denuncia.getIdDenuncia());
+                return Optional.of(denuncia);
             }
 
             return Optional.empty();

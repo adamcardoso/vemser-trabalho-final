@@ -63,10 +63,10 @@ public class DenunciaController implements IDenunciaController {
         }
     }
 
-    @PutMapping("/{idDenuncia}")
-    public ResponseEntity<Response<DenunciaDTO>> editarDenuncia(@PathVariable("idDenuncia") Integer idDenuncia, @RequestBody DenunciaCreateDTO denunciaCreateDTO) {
+    @PutMapping("/{idDenuncia}/{idUsuario}")
+    public ResponseEntity<Response<DenunciaDTO>> editarDenuncia(@PathVariable("idDenuncia") Integer idDenuncia, @RequestBody DenunciaCreateDTO denunciaCreateDTO, @PathVariable("idUsuario") Integer idUsuario) {
         try {
-            return denunciaService.editarDenuncia(denunciaCreateDTO, idDenuncia)
+            return denunciaService.editarDenuncia(denunciaCreateDTO, idDenuncia, idUsuario)
                     .map(d -> new ResponseEntity<>(new Response<>(d, 200, "Denúncia editada com sucesso!"), HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(new Response<>(null, 404, "Denúncia não encontrada!"), HttpStatus.NOT_FOUND));
         } catch (Exception e) {

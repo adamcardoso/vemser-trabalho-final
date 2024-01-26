@@ -71,7 +71,7 @@ public interface IDenunciaController {
             }
     )
     @PutMapping("/{idDenuncia}")
-    public ResponseEntity<Response<DenunciaDTO>> editarDenuncia(@PathVariable("idDenuncia") Integer idDenuncia, @Valid @RequestBody DenunciaCreateDTO denunciaCreateDTO);
+    public ResponseEntity<Response<DenunciaDTO>> editarDenuncia(@PathVariable("idDenuncia") Integer idDenuncia, @Valid @RequestBody DenunciaCreateDTO denunciaCreateDTO, @PathVariable("idUsuario") Integer idUsuario);
 
     @Operation(summary = "Deletar denúncia", description = "Deleta uma denúncia pelo ID")
     @ApiResponses(

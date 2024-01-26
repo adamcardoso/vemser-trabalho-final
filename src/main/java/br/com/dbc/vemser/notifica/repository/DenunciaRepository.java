@@ -113,10 +113,10 @@ public class DenunciaRepository {
         try (Connection connection = conexaoBancoDeDados.getConnection()) {
             String sql = "SELECT * FROM DENUNCIA WHERE id_denuncia = ?";
 
-            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            PreparedStatement stmt = connection.prepareStatement(sql);
                 stmt.setInt(1, idDenuncia);
 
-                try (ResultSet res = stmt.executeQuery()) {
+                ResultSet res = stmt.executeQuery();
                     if (res.next()) {
                         return Optional.of(new Denuncia(
                                 res.getInt("id_denuncia"),
@@ -128,9 +128,6 @@ public class DenunciaRepository {
                                 res.getInt("id_usuario")
                         ));
                     }
-                }
-            }
-
             return Optional.empty();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -183,7 +180,7 @@ public class DenunciaRepository {
     }
 
 
-    public Optional<Denuncia> editarDenuncia(Integer idDenuncia, Denuncia denuncia) throws Exception {
+    public Optional<Denuncia> editarDenuncia(Integer idDenuncia, Denuncia denuncia, Integer idUsuario) throws Exception {
         Connection con = null;
         PreparedStatement stmt = null;
 
@@ -307,6 +304,5 @@ public class DenunciaRepository {
             return null;
         }
     }
-
 
 }
