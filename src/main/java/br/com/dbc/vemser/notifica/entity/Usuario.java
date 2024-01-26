@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Data
 public class Usuario {
-    private int idUsuario;
+    private Integer idUsuario;
     private String nomeUsuario;
     private String emailUsuario;
     private String numeroCelular;

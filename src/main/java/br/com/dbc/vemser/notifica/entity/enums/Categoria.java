@@ -6,17 +6,17 @@ public enum Categoria {
     GESTAO_RESIDUOS(3),
     EDUCACAO_HIGIENE(4);
 
-    private final int valor;
+    private final Integer valor;
 
-    Categoria(int valor) {
+    Categoria(Integer valor) {
         this.valor = valor;
     }
 
-    public int getIdCategoria() {
+    public Integer getIdCategoria() {
         return valor;
     }
 
-    public static Categoria fromInt(int value) {
+    public static Categoria fromInt(Integer value) {
         for (Categoria categoria : Categoria.values()) {
             if (categoria.getIdCategoria() == value) {
                 return categoria;

@@ -92,7 +92,7 @@ public class DenunciaService {
     public Optional<DenunciaDTO> criarDenuncia(DenunciaCreateDTO denunciaDTO, int idUsuario) throws Exception {
         try {
             Denuncia d = objectMapper.convertValue(denunciaDTO, Denuncia.class);
-            UsuarioDto usuario = usuarioService.obterUsuarioById(idUsuario);
+            UsuarioDto usuario = usuarioService.obterUsuario(idUsuario);
             DenunciaDTO denuncia = objectMapper.convertValue(denunciaRepository.criarDenuncia(d, idUsuario), DenunciaDTO.class);
             emailService.enviarEmailCriacaoDenuncia(usuario.getEmailUsuario(), usuario.getNomeUsuario(), denuncia.getIdDenuncia());
             return Optional.of(denuncia);
@@ -107,7 +107,7 @@ public class DenunciaService {
 
             if (denunciaOpt.isPresent()) {
                 Denuncia d = objectMapper.convertValue(denunciaCreateDTO, Denuncia.class);
-                UsuarioDto usuario = usuarioService.obterUsuarioById(idUsuario);
+                UsuarioDto usuario = usuarioService.obterUsuario(idUsuario);
                 DenunciaDTO denuncia = objectMapper.convertValue(denunciaRepository.editarDenuncia(idDenuncia, d, idUsuario), DenunciaDTO.class);
                 emailService.enviarEmailEdicaoEndereco(usuario.getEmailUsuario(), usuario.getNomeUsuario(), denuncia.getIdDenuncia());
                 return Optional.of(denuncia);

@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 public class DenunciaCreateDTO {
     @Schema(description = "ID da Denúncia", example = "1")
-    private int idDenuncia;
+    private Integer idDenuncia;
 
     @Schema(description = "Descrição da Denúncia", example = "Isso é uma denúncia")
     private String descricao;
@@ -41,7 +41,7 @@ public class DenunciaCreateDTO {
     private Categoria categoria;
 
     @Schema(description = "Número de Curtidas da Denúncia", example = "10")
-    private int curtidas;
+    private Integer curtidas;
 
     @Schema(description = "Lista de Comentários da Denúncia")
     private final List<String> comentarios = new ArrayList<>();
@@ -50,5 +50,5 @@ public class DenunciaCreateDTO {
     private TipoDenuncia tipoDenuncia;
 
     @Schema(description = "ID do Usuário que fez a Denúncia", example = "1")
-    private int idUsuario;
+    private Integer idUsuario;
 }
