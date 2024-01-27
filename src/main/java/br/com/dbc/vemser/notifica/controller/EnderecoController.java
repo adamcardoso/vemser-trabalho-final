@@ -1,9 +1,9 @@
 package br.com.dbc.vemser.notifica.controller;
 
 import br.com.dbc.vemser.notifica.controller.documentacao.IEnderecoController;
-import br.com.dbc.vemser.notifica.dto.endereco.CreateEnderecoDTO;
+import br.com.dbc.vemser.notifica.dto.endereco.EnderecoCreateDTO;
 import br.com.dbc.vemser.notifica.dto.endereco.EnderecoDTO;
-import br.com.dbc.vemser.notifica.dto.endereco.UpdateEnderecoDTO;
+import br.com.dbc.vemser.notifica.dto.endereco.EnderecoUpdateDTO;
 import br.com.dbc.vemser.notifica.exceptions.Response;
 import br.com.dbc.vemser.notifica.service.IService.IEnderecoService;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +43,7 @@ public class EnderecoController implements IEnderecoController {
     }
 
     @PostMapping
-    public ResponseEntity<Response<EnderecoDTO>> adicionarEndereco(@RequestBody CreateEnderecoDTO enderecoDto) {
+    public ResponseEntity<Response<EnderecoDTO>> adicionarEndereco(@RequestBody EnderecoCreateDTO enderecoDto) {
         try{
             return enderecoService.adicionarEndereco(enderecoDto)
                     .map(c -> new ResponseEntity<>(new Response<>(c, 201, "Endereço criado com sucesso!"), HttpStatus.CREATED))
@@ -54,7 +54,7 @@ public class EnderecoController implements IEnderecoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Response<EnderecoDTO>> atualizarEndereco(@PathVariable("id") Integer id, @RequestBody UpdateEnderecoDTO enderecoDto){
+    public ResponseEntity<Response<EnderecoDTO>> atualizarEndereco(@PathVariable("id") Integer id, @RequestBody EnderecoUpdateDTO enderecoDto){
         try{
             return enderecoService.atualizarEndereco(id, enderecoDto)
                     .map(e -> new ResponseEntity<>(
