@@ -18,6 +18,7 @@ import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -59,14 +60,13 @@ public class EmailService {
         }
     }
 
-    private String obterConteudoDoTemplate(String template, String nomePessoa, Integer idDenuncia) throws IOException, TemplateException {
-        Optional<Denuncia> optionalDenuncia = denunciaRepository.obterDenunciaById(idDenuncia);
+    private String obterConteudoDoTemplate(String template, String nomePessoa, Integer idDenuncia) throws IOException, TemplateException, SQLException {
+        Denuncia denuncia = denunciaRepository.obterDenunciaById(idDenuncia);
 
         Map<String, Object> dados = new HashMap<>();
         dados.put("nome", nomePessoa);
 
-        if (optionalDenuncia.isPresent()) {
-            Denuncia denuncia = optionalDenuncia.get();
+        if (denuncia != null) {
             dados.put("status", denuncia.getStatusDenuncia());
             dados.put("categoria", denuncia.getCategoria());
             dados.put("descricao", denuncia.getDescricao());
@@ -76,4 +76,5 @@ public class EmailService {
         Template templateFreemarker = configuracaoFreemarker.getTemplate(template);
         return FreeMarkerTemplateUtils.processTemplateIntoString(templateFreemarker, dados);
     }
+
 }

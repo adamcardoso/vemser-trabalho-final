@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @Getter
 @Setter
-public class EnderecoDto {
+public class EnderecoDTO {
     private Integer idEndereco;
 
     @NotNull(message = "Tipo de Endereco não pode ser nulo")
