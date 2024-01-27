@@ -8,20 +8,18 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 @AllArgsConstructor
 @Data
-public class CreateUsuarioDto {
+public class UsuarioCreateDTO {
     @Schema(description = "ID do Usuário", example = "1")
     private Integer idUsuario;
 
     @NotNull
     @NotEmpty
-    @Schema(description = "Nome do Usuário", required = true, example = "John Doe")
+    @Schema(description = "Nome do Usuário", required = true, example = "Renata Oliveira")
     private String nomeUsuario;
 
     @NotNull
@@ -30,11 +28,13 @@ public class CreateUsuarioDto {
     private String emailUsuario;
 
     @NotBlank
-    @Schema(description = "Número de Celular do Usuário", required = true, example = "123456789")
+    @Schema(description = "Número de Celular do Usuário", required = true, example = "998427710")
     private String numeroCelular;
 
     @NotNull
     @NotEmpty
+    @Size(min = 6, message = "A senha deve ter pelo menos 6 caracteres")
+    @Pattern(regexp = "^(?=.*[!@#$%^&*(),.?\":{}|<>]).*$", message = "A senha deve conter pelo menos 1 caractere especial")
     @Schema(description = "Senha do Usuário", required = true, example = "Senha123@")
     private String senhaUsuario;
 

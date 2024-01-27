@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-public class EstatisticaDto {
+public class EstatisticaDTO {
     @Schema(description = "Classificação da Estatística", example = "Alta")
     private String classificacao;
 

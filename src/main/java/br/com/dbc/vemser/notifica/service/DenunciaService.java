@@ -2,7 +2,7 @@ package br.com.dbc.vemser.notifica.service;
 
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaCreateDTO;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
-import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDto;
+import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import br.com.dbc.vemser.notifica.entity.Denuncia;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.repository.DenunciaRepository;
@@ -63,7 +63,7 @@ public class DenunciaService {
 
     public DenunciaDTO criarDenuncia(DenunciaCreateDTO denunciaDTO, int idUsuario) throws Exception {
         Denuncia d = objectMapper.convertValue(denunciaDTO, Denuncia.class);
-        UsuarioDto usuario = usuarioService.obterUsuario(idUsuario);
+        UsuarioDTO usuario = usuarioService.obterUsuario(idUsuario);
         DenunciaDTO denuncia = objectMapper.convertValue(denunciaRepository.criarDenuncia(d, idUsuario), DenunciaDTO.class);
         emailService.enviarEmailCriacaoDenuncia(usuario.getEmailUsuario(), usuario.getNomeUsuario(), denuncia.getIdDenuncia());
         return denuncia;
@@ -74,7 +74,7 @@ public class DenunciaService {
 
         if (denuncia != null) {
             Denuncia d = objectMapper.convertValue(denunciaCreateDTO, Denuncia.class);
-            UsuarioDto usuario = usuarioService.obterUsuario(idUsuario);
+            UsuarioDTO usuario = usuarioService.obterUsuario(idUsuario);
             DenunciaDTO denunciaDTO = objectMapper.convertValue(denunciaRepository.editarDenuncia(idDenuncia, d, idUsuario), DenunciaDTO.class);
             emailService.enviarEmailEdicaoEndereco(usuario.getEmailUsuario(), usuario.getNomeUsuario(), denunciaDTO.getIdDenuncia());
             return denunciaDTO;

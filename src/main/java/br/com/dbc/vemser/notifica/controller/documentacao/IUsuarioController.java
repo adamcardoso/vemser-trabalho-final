@@ -1,8 +1,8 @@
 package br.com.dbc.vemser.notifica.controller.documentacao;
 
-import br.com.dbc.vemser.notifica.dto.usuario.CreateUsuarioDto;
-import br.com.dbc.vemser.notifica.dto.usuario.UpdateUsuarioDto;
-import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDto;
+import br.com.dbc.vemser.notifica.dto.usuario.UsuarioCreateDTO;
+import br.com.dbc.vemser.notifica.dto.usuario.UsuarioUpdateDTO;
+import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -23,7 +23,7 @@ public interface IUsuarioController {
             }
     )
     @GetMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDto> obterUsuarioById(@PathVariable("idUsuario") Integer idUsuario)throws Exception;
+    public ResponseEntity<UsuarioDTO> obterUsuarioById(@PathVariable("idUsuario") Integer idUsuario)throws Exception;
 
 
     @Operation(summary = "Criar usuário", description = "Cria um novo usuário")
@@ -35,7 +35,7 @@ public interface IUsuarioController {
             }
     )
     @PostMapping
-    public ResponseEntity<UsuarioDto> criarUsuario(@Valid @RequestBody CreateUsuarioDto novoUsuario)throws Exception;
+    public ResponseEntity<UsuarioDTO> criarUsuario(@Valid @RequestBody UsuarioCreateDTO novoUsuario)throws Exception;
 
     @Operation(summary = "Atualizar usuário", description = "Atualiza um usuário pelo ID")
     @ApiResponses(
@@ -47,7 +47,7 @@ public interface IUsuarioController {
             }
     )
     @PutMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDto> atualizarUsuario(@PathVariable("idUsuario") Integer idUsuario, @Valid @RequestBody UpdateUsuarioDto novoUsuario)throws Exception;
+    public ResponseEntity<UsuarioDTO> atualizarUsuario(@PathVariable("idUsuario") Integer idUsuario, @Valid @RequestBody UsuarioUpdateDTO novoUsuario)throws Exception;
 
     @Operation(summary = "Remover usuário", description = "Remove um usuário pelo ID")
     @ApiResponses(

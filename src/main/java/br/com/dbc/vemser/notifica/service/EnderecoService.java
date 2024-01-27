@@ -1,8 +1,8 @@
 package br.com.dbc.vemser.notifica.service;
 
-import br.com.dbc.vemser.notifica.dto.endereco.CreateEnderecoDTO;
+import br.com.dbc.vemser.notifica.dto.endereco.EnderecoCreateDTO;
 import br.com.dbc.vemser.notifica.dto.endereco.EnderecoDTO;
-import br.com.dbc.vemser.notifica.dto.endereco.UpdateEnderecoDTO;
+import br.com.dbc.vemser.notifica.dto.endereco.EnderecoUpdateDTO;
 import br.com.dbc.vemser.notifica.entity.Endereco;
 import br.com.dbc.vemser.notifica.repository.irepository.IEnderecoRepository;
 import br.com.dbc.vemser.notifica.service.IService.IEnderecoService;
@@ -53,7 +53,7 @@ public class EnderecoService implements IEnderecoService {
             throw new Exception();
         }
     }
-    public Optional<EnderecoDTO> adicionarEndereco(CreateEnderecoDTO enderecoDto) throws Exception{
+    public Optional<EnderecoDTO> adicionarEndereco(EnderecoCreateDTO enderecoDto) throws Exception{
         try {
             Endereco e = objectMapper.convertValue(enderecoDto, Endereco.class);
             return Optional.of(objectMapper.convertValue(enderecoRepository.adicionarEndereco(e), EnderecoDTO.class));
@@ -61,7 +61,7 @@ public class EnderecoService implements IEnderecoService {
             throw new Exception();
         }
     }
-    public Optional<EnderecoDTO> atualizarEndereco(Integer id, UpdateEnderecoDTO enderecoDto) throws Exception {
+    public Optional<EnderecoDTO> atualizarEndereco(Integer id, EnderecoUpdateDTO enderecoDto) throws Exception {
         try {
             Optional<Endereco> eOpt = enderecoRepository.obterEnderecoById(id);
 

@@ -2,7 +2,7 @@ package br.com.dbc.vemser.notifica.controller;
 
 
 import br.com.dbc.vemser.notifica.controller.documentacao.IEstatisticaController;
-import br.com.dbc.vemser.notifica.dto.estatistica.EstatisticaDto;
+import br.com.dbc.vemser.notifica.dto.estatistica.EstatisticaDTO;
 import br.com.dbc.vemser.notifica.exceptions.Response;
 import br.com.dbc.vemser.notifica.service.EstatisticaService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class EstatisticaController implements IEstatisticaController {
     public final EstatisticaService estatisticaService;
 
     @GetMapping("/bycolumn")
-    public ResponseEntity<Response<HashMap<String, List<EstatisticaDto>>>> obterEstatistica(@RequestParam("coluna") List<String> colunas) {
+    public ResponseEntity<Response<HashMap<String, List<EstatisticaDTO>>>> obterEstatistica(@RequestParam("coluna") List<String> colunas) {
         try{
             return estatisticaService.obterEstatistica(colunas)
                     .map(c -> new ResponseEntity<>(
