@@ -6,6 +6,7 @@ import br.com.dbc.vemser.notifica.dto.usuario.UpdateUsuarioDto;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDto;
 import br.com.dbc.vemser.notifica.entity.Denuncia;
 import br.com.dbc.vemser.notifica.entity.Usuario;
+import br.com.dbc.vemser.notifica.entity.enums.TipoUsuario;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.repository.AdminRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;

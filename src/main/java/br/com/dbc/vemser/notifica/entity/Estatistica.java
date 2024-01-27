@@ -11,6 +11,6 @@ import lombok.Setter;
 @Getter
 public class Estatistica {
     private String classificacao;
-    private int total;
-    private double percentual;
+    private Integer total;
+    private Double percentual;
 }

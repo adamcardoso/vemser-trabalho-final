@@ -18,7 +18,7 @@ public class CreateComentarioDto {
     private String comentario;
 
     @Schema(description = "Número de Curtidas", example = "10")
-    private int curtida;
+    private Integer curtida;
 
     @Schema(description = "ID da Denúncia associada ao Comentário", example = "1")
     private Integer idDenuncia;

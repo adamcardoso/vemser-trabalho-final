@@ -16,19 +16,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Denuncia{
-    private int idDenuncia;
+    private Integer idDenuncia;
     private String descricao;
     private String titulo;
     private Localizacao local;
     private LocalDateTime dataHora;
     private StatusDenuncia statusDenuncia;
     private Categoria categoria;
-    private int curtidas;
+    private Integer curtidas;
     private final List<String> comentarios = new ArrayList<>();
     private TipoDenuncia tipoDenuncia;
-    private int idUsuario;
+    private Integer idUsuario;
 
-    public Denuncia(int idDenuncia, String descricao, String titulo, StatusDenuncia statusDenuncia, Categoria categoria, TipoDenuncia tipoDenuncia, int idUsuario) {
+    public Denuncia(Integer idDenuncia, String descricao, String titulo, StatusDenuncia statusDenuncia, Categoria categoria, TipoDenuncia tipoDenuncia, Integer idUsuario) {
         this.idDenuncia = idDenuncia;
         this.descricao = descricao;
         this.titulo = titulo;
