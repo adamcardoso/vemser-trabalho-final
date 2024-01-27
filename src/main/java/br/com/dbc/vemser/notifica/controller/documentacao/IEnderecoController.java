@@ -1,8 +1,8 @@
 package br.com.dbc.vemser.notifica.controller.documentacao;
 
-import br.com.dbc.vemser.notifica.dto.endereco.CreateEnderecoDTO;
+import br.com.dbc.vemser.notifica.dto.endereco.EnderecoCreateDTO;
 import br.com.dbc.vemser.notifica.dto.endereco.EnderecoDTO;
-import br.com.dbc.vemser.notifica.dto.endereco.UpdateEnderecoDTO;
+import br.com.dbc.vemser.notifica.dto.endereco.EnderecoUpdateDTO;
 import br.com.dbc.vemser.notifica.exceptions.Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -48,7 +48,7 @@ public interface IEnderecoController {
             }
     )
     @PostMapping
-    public ResponseEntity<Response<EnderecoDTO>> adicionarEndereco(@Valid @RequestBody CreateEnderecoDTO enderecoDto);
+    public ResponseEntity<Response<EnderecoDTO>> adicionarEndereco(@Valid @RequestBody EnderecoCreateDTO enderecoDto);
 
     @Operation(summary = "Atualizar endereço", description = "Atualiza um endereço pelo ID")
     @ApiResponses(
@@ -60,7 +60,7 @@ public interface IEnderecoController {
             }
     )
     @PutMapping("/{id}")
-    public ResponseEntity<Response<EnderecoDTO>> atualizarEndereco(@PathVariable("id") Integer id, @Valid @RequestBody UpdateEnderecoDTO enderecoDto);
+    public ResponseEntity<Response<EnderecoDTO>> atualizarEndereco(@PathVariable("id") Integer id, @Valid @RequestBody EnderecoUpdateDTO enderecoDto);
 
     @Operation(summary = "Remover endereço", description = "Remove um endereço pelo ID")
     @ApiResponses(

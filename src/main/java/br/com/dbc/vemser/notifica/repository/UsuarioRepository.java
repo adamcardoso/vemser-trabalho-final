@@ -63,14 +63,22 @@ public class UsuarioRepository {
     public Usuario criarUsuario(Usuario usuario) throws RegraDeNegocioException {
         Connection con = null;
         PreparedStatement stmt = null;
+        ResultSet resultSet = null;
 
         try {
             con = dataSourceConfig.getConnection();
 
+            if (registroJaExiste(con, "EMAIL_USUARIO", usuario.getEmailUsuario())) {
+                throw new RegraDeNegocioException("E-mail já Cadastrado!");
+            }
+            if (registroJaExiste(con, "CELULAR_USUARIO", usuario.getNumeroCelular())) {
+                throw new RegraDeNegocioException("Celular já Cadastrado!");
+            }
+
             String sql = """
-                    INSERT INTO USUARIO
-                    (ID_USUARIO, NOME_USUARIO, EMAIL_USUARIO, CELULAR_USUARIO, SENHA_USUARIO, DATA_NASCIMENTO, ETNIA, CLASSE_SOCIAL, GENERO, TIPO_USUARIO)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""";
+            INSERT INTO USUARIO
+            (ID_USUARIO, NOME_USUARIO, EMAIL_USUARIO, CELULAR_USUARIO, SENHA_USUARIO, DATA_NASCIMENTO, ETNIA, CLASSE_SOCIAL, GENERO, TIPO_USUARIO)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""";
 
             Integer proximoId = this.getProximoIdDoUsuario(con);
             usuario.setIdUsuario(proximoId);
@@ -99,6 +107,9 @@ public class UsuarioRepository {
             throw new RegraDeNegocioException(e.getMessage());
         } finally {
             try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
                 if (stmt != null) {
                     stmt.close();
                 }
@@ -110,6 +121,19 @@ public class UsuarioRepository {
             }
         }
     }
+
+    private boolean registroJaExiste(Connection con, String coluna, String valor) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM USUARIO WHERE " + coluna + " = ?";
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, valor);
+            ResultSet resultSet = stmt.executeQuery();
+            resultSet.next();
+            int count = resultSet.getInt(1);
+            return count > 0;
+        }
+    }
+
+
 
     public Usuario atualizarUsuario(Integer id, Usuario usuario) throws RegraDeNegocioException {
         Connection con = null;

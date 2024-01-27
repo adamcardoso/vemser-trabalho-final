@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class DenunciaCreateDTO {
     @Schema(description = "Descrição da Denúncia", example = "Isso é uma denúncia")
     private String descricao;
 
-    @NotNull(message = "A Denúncia precisa ter um Título!")
+    @NotBlank(message = "A Denúncia precisa ter um Título!")
     @Schema(description = "Título da Denúncia", required = true, example = "Título da Denúncia")
     private String titulo;
 
