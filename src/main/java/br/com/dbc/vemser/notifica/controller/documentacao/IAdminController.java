@@ -1,9 +1,9 @@
 package br.com.dbc.vemser.notifica.controller.documentacao;
 
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
-import br.com.dbc.vemser.notifica.dto.usuario.CreateUsuarioDTO;
-import br.com.dbc.vemser.notifica.dto.usuario.UpdateUsuarioDTO;
-import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
+import br.com.dbc.vemser.notifica.dto.usuario.CreateUsuarioDto;
+import br.com.dbc.vemser.notifica.dto.usuario.UpdateUsuarioDto;
+import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -24,7 +24,7 @@ public interface IAdminController {
             }
     )
     @GetMapping("/list-usuario")
-    public ResponseEntity<List<UsuarioDTO>> listarUsuarios() throws Exception;
+    public ResponseEntity<List<UsuarioDto>> listarUsuarios() throws Exception;
 
     @Operation(summary = "Listar Admins", description = "Listar Admins")
     @ApiResponses(
@@ -36,7 +36,7 @@ public interface IAdminController {
             }
     )
     @GetMapping("/list-admin")
-    public ResponseEntity<List<UsuarioDTO>> listarAdmins() throws Exception;
+    public ResponseEntity<List<UsuarioDto>> listarAdmins() throws Exception;
 
     @Operation(summary = "Obter usuário por ID", description = "Obtém um usuário pelo ID")
     @ApiResponses(
@@ -48,7 +48,7 @@ public interface IAdminController {
             }
     )
     @GetMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDTO> obterUsuarioById(@PathVariable("idUsuario") Integer idUsuario)throws Exception;
+    public ResponseEntity<UsuarioDto> obterUsuarioById(@PathVariable("idUsuario") Integer idUsuario)throws Exception;
 
 
     @Operation(summary = "Criar Admin", description = "Cria um novo Admin")
@@ -60,7 +60,7 @@ public interface IAdminController {
             }
     )
     @PostMapping
-    public ResponseEntity<UsuarioDTO> criarUsuarioAdmin(@Valid @RequestBody CreateUsuarioDTO novoUsuario)throws Exception;
+    public ResponseEntity<UsuarioDto> criarUsuarioAdmin(@Valid @RequestBody CreateUsuarioDto novoUsuario)throws Exception;
 
     @Operation(summary = "Atualizar Admin", description = "Atualiza um Admin pelo ID")
     @ApiResponses(
@@ -72,7 +72,7 @@ public interface IAdminController {
             }
     )
     @PutMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDTO> atualizarAdmin(@PathVariable("idUsuario") Integer idUsuario, @Valid @RequestBody UpdateUsuarioDTO novoUsuario)throws Exception;
+    public ResponseEntity<UsuarioDto> atualizarAdmin(@PathVariable("idUsuario") Integer idUsuario, @Valid @RequestBody UpdateUsuarioDto novoUsuario)throws Exception;
 
     @Operation(summary = "Remover usuário", description = "Remove um usuário pelo ID")
     @ApiResponses(

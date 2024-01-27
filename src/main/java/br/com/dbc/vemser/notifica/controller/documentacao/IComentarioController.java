@@ -1,8 +1,8 @@
 package br.com.dbc.vemser.notifica.controller.documentacao;
 
-import br.com.dbc.vemser.notifica.dto.comentario.ComentarioDTO;
-import br.com.dbc.vemser.notifica.dto.comentario.CreateComentarioDTO;
-import br.com.dbc.vemser.notifica.dto.comentario.UpdateComentarioDTO;
+import br.com.dbc.vemser.notifica.dto.comentario.ComentarioDto;
+import br.com.dbc.vemser.notifica.dto.comentario.CreateComentarioDto;
+import br.com.dbc.vemser.notifica.dto.comentario.UpdateComentarioDto;
 import br.com.dbc.vemser.notifica.exceptions.Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -25,7 +25,7 @@ public interface IComentarioController {
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<Response<ComentarioDTO>> obterComentarioById(@PathVariable("id") Integer id);
+    public ResponseEntity<Response<ComentarioDto>> obterComentarioById(@PathVariable("id") Integer id);
 
     @Operation(summary = "Listar comentários por ID de denúncia", description = "Lista comentários por ID de denúncia")
     @ApiResponses(
@@ -37,7 +37,7 @@ public interface IComentarioController {
             }
     )
     @GetMapping("/{id}/denuncia")
-    public ResponseEntity<Response<List<ComentarioDTO>>> listarComentariosByIdDenuncia(@PathVariable("id") Integer id);
+    public ResponseEntity<Response<List<ComentarioDto>>> listarComentariosByIdDenuncia(@PathVariable("id") Integer id);
 
     @Operation(summary = "Adicionar comentário", description = "Adiciona um novo comentário")
     @ApiResponses(
@@ -48,7 +48,7 @@ public interface IComentarioController {
             }
     )
     @PostMapping
-    public ResponseEntity<Response<ComentarioDTO>> adicionarComentario(@Valid @RequestBody CreateComentarioDTO comentarioDto);
+    public ResponseEntity<Response<ComentarioDto>> adicionarComentario(@Valid @RequestBody CreateComentarioDto comentarioDto);
 
     @Operation(summary = "Atualizar comentário", description = "Atualiza um comentário pelo ID")
     @ApiResponses(
@@ -60,7 +60,7 @@ public interface IComentarioController {
             }
     )
     @PutMapping("/{id}")
-    public ResponseEntity<Response<ComentarioDTO>> atualizarComentario(@PathVariable("id") Integer id, @Valid @RequestBody UpdateComentarioDTO comentarioDto);
+    public ResponseEntity<Response<ComentarioDto>> atualizarComentario(@PathVariable("id") Integer id, @Valid @RequestBody UpdateComentarioDto comentarioDto);
 
     @Operation(summary = "Deletar comentário", description = "Deleta um comentário pelo ID")
     @ApiResponses(

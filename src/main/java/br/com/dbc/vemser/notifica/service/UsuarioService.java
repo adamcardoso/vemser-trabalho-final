@@ -1,8 +1,8 @@
 package br.com.dbc.vemser.notifica.service;
 
-import br.com.dbc.vemser.notifica.dto.usuario.CreateUsuarioDTO;
-import br.com.dbc.vemser.notifica.dto.usuario.UpdateUsuarioDTO;
-import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
+import br.com.dbc.vemser.notifica.dto.usuario.CreateUsuarioDto;
+import br.com.dbc.vemser.notifica.dto.usuario.UpdateUsuarioDto;
+import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDto;
 import br.com.dbc.vemser.notifica.entity.Usuario;
 import br.com.dbc.vemser.notifica.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,25 +15,25 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
 
-    public UsuarioDTO obterUsuario(Integer idUsuario) throws Exception {
+    public UsuarioDto obterUsuario(Integer idUsuario) throws Exception {
         //TODO Será ajustado para mostrar somento o usuario
         Usuario usuario = usuarioRepository.obterUsuario(idUsuario);
-        return objectMapper.convertValue(usuario, UsuarioDTO.class);
+        return objectMapper.convertValue(usuario, UsuarioDto.class);
     }
 
-    public UsuarioDTO criarUsuario(CreateUsuarioDTO novoUsuario) throws Exception {
+    public UsuarioDto criarUsuario(CreateUsuarioDto novoUsuario) throws Exception {
         Usuario novoUsuarioEntity = objectMapper.convertValue(novoUsuario, Usuario.class);
         Usuario usuarioCriado = usuarioRepository.criarUsuario(novoUsuarioEntity);
 
-        return objectMapper.convertValue(usuarioCriado, UsuarioDTO.class);
+        return objectMapper.convertValue(usuarioCriado, UsuarioDto.class);
     }
 
-    public UsuarioDTO atualizarUsuario(Integer idUsuario, UpdateUsuarioDTO novoUsuario) throws Exception {
+    public UsuarioDto atualizarUsuario(Integer idUsuario, UpdateUsuarioDto novoUsuario) throws Exception {
         //TODO Será verificado se o usuario editado é o mesmo que o usuario logado
         Usuario novoUsuarioEntity = objectMapper.convertValue(novoUsuario, Usuario.class);
         Usuario usuarioAtualizado = usuarioRepository.atualizarUsuario(idUsuario, novoUsuarioEntity);
 
-        return objectMapper.convertValue(usuarioAtualizado, UsuarioDTO.class);
+        return objectMapper.convertValue(usuarioAtualizado, UsuarioDto.class);
     }
 
     public void removerUsuario(Integer idUsuario) throws Exception {

@@ -1,6 +1,6 @@
 package br.com.dbc.vemser.notifica.controller.documentacao;
 
-import br.com.dbc.vemser.notifica.dto.estatistica.EstatisticaDTO;
+import br.com.dbc.vemser.notifica.dto.estatistica.EstatisticaDto;
 import br.com.dbc.vemser.notifica.exceptions.Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -23,5 +23,5 @@ public interface IEstatisticaController {
             }
     )
     @GetMapping("/bycolumn")
-    public ResponseEntity<Response<HashMap<String, List<EstatisticaDTO>>>> obterEstatistica(@RequestParam("coluna") List<String> colunas);
+    public ResponseEntity<Response<HashMap<String, List<EstatisticaDto>>>> obterEstatistica(@RequestParam("coluna") List<String> colunas);
 }

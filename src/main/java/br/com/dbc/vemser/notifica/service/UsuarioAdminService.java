@@ -1,9 +1,9 @@
 package br.com.dbc.vemser.notifica.service;
 
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
-import br.com.dbc.vemser.notifica.dto.usuario.CreateUsuarioDTO;
-import br.com.dbc.vemser.notifica.dto.usuario.UpdateUsuarioDTO;
-import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
+import br.com.dbc.vemser.notifica.dto.usuario.CreateUsuarioDto;
+import br.com.dbc.vemser.notifica.dto.usuario.UpdateUsuarioDto;
+import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDto;
 import br.com.dbc.vemser.notifica.entity.Denuncia;
 import br.com.dbc.vemser.notifica.entity.Usuario;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
@@ -16,37 +16,37 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class AdminService {
+public class UsuarioAdminService {
     private final AdminRepository adminRepository;
     private final ObjectMapper objectMapper;
 
 
-    public UsuarioDTO obterUsuarioById(Integer idUsuario) throws Exception {
-        return objectMapper.convertValue(getUsuario(idUsuario), UsuarioDTO.class);
+    public UsuarioDto obterUsuarioById(Integer idUsuario) throws Exception {
+        return objectMapper.convertValue(getUsuario(idUsuario), UsuarioDto.class);
     }
 
-    public List<UsuarioDTO> listarUsuarios() throws Exception {
+    public List<UsuarioDto> listarUsuarios() throws Exception {
         List<Usuario> usuarios = adminRepository.listarUsuarios();
-        return objectMapper.convertValue(usuarios, objectMapper.getTypeFactory().constructCollectionType(List.class, UsuarioDTO.class));
+        return objectMapper.convertValue(usuarios, objectMapper.getTypeFactory().constructCollectionType(List.class, UsuarioDto.class));
     }
 
-    public List<UsuarioDTO> listarAdmins() throws Exception {
+    public List<UsuarioDto> listarAdmins() throws Exception {
         List<Usuario> usuarios = adminRepository.listarAdmins();
-        return objectMapper.convertValue(usuarios, objectMapper.getTypeFactory().constructCollectionType(List.class, UsuarioDTO.class));
+        return objectMapper.convertValue(usuarios, objectMapper.getTypeFactory().constructCollectionType(List.class, UsuarioDto.class));
     }
 
-    public UsuarioDTO criarUsuarioAdmin(CreateUsuarioDTO novoUsuario) throws Exception {
+    public UsuarioDto criarUsuarioAdmin(CreateUsuarioDto novoUsuario) throws Exception {
         Usuario novoUsuarioEntity = objectMapper.convertValue(novoUsuario, Usuario.class);
         Usuario usuarioCriado = adminRepository.criarUsuarioAdmin(novoUsuarioEntity);
 
-        return objectMapper.convertValue(usuarioCriado, UsuarioDTO.class);
+        return objectMapper.convertValue(usuarioCriado, UsuarioDto.class);
     }
 
-    public UsuarioDTO atualizarAdmin(Integer idUsuario, UpdateUsuarioDTO novoUsuario) throws Exception {
+    public UsuarioDto atualizarAdmin(Integer idUsuario, UpdateUsuarioDto novoUsuario) throws Exception {
         Usuario novoUsuarioEntity = objectMapper.convertValue(novoUsuario, Usuario.class);
         Usuario usuarioAtualizado = adminRepository.atualizarAdmin(idUsuario, novoUsuarioEntity);
 
-        return objectMapper.convertValue(usuarioAtualizado, UsuarioDTO.class);
+        return objectMapper.convertValue(usuarioAtualizado, UsuarioDto.class);
     }
 
     public String removerUsuario(Integer idUsuario) throws Exception {
