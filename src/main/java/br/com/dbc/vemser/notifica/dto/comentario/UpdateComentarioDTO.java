@@ -9,10 +9,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-public class ComentarioDto {
+public class UpdateComentarioDTO {
     private Integer idComentario;
     private String comentario;
     private int curtida;
     private Integer idDenuncia;
     private Integer idUsuario;
+
+    public UpdateComentarioDTO(String comentario){
+        this.comentario = comentario;
+    }
 }
+

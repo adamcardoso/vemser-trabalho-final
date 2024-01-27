@@ -23,16 +23,15 @@
                             </div>
 
                             <div style="font-size: 20px; color: #ffffff; margin-top: 15px;">
-                                <b>Confirmação de Denúncia <b><br>
+                                Confirmação de Denúncia <br>
                             </div>
 
                             <div style="font-size: 18px; color: #ffffff; margin-top: 20px; line-height: 1.6;">
-                                <i>Olá ${nome}, obrigado por contribuir para a melhoria do abastecimento de água e saneamento básico em sua região usando o NOTIFICA. Sua denúncia foi postada e já está disponível para visualização!<i>
+                                Olá ${nome}, obrigado por contribuir para a melhoria do abastecimento de água e saneamento básico em sua região usando o NOTIFICA. Sua denúncia foi atualizada e já está disponível para visualização!
                             </div>
 
                             <div style="font-size: 18px; color: #ffffff; margin-top: 20px; line-height: 1.6;">
-                                <b>Detalhes da Denúncia:</b>
-                                <br>
+                                <b>Detalhes da Denúncia Criada:</b><br>
                                 <b>Status:</b> ${status}<br>
                                 <b>Categoria:</b> ${categoria}<br>
                                 <b>Tipo Denuncia:</b> ${tipo_denuncia}<br>

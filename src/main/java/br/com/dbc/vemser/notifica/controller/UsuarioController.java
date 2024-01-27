@@ -1,9 +1,9 @@
 package br.com.dbc.vemser.notifica.controller;
 
 import br.com.dbc.vemser.notifica.controller.documentacao.IUsuarioController;
-import br.com.dbc.vemser.notifica.dto.usuario.CreateUsuarioDto;
-import br.com.dbc.vemser.notifica.dto.usuario.UpdateUsuarioDto;
-import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDto;
+import br.com.dbc.vemser.notifica.dto.usuario.CreateUsuarioDTO;
+import br.com.dbc.vemser.notifica.dto.usuario.UpdateUsuarioDTO;
+import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import br.com.dbc.vemser.notifica.service.UsuarioService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,20 +21,20 @@ public class UsuarioController implements IUsuarioController {
     private final UsuarioService usuarioService;
 
     @GetMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDto> obterUsuarioById(@PathVariable("idUsuario") Integer idUsuario) throws Exception {
-        UsuarioDto usuario = usuarioService.obterUsuario(idUsuario);
+    public ResponseEntity<UsuarioDTO> obterUsuarioById(@PathVariable("idUsuario") Integer idUsuario) throws Exception {
+        UsuarioDTO usuario = usuarioService.obterUsuario(idUsuario);
         return new ResponseEntity<>(usuario, HttpStatus.CREATED);
     }
 
     @PostMapping
-    public ResponseEntity<UsuarioDto> criarUsuario(@Valid @RequestBody CreateUsuarioDto novoUsuario) throws Exception {
-        UsuarioDto usuarios = usuarioService.criarUsuario(novoUsuario);
+    public ResponseEntity<UsuarioDTO> criarUsuario(@Valid @RequestBody CreateUsuarioDTO novoUsuario) throws Exception {
+        UsuarioDTO usuarios = usuarioService.criarUsuario(novoUsuario);
         return new ResponseEntity<>(usuarios, HttpStatus.OK);
     }
 
     @PutMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDto> atualizarUsuario(@PathVariable("idUsuario") Integer idUsuario, @Valid @RequestBody UpdateUsuarioDto novoUsuario) throws Exception {
-        UsuarioDto usuarios = usuarioService.atualizarUsuario(idUsuario, novoUsuario);
+    public ResponseEntity<UsuarioDTO> atualizarUsuario(@PathVariable("idUsuario") Integer idUsuario, @Valid @RequestBody UpdateUsuarioDTO novoUsuario) throws Exception {
+        UsuarioDTO usuarios = usuarioService.atualizarUsuario(idUsuario, novoUsuario);
         return new ResponseEntity<>(usuarios, HttpStatus.OK);
     }
 

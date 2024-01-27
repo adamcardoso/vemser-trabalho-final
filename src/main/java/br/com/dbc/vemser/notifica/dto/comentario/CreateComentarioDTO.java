@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-public class CreateComentarioDto {
+public class CreateComentarioDTO {
     @Schema(description = "ID do Comentário", example = "1")
     private Integer idComentario;
 
@@ -26,7 +26,7 @@ public class CreateComentarioDto {
     @Schema(description = "ID do Usuário que fez o Comentário", example = "1")
     private Integer idUsuario;
 
-    public CreateComentarioDto(String comentario, Integer idDenuncia, Integer idUsuario){
+    public CreateComentarioDTO(String comentario, Integer idDenuncia, Integer idUsuario){
         this.comentario = comentario;
         this.curtida = 0;
         this.idDenuncia = idDenuncia;

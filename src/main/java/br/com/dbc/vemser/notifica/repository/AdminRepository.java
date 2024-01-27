@@ -1,11 +1,10 @@
 package br.com.dbc.vemser.notifica.repository;
 
 import br.com.dbc.vemser.notifica.config.ConexaoBancoDeDados;
+import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
+import br.com.dbc.vemser.notifica.entity.Denuncia;
 import br.com.dbc.vemser.notifica.entity.Usuario;
-import br.com.dbc.vemser.notifica.entity.enums.ClasseSocial;
-import br.com.dbc.vemser.notifica.entity.enums.Etnia;
-import br.com.dbc.vemser.notifica.entity.enums.Genero;
-import br.com.dbc.vemser.notifica.entity.enums.TipoUsuario;
+import br.com.dbc.vemser.notifica.entity.enums.*;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -17,7 +16,7 @@ import java.util.List;
 
 @Repository
 @AllArgsConstructor
-public class UsuarioAdminRepository {
+public class AdminRepository {
     private final ConexaoBancoDeDados dataSourceConfig;
 
     public Usuario obterUsuarioById(int idUsuario) throws Exception {
@@ -159,8 +158,52 @@ public class UsuarioAdminRepository {
             }
         }
     }
+    public List<Usuario> listarAdmins() throws Exception {
+        Connection con = null;
+        PreparedStatement stmt = null;
 
-    public Usuario atualizarUsuario(Integer id, Usuario usuario) throws RegraDeNegocioException {
+        try{
+            con = dataSourceConfig.getConnection();
+
+            String sql = "SELECT * FROM USUARIO WHERE TIPO_USUARIO = 1";
+
+            stmt = con.prepareStatement(sql);
+
+            ResultSet resultSet = stmt.executeQuery();
+
+            List<Usuario> usuarios = new ArrayList<>();
+
+            while (resultSet.next()) {
+                Integer idUsuario = resultSet.getInt("ID_USUARIO");
+                String nomeUsuario = resultSet.getString("NOME_USUARIO");
+                String emailUsuario = resultSet.getString("EMAIL_USUARIO");
+                String celularUsuario = resultSet.getString("CELULAR_USUARIO");
+                String senhaUsuario = resultSet.getString("SENHA_USUARIO");
+                Etnia etnia = Etnia.fromInt(resultSet.getInt("ETNIA"));
+                LocalDate dataNascimento = resultSet.getDate("DATA_NASCIMENTO").toLocalDate();
+                ClasseSocial classeSocial = ClasseSocial.fromInt(resultSet.getInt("CLASSE_SOCIAL"));
+                Genero genero = Genero.fromInt(resultSet.getInt("GENERO"));
+                TipoUsuario tipoUsuario = TipoUsuario.fromInt(resultSet.getInt("TIPO_USUARIO"));
+                Boolean isAdmin = TipoUsuario.fromInt(resultSet.getInt("TIPO_USUARIO")).equals(TipoUsuario.ADMIN);
+
+                usuarios.add(new Usuario(idUsuario, nomeUsuario, emailUsuario, celularUsuario, senhaUsuario, etnia, dataNascimento, classeSocial, genero, tipoUsuario, isAdmin));
+            }
+            return usuarios;
+        } catch (Exception e) {
+            throw new Exception(e);
+        } finally {
+            try{
+                if(stmt != null)
+                    stmt.close();
+                if(con != null)
+                    con.close();
+            } catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public Usuario atualizarAdmin(Integer id, Usuario usuario) throws RegraDeNegocioException {
         Connection con = null;
         PreparedStatement stmt = null;
 
@@ -215,22 +258,32 @@ public class UsuarioAdminRepository {
 
     public boolean removerUsuario(Integer idUsuario) throws RegraDeNegocioException {
         Connection con = null;
-        PreparedStatement stmt = null;
 
         try {
             con = dataSourceConfig.getConnection();
             con.setAutoCommit(false);
 
-
-            // Exclui registros dependentes em COMENTARIO
             String sqlDeleteComentario = "DELETE FROM COMENTARIO WHERE id_usuario = ?";
             try (PreparedStatement stmtComentario = con.prepareStatement(sqlDeleteComentario)) {
                 stmtComentario.setInt(1, idUsuario);
                 stmtComentario.executeUpdate();
-
             }
 
-            // Exclui o registro principal em DENUNCIA
+            String sqlSelectDenuncia = "SELECT id_denuncia FROM DENUNCIA WHERE id_usuario = ?";
+            try (PreparedStatement stmtSelectDenuncia = con.prepareStatement(sqlSelectDenuncia)) {
+                stmtSelectDenuncia.setInt(1, idUsuario);
+                try (ResultSet rs = stmtSelectDenuncia.executeQuery()) {
+                    while (rs.next()) {
+                        int idDenuncia = rs.getInt("id_denuncia");
+                        String sqlDeleteLocalizacao = "DELETE FROM LOCALIZACAO WHERE id_denuncia = ?";
+                        try (PreparedStatement stmtLocalizacao = con.prepareStatement(sqlDeleteLocalizacao)) {
+                            stmtLocalizacao.setInt(1, idDenuncia);
+                            stmtLocalizacao.executeUpdate();
+                        }
+                    }
+                }
+            }
+
             String sqlDeleteDenuncia = "DELETE FROM DENUNCIA WHERE id_usuario = ?";
             try (PreparedStatement stmtDenuncia = con.prepareStatement(sqlDeleteDenuncia)) {
                 stmtDenuncia.setInt(1, idUsuario);
@@ -266,6 +319,7 @@ public class UsuarioAdminRepository {
         }
     }
 
+
     public Integer getProximoIdDoUsuario(Connection connection) throws SQLException {
         String sql = "SELECT SEQ_USUARIO.NEXTVAL mysequence from DUAL";
 
@@ -277,5 +331,93 @@ public class UsuarioAdminRepository {
         }
 
         return null;
+    }
+
+    public List<DenunciaDTO> listarTodasDenuncias() throws SQLException {
+        try (Connection connection = dataSourceConfig.getConnection();
+             Statement stmt = connection.createStatement();
+             ResultSet res = stmt.executeQuery("SELECT * FROM DENUNCIA")) {
+
+            List<DenunciaDTO> denuncias = new ArrayList<>();
+
+            while (res.next()) {
+                denuncias.add(new DenunciaDTO(
+                        res.getInt("id_denuncia"),
+                        res.getInt("id_usuario"),
+                        res.getString("descricao"),
+                        res.getString("titulo"),
+                        StatusDenuncia.fromInt(res.getInt("status_denuncia")),
+                        Categoria.fromInt(res.getInt("categoria")),
+                        TipoDenuncia.fromInt(res.getInt("tipo_denuncia"))
+                ));
+            }
+
+            return denuncias;
+        }
+    }
+
+    public boolean deletarDenuncia(Integer idDenuncia) throws SQLException {
+        Connection con = null;
+        PreparedStatement stmt = null;
+
+        try {
+            con = dataSourceConfig.getConnection();
+            con.setAutoCommit(false);
+
+            String sqlDeleteComentario = "DELETE FROM COMENTARIO WHERE id_denuncia = ?";
+            try (PreparedStatement stmtComentario = con.prepareStatement(sqlDeleteComentario)) {
+                stmtComentario.setInt(1, idDenuncia);
+                stmtComentario.executeUpdate();
+            }
+
+            String sqlDeleteLocalizacao = "DELETE FROM LOCALIZACAO WHERE id_denuncia = ?";
+            try (PreparedStatement stmtLocalizacao = con.prepareStatement(sqlDeleteLocalizacao)) {
+                stmtLocalizacao.setInt(1, idDenuncia);
+                stmtLocalizacao.executeUpdate();
+            }
+
+            String sqlDeleteDenuncia = "DELETE FROM DENUNCIA WHERE id_denuncia = ?";
+            stmt = con.prepareStatement(sqlDeleteDenuncia);
+            stmt.setInt(1, idDenuncia);
+            int res = stmt.executeUpdate();
+
+            return res > 0;
+
+        } catch (SQLException e) {
+            con.rollback();
+            throw e;
+        } finally {
+            try {
+                if (stmt != null)
+                    stmt.close();
+                if (con != null)
+                    con.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public Denuncia obterDenunciaById(Integer idDenuncia) throws SQLException {
+        try (Connection connection = dataSourceConfig.getConnection();
+             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM DENUNCIA WHERE id_denuncia = ?")) {
+
+            stmt.setInt(1, idDenuncia);
+
+            try (ResultSet res = stmt.executeQuery()) {
+                if (res.next()) {
+                    return new Denuncia(
+                            res.getInt("id_denuncia"),
+                            res.getString("descricao"),
+                            res.getString("titulo"),
+                            StatusDenuncia.fromInt(res.getInt("status_denuncia")),
+                            Categoria.fromInt(res.getInt("categoria")),
+                            TipoDenuncia.fromInt(res.getInt("tipo_denuncia")),
+                            res.getInt("id_usuario")
+                    );
+                }
+                return null;
+            }
+        }
     }
 }

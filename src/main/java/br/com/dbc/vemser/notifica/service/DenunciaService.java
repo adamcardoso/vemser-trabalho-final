@@ -1,22 +1,17 @@
 package br.com.dbc.vemser.notifica.service;
 
-import br.com.dbc.vemser.notifica.dto.comentario.ComentarioDto;
-import br.com.dbc.vemser.notifica.dto.comentario.UpdateComentarioDto;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaCreateDTO;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
-import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDto;
-import br.com.dbc.vemser.notifica.entity.Comentario;
+import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import br.com.dbc.vemser.notifica.entity.Denuncia;
-import br.com.dbc.vemser.notifica.entity.Usuario;
+import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.repository.DenunciaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,105 +21,71 @@ public class DenunciaService {
     private final UsuarioService usuarioService;
     private final ObjectMapper objectMapper;
 
-    public Optional<List<DenunciaDTO>> listarTodasDenuncias() throws Exception {
-        try {
-            Optional<List<DenunciaDTO>> denunciaDTOS = denunciaRepository.listarTodasDenuncias();
+    public List<DenunciaDTO> listarTodasDenuncias() throws Exception {
+        return denunciaRepository.listarTodasDenuncias();
+    }
+    public List<DenunciaDTO> listByTitulo(String titulo) throws Exception {
+        List<Denuncia> denuncias = denunciaRepository.listByTitulo(titulo);
+
+        if (!denuncias.isEmpty()) {
+            List<DenunciaDTO> denunciaDTOS = new ArrayList<>();
+
+            for (Denuncia d : denuncias)
+                denunciaDTOS.add(objectMapper.convertValue(d, DenunciaDTO.class));
+
             return denunciaDTOS;
-        } catch (Exception e) {
-            throw new Exception("Erro ao listar as denúncias", e);
         }
+
+        throw new RegraDeNegocioException("Nenhuma denúncia encontrada com o título fornecido.");
     }
 
-    public Optional<List<DenunciaDTO>> listByTitulo(String titulo) throws Exception {
-        try{
-            Optional<List<Denuncia>> denunciasopt = denunciaRepository.listByTitulo(titulo);
+    public List<DenunciaDTO> listByIdUsuario(Integer idUsuario) throws Exception {
+        List<Denuncia> denuncias = denunciaRepository.listByIdUsuario(idUsuario);
+        if (!denuncias.isEmpty()) {
+            List<DenunciaDTO> denunciaDTOS = new ArrayList<>();
+            for (Denuncia d : denuncias)
+                denunciaDTOS.add(objectMapper.convertValue(d, DenunciaDTO.class));
 
-            if(denunciasopt.isPresent()){
-                List<Denuncia> denuncias = denunciasopt.get();
-                List<DenunciaDTO> denunciaDTOS = new ArrayList<>();
-
-                for(Denuncia d: denuncias)
-                    denunciaDTOS.add(objectMapper.convertValue(d, DenunciaDTO.class));
-
-                return Optional.of(denunciaDTOS);
-            }
-            return Optional.empty();
-        } catch (Exception e){
-            throw new Exception();
+            return denunciaDTOS;
         }
+        throw new RegraDeNegocioException("Nenhuma denúncia encontrada para o usuário com ID fornecido.");
     }
 
-    public Optional<List<DenunciaDTO>> listByIdUsuario(Integer idUsuario) throws Exception {
-        try {
-            Optional<List<Denuncia>> denunciasOpt = denunciaRepository.ListByIdUsuario(idUsuario);
+    public DenunciaDTO obterDenunciaById(Integer idDenuncia) throws Exception {
+        Denuncia denuncia = denunciaRepository.obterDenunciaById(idDenuncia);
 
-            if (denunciasOpt.isPresent()) {
-                List<Denuncia> denuncias = denunciasOpt.get();
-                List<DenunciaDTO> denunciaDTOS = new ArrayList<>();
-
-                for (Denuncia d : denuncias)
-                    denunciaDTOS.add(objectMapper.convertValue(d, DenunciaDTO.class));
-
-                return Optional.of(denunciaDTOS);
-            }
-            return Optional.empty();
-        } catch (Exception e) {
-            throw new Exception("Erro ao listar as denúncias do usuário.", e);
+        if (denuncia != null) {
+            return objectMapper.convertValue(denuncia, DenunciaDTO.class);
         }
+
+        throw new RegraDeNegocioException("Denúncia não encontrada com o ID fornecido.");
     }
 
-    public Optional<DenunciaDTO> obterDenunciaById(Integer idDenuncia) throws Exception {
-        try {
-            Optional<Denuncia> denunciaOpt = denunciaRepository.obterDenunciaById(idDenuncia);
-
-            if (denunciaOpt.isPresent()) {
-                Denuncia denuncia = denunciaOpt.get();
-                DenunciaDTO dDto = objectMapper.convertValue(denuncia, DenunciaDTO.class);
-
-                return Optional.of(dDto);
-            }
-            return Optional.empty();
-        } catch (Exception e) {
-            throw new Exception("Falha ao obter a denúncia pelo ID.", e);
-        }
+    public DenunciaDTO criarDenuncia(DenunciaCreateDTO denunciaDTO, int idUsuario) throws Exception {
+        Denuncia d = objectMapper.convertValue(denunciaDTO, Denuncia.class);
+        UsuarioDTO usuario = usuarioService.obterUsuario(idUsuario);
+        DenunciaDTO denuncia = objectMapper.convertValue(denunciaRepository.criarDenuncia(d, idUsuario), DenunciaDTO.class);
+        emailService.enviarEmailCriacaoDenuncia(usuario.getEmailUsuario(), usuario.getNomeUsuario(), denuncia.getIdDenuncia());
+        return denuncia;
     }
 
-    public Optional<DenunciaDTO> criarDenuncia(DenunciaCreateDTO denunciaDTO, int idUsuario) throws Exception {
-        try {
-            Denuncia d = objectMapper.convertValue(denunciaDTO, Denuncia.class);
-            UsuarioDto usuario = usuarioService.obterUsuarioById(idUsuario);
-            DenunciaDTO denuncia = objectMapper.convertValue(denunciaRepository.criarDenuncia(d, idUsuario), DenunciaDTO.class);
-            emailService.enviarEmailCriacaoDenuncia(usuario.getEmailUsuario(), usuario.getNomeUsuario(), denuncia.getIdDenuncia());
-            return Optional.of(denuncia);
-        } catch (Exception e){
-            throw new Exception();
+    public DenunciaDTO editarDenuncia(DenunciaCreateDTO denunciaCreateDTO, Integer idDenuncia, Integer idUsuario) throws Exception {
+        Denuncia denuncia = denunciaRepository.obterDenunciaById(idDenuncia);
+
+        if (denuncia != null) {
+            Denuncia d = objectMapper.convertValue(denunciaCreateDTO, Denuncia.class);
+            UsuarioDTO usuario = usuarioService.obterUsuario(idUsuario);
+            DenunciaDTO denunciaDTO = objectMapper.convertValue(denunciaRepository.editarDenuncia(idDenuncia, d, idUsuario), DenunciaDTO.class);
+            emailService.enviarEmailEdicaoEndereco(usuario.getEmailUsuario(), usuario.getNomeUsuario(), denunciaDTO.getIdDenuncia());
+            return denunciaDTO;
         }
+        throw new RegraDeNegocioException("Denúncia não encontrada com o ID fornecido.");
     }
 
-    public Optional<DenunciaDTO> editarDenuncia(DenunciaCreateDTO denunciaCreateDTO, Integer idDenuncia, Integer idUsuario) throws Exception {
-        try {
-            Optional<Denuncia> denunciaOpt = denunciaRepository.obterDenunciaById(idDenuncia);
-
-            if (denunciaOpt.isPresent()) {
-                Denuncia d = objectMapper.convertValue(denunciaCreateDTO, Denuncia.class);
-                UsuarioDto usuario = usuarioService.obterUsuarioById(idUsuario);
-                DenunciaDTO denuncia = objectMapper.convertValue(denunciaRepository.editarDenuncia(idDenuncia, d, idUsuario), DenunciaDTO.class);
-                emailService.enviarEmailEdicaoEndereco(usuario.getEmailUsuario(), usuario.getNomeUsuario(), denuncia.getIdDenuncia());
-                return Optional.of(denuncia);
-            }
-
-            return Optional.empty();
-        } catch (Exception e) {
-            throw new Exception("Falha ao editar a denúncia.", e);
+    public String deletarDenuncia(Integer idDenuncia, Integer idUsuario) throws Exception{
+        if (denunciaRepository.deletarDenuncia(idDenuncia, idUsuario)) {
+            return "Denúncia Excluída!";
         }
-    }
-
-    public Optional<Boolean> deletarDenuncia(Integer idDenuncia, Integer idUsuario) throws Exception{
-        try {
-
-            return denunciaRepository.deletarDenuncia(idDenuncia, idUsuario);
-        } catch (Exception e){
-            throw new Exception();
-        }
+        throw new RegraDeNegocioException("Denúncia não encontrada com o ID fornecido.");
     }
 }

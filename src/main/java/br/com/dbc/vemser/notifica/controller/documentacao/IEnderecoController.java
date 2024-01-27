@@ -1,8 +1,8 @@
 package br.com.dbc.vemser.notifica.controller.documentacao;
 
-import br.com.dbc.vemser.notifica.dto.endereco.CreateEnderecoDto;
-import br.com.dbc.vemser.notifica.dto.endereco.EnderecoDto;
-import br.com.dbc.vemser.notifica.dto.endereco.UpdateEnderecoDto;
+import br.com.dbc.vemser.notifica.dto.endereco.CreateEnderecoDTO;
+import br.com.dbc.vemser.notifica.dto.endereco.EnderecoDTO;
+import br.com.dbc.vemser.notifica.dto.endereco.UpdateEnderecoDTO;
 import br.com.dbc.vemser.notifica.exceptions.Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -25,7 +25,7 @@ public interface IEnderecoController {
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<Response<EnderecoDto>> obterEnderecoById(@PathVariable Integer id);
+    public ResponseEntity<Response<EnderecoDTO>> obterEnderecoById(@PathVariable Integer id);
 
     @Operation(summary = "Listar endereços por ID de usuário", description = "Lista endereços por ID de usuário")
     @ApiResponses(
@@ -37,7 +37,7 @@ public interface IEnderecoController {
             }
     )
     @GetMapping("/{id}/usuario")
-    public ResponseEntity<Response<List<EnderecoDto>>> obterEnderecosByIdUsuario(@PathVariable("id") Integer id);
+    public ResponseEntity<Response<List<EnderecoDTO>>> obterEnderecosByIdUsuario(@PathVariable("id") Integer id);
 
     @Operation(summary = "Adicionar endereço", description = "Adiciona um novo endereço")
     @ApiResponses(
@@ -48,7 +48,7 @@ public interface IEnderecoController {
             }
     )
     @PostMapping
-    public ResponseEntity<Response<EnderecoDto>> adicionarEndereco(@Valid @RequestBody CreateEnderecoDto enderecoDto);
+    public ResponseEntity<Response<EnderecoDTO>> adicionarEndereco(@Valid @RequestBody CreateEnderecoDTO enderecoDto);
 
     @Operation(summary = "Atualizar endereço", description = "Atualiza um endereço pelo ID")
     @ApiResponses(
@@ -60,7 +60,7 @@ public interface IEnderecoController {
             }
     )
     @PutMapping("/{id}")
-    public ResponseEntity<Response<EnderecoDto>> atualizarEndereco(@PathVariable("id") Integer id, @Valid @RequestBody UpdateEnderecoDto enderecoDto);
+    public ResponseEntity<Response<EnderecoDTO>> atualizarEndereco(@PathVariable("id") Integer id, @Valid @RequestBody UpdateEnderecoDTO enderecoDto);
 
     @Operation(summary = "Remover endereço", description = "Remove um endereço pelo ID")
     @ApiResponses(

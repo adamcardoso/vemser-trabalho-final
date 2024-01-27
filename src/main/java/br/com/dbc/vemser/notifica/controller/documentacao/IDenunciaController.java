@@ -2,7 +2,6 @@ package br.com.dbc.vemser.notifica.controller.documentacao;
 
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaCreateDTO;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
-import br.com.dbc.vemser.notifica.exceptions.Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -24,7 +23,7 @@ public interface IDenunciaController {
             }
     )
     @GetMapping
-    public ResponseEntity<Response<List<DenunciaDTO>>> listarTodasDenuncias();
+    public ResponseEntity<List<DenunciaDTO>> listarTodasDenuncias() throws Exception;
 
     @Operation(summary = "Obter denúncia por ID", description = "Obtém uma denúncia pelo ID")
     @ApiResponses(
@@ -36,7 +35,7 @@ public interface IDenunciaController {
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<Response<DenunciaDTO>> obterDenunciaById(@PathVariable("id") Integer id);
+    public ResponseEntity<DenunciaDTO> obterDenunciaById(@PathVariable("id") Integer id) throws Exception;
 
     @Operation(summary = "Listar denúncias por ID de usuário", description = "Lista denúncias por ID de usuário")
     @ApiResponses(
@@ -48,7 +47,7 @@ public interface IDenunciaController {
             }
     )
     @GetMapping("/usuario/{idUsuario}")
-    public ResponseEntity<Response<List<DenunciaDTO>>> listByIdUsuario(@PathVariable("idUsuario") Integer idUsuario);
+    public ResponseEntity<List<DenunciaDTO>> listByIdUsuario(@PathVariable("idUsuario") Integer idUsuario) throws Exception;
 
     @Operation(summary = "Criar denúncia", description = "Cria uma nova denúncia")
     @ApiResponses(
@@ -59,7 +58,7 @@ public interface IDenunciaController {
             }
     )
     @PostMapping("/{idUsuario}")
-    public ResponseEntity<Response<DenunciaDTO>> criarDenuncia(@PathVariable("idUsuario") Integer idUsuario, @Valid @RequestBody DenunciaCreateDTO denunciaCreateDTO);
+    public ResponseEntity<DenunciaDTO> criarDenuncia(@PathVariable("idUsuario") Integer idUsuario, @Valid @RequestBody DenunciaCreateDTO denunciaCreateDTO) throws Exception;
 
     @Operation(summary = "Editar denúncia", description = "Edita uma denúncia pelo ID")
     @ApiResponses(
@@ -71,7 +70,7 @@ public interface IDenunciaController {
             }
     )
     @PutMapping("/{idDenuncia}")
-    public ResponseEntity<Response<DenunciaDTO>> editarDenuncia(@PathVariable("idDenuncia") Integer idDenuncia, @Valid @RequestBody DenunciaCreateDTO denunciaCreateDTO, @PathVariable("idUsuario") Integer idUsuario);
+    public ResponseEntity<DenunciaDTO>editarDenuncia(@PathVariable("idDenuncia") Integer idDenuncia, @Valid @RequestBody DenunciaCreateDTO denunciaCreateDTO, @PathVariable("idUsuario") Integer idUsuario) throws Exception;
 
     @Operation(summary = "Deletar denúncia", description = "Deleta uma denúncia pelo ID")
     @ApiResponses(
@@ -83,6 +82,6 @@ public interface IDenunciaController {
             }
     )
     @DeleteMapping("/{idDenuncia}")
-    public ResponseEntity<Response<Object>> deletarDenuncia(@PathVariable("idDenuncia") Integer idDenuncia, @PathVariable("idUsuario") Integer idUsuario);
+    public ResponseEntity<Object> deletarDenuncia(@PathVariable("idDenuncia") Integer idDenuncia, @PathVariable("idUsuario") Integer idUsuario) throws Exception;
 }
 
