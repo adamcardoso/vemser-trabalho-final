@@ -24,7 +24,7 @@ public class EnderecoService{
         return objectMapper.convertValue(getEndereco(id), EnderecoDTO.class);
     }
     public List<EnderecoDTO> obterEnderecosByIdUsuario(Integer id) throws Exception{
-        List<Endereco> enderecosIdUsuario = enderecoRepository.ListarTodosEnderecos().stream()
+        List<Endereco> enderecosIdUsuario = enderecoRepository.listarTodosEnderecos().stream()
                 .filter(endereco -> endereco.getIdPessoa().equals(id))
                 .collect(Collectors.toList());
 
@@ -48,7 +48,7 @@ public class EnderecoService{
     }
 
     private Endereco getEndereco(Integer id) throws Exception{
-        Endereco enderecoGet = enderecoRepository.ListarTodosEnderecos().stream()
+        Endereco enderecoGet = enderecoRepository.listarTodosEnderecos().stream()
                 .filter(endereco -> endereco.getIdEndereco().equals(id))
                 .findFirst()
                 .orElseThrow(() -> new RegraDeNegocioException("Endereço não encontrado!"));

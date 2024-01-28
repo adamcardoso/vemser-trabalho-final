@@ -4,6 +4,8 @@ import br.com.dbc.vemser.notifica.controller.documentacao.IEnderecoController;
 import br.com.dbc.vemser.notifica.dto.endereco.CreateEnderecoDTO;
 import br.com.dbc.vemser.notifica.dto.endereco.EnderecoDTO;
 import br.com.dbc.vemser.notifica.dto.endereco.UpdateEnderecoDTO;
+import br.com.dbc.vemser.notifica.entity.Endereco;
+import br.com.dbc.vemser.notifica.repository.irepository.IEnderecoRepository;
 import br.com.dbc.vemser.notifica.service.EnderecoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +21,7 @@ import java.util.List;
 public class EnderecoController implements IEnderecoController {
     private final EnderecoService enderecoService;
     @GetMapping("/{id}")
-    public ResponseEntity<EnderecoDTO>  obterEnderecoById(@PathVariable Integer id) throws Exception {
+    public ResponseEntity<EnderecoDTO>  obterEnderecoById(@PathVariable("id") Integer id) throws Exception {
         return new ResponseEntity<>(enderecoService.obterEnderecoById(id), HttpStatus.OK);
     }
 

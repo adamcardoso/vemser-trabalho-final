@@ -3,6 +3,7 @@ package br.com.dbc.vemser.notifica.repository;
 import br.com.dbc.vemser.notifica.config.ConexaoBancoDeDados;
 import br.com.dbc.vemser.notifica.entity.Endereco;
 import br.com.dbc.vemser.notifica.entity.enums.TipoEndereco;
+import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.repository.irepository.IEnderecoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,14 +21,47 @@ import java.util.Optional;
 public class EnderecoRepository implements IEnderecoRepository {
     private final ConexaoBancoDeDados conexaoBancoDeDados;
 
+    public List<Endereco> listarTodosEnderecos() throws Exception {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        try {
+            con = conexaoBancoDeDados.getConnection();
 
-    public List<Endereco> ListarTodosEnderecos(){
-        //Exemplo so pra facilitar ao codar
-        List<Endereco> a = new ArrayList<>();
-        a.add(new Endereco());
-        return a;
+            String sql = """
+                    SELECT * FROM ENDERECO
+                    """;
+
+            stmt = con.prepareStatement(sql);
+
+            ResultSet resultSet = stmt.executeQuery();
+
+            List<Endereco> enderecos = new ArrayList<>();
+
+
+            while (resultSet.next())
+                enderecos.add(
+                    new Endereco(
+                        resultSet.getInt("ID_ENDERECO"), TipoEndereco.ofTipo(resultSet.getInt("TIPO_ENDERECO")), resultSet.getString("LOGRADOURO"),
+                        resultSet.getInt("NUMERO"), resultSet.getString("COMPLEMENTO"), resultSet.getString("CEP"),
+                        resultSet.getString("CIDADE"), resultSet.getString("ESTADO"), resultSet.getString("PAIS"), resultSet.getInt("ID_USUARIO")));
+            return enderecos;
+
+        } catch (Exception e){
+            e.printStackTrace();
+            throw new Exception(e.getMessage());
+        } finally {
+            try{
+                if(stmt != null)
+                    stmt.close();
+                if(con != null)
+                    con.close();
+            } catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
     }
-    public Optional<Endereco> obterEnderecoById(Integer id) throws Exception{
+
+    public Endereco obterEnderecoById(Integer id) throws Exception{
         Connection con = null;
         PreparedStatement stmt = null;
 
@@ -43,13 +77,12 @@ public class EnderecoRepository implements IEnderecoRepository {
             ResultSet resultSet = stmt.executeQuery();
 
             if(resultSet.next())
-                return Optional.of(
-                        new Endereco(resultSet.getInt("ID_ENDERECO"), TipoEndereco.ofTipo(resultSet.getInt("TIPO_ENDERECO")), resultSet.getString("LOGRADOURO"),
-                                resultSet.getInt("NUMERO"), resultSet.getString("COMPLEMENTO"), resultSet.getString("CEP"),
-                                resultSet.getString("CIDADE"), resultSet.getString("ESTADO"), resultSet.getString("PAIS"), resultSet.getInt("ID_USUARIO"))
-                );
+                return new Endereco(
+                    resultSet.getInt("ID_ENDERECO"), TipoEndereco.ofTipo(resultSet.getInt("TIPO_ENDERECO")), resultSet.getString("LOGRADOURO"),
+                    resultSet.getInt("NUMERO"), resultSet.getString("COMPLEMENTO"), resultSet.getString("CEP"),
+                    resultSet.getString("CIDADE"), resultSet.getString("ESTADO"), resultSet.getString("PAIS"), resultSet.getInt("ID_USUARIO"));
 
-            return Optional.empty();
+            throw new Exception("Falha ao obter endereço.");
         } catch (Exception e){
             throw new Exception(e);
         }finally {
@@ -64,7 +97,7 @@ public class EnderecoRepository implements IEnderecoRepository {
         }
     }
 
-    public Optional<List<Endereco>> obterEnderecosByIdUsuario(Integer id) throws Exception{
+    public List<Endereco> obterEnderecosByIdUsuario(Integer id) throws Exception{
         Connection con = null;
         PreparedStatement stmt = null;
 
@@ -87,7 +120,7 @@ public class EnderecoRepository implements IEnderecoRepository {
                         resultSet.getInt("NUMERO"), resultSet.getString("COMPLEMENTO"), resultSet.getString("CEP"),
                         resultSet.getString("CIDADE"), resultSet.getString("ESTADO"), resultSet.getString("PAIS"), resultSet.getInt("ID_USUARIO")));
 
-            return Optional.of(enderecos);
+            return enderecos;
         } catch (Exception e) {
             throw new Exception(e);
         } finally {
@@ -102,7 +135,7 @@ public class EnderecoRepository implements IEnderecoRepository {
         }
     }
 
-    public Optional<Endereco> adicionarEndereco(Endereco endereco) throws Exception {
+    public Endereco adicionarEndereco(Endereco endereco) throws Exception {
         Connection con = null;
         PreparedStatement stmt = null;
 
@@ -137,9 +170,9 @@ public class EnderecoRepository implements IEnderecoRepository {
             int res = stmt.executeUpdate();
 
             if (res > 0)
-                return Optional.of(e);
+                return e;
 
-            throw new Exception("Falha ao adicionar usuário.");
+            throw new RegraDeNegocioException("Falha ao adicionar usuário.");
 
         } catch (Exception e){
             throw new Exception(e);
@@ -155,7 +188,7 @@ public class EnderecoRepository implements IEnderecoRepository {
         }
     }
 
-    public Optional<Endereco> atualizarEndereco(Integer id, Endereco endereco) throws Exception{
+    public Endereco atualizarEndereco(Integer id, Endereco endereco) throws Exception{
         Connection con = null;
         PreparedStatement stmt = null;
 
@@ -187,12 +220,13 @@ public class EnderecoRepository implements IEnderecoRepository {
             int res = stmt.executeUpdate();
 
             if (res > 0)
-                return Optional.of(e);
+                return e;
 
-            throw new Exception("Falha ao atualizar comentário.");
+            throw new RegraDeNegocioException("Falha ao atualizar endereço.");
 
         } catch (Exception e){
-            throw new Exception();
+            e.printStackTrace();
+            throw new Exception(e.getMessage());
         } finally {
             try{
                 if(stmt != null)
@@ -204,7 +238,7 @@ public class EnderecoRepository implements IEnderecoRepository {
             }
         }
     }
-    public Optional<Boolean> removerEndereco(Integer id) throws Exception {
+    public void removerEndereco(Integer id) throws Exception {
         Connection con = null;
         PreparedStatement stmt = null;
 
@@ -220,13 +254,12 @@ public class EnderecoRepository implements IEnderecoRepository {
             stmt.setInt(1, id);
             ResultSet resultSet = stmt.executeQuery();
 
-            if (resultSet.next())
-                return Optional.of(true);
+            if (!resultSet.next())
+                throw new RegraDeNegocioException("Falha ao remover endereço.");
 
-            return Optional.empty();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new Exception(e);
+            throw new Exception(e.getMessage());
         } finally {
             try {
                 if (stmt != null)
