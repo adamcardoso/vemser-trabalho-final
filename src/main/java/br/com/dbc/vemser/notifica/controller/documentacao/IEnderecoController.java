@@ -3,7 +3,6 @@ package br.com.dbc.vemser.notifica.controller.documentacao;
 import br.com.dbc.vemser.notifica.dto.endereco.CreateEnderecoDTO;
 import br.com.dbc.vemser.notifica.dto.endereco.EnderecoDTO;
 import br.com.dbc.vemser.notifica.dto.endereco.UpdateEnderecoDTO;
-import br.com.dbc.vemser.notifica.exceptions.Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -25,7 +24,7 @@ public interface IEnderecoController {
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<Response<EnderecoDTO>> obterEnderecoById(@PathVariable Integer id);
+    public ResponseEntity<EnderecoDTO>  obterEnderecoById(@PathVariable Integer id) throws Exception;
 
     @Operation(summary = "Listar endereços por ID de usuário", description = "Lista endereços por ID de usuário")
     @ApiResponses(
@@ -37,7 +36,7 @@ public interface IEnderecoController {
             }
     )
     @GetMapping("/{id}/usuario")
-    public ResponseEntity<Response<List<EnderecoDTO>>> obterEnderecosByIdUsuario(@PathVariable("id") Integer id);
+    public ResponseEntity<List<EnderecoDTO>> obterEnderecosByIdUsuario(@PathVariable("id") Integer id) throws Exception;
 
     @Operation(summary = "Adicionar endereço", description = "Adiciona um novo endereço")
     @ApiResponses(
@@ -48,7 +47,7 @@ public interface IEnderecoController {
             }
     )
     @PostMapping
-    public ResponseEntity<Response<EnderecoDTO>> adicionarEndereco(@Valid @RequestBody CreateEnderecoDTO enderecoDto);
+    public ResponseEntity<EnderecoDTO> adicionarEndereco(@Valid @RequestBody CreateEnderecoDTO enderecoDto) throws Exception;
 
     @Operation(summary = "Atualizar endereço", description = "Atualiza um endereço pelo ID")
     @ApiResponses(
@@ -60,7 +59,7 @@ public interface IEnderecoController {
             }
     )
     @PutMapping("/{id}")
-    public ResponseEntity<Response<EnderecoDTO>> atualizarEndereco(@PathVariable("id") Integer id, @Valid @RequestBody UpdateEnderecoDTO enderecoDto);
+    public ResponseEntity<EnderecoDTO> atualizarEndereco(@PathVariable("id") Integer id, @Valid @RequestBody UpdateEnderecoDTO enderecoDto) throws Exception;
 
     @Operation(summary = "Remover endereço", description = "Remove um endereço pelo ID")
     @ApiResponses(
@@ -72,5 +71,5 @@ public interface IEnderecoController {
             }
     )
     @DeleteMapping("/{id}")
-    public ResponseEntity<Response<Object>> removerEndereco(@PathVariable("id") Integer id);
+    public ResponseEntity<Object> removerEndereco(@PathVariable("id") Integer id) throws Exception;
 }

@@ -20,6 +20,13 @@ import java.util.Optional;
 public class EnderecoRepository implements IEnderecoRepository {
     private final ConexaoBancoDeDados conexaoBancoDeDados;
 
+
+    public List<Endereco> ListarTodosEnderecos(){
+        //Exemplo so pra facilitar ao codar
+        List<Endereco> a = new ArrayList<>();
+        a.add(new Endereco());
+        return a;
+    }
     public Optional<Endereco> obterEnderecoById(Integer id) throws Exception{
         Connection con = null;
         PreparedStatement stmt = null;
