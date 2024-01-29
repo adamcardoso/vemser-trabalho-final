@@ -15,7 +15,7 @@ import java.time.LocalDate;
 public class UsuarioRepository {
     private final ConexaoBancoDeDados dataSourceConfig;
 
-    public Usuario obterUsuario(int idUsuario) throws Exception {
+    public Usuario obterUsuarioById(int idUsuario) throws Exception {
         Usuario usuario = new Usuario();
         Connection con = null;
         PreparedStatement stmt = null;
