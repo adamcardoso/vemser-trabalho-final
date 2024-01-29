@@ -24,7 +24,7 @@ public class UsuarioCreateDTO {
 
     @NotNull
     @NotEmpty
-    @Schema(description = "E-mail do Usuário", required = true, example = "nome.sobrenome@gmail.com")
+    @Schema(description = "E-mail do Usuário", required = true, example = "renata.schafer@dbccompany.com.br")
     private String emailUsuario;
 
     @NotBlank
