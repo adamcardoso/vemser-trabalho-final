@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Denuncia{
+public class Denuncia {
     private Integer idDenuncia;
     private String descricao;
     private String titulo;
@@ -38,6 +38,18 @@ public class Denuncia{
         this.idUsuario = idUsuario;
     }
 
+    public Denuncia(Integer idDenuncia, String descricao, String titulo, Integer curtidas, StatusDenuncia statusDenuncia, Categoria categoria, TipoDenuncia tipoDenuncia, Integer idUsuario) {
+        this.idDenuncia = idDenuncia;
+        this.descricao = descricao;
+        this.titulo = titulo;
+        this.curtidas = curtidas;
+        this.statusDenuncia = statusDenuncia;
+        this.categoria = categoria;
+        this.tipoDenuncia = tipoDenuncia;
+        this.idUsuario = idUsuario;
+    }
 
-
+    public int getCurtidas() {
+        return curtidas == null ? 0 : curtidas;
+    }
 }

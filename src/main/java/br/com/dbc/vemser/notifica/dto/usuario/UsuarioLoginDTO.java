@@ -9,7 +9,7 @@ import lombok.Data;
 @Schema(description = "Objeto de dados para autenticação de usuário")
 public class UsuarioLoginDTO {
 
-    @Schema(description = "E-mail do usuário", required = true, example = "usuario@example.com")
+    @Schema(description = "E-mail do usuário", required = true, example = "renata.schafer@dbccompany.com.br")
     private String emailUsuario;
 
     @Schema(description = "Senha do usuário", required = true, example = "Senha123@")

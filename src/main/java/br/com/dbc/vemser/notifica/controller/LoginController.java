@@ -26,7 +26,7 @@ public class LoginController implements ILoginController {
             UsuarioDTO usuario = loginService.autenticarUsuario(usuarioLoginDTO.getEmailUsuario(), usuarioLoginDTO.getSenhaUsuario());
             return ResponseEntity.ok().body(usuario);
         } catch (Exception e) {
-            return ResponseEntity.status(401).body("{\"error\": \"Credenciais inválidas\"}");
+            return ResponseEntity.status(401).body("Credenciais inválidas, Usuário ou Senha Incorretos!");
         }
     }
 }

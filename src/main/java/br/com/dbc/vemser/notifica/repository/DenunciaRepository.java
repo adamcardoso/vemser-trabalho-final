@@ -32,38 +32,13 @@ public class DenunciaRepository {
                         res.getInt("id_usuario"),
                         res.getString("descricao"),
                         res.getString("titulo"),
+                        res.getInt("curtida"),
                         StatusDenuncia.fromInt(res.getInt("status_denuncia")),
                         Categoria.fromInt(res.getInt("categoria")),
                         TipoDenuncia.fromInt(res.getInt("tipo_denuncia"))
                 ));
             }
             return denuncias;
-        }
-    }
-
-    public List<Denuncia> listByTitulo(String titulo) throws SQLException {
-        try (Connection connection = conexaoBancoDeDados.getConnection();
-             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM DENUNCIA WHERE titulo LIKE ?");
-        ) {
-            stmt.setString(1, "%" + titulo + "%");
-
-            try (ResultSet res = stmt.executeQuery()) {
-                List<Denuncia> listByTitulo = new ArrayList<>();
-
-                while (res.next()) {
-                    listByTitulo.add(new Denuncia(
-                            res.getInt("id_denuncia"),
-                            res.getString("descricao"),
-                            res.getString("titulo"),
-                            StatusDenuncia.fromInt(res.getInt("status_denuncia")),
-                            Categoria.fromInt(res.getInt("categoria")),
-                            TipoDenuncia.fromInt(res.getInt("tipo_denuncia")),
-                            res.getInt("id_usuario")
-                    ));
-                }
-
-                return listByTitulo;
-            }
         }
     }
 
@@ -81,6 +56,7 @@ public class DenunciaRepository {
                             res.getInt("id_denuncia"),
                             res.getString("descricao"),
                             res.getString("titulo"),
+                            res.getInt("curtida"),
                             StatusDenuncia.fromInt(res.getInt("status_denuncia")),
                             Categoria.fromInt(res.getInt("categoria")),
                             TipoDenuncia.fromInt(res.getInt("tipo_denuncia")),
@@ -105,6 +81,7 @@ public class DenunciaRepository {
                             res.getInt("id_denuncia"),
                             res.getString("descricao"),
                             res.getString("titulo"),
+                            res.getInt("curtida"),
                             StatusDenuncia.fromInt(res.getInt("status_denuncia")),
                             Categoria.fromInt(res.getInt("categoria")),
                             TipoDenuncia.fromInt(res.getInt("tipo_denuncia")),
@@ -128,7 +105,7 @@ public class DenunciaRepository {
             denuncia.setIdDenuncia(proximoId);
             denuncia.setIdUsuario(idUsuario);
 
-            String sql = "INSERT INTO DENUNCIA (id_denuncia, titulo, descricao, data_hora, status_denuncia, categoria, curtida, tipo_denuncia, id_usuario) VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO DENUNCIA (id_denuncia, titulo, descricao, data_hora, status_denuncia, categoria, curtida,  tipo_denuncia, id_usuario) VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?)";
 
             stmt = con.prepareStatement(sql);
             stmt.setInt(1, proximoId);
@@ -173,7 +150,7 @@ public class DenunciaRepository {
             con = conexaoBancoDeDados.getConnection();
             con.setAutoCommit(false);
 
-            String sql = "UPDATE DENUNCIA SET titulo = ?, descricao = ?, status_denuncia = ?, categoria = ?, curtida = ?, tipo_denuncia = ? WHERE id_denuncia = ?";
+            String sql = "UPDATE DENUNCIA SET titulo = ?, descricao = ?, status_denuncia = ?, categoria = ?, curtida = ?, tipo_denuncia = ? WHERE id_denuncia = ? AND id_usuario = ?";
 
             stmt = con.prepareStatement(sql);
             stmt.setString(1, denuncia.getTitulo());
@@ -183,12 +160,14 @@ public class DenunciaRepository {
             stmt.setInt(5, denuncia.getCurtidas());
             stmt.setInt(6, denuncia.getTipoDenuncia().getIdTipoDenuncia());
             stmt.setInt(7, idDenuncia);
+            stmt.setInt(8, idUsuario);
 
             int res = stmt.executeUpdate();
 
             if (res > 0) {
                 con.commit();
                 denuncia.setIdDenuncia(idDenuncia);
+                denuncia.setIdUsuario(idUsuario);
                 return denuncia;
             }
 
