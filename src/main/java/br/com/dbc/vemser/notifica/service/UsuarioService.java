@@ -4,6 +4,7 @@ import br.com.dbc.vemser.notifica.dto.usuario.UsuarioCreateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioUpdateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import br.com.dbc.vemser.notifica.entity.Usuario;
+import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -15,10 +16,14 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
 
-    public UsuarioDTO obterUsuario(Integer idUsuario) throws Exception {
-        //TODO Será ajustado para mostrar somento o usuario
-        Usuario usuario = usuarioRepository.obterUsuario(idUsuario);
-        return objectMapper.convertValue(usuario, UsuarioDTO.class);
+    public UsuarioDTO obterUsuarioById(Integer idUsuario) throws Exception {
+        Usuario usuario = usuarioRepository.obterUsuarioById(idUsuario);
+        if(usuario.getEmailUsuario()!=null){
+            return objectMapper.convertValue(usuario, UsuarioDTO.class);
+        }else {
+            throw new RegraDeNegocioException("Usuário não encontrado");
+        }
+
     }
 
     public UsuarioDTO criarUsuario(UsuarioCreateDTO novoUsuario) throws Exception {
