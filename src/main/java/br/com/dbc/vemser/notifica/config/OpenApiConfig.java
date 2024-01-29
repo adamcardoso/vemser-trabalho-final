@@ -29,11 +29,13 @@ public class OpenApiConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/login") // Apenas para a rota /login
-                        .allowedOrigins("*") // Permitir todas as origens
+                        .allowedOrigins("http://localhost:3000") // Frontend
                         .allowedMethods("POST") // Permitir apenas o método POST
-                        .allowCredentials(false)
+                        .allowCredentials(true) // Permitir credenciais
                         .maxAge(3600);
             }
         };
     }
 }
+
+
