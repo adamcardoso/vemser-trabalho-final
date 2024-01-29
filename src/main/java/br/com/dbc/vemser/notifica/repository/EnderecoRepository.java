@@ -4,7 +4,6 @@ import br.com.dbc.vemser.notifica.config.ConexaoBancoDeDados;
 import br.com.dbc.vemser.notifica.entity.Endereco;
 import br.com.dbc.vemser.notifica.entity.enums.TipoEndereco;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
-import br.com.dbc.vemser.notifica.repository.irepository.IEnderecoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
@@ -14,11 +13,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Repository
-public class EnderecoRepository implements IEnderecoRepository {
+public class EnderecoRepository {
     private final ConexaoBancoDeDados conexaoBancoDeDados;
 
     public List<Endereco> listarTodosEnderecos() throws Exception {
@@ -61,79 +59,6 @@ public class EnderecoRepository implements IEnderecoRepository {
         }
     }
 
-    public Endereco obterEnderecoById(Integer id) throws Exception{
-        Connection con = null;
-        PreparedStatement stmt = null;
-
-        try {
-            con = conexaoBancoDeDados.getConnection();
-
-            String sql = """
-                    SELECT * FROM ENDERECO e WHERE E.ID_ENDERECO = ?
-                    """;
-            stmt = con.prepareStatement(sql);
-
-            stmt.setInt(1, id);
-            ResultSet resultSet = stmt.executeQuery();
-
-            if(resultSet.next())
-                return new Endereco(
-                    resultSet.getInt("ID_ENDERECO"), TipoEndereco.ofTipo(resultSet.getInt("TIPO_ENDERECO")), resultSet.getString("LOGRADOURO"),
-                    resultSet.getInt("NUMERO"), resultSet.getString("COMPLEMENTO"), resultSet.getString("CEP"),
-                    resultSet.getString("CIDADE"), resultSet.getString("ESTADO"), resultSet.getString("PAIS"), resultSet.getInt("ID_USUARIO"));
-
-            throw new Exception("Falha ao obter endereço.");
-        } catch (Exception e){
-            throw new Exception(e);
-        }finally {
-            try{
-                if(stmt != null)
-                    stmt.close();
-                if(con != null)
-                    con.close();
-            } catch (SQLException e){
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public List<Endereco> obterEnderecosByIdUsuario(Integer id) throws Exception{
-        Connection con = null;
-        PreparedStatement stmt = null;
-
-        try{
-            con = conexaoBancoDeDados.getConnection();
-
-            String sql = """
-                   SELECT * FROM ENDERECO e WHERE e.ID_USUARIO = ?
-                    """;
-
-            stmt = con.prepareStatement(sql);
-
-            stmt.setInt(1, id);
-            ResultSet resultSet = stmt.executeQuery();
-
-            List<Endereco> enderecos = new ArrayList<>();
-
-            while (resultSet.next())
-                enderecos.add(new Endereco(resultSet.getInt("ID_ENDERECO"), TipoEndereco.ofTipo(resultSet.getInt("TIPO_ENDERECO")), resultSet.getString("LOGRADOURO"),
-                        resultSet.getInt("NUMERO"), resultSet.getString("COMPLEMENTO"), resultSet.getString("CEP"),
-                        resultSet.getString("CIDADE"), resultSet.getString("ESTADO"), resultSet.getString("PAIS"), resultSet.getInt("ID_USUARIO")));
-
-            return enderecos;
-        } catch (Exception e) {
-            throw new Exception(e);
-        } finally {
-            try{
-                if(stmt != null)
-                    stmt.close();
-                if(con != null)
-                    con.close();
-            } catch (SQLException e){
-                e.printStackTrace();
-            }
-        }
-    }
 
     public Endereco adicionarEndereco(Endereco endereco) throws Exception {
         Connection con = null;
