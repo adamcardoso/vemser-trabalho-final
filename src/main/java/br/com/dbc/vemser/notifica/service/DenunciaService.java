@@ -71,15 +71,21 @@ public class DenunciaService {
 
     public DenunciaDTO editarDenuncia(DenunciaCreateDTO denunciaCreateDTO, Integer idDenuncia, Integer idUsuario) throws Exception {
         Denuncia denuncia = denunciaRepository.obterDenunciaById(idDenuncia);
-
         if (denuncia != null) {
-            Denuncia d = objectMapper.convertValue(denunciaCreateDTO, Denuncia.class);
-            UsuarioDTO usuario = usuarioService.obterUsuario(idUsuario);
-            DenunciaDTO denunciaDTO = objectMapper.convertValue(denunciaRepository.editarDenuncia(idDenuncia, d, idUsuario), DenunciaDTO.class);
-            emailService.enviarEmailEdicaoEndereco(usuario.getEmailUsuario(), usuario.getNomeUsuario(), denunciaDTO.getIdDenuncia());
-            return denunciaDTO;
+            if (denuncia.getIdUsuario().equals(idUsuario)) {
+                Denuncia d = objectMapper.convertValue(denunciaCreateDTO, Denuncia.class);
+                UsuarioDTO usuario = usuarioService.obterUsuario(idUsuario);
+                DenunciaDTO denunciaDTO = objectMapper.convertValue(denunciaRepository.editarDenuncia(idDenuncia, d, idUsuario), DenunciaDTO.class);
+
+                emailService.enviarEmailEdicaoEndereco(usuario.getEmailUsuario(), usuario.getNomeUsuario(), denunciaDTO.getIdDenuncia());
+
+                return denunciaDTO;
+            } else {
+                throw new RegraDeNegocioException("A denúncia não pertence ao usuário com o ID fornecido.");
+            }
+        } else {
+            throw new RegraDeNegocioException("Denúncia não encontrada com o ID fornecido.");
         }
-        throw new RegraDeNegocioException("Denúncia não encontrada com o ID fornecido.");
     }
 
     public String deletarDenuncia(Integer idDenuncia, Integer idUsuario) throws Exception{

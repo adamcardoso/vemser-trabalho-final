@@ -173,7 +173,7 @@ public class DenunciaRepository {
             con = conexaoBancoDeDados.getConnection();
             con.setAutoCommit(false);
 
-            String sql = "UPDATE DENUNCIA SET titulo = ?, descricao = ?, status_denuncia = ?, categoria = ?, curtida = ?, tipo_denuncia = ? WHERE id_denuncia = ?";
+            String sql = "UPDATE DENUNCIA SET titulo = ?, descricao = ?, status_denuncia = ?, categoria = ?, curtida = ?, tipo_denuncia = ? WHERE id_denuncia = ? AND id_usuario = ?";
 
             stmt = con.prepareStatement(sql);
             stmt.setString(1, denuncia.getTitulo());
@@ -183,12 +183,14 @@ public class DenunciaRepository {
             stmt.setInt(5, denuncia.getCurtidas());
             stmt.setInt(6, denuncia.getTipoDenuncia().getIdTipoDenuncia());
             stmt.setInt(7, idDenuncia);
+            stmt.setInt(8, idUsuario);
 
             int res = stmt.executeUpdate();
 
             if (res > 0) {
                 con.commit();
                 denuncia.setIdDenuncia(idDenuncia);
+                denuncia.setIdUsuario(idUsuario);
                 return denuncia;
             }
 
