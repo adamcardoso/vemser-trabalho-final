@@ -11,8 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-
 @RestController
 @RequestMapping("/usuario")
 @Validated
@@ -22,7 +20,7 @@ public class UsuarioController implements IUsuarioController {
 
     @GetMapping("/{idUsuario}")
     public ResponseEntity<UsuarioDTO> obterUsuarioById(@PathVariable("idUsuario") Integer idUsuario) throws Exception {
-        UsuarioDTO usuario = usuarioService.obterUsuario(idUsuario);
+        UsuarioDTO usuario = usuarioService.obterUsuarioById(idUsuario);
         return new ResponseEntity<>(usuario, HttpStatus.CREATED);
     }
 

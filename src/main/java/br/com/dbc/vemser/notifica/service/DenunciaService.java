@@ -51,13 +51,13 @@ public class DenunciaService {
     }
 
     public DenunciaDTO criarDenuncia(DenunciaCreateDTO denunciaDTO, Integer idUsuario) throws Exception {
-        Usuario usuario = usuarioRepository.obterUsuario(idUsuario);
+        Usuario usuario = usuarioRepository.obterUsuarioById(idUsuario);
         if (usuario.getEmailUsuario() != null) {
-            Denuncia d = objectMapper.convertValue(denunciaDTO, Denuncia.class);
-            UsuarioDTO usuarioDTO = usuarioService.obterUsuario(idUsuario);
-            DenunciaDTO denuncia = objectMapper.convertValue(denunciaRepository.criarDenuncia(d, idUsuario), DenunciaDTO.class);
-            emailService.enviarEmailCriacaoDenuncia(usuarioDTO.getEmailUsuario(), usuarioDTO.getNomeUsuario(), denuncia.getIdDenuncia());
-        return denuncia;
+                Denuncia d = objectMapper.convertValue(denunciaDTO, Denuncia.class);
+                UsuarioDTO usuarioDTO = usuarioService.obterUsuarioById(idUsuario);
+                DenunciaDTO denuncia = objectMapper.convertValue(denunciaRepository.criarDenuncia(d, idUsuario), DenunciaDTO.class);
+                emailService.enviarEmailCriacaoDenuncia(usuarioDTO.getEmailUsuario(), usuarioDTO.getNomeUsuario(), denuncia.getIdDenuncia());
+            return denuncia;
         }else {
             throw new RegraDeNegocioException("ID Usuário desconhecido.");
         }
@@ -68,7 +68,7 @@ public class DenunciaService {
         if (denuncia != null) {
             if (denuncia.getIdUsuario().equals(idUsuario)) {
                 Denuncia d = objectMapper.convertValue(denunciaCreateDTO, Denuncia.class);
-                UsuarioDTO usuario = usuarioService.obterUsuario(idUsuario);
+                UsuarioDTO usuario = usuarioService.obterUsuarioById(idUsuario);
                 DenunciaDTO denunciaDTO = objectMapper.convertValue(denunciaRepository.editarDenuncia(idDenuncia, d, idUsuario), DenunciaDTO.class);
 
                 emailService.enviarEmailEdicaoEndereco(usuario.getEmailUsuario(), usuario.getNomeUsuario(), denunciaDTO.getIdDenuncia());
@@ -83,7 +83,7 @@ public class DenunciaService {
     }
 
     public String deletarDenuncia(Integer idDenuncia, Integer idUsuario) throws Exception{
-        Usuario usuario = usuarioRepository.obterUsuario(idUsuario);
+        Usuario usuario = usuarioRepository.obterUsuarioById(idUsuario);
         if (usuario.getEmailUsuario() != null) {
             if (denunciaRepository.deletarDenuncia(idDenuncia, idUsuario)) {
                 return "Denúncia Excluída!";
