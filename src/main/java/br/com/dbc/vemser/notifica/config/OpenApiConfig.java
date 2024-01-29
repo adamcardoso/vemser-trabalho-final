@@ -16,8 +16,8 @@ public class OpenApiConfig {
     public OpenAPI springShopOpenAPI() {
         String securitySchemeName = "bearerAuth";
         return new OpenAPI()
-                .info(new Info().title("NOTIFICA API")
-                        .description("Notifica API documentação")
+                .info(new Info().title("Pessoa API")
+                        .description("Pessoa API documentação")
                         .version("v1.0.0")
                         .license(new License().name("Apache 2.0").url("http://springdoc.org")))
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName));
@@ -28,13 +28,12 @@ public class OpenApiConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedOrigins("*")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE")
+                registry.addMapping("/login") // Apenas para a rota /login
+                        .allowedOrigins("*") // Permitir todas as origens
+                        .allowedMethods("POST") // Permitir apenas o método POST
                         .allowCredentials(false)
                         .maxAge(3600);
             }
         };
     }
 }
-
