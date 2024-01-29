@@ -23,18 +23,6 @@ public class OpenApiConfig {
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName));
     }
 
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/login") // Apenas para a rota /login
-                        .allowedMethods("POST") // Permitir apenas o método POST
-                        .allowCredentials(true) // Permitir credenciais
-                        .maxAge(3600);
-            }
-        };
-    }
 }
 
 
