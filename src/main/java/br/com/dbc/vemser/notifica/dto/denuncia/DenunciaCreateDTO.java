@@ -29,9 +29,6 @@ public class DenunciaCreateDTO {
     @Schema(description = "Título da Denúncia", required = true, example = "Título da Denúncia")
     private String titulo;
 
-    @Schema(description = "Localização da Denúncia")
-    private Localizacao local;
-
     @Schema(description = "Data e Hora da Denúncia", example = "2024-01-24T10:30:00")
     private LocalDateTime dataHora;
 
@@ -40,12 +37,6 @@ public class DenunciaCreateDTO {
 
     @Schema(description = "Categoria da Denúncia", example = "AGUA_POTAVEL", allowableValues = {"AGUA_POTAVEL", "SANEAMENTO_BASICO", "GESTAO_RESIDUOS", "EDUCACAO_HIGIENE"})
     private Categoria categoria;
-
-    @Schema(description = "Número de Curtidas da Denúncia", example = "10")
-    private Integer curtidas;
-
-    @Schema(description = "Lista de Comentários da Denúncia")
-    private final List<String> comentarios = new ArrayList<>();
 
     @Schema(description = "Tipo da Denúncia", example = "ANONIMA", allowableValues = {"PUBLICA", "ANONIMA"})
     private TipoDenuncia tipoDenuncia;

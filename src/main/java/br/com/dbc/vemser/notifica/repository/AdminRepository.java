@@ -346,6 +346,7 @@ public class AdminRepository {
                         res.getInt("id_usuario"),
                         res.getString("descricao"),
                         res.getString("titulo"),
+                        res.getInt("curtida"),
                         StatusDenuncia.fromInt(res.getInt("status_denuncia")),
                         Categoria.fromInt(res.getInt("categoria")),
                         TipoDenuncia.fromInt(res.getInt("tipo_denuncia"))
