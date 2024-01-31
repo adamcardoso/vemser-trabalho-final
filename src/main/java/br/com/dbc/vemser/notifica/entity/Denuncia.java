@@ -8,48 +8,53 @@ import br.com.dbc.vemser.notifica.entity.enums.TipoDenuncia;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
+
+import javax.persistence.*;
+@Getter
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor
+@Entity(name = "DENUNCIA")
 public class Denuncia {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DENUNCIA_SEQ")
+    @SequenceGenerator(name = "DENUNCIA_SEQ", sequenceName = "SEQ_DENUNCIA", allocationSize = 1)
+    @Column(name = "id_denuncia")
     private Integer idDenuncia;
+
+    @Column(name = "descricao")
     private String descricao;
+
+    @Column(name = "titulo")
     private String titulo;
-    private Localizacao local;
+
+    @Column(name = "data_hora")
     private LocalDateTime dataHora;
+
+    @Column(name = "status_denuncia")
+    @Enumerated(EnumType.ORDINAL)
     private StatusDenuncia statusDenuncia;
+
+    @Column(name = "categoria")
+    @Enumerated(EnumType.ORDINAL)
     private Categoria categoria;
+
+    @Column(name = "curtida")
     private Integer curtidas;
-    private final List<String> comentarios = new ArrayList<>();
+
+    @Column(name = "tipo_denuncia")
+    @Enumerated(EnumType.ORDINAL)
     private TipoDenuncia tipoDenuncia;
-    private Integer idUsuario;
 
-    public Denuncia(Integer idDenuncia, String descricao, String titulo, StatusDenuncia statusDenuncia, Categoria categoria, TipoDenuncia tipoDenuncia, Integer idUsuario) {
-        this.idDenuncia = idDenuncia;
-        this.descricao = descricao;
-        this.titulo = titulo;
-        this.statusDenuncia = statusDenuncia;
-        this.categoria = categoria;
-        this.tipoDenuncia = tipoDenuncia;
-        this.idUsuario = idUsuario;
-    }
-
-    public Denuncia(Integer idDenuncia, String descricao, String titulo, Integer curtidas, StatusDenuncia statusDenuncia, Categoria categoria, TipoDenuncia tipoDenuncia, Integer idUsuario) {
-        this.idDenuncia = idDenuncia;
-        this.descricao = descricao;
-        this.titulo = titulo;
-        this.curtidas = curtidas;
-        this.statusDenuncia = statusDenuncia;
-        this.categoria = categoria;
-        this.tipoDenuncia = tipoDenuncia;
-        this.idUsuario = idUsuario;
-    }
+    @ManyToOne
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    private Usuario usuario;
 
     public int getCurtidas() {
         return curtidas == null ? 0 : curtidas;
     }
+
 }

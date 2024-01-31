@@ -34,20 +34,20 @@ public class AdminRepository {
             stmt.setInt(1, idUsuario);
             ResultSet resultSet = stmt.executeQuery();
 
-            while (resultSet.next()) {
-                String nomeUsuario = resultSet.getString("NOME_USUARIO");
-                String celularUsuario = resultSet.getString("CELULAR_USUARIO");
-                String senhaUsuario = resultSet.getString("SENHA_USUARIO");
-                String emailUsuario = resultSet.getString("EMAIL_USUARIO");
-                Etnia etnia = Etnia.fromInt(resultSet.getInt("ETNIA"));
-                LocalDate dataNascimento = resultSet.getDate("DATA_NASCIMENTO").toLocalDate();
-                ClasseSocial classeSocial = ClasseSocial.fromInt(resultSet.getInt("CLASSE_SOCIAL"));
-                Genero genero = Genero.fromInt(resultSet.getInt("GENERO"));
-                TipoUsuario tipoUsuario = TipoUsuario.fromInt(resultSet.getInt("TIPO_USUARIO"));
-                Boolean isAdmin = TipoUsuario.fromInt(resultSet.getInt("TIPO_USUARIO")).equals(TipoUsuario.ADMIN);
-
-                usuario = new Usuario(idUsuario, nomeUsuario, emailUsuario, celularUsuario, senhaUsuario, etnia, dataNascimento, classeSocial, genero, tipoUsuario, isAdmin);
-            }
+//            while (resultSet.next()) {
+//                String nomeUsuario = resultSet.getString("NOME_USUARIO");
+//                String celularUsuario = resultSet.getString("CELULAR_USUARIO");
+//                String senhaUsuario = resultSet.getString("SENHA_USUARIO");
+//                String emailUsuario = resultSet.getString("EMAIL_USUARIO");
+//                Etnia etnia = Etnia.fromInt(resultSet.getInt("ETNIA"));
+//                LocalDate dataNascimento = resultSet.getDate("DATA_NASCIMENTO").toLocalDate();
+//                ClasseSocial classeSocial = ClasseSocial.fromInt(resultSet.getInt("CLASSE_SOCIAL"));
+//                Genero genero = Genero.fromInt(resultSet.getInt("GENERO"));
+//                TipoUsuario tipoUsuario = TipoUsuario.fromInt(resultSet.getInt("TIPO_USUARIO"));
+//                //Boolean isAdmin = TipoUsuario.fromInt(resultSet.getInt("TIPO_USUARIO")).equals(TipoUsuario.ADMIN);
+//
+//                usuario = new Usuario(idUsuario, nomeUsuario, emailUsuario, celularUsuario, senhaUsuario, etnia, dataNascimento, classeSocial, genero, tipoUsuario);
+//            }
 
             return usuario;
         } catch (Exception e) {
@@ -129,21 +129,21 @@ public class AdminRepository {
 
             List<Usuario> usuarios = new ArrayList<>();
 
-            while (resultSet.next()) {
-                Integer idUsuario = resultSet.getInt("ID_USUARIO");
-                String nomeUsuario = resultSet.getString("NOME_USUARIO");
-                String emailUsuario = resultSet.getString("EMAIL_USUARIO");
-                String celularUsuario = resultSet.getString("CELULAR_USUARIO");
-                String senhaUsuario = resultSet.getString("SENHA_USUARIO");
-                Etnia etnia = Etnia.fromInt(resultSet.getInt("ETNIA"));
-                LocalDate dataNascimento = resultSet.getDate("DATA_NASCIMENTO").toLocalDate();
-                ClasseSocial classeSocial = ClasseSocial.fromInt(resultSet.getInt("CLASSE_SOCIAL"));
-                Genero genero = Genero.fromInt(resultSet.getInt("GENERO"));
-                TipoUsuario tipoUsuario = TipoUsuario.fromInt(resultSet.getInt("TIPO_USUARIO"));
-                Boolean isAdmin = TipoUsuario.fromInt(resultSet.getInt("TIPO_USUARIO")).equals(TipoUsuario.ADMIN);
-
-                usuarios.add(new Usuario(idUsuario, nomeUsuario, emailUsuario, celularUsuario, senhaUsuario, etnia, dataNascimento, classeSocial, genero, tipoUsuario, isAdmin));
-            }
+//            while (resultSet.next()) {
+//                Integer idUsuario = resultSet.getInt("ID_USUARIO");
+//                String nomeUsuario = resultSet.getString("NOME_USUARIO");
+//                String emailUsuario = resultSet.getString("EMAIL_USUARIO");
+//                String celularUsuario = resultSet.getString("CELULAR_USUARIO");
+//                String senhaUsuario = resultSet.getString("SENHA_USUARIO");
+//                Etnia etnia = Etnia.fromInt(resultSet.getInt("ETNIA"));
+//                LocalDate dataNascimento = resultSet.getDate("DATA_NASCIMENTO").toLocalDate();
+//                ClasseSocial classeSocial = ClasseSocial.fromInt(resultSet.getInt("CLASSE_SOCIAL"));
+//                Genero genero = Genero.fromInt(resultSet.getInt("GENERO"));
+//                TipoUsuario tipoUsuario = TipoUsuario.fromInt(resultSet.getInt("TIPO_USUARIO"));
+//                //Boolean isAdmin = TipoUsuario.fromInt(resultSet.getInt("TIPO_USUARIO")).equals(TipoUsuario.ADMIN);
+//
+//                usuarios.add(new Usuario(idUsuario, nomeUsuario, emailUsuario, celularUsuario, senhaUsuario, etnia, dataNascimento, classeSocial, genero, tipoUsuario));
+//            }
             return usuarios;
         } catch (Exception e) {
             throw new Exception(e);
@@ -173,21 +173,21 @@ public class AdminRepository {
 
             List<Usuario> usuarios = new ArrayList<>();
 
-            while (resultSet.next()) {
-                Integer idUsuario = resultSet.getInt("ID_USUARIO");
-                String nomeUsuario = resultSet.getString("NOME_USUARIO");
-                String emailUsuario = resultSet.getString("EMAIL_USUARIO");
-                String celularUsuario = resultSet.getString("CELULAR_USUARIO");
-                String senhaUsuario = resultSet.getString("SENHA_USUARIO");
-                Etnia etnia = Etnia.fromInt(resultSet.getInt("ETNIA"));
-                LocalDate dataNascimento = resultSet.getDate("DATA_NASCIMENTO").toLocalDate();
-                ClasseSocial classeSocial = ClasseSocial.fromInt(resultSet.getInt("CLASSE_SOCIAL"));
-                Genero genero = Genero.fromInt(resultSet.getInt("GENERO"));
-                TipoUsuario tipoUsuario = TipoUsuario.fromInt(resultSet.getInt("TIPO_USUARIO"));
-                Boolean isAdmin = TipoUsuario.fromInt(resultSet.getInt("TIPO_USUARIO")).equals(TipoUsuario.ADMIN);
-
-                usuarios.add(new Usuario(idUsuario, nomeUsuario, emailUsuario, celularUsuario, senhaUsuario, etnia, dataNascimento, classeSocial, genero, tipoUsuario, isAdmin));
-            }
+//            while (resultSet.next()) {
+//                Integer idUsuario = resultSet.getInt("ID_USUARIO");
+//                String nomeUsuario = resultSet.getString("NOME_USUARIO");
+//                String emailUsuario = resultSet.getString("EMAIL_USUARIO");
+//                String celularUsuario = resultSet.getString("CELULAR_USUARIO");
+//                String senhaUsuario = resultSet.getString("SENHA_USUARIO");
+//                Etnia etnia = Etnia.fromInt(resultSet.getInt("ETNIA"));
+//                LocalDate dataNascimento = resultSet.getDate("DATA_NASCIMENTO").toLocalDate();
+//                ClasseSocial classeSocial = ClasseSocial.fromInt(resultSet.getInt("CLASSE_SOCIAL"));
+//                Genero genero = Genero.fromInt(resultSet.getInt("GENERO"));
+//                TipoUsuario tipoUsuario = TipoUsuario.fromInt(resultSet.getInt("TIPO_USUARIO"));
+//                //Boolean isAdmin = TipoUsuario.fromInt(resultSet.getInt("TIPO_USUARIO")).equals(TipoUsuario.ADMIN);
+//
+//                usuarios.add(new Usuario(idUsuario, nomeUsuario, emailUsuario, celularUsuario, senhaUsuario, etnia, dataNascimento, classeSocial, genero, tipoUsuario));
+//            }
             return usuarios;
         } catch (Exception e) {
             throw new Exception(e);
@@ -340,18 +340,18 @@ public class AdminRepository {
 
             List<DenunciaDTO> denuncias = new ArrayList<>();
 
-            while (res.next()) {
-                denuncias.add(new DenunciaDTO(
-                        res.getInt("id_denuncia"),
-                        res.getInt("id_usuario"),
-                        res.getString("descricao"),
-                        res.getString("titulo"),
-                        res.getInt("curtida"),
-                        StatusDenuncia.fromInt(res.getInt("status_denuncia")),
-                        Categoria.fromInt(res.getInt("categoria")),
-                        TipoDenuncia.fromInt(res.getInt("tipo_denuncia"))
-                ));
-            }
+//            while (res.next()) {
+//                denuncias.add(new DenunciaDTO(
+//                        res.getInt("id_denuncia"),
+//                        res.getInt("id_usuario"),
+//                        res.getString("descricao"),
+//                        res.getString("titulo"),
+//                        res.getInt("curtida"),
+//                        StatusDenuncia.fromInt(res.getInt("status_denuncia")),
+//                        Categoria.fromInt(res.getInt("categoria")),
+//                        TipoDenuncia.fromInt(res.getInt("tipo_denuncia"))
+//                ));
+//            }
 
             return denuncias;
         }
@@ -406,17 +406,17 @@ public class AdminRepository {
             stmt.setInt(1, idDenuncia);
 
             try (ResultSet res = stmt.executeQuery()) {
-                if (res.next()) {
-                    return new Denuncia(
-                            res.getInt("id_denuncia"),
-                            res.getString("descricao"),
-                            res.getString("titulo"),
-                            StatusDenuncia.fromInt(res.getInt("status_denuncia")),
-                            Categoria.fromInt(res.getInt("categoria")),
-                            TipoDenuncia.fromInt(res.getInt("tipo_denuncia")),
-                            res.getInt("id_usuario")
-                    );
-                }
+//                if (res.next()) {
+//                    return new Denuncia(
+//                            res.getInt("id_denuncia"),
+//                            res.getString("descricao"),
+//                            res.getString("titulo"),
+//                            StatusDenuncia.fromInt(res.getInt("status_denuncia")),
+//                            Categoria.fromInt(res.getInt("categoria")),
+//                            TipoDenuncia.fromInt(res.getInt("tipo_denuncia"))
+//                            //res.getInt("id_usuario")
+//                    );
+//                }
                 return null;
             }
         }

@@ -16,33 +16,31 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
 
-    public UsuarioDTO obterUsuarioById(Integer idUsuario) throws Exception {
-        Usuario usuario = usuarioRepository.obterUsuarioById(idUsuario);
-        if(usuario.getEmailUsuario()!=null){
-            return objectMapper.convertValue(usuario, UsuarioDTO.class);
-        }else {
-            throw new RegraDeNegocioException("Usuário não encontrado");
-        }
-
-    }
-
-    public UsuarioDTO criarUsuario(UsuarioCreateDTO novoUsuario) throws Exception {
-        Usuario novoUsuarioEntity = objectMapper.convertValue(novoUsuario, Usuario.class);
-        Usuario usuarioCriado = usuarioRepository.criarUsuario(novoUsuarioEntity);
-
-        return objectMapper.convertValue(usuarioCriado, UsuarioDTO.class);
-    }
-
-    public UsuarioDTO atualizarUsuario(Integer idUsuario, UsuarioUpdateDTO novoUsuario) throws Exception {
-        //TODO Será verificado se o usuario editado é o mesmo que o usuario logado
-        Usuario novoUsuarioEntity = objectMapper.convertValue(novoUsuario, Usuario.class);
-        Usuario usuarioAtualizado = usuarioRepository.atualizarUsuario(idUsuario, novoUsuarioEntity);
-
-        return objectMapper.convertValue(usuarioAtualizado, UsuarioDTO.class);
-    }
-
-    public void removerUsuario(Integer idUsuario) throws Exception {
-        //TODO Será verificado se o usuario deletado é o mesmo que o usuario logado
-        usuarioRepository.removerUsuario(idUsuario);
-    }
+//    public UsuarioDTO obterUsuarioById(Integer idUsuario) throws Exception {
+//        Usuario usuario = usuarioRepository.obterUsuarioById(idUsuario);
+//        if(usuario.getEmailUsuario()!=null){
+//            return objectMapper.convertValue(usuario, UsuarioDTO.class);
+//        }else {
+//            throw new RegraDeNegocioException("Usuário não encontrado");
+//        }
+//
+//    }
+//
+//    public UsuarioDTO criarUsuario(UsuarioCreateDTO novoUsuario) throws Exception {
+//        Usuario novoUsuarioEntity = objectMapper.convertValue(novoUsuario, Usuario.class);
+//        Usuario usuarioCriado = usuarioRepository.criarUsuario(novoUsuarioEntity);
+//
+//        return objectMapper.convertValue(usuarioCriado, UsuarioDTO.class);
+//    }
+//
+//    public UsuarioDTO atualizarUsuario(Integer idUsuario, UsuarioUpdateDTO novoUsuario) throws Exception {
+//        Usuario novoUsuarioEntity = objectMapper.convertValue(novoUsuario, Usuario.class);
+//        Usuario usuarioAtualizado = usuarioRepository.atualizarUsuario(idUsuario, novoUsuarioEntity);
+//
+//        return objectMapper.convertValue(usuarioAtualizado, UsuarioDTO.class);
+//    }
+//
+//    public void removerUsuario(Integer idUsuario) throws Exception {
+//        usuarioRepository.removerUsuario(idUsuario);
+//    }
 }
