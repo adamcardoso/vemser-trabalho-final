@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class LoginService {
 
@@ -21,12 +23,12 @@ public class LoginService {
     }
 
     public UsuarioDTO autenticarUsuario(String email, String senha) throws RegraDeNegocioException {
-        Usuario usuario = loginRepository.findByEmail(email, senha);
+        Optional<Usuario> usuario = loginRepository.findByEmailUsuarioAndSenhaUsuario(email, senha);
 
-        if (usuario.getEmailUsuario()!=null) {
+        if (usuario.isPresent()) {
             return objectMapper.convertValue(usuario, UsuarioDTO.class);
         } else {
-            throw new RegraDeNegocioException("Credenciais inválidas");
+            throw new RegraDeNegocioException("Credenciais inválidas, Usuário ou Senha Incorretos!");
         }
     }
 }

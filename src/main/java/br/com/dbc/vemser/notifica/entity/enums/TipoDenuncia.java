@@ -1,8 +1,8 @@
 package br.com.dbc.vemser.notifica.entity.enums;
 
 public enum TipoDenuncia {
-    PUBLICA(1),
-    ANONIMA(2);
+    PUBLICA(0),
+    ANONIMA(1);
     private final int valor;
 
     TipoDenuncia(int valor) {

@@ -3,6 +3,7 @@ package br.com.dbc.vemser.notifica.controller.documentacao;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioCreateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioLoginDTO;
 import br.com.dbc.vemser.notifica.exceptions.ErrorResponse;
+import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,6 +25,6 @@ public interface ILoginController {
 
     )
     @PostMapping
-    public ResponseEntity<Object> login(@RequestBody UsuarioLoginDTO usuarioLoginDTO);
+    public ResponseEntity<Object> login(@RequestBody UsuarioLoginDTO usuarioLoginDTO) throws RegraDeNegocioException;
 }
 

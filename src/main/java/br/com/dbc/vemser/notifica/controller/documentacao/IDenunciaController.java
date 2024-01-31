@@ -2,8 +2,8 @@ package br.com.dbc.vemser.notifica.controller.documentacao;
 
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaCreateDTO;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
+import br.com.dbc.vemser.notifica.entity.Denuncia;
 import br.com.dbc.vemser.notifica.exceptions.ErrorResponse;
-import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 public interface IDenunciaController {
 
@@ -37,7 +38,7 @@ public interface IDenunciaController {
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<DenunciaDTO> obterDenunciaById(@PathVariable("id") Integer id) throws Exception;
+    public ResponseEntity<Optional<Denuncia>> obterDenunciaById(@PathVariable("id") Integer id) throws Exception;
 
     @Operation(summary = "Listar denúncias por ID de usuário", description = "Esse Método Lista denúncias por ID de usuário")
     @ApiResponses(
