@@ -18,15 +18,6 @@ import java.util.Optional;
 
 public interface IDenunciaController {
 
-    @Operation(summary = "Listar todas as denúncias", description = "Esse Método Lista todas as denúncias")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna a lista de denúncias",
-                            content = @Content(schema = @Schema(hidden = true)))
-            }
-    )
-    @GetMapping
-    public ResponseEntity<List<DenunciaDTO>> listarTodasDenuncias() throws Exception;
 
     @Operation(summary = "Obter denúncia por ID", description = "Esse Método Obtém uma denúncia pelo ID")
     @ApiResponses(

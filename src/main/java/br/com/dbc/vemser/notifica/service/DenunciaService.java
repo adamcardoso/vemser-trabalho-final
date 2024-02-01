@@ -26,16 +26,6 @@ public class DenunciaService {
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
 
-    public List<DenunciaDTO> listarTodasDenuncias() throws Exception {
-        List<Denuncia> denuncias = denunciaRepository.findAll();
-        if (denuncias.isEmpty()) {
-            throw new RegraDeNegocioException("Nenhuma denúncia encontrada.");
-        }
-        return denuncias.stream()
-                .map(this::retornarDTO)
-                .collect(Collectors.toList());
-    }
-
     public Denuncia obterDenunciaById(Integer idDenuncia) throws Exception {
         return denunciaRepository.findById(idDenuncia)
                 .orElseThrow(() -> new RegraDeNegocioException("Denúncia não encontrada com ID: " + idDenuncia));
