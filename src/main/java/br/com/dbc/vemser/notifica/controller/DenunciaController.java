@@ -20,12 +20,6 @@ public class DenunciaController implements IDenunciaController{
 
     private final DenunciaService denunciaService;
 
-    @GetMapping
-    public ResponseEntity<List<DenunciaDTO>> listarTodasDenuncias() throws Exception {
-        List<DenunciaDTO> denunciaDTOS = denunciaService.listarTodasDenuncias();
-        return ResponseEntity.ok(denunciaDTOS);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<Denuncia> obterDenunciaById(@PathVariable("id") Integer id) throws Exception {
         Denuncia denunciaDTO = denunciaService.obterDenunciaById(id);
@@ -53,6 +47,6 @@ public class DenunciaController implements IDenunciaController{
     @DeleteMapping("/{idDenuncia}/{idUsuario}")
     public ResponseEntity<Object> deletarDenuncia(@PathVariable("idDenuncia") Integer idDenuncia, @PathVariable("idUsuario") Integer idUsuario) throws Exception {
         String deleted = denunciaService.deletarDenuncia(idDenuncia, idUsuario);
-        return ResponseEntity.ok(deleted);
+        return ResponseEntity.noContent().build();
     }
 }
