@@ -16,31 +16,45 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
 
-//    public UsuarioDTO obterUsuarioById(Integer idUsuario) throws Exception {
-//        Usuario usuario = usuarioRepository.obterUsuarioById(idUsuario);
-//        if(usuario.getEmailUsuario()!=null){
-//            return objectMapper.convertValue(usuario, UsuarioDTO.class);
-//        }else {
-//            throw new RegraDeNegocioException("Usuário não encontrado");
-//        }
+    public UsuarioDTO obterUsuarioById(Integer idUsuario) throws Exception {
+       return retornarDTO(getUsuario(idUsuario));
+    }
+
+    public UsuarioDTO criarUsuario(UsuarioCreateDTO novoUsuario) {
+        Usuario usuarioCriado = converterDTO(novoUsuario);
+        return retornarDTO(usuarioRepository.save(usuarioCriado));
+    }
 //
-//    }
-//
-//    public UsuarioDTO criarUsuario(UsuarioCreateDTO novoUsuario) throws Exception {
-//        Usuario novoUsuarioEntity = objectMapper.convertValue(novoUsuario, Usuario.class);
-//        Usuario usuarioCriado = usuarioRepository.criarUsuario(novoUsuarioEntity);
-//
-//        return objectMapper.convertValue(usuarioCriado, UsuarioDTO.class);
-//    }
-//
-//    public UsuarioDTO atualizarUsuario(Integer idUsuario, UsuarioUpdateDTO novoUsuario) throws Exception {
-//        Usuario novoUsuarioEntity = objectMapper.convertValue(novoUsuario, Usuario.class);
-//        Usuario usuarioAtualizado = usuarioRepository.atualizarUsuario(idUsuario, novoUsuarioEntity);
-//
-//        return objectMapper.convertValue(usuarioAtualizado, UsuarioDTO.class);
-//    }
-//
-//    public void removerUsuario(Integer idUsuario) throws Exception {
-//        usuarioRepository.removerUsuario(idUsuario);
-//    }
+    public UsuarioDTO atualizarUsuario(Integer idUsuario, UsuarioUpdateDTO novoUsuario) throws Exception {
+        Usuario usuarioRecuperado = getUsuario(idUsuario);
+        usuarioRecuperado.setEmailUsuario(novoUsuario.getEmailUsuario());
+        usuarioRecuperado.setEtniaUsuario(novoUsuario.getEtniaUsuario());
+        usuarioRecuperado.setGeneroUsuario(novoUsuario.getGeneroUsuario());
+        usuarioRecuperado.setNomeUsuario(novoUsuario.getNomeUsuario());
+        usuarioRecuperado.setSenhaUsuario(novoUsuario.getSenhaUsuario());
+        usuarioRecuperado.setTipoUsuario(novoUsuario.getTipoUsuario());
+        usuarioRecuperado.setClasseSocial(novoUsuario.getClasseSocial());
+        usuarioRecuperado.setDataNascimento(novoUsuario.getDataNascimento());
+        usuarioRecuperado.setNumeroCelular(novoUsuario.getNumeroCelular());
+
+        return retornarDTO(usuarioRecuperado);
+    }
+
+    public void removerUsuario(Integer idUsuario) throws Exception {
+        Usuario usuarioDeletado = getUsuario(idUsuario);
+        usuarioRepository.delete(usuarioDeletado);
+    }
+
+    private Usuario getUsuario(Integer id) throws RegraDeNegocioException {
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado!"));
+    }
+
+    private Usuario converterDTO(UsuarioCreateDTO dto) {
+        return objectMapper.convertValue(dto, Usuario.class);
+    }
+
+    private UsuarioDTO retornarDTO(Usuario entity) {
+        return objectMapper.convertValue(entity, UsuarioDTO.class);
+    }
 }
