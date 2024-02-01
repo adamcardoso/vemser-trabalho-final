@@ -52,6 +52,5 @@ public class Usuario {
     @Column(name = "tipo_usuario")
     @Enumerated(EnumType.ORDINAL)
     private TipoUsuario tipoUsuario;
-    //private boolean isAdmin;
 
 }

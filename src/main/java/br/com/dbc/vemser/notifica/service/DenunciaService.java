@@ -26,25 +26,28 @@ public class DenunciaService {
     private final ObjectMapper objectMapper;
     private final LocalizacaoService localizacaoService;
 
-    public List<DenunciaDTO> listarTodasDenuncias() throws Exception {
-        return denunciaRepository.findAll().stream()
-                .map(this::retornarDTO)
-                .collect(Collectors.toList());
+    public Denuncia obterDenunciaById(Integer idDenuncia) throws Exception {
+        return denunciaRepository.findById(idDenuncia)
+                .orElseThrow(() -> new RegraDeNegocioException("Denúncia não encontrada com ID: " + idDenuncia));
     }
-
-    public Optional<Denuncia> obterDenunciaById(Integer idDenuncia) throws Exception {
-        return denunciaRepository.findById(idDenuncia);
+    public Usuario ObterUsuarioById(Integer idUsuario) throws RegraDeNegocioException {
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado com ID: " + idUsuario));
+        return usuario;
     }
 
     public List<DenunciaDTO> listByIdUsuario(Integer idUsuario) throws Exception {
-        return denunciaRepository.findAllByUsuario_IdUsuario(idUsuario).stream()
+        List<Denuncia> denuncias = denunciaRepository.findAllByUsuario_IdUsuario(idUsuario);
+        if (denuncias.isEmpty()) {
+            throw new RegraDeNegocioException("Nenhuma denúncia encontrada para o usuário com ID: " + idUsuario);
+        }
+        return denuncias.stream()
                 .map(this::retornarDTO)
                 .collect(Collectors.toList());
     }
 
     public DenunciaDTO criarDenuncia(DenunciaCreateDTO denunciaCreateDTO, Integer idUsuario) throws Exception {
-        UsuarioDTO usuario = objectMapper.convertValue(usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado com ID: " + idUsuario)), UsuarioDTO.class);
+        Usuario usuario = ObterUsuarioById(idUsuario);
 
         Denuncia denuncia = converterCreateDTO(denunciaCreateDTO);
         denuncia.setUsuario(objectMapper.convertValue(usuario, Usuario.class));
@@ -57,11 +60,9 @@ public class DenunciaService {
     }
 
     public DenunciaDTO editarDenuncia(DenunciaCreateDTO denunciaCreateDTO, Integer idDenuncia, Integer idUsuario) throws Exception {
-        Usuario usuario = usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado com ID: " + idUsuario));
+        Usuario usuario = ObterUsuarioById(idUsuario);
 
-        Denuncia denuncia = denunciaRepository.findById(idDenuncia)
-                .orElseThrow(() -> new RegraDeNegocioException("Denúncia não encontrada com ID: " + idDenuncia));
+        Denuncia denuncia = obterDenunciaById(idDenuncia);
 
         if (!denuncia.getUsuario().equals(usuario)) {
             throw new RegraDeNegocioException("Usuário não tem permissão para editar esta denúncia.");
@@ -77,11 +78,9 @@ public class DenunciaService {
     }
 
     public String deletarDenuncia(Integer idDenuncia, Integer idUsuario) throws Exception {
-        Usuario usuario = usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado com ID: " + idUsuario));
+        Usuario usuario = ObterUsuarioById(idUsuario);
 
-        Denuncia denuncia = denunciaRepository.findById(idDenuncia)
-                .orElseThrow(() -> new RegraDeNegocioException("Denúncia não encontrada com ID: " + idDenuncia));
+        Denuncia denuncia = obterDenunciaById(idDenuncia);
 
         if (!denuncia.getUsuario().equals(usuario)) {
             throw new RegraDeNegocioException("Usuário não tem permissão para excluir esta denúncia.");
@@ -99,6 +98,5 @@ public class DenunciaService {
         return objectMapper.convertValue(entity, DenunciaDTO.class);
     }
     public Denuncia converterCreateDTO(DenunciaCreateDTO createDTO) {return objectMapper.convertValue(createDTO, Denuncia.class);}
-
 
 }

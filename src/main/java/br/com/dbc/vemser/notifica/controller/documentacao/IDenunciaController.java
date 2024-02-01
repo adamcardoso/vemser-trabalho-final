@@ -18,15 +18,6 @@ import java.util.Optional;
 
 public interface IDenunciaController {
 
-    @Operation(summary = "Listar todas as denúncias", description = "Esse Método Lista todas as denúncias")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna a lista de denúncias",
-                            content = @Content(schema = @Schema(hidden = true)))
-            }
-    )
-    @GetMapping
-    public ResponseEntity<List<DenunciaDTO>> listarTodasDenuncias() throws Exception;
 
     @Operation(summary = "Obter denúncia por ID", description = "Esse Método Obtém uma denúncia pelo ID")
     @ApiResponses(
@@ -38,7 +29,7 @@ public interface IDenunciaController {
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Denuncia>> obterDenunciaById(@PathVariable("id") Integer id) throws Exception;
+    public ResponseEntity<Denuncia> obterDenunciaById(@PathVariable("id") Integer id) throws Exception;
 
     @Operation(summary = "Listar denúncias por ID de usuário", description = "Esse Método Lista denúncias por ID de usuário")
     @ApiResponses(

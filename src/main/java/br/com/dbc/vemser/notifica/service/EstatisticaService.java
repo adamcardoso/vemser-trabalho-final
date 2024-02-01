@@ -15,14 +15,12 @@ public class EstatisticaService {
     private final EstatisticaRepository estatisticaRepository;
     private final ObjectMapper objectMapper;
 
-    public Optional<HashMap<String, List<EstatisticaDTO>>> obterEstatistica(List<String> colunas) throws Exception{
-        try {
-            List<String> cols = new ArrayList<>(Arrays.asList("etnia", "genero", "classe_social"));
-            cols.retainAll(colunas);
+//    public Optional<HashMap<String, List<EstatisticaDTO>>> obterEstatistica(List<String> colunas) {
+//
+//    }
 
-            if(cols.isEmpty())
-                return Optional.empty();
 
+<<<<<<< HEAD
             Optional<HashMap<String, List<Estatistica>>> mapOpt = estatisticaRepository.obterEstatistica(cols);
 
             if(mapOpt.isPresent()){
@@ -45,4 +43,6 @@ public class EstatisticaService {
             throw new Exception();
         }
     }
+=======
+>>>>>>> develop
 }
