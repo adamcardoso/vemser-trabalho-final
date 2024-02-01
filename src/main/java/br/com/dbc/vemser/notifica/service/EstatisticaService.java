@@ -15,33 +15,9 @@ public class EstatisticaService {
     private final EstatisticaRepository estatisticaRepository;
     private final ObjectMapper objectMapper;
 
-    public Optional<HashMap<String, List<EstatisticaDTO>>> obterEstatistica(List<String> colunas) throws Exception{
-        try {
-            List<String> cols = new ArrayList<>(Arrays.asList("etnia", "genero", "classe_social"));
-            cols.retainAll(colunas);
+//    public Optional<HashMap<String, List<EstatisticaDTO>>> obterEstatistica(List<String> colunas) {
+//
+//    }
 
-            if(cols.isEmpty())
-                return Optional.empty();
 
-            Optional<HashMap<String, List<Estatistica>>> mapOpt = estatisticaRepository.obterEstatistica(cols);
-
-            if(mapOpt.isPresent()){
-                HashMap<String, List<Estatistica>> estatisticas = mapOpt.get();
-                HashMap<String, List<EstatisticaDTO>> hashEstatisticasDto = new HashMap<>();
-
-                for(Map.Entry<String, List<Estatistica>> es: estatisticas.entrySet()) {
-                    List<EstatisticaDTO> estatisticasDto = new ArrayList<>();
-                    for (Estatistica estatistica : es.getValue())
-                        estatisticasDto.add(objectMapper.convertValue(estatistica, EstatisticaDTO.class));
-
-                    hashEstatisticasDto.put(es.getKey(), estatisticasDto);
-                }
-
-                return Optional.of(hashEstatisticasDto);
-            }
-            return Optional.empty();
-        } catch (Exception e){
-            throw new Exception();
-        }
-    }
 }
