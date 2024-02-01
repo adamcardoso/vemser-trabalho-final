@@ -38,7 +38,7 @@ public interface IDenunciaController {
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Denuncia>> obterDenunciaById(@PathVariable("id") Integer id) throws Exception;
+    public ResponseEntity<Denuncia> obterDenunciaById(@PathVariable("id") Integer id) throws Exception;
 
     @Operation(summary = "Listar denúncias por ID de usuário", description = "Esse Método Lista denúncias por ID de usuário")
     @ApiResponses(
