@@ -1,7 +1,7 @@
 package br.com.dbc.vemser.notifica.controller;
 
 import br.com.dbc.vemser.notifica.dto.estatistica.EstatisticaDTO;
-import br.com.dbc.vemser.notifica.service.EstatisticaService;
+//import br.com.dbc.vemser.notifica.service.EstatisticaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/estatistica")
 public class EstatisticaController {
-    private final EstatisticaService estatisticaService;
+//    private final EstatisticaService estatisticaService;
 
 //    @GetMapping("/bycolumn")
 //    public ResponseEntity<HashMap<String, List<EstatisticaDTO>>> obterEstatistica(@RequestParam("coluna") List<String> colunas) {

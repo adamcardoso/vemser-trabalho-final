@@ -5,7 +5,6 @@ import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import br.com.dbc.vemser.notifica.entity.Denuncia;
 import br.com.dbc.vemser.notifica.entity.Usuario;
-import br.com.dbc.vemser.notifica.entity.enums.StatusDenuncia;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.repository.DenunciaRepository;
 import br.com.dbc.vemser.notifica.repository.UsuarioRepository;
@@ -25,6 +24,7 @@ public class DenunciaService {
     private final EmailService emailService;
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
+    private final LocalizacaoService localizacaoService;
 
     public Denuncia obterDenunciaById(Integer idDenuncia) throws Exception {
         return denunciaRepository.findById(idDenuncia)
@@ -53,7 +53,10 @@ public class DenunciaService {
         denuncia.setUsuario(objectMapper.convertValue(usuario, Usuario.class));
         denuncia.setDataHora(LocalDateTime.now());
 
-        return retornarDTO(denunciaRepository.save(denuncia));
+        Denuncia d = denunciaRepository.save(denuncia);
+        localizacaoService.criarLocalizacao(d);
+
+        return retornarDTO(d);
     }
 
     public DenunciaDTO editarDenuncia(DenunciaCreateDTO denunciaCreateDTO, Integer idDenuncia, Integer idUsuario) throws Exception {
