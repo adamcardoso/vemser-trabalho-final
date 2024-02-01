@@ -21,7 +21,7 @@ public class UsuarioController  {
     @GetMapping("/{idUsuario}")
     public ResponseEntity<UsuarioDTO> obterUsuarioById(@PathVariable("idUsuario") Integer idUsuario) throws Exception {
         UsuarioDTO usuario = usuarioService.obterUsuarioById(idUsuario);
-        return new ResponseEntity<>(usuario, HttpStatus.CREATED);
+        return new ResponseEntity<>(usuario, HttpStatus.OK);
     }
 
     @PostMapping

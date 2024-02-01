@@ -18,6 +18,6 @@ import java.util.List;
 
 @Repository
 public interface AdminRepository extends JpaRepository<Usuario, Integer> {
-    @Query(value = "SELECT u FROM USUARIO u WHERE u.tipoUsuario = 1")
+    @Query(value = "SELECT u FROM USUARIO u WHERE u.tipoUsuario = 0")
     public List<Usuario> usuariosAdmin();
 }
