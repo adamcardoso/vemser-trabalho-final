@@ -37,7 +37,7 @@ public class UsuarioService {
         usuarioRecuperado.setDataNascimento(novoUsuario.getDataNascimento());
         usuarioRecuperado.setNumeroCelular(novoUsuario.getNumeroCelular());
 
-        return retornarDTO(usuarioRecuperado);
+        return retornarDTO(usuarioRepository.save(usuarioRecuperado));
     }
 
     public void removerUsuario(Integer idUsuario) throws Exception {
