@@ -27,8 +27,8 @@ public class DenunciaController implements IDenunciaController{
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Denuncia>> obterDenunciaById(@PathVariable("id") Integer id) throws Exception {
-        Optional<Denuncia> denunciaDTO = denunciaService.obterDenunciaById(id);
+    public ResponseEntity<Denuncia> obterDenunciaById(@PathVariable("id") Integer id) throws Exception {
+        Denuncia denunciaDTO = denunciaService.obterDenunciaById(id);
         return ResponseEntity.ok(denunciaDTO);
     }
 
