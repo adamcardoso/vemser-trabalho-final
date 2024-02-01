@@ -28,6 +28,7 @@ public class EstatisticaController implements IEstatisticaController {
                     .orElseGet(() -> new ResponseEntity<>(
                             new Response<>(null, 404, "Houve algum problema"), HttpStatus.NOT_FOUND));
         } catch (Exception e){
+            e.printStackTrace();
             return new ResponseEntity<>(
                     new Response<>(null, 400, e.getMessage()), HttpStatus.BAD_REQUEST);
         }

@@ -41,6 +41,7 @@ public class EstatisticaService {
             }
             return Optional.empty();
         } catch (Exception e){
+            e.printStackTrace();
             throw new Exception();
         }
     }

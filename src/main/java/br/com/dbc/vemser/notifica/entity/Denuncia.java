@@ -53,6 +53,9 @@ public class Denuncia {
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     private Usuario usuario;
 
+    @OneToOne(mappedBy = "denuncia", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Localizacao localizacao;
+
     public int getCurtidas() {
         return curtidas == null ? 0 : curtidas;
     }
