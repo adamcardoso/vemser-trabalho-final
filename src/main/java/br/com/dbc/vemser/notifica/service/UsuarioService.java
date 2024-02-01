@@ -19,7 +19,7 @@ public class UsuarioService {
     public UsuarioDTO obterUsuarioById(Integer idUsuario) throws Exception {
        return retornarDTO(getUsuario(idUsuario));
     }
-//
+
     public UsuarioDTO criarUsuario(UsuarioCreateDTO novoUsuario) {
         Usuario usuarioCriado = converterDTO(novoUsuario);
         return retornarDTO(usuarioRepository.save(usuarioCriado));
@@ -50,11 +50,11 @@ public class UsuarioService {
                 .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado!"));
     }
 
-    public Usuario converterDTO(UsuarioCreateDTO dto) {
+    private Usuario converterDTO(UsuarioCreateDTO dto) {
         return objectMapper.convertValue(dto, Usuario.class);
     }
 
-    public UsuarioDTO retornarDTO(Usuario entity) {
+    private UsuarioDTO retornarDTO(Usuario entity) {
         return objectMapper.convertValue(entity, UsuarioDTO.class);
     }
 }
