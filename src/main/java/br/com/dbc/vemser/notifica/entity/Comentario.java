@@ -32,6 +32,7 @@ public class Comentario {
     @JoinColumn(name = "id_denuncia", referencedColumnName = "id_denuncia")
     private Denuncia denuncia;
 
-    private Integer idUsuario;
-
+    @ManyToOne
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    private Usuario usuario;
 }

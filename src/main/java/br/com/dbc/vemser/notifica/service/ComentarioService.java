@@ -64,6 +64,6 @@ public class ComentarioService {
     }
 
     private ComentarioDTO returnComentarioDto(Comentario c){
-        return new ComentarioDTO(c.getIdComentario(), c.getComentario(), c.getCurtida(), c.getDenuncia().getIdDenuncia(), c.getIdUsuario());
+        return new ComentarioDTO(c.getIdComentario(), c.getComentario(), c.getCurtida(), c.getDenuncia().getIdDenuncia(), c.getUsuario().getIdUsuario());
     }
 }
