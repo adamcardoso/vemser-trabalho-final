@@ -4,12 +4,14 @@ import br.com.dbc.vemser.notifica.entity.enums.ClasseSocial;
 import br.com.dbc.vemser.notifica.entity.enums.Etnia;
 import br.com.dbc.vemser.notifica.entity.enums.Genero;
 import br.com.dbc.vemser.notifica.entity.enums.TipoUsuario;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -53,4 +55,7 @@ public class Usuario {
     @Enumerated(EnumType.ORDINAL)
     private TipoUsuario tipoUsuario;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Endereco> enderecos;
 }

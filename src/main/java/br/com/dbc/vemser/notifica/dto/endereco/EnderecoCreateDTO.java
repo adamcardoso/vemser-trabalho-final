@@ -35,5 +35,5 @@ public class EnderecoCreateDTO {
     private String pais;
 
     @Schema(description = "ID da Pessoa associada ao Endereço", example = "1")
-    private Integer idPessoa;
+    private Integer idUsuario;
 }
