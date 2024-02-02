@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class Localizacao {
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="localizacao_sequence")
-    @SequenceGenerator(name="localizacao_sequence", sequenceName="seq_localizacao", allocationSize = 1)
+    @SequenceGenerator(name="localizacao_sequence", sequenceName="SEQ_LOCALIZACAO", allocationSize = 1)
     @Column(name = "id_localizacao")
     private Integer idLocalizacao;
 

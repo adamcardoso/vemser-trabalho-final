@@ -1,6 +1,8 @@
 package br.com.dbc.vemser.notifica.dto.denuncia;
 
+import br.com.dbc.vemser.notifica.dto.comentario.ComentarioDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
+import br.com.dbc.vemser.notifica.entity.Comentario;
 import br.com.dbc.vemser.notifica.entity.Localizacao;
 import br.com.dbc.vemser.notifica.entity.Usuario;
 import br.com.dbc.vemser.notifica.entity.enums.Categoria;
@@ -26,7 +28,7 @@ public class DenunciaDTO {
         private StatusDenuncia statusDenuncia;
         private Integer curtidas;
         private Categoria categoria;
-        //private final List<String> comentarios = new ArrayList<>();
+        private List<ComentarioDTO> comentarios;
         private TipoDenuncia tipoDenuncia;
         private UsuarioDTO usuario;
 
