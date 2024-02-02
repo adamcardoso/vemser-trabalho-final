@@ -4,13 +4,14 @@ import br.com.dbc.vemser.notifica.entity.enums.ClasseSocial;
 import br.com.dbc.vemser.notifica.entity.enums.Etnia;
 import br.com.dbc.vemser.notifica.entity.enums.Genero;
 import br.com.dbc.vemser.notifica.entity.enums.TipoUsuario;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @AllArgsConstructor
-@Data
+@NoArgsConstructor
+@Getter
+@Setter
 public class UsuarioDTO {
     private Integer idUsuario;
     private String nomeUsuario;
@@ -22,4 +23,5 @@ public class UsuarioDTO {
     private ClasseSocial classeSocial;
     private Genero generoUsuario;
     private TipoUsuario tipoUsuario;
+
 }

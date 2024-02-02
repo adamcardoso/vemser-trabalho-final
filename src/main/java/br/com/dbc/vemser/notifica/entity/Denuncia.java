@@ -3,23 +3,21 @@ package br.com.dbc.vemser.notifica.entity;
 import br.com.dbc.vemser.notifica.entity.enums.Categoria;
 import br.com.dbc.vemser.notifica.entity.enums.StatusDenuncia;
 import br.com.dbc.vemser.notifica.entity.enums.TipoDenuncia;
-
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "DENUNCIA")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Denuncia {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DENUNCIA_SEQ")
@@ -61,9 +59,5 @@ public class Denuncia {
 
     @OneToOne(mappedBy = "denuncia", cascade = CascadeType.ALL, orphanRemoval = true)
     private Localizacao localizacao;
-
-    public int getCurtidas() {
-        return curtidas == null ? 0 : curtidas;
-    }
 
 }

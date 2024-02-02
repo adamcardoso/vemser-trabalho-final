@@ -62,4 +62,8 @@ public class Usuario {
     @JsonIgnore
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Comentario> comentarios;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Denuncia> denuncias;
 }

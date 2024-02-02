@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
 
 public interface IFeedController {
-    @Operation(summary = "Listar todas as denúncias", description = "Esse Método Lista todas as denúncias")
+    @Operation(summary = "Listar todas as denúncias", description = "Esse Método é o Feed que Lista todas as denúncias sem os comentários")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Retorna a lista de denúncias",
