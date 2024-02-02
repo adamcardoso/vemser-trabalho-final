@@ -5,7 +5,6 @@ import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioCreateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioUpdateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
-import br.com.dbc.vemser.notifica.service.DenunciaService;
 import br.com.dbc.vemser.notifica.service.UsuarioAdminService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

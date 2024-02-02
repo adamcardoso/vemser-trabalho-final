@@ -17,9 +17,7 @@ public interface IAdminController {
     @Operation(summary = "Listar Usuários", description = "Listar Usuários")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna o usuário"),
-                    @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
-                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "200", description = "Retorna os usuários"),
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
@@ -29,9 +27,7 @@ public interface IAdminController {
     @Operation(summary = "Listar Admins", description = "Listar Admins")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna o usuário"),
-                    @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
-                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "200", description = "Retorna os usuários"),
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
@@ -42,8 +38,7 @@ public interface IAdminController {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Retorna o usuário"),
-                    @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
-                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "400", description = "Usuário não encontrado"),
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
@@ -55,7 +50,7 @@ public interface IAdminController {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Usuário criado com sucesso"),
-                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "400", description = "Object: não deve ser nulo"),
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
@@ -66,8 +61,7 @@ public interface IAdminController {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Retorna o usuário atualizado"),
-                    @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
-                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "400", description = "Object: não deve ser nulo"),
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
@@ -78,8 +72,7 @@ public interface IAdminController {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Usuário removido com sucesso"),
-                    @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
-                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "400", description = "Usuário não encontrado"),
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
@@ -90,32 +83,28 @@ public interface IAdminController {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Usuário removido com sucesso"),
-                    @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
-                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
     @DeleteMapping("/{idUsuario}")
     public ResponseEntity<List<DenunciaDTO>> listarTodasDenuncias() throws Exception;
 
-    @Operation(summary = "Listar todas Denúncias", description = "Lista todas Denúncias")
+    @Operation(summary = "Deletar Denúncia", description = "Deleta denuncia por id")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Usuário removido com sucesso"),
-                    @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
-                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "200", description = "denuncia removido com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "denuncia não encontrado"),
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
     @DeleteMapping("/{idDenuncia}")
     public ResponseEntity<Object> deletarDenuncia(@PathVariable("idDenuncia") Integer idDenuncia) throws Exception;
 
-    @Operation(summary = "Listar todas Denúncias", description = "Lista todas Denúncias")
+    @Operation(summary = "Lista denuncia", description = "Lista denuncia por id")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Usuário removido com sucesso"),
-                    @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
-                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+                    @ApiResponse(responseCode = "400", description = "Usuário não encontrado"),
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
