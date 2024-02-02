@@ -35,7 +35,7 @@ public class ComentarioService {
                 .collect(Collectors.toList());
     }
 
-    public ComentarioDTO criarComentario(ComentarioCreateDTO comentarioDto) throws Exception{
+    public ComentarioDTO criarComentario(ComentarioCreateDTO comentarioDto) {
         Denuncia d = denunciaRepository.getById(comentarioDto.getIdDenuncia());
         Comentario c = objectMapper.convertValue(comentarioDto, Comentario.class);
         c.setDenuncia(d);
@@ -64,6 +64,9 @@ public class ComentarioService {
     }
 
     private ComentarioDTO returnComentarioDto(Comentario c){
-        return new ComentarioDTO(c.getIdComentario(), c.getComentario(), c.getCurtida(), c.getDenuncia().getIdDenuncia(), c.getUsuario().getIdUsuario());
+        ComentarioDTO comentarioDTO = objectMapper.convertValue(c, ComentarioDTO.class);
+        comentarioDTO.setIdDenuncia(c.getDenuncia().getIdDenuncia());
+        comentarioDTO.setIdUsuario(c.getUsuario().getIdUsuario());
+        return comentarioDTO;
     }
 }
