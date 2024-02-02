@@ -25,7 +25,7 @@ public interface IComentarioController {
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<Response<ComentarioDTO>> obterComentarioById(@PathVariable("id") Integer id);
+    public ResponseEntity<ComentarioDTO> obterComentarioById(@PathVariable("id") Integer id) throws Exception;
 
     @Operation(summary = "Listar comentários por ID de denúncia", description = "Lista comentários por ID de denúncia")
     @ApiResponses(
@@ -37,7 +37,7 @@ public interface IComentarioController {
             }
     )
     @GetMapping("/{id}/denuncia")
-    public ResponseEntity<Response<List<ComentarioDTO>>> listarComentariosByIdDenuncia(@PathVariable("id") Integer id);
+    public ResponseEntity<List<ComentarioDTO>> listarComentariosByIdDenuncia(@PathVariable("id") Integer id) throws Exception;
 
     @Operation(summary = "Adicionar comentário", description = "Adiciona um novo comentário")
     @ApiResponses(
@@ -48,7 +48,7 @@ public interface IComentarioController {
             }
     )
     @PostMapping
-    public ResponseEntity<Response<ComentarioDTO>> adicionarComentario(@Valid @RequestBody ComentarioCreateDTO comentarioDto);
+    public ResponseEntity<ComentarioDTO> adicionarComentario(@Valid @RequestBody ComentarioCreateDTO comentarioDto) throws Exception;
 
     @Operation(summary = "Atualizar comentário", description = "Atualiza um comentário pelo ID")
     @ApiResponses(
@@ -60,7 +60,7 @@ public interface IComentarioController {
             }
     )
     @PutMapping("/{id}")
-    public ResponseEntity<Response<ComentarioDTO>> atualizarComentario(@PathVariable("id") Integer id, @Valid @RequestBody ComentarioUpdateDTO comentarioDto);
+    public ResponseEntity<ComentarioDTO> atualizarComentario(@PathVariable("id") Integer id, @Valid @RequestBody ComentarioUpdateDTO comentarioDto) throws Exception;
 
     @Operation(summary = "Deletar comentário", description = "Deleta um comentário pelo ID")
     @ApiResponses(
@@ -72,5 +72,5 @@ public interface IComentarioController {
             }
     )
     @DeleteMapping("/{id}")
-    public ResponseEntity<Response<Object>> deletarComentario(@PathVariable("id") Integer id);
+    public ResponseEntity<Void> deletarComentario(@PathVariable("id") Integer id) throws Exception;
 }
