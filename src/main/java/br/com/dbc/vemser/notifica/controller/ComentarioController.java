@@ -6,6 +6,7 @@ import br.com.dbc.vemser.notifica.dto.comentario.ComentarioDTO;
 import br.com.dbc.vemser.notifica.dto.comentario.ComentarioCreateDTO;
 import br.com.dbc.vemser.notifica.dto.comentario.ComentarioUpdateDTO;
 import br.com.dbc.vemser.notifica.service.ComentarioService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
+@Tag(name = "Comentário Controller")
 @RequestMapping("/comentario")
 public class ComentarioController implements IComentarioController {
     private final ComentarioService comentarioService;

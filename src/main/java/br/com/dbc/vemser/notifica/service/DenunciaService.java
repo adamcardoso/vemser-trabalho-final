@@ -2,7 +2,6 @@ package br.com.dbc.vemser.notifica.service;
 
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaCreateDTO;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
-import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import br.com.dbc.vemser.notifica.entity.Denuncia;
 import br.com.dbc.vemser.notifica.entity.Usuario;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,9 +24,10 @@ public class DenunciaService {
     private final ObjectMapper objectMapper;
     private final LocalizacaoService localizacaoService;
 
-    public Denuncia obterDenunciaById(Integer idDenuncia) throws Exception {
-        return denunciaRepository.findById(idDenuncia)
+    public DenunciaDTO obterDenunciaById(Integer idDenuncia) throws Exception {
+        Denuncia denuncia = denunciaRepository.findById(idDenuncia)
                 .orElseThrow(() -> new RegraDeNegocioException("Denúncia não encontrada com ID: " + idDenuncia));
+        return objectMapper.convertValue(denuncia, DenunciaDTO.class);
     }
     public Usuario ObterUsuarioById(Integer idUsuario) throws RegraDeNegocioException {
         Usuario usuario = usuarioRepository.findById(idUsuario)
@@ -50,8 +49,12 @@ public class DenunciaService {
         Usuario usuario = ObterUsuarioById(idUsuario);
 
         Denuncia denuncia = converterCreateDTO(denunciaCreateDTO);
+
         denuncia.setUsuario(objectMapper.convertValue(usuario, Usuario.class));
+
         denuncia.setDataHora(LocalDateTime.now());
+        denuncia.setCurtidas(0);
+        denuncia.setIdUsuario(idUsuario);
 
         Denuncia d = denunciaRepository.save(denuncia);
         localizacaoService.criarLocalizacao(d);
@@ -62,7 +65,7 @@ public class DenunciaService {
     public DenunciaDTO editarDenuncia(DenunciaCreateDTO denunciaCreateDTO, Integer idDenuncia, Integer idUsuario) throws Exception {
         Usuario usuario = ObterUsuarioById(idUsuario);
 
-        Denuncia denuncia = obterDenunciaById(idDenuncia);
+        Denuncia denuncia = objectMapper.convertValue(obterDenunciaById(idDenuncia), Denuncia.class);
 
         if (!denuncia.getUsuario().equals(usuario)) {
             throw new RegraDeNegocioException("Usuário não tem permissão para editar esta denúncia.");
@@ -80,7 +83,7 @@ public class DenunciaService {
     public String deletarDenuncia(Integer idDenuncia, Integer idUsuario) throws Exception {
         Usuario usuario = ObterUsuarioById(idUsuario);
 
-        Denuncia denuncia = obterDenunciaById(idDenuncia);
+        Denuncia denuncia = objectMapper.convertValue(obterDenunciaById(idDenuncia), Denuncia.class);
 
         if (!denuncia.getUsuario().equals(usuario)) {
             throw new RegraDeNegocioException("Usuário não tem permissão para excluir esta denúncia.");

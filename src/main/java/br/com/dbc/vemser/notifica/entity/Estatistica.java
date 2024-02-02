@@ -22,9 +22,5 @@ public class Estatistica {
 
     private Genero generoUsuario;
 
-    private Integer total;
-
-    private double percentual;
-
     private LocalDate ultimaDataCadastro;
 }

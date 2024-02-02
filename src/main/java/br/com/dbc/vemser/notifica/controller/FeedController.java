@@ -4,6 +4,7 @@ import br.com.dbc.vemser.notifica.controller.documentacao.IFeedController;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
 import br.com.dbc.vemser.notifica.service.DenunciaService;
 import br.com.dbc.vemser.notifica.service.FeedService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Feed Controller")
 @RequestMapping("/feed")
 public class FeedController implements IFeedController {
     private final FeedService feedService;
