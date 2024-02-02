@@ -30,20 +30,18 @@ public class EnderecoController implements IEnderecoController {
 
     @PostMapping
     public ResponseEntity<EnderecoDTO> adicionarEndereco(@Valid @RequestBody EnderecoCreateDTO enderecoDto) throws Exception {
-        EnderecoDTO enderecoAdicionado = enderecoService.adicionarEndereco(enderecoDto);
-        return new ResponseEntity<>(enderecoAdicionado, HttpStatus.CREATED);
+        return new ResponseEntity<>(enderecoService.adicionarEndereco(enderecoDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<EnderecoDTO> atualizarEndereco(@PathVariable("id") Integer id,
                                                          @Valid @RequestBody EnderecoUpdateDTO enderecoDto) throws Exception {
-        EnderecoDTO enderecoAtualizado = enderecoService.atualizarEndereco(id, enderecoDto);
-        return new ResponseEntity<>(enderecoAtualizado, HttpStatus.OK);
+        return new ResponseEntity<>(enderecoService.atualizarEndereco(id, enderecoDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> removerEndereco(@PathVariable("id") Integer id) throws Exception {
+    public ResponseEntity<Void> removerEndereco(@PathVariable("id") Integer id) throws Exception {
         enderecoService.removerEndereco(id);
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 }

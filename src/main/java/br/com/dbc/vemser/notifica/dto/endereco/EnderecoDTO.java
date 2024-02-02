@@ -39,5 +39,5 @@ public class EnderecoDTO {
     @NotEmpty(message = "País não pode ser nulo")
     private String pais;
 
-    private Integer idPessoa;
+    private Integer idUsuario;
 }
