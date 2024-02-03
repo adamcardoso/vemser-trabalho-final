@@ -53,7 +53,6 @@ public class DenunciaService {
         denuncia.setUsuario(objectMapper.convertValue(usuario, Usuario.class));
 
         denuncia.setDataHora(LocalDateTime.now());
-        denuncia.setCurtidas(0);
         denuncia.setIdUsuario(idUsuario);
 
         Denuncia d = denunciaRepository.save(denuncia);

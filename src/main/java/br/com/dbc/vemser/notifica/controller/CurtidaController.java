@@ -12,8 +12,15 @@ import org.springframework.web.bind.annotation.*;
 public class CurtidaController implements ICurtidaController {
     private final ICurtidaService curtidaService;
 
-    @PostMapping()
-    public void apoiar(@RequestBody CurtidaDto curtidaDto) throws Exception {
-        curtidaService.apoiar(curtidaDto);
+    @Override
+    @PostMapping("/comentario")
+    public void apoiarComentario(@RequestBody CurtidaDto curtidaDto) throws Exception {
+        curtidaService.apoiarComentario(curtidaDto);
+    }
+
+    @Override
+    @PostMapping("/denuncia")
+    public void apoiarDenuncia(@RequestBody CurtidaDto curtidaDto) throws Exception {
+        curtidaService.apoiarDenuncia(curtidaDto);
     }
 }

@@ -9,4 +9,7 @@ import java.util.Optional;
 public interface ICurtidaRepository extends JpaRepository<Curtida, Integer> {
     @Query(value = "SELECT * FROM CURTIDA cu WHERE cu.ID_USUARIO=?1 AND cu.ID_COMENTARIO=?2", nativeQuery = true)
     Optional<Curtida> findByIdUsuarioAndIdComentario(Integer idUsuario, Integer idComentario);
+
+    @Query(value = "SELECT * FROM CURTIDA cu WHERE cu.ID_USUARIO=?1 AND cu.ID_DENUNCIA=?2", nativeQuery = true)
+    Optional<Curtida> findByIdUsuarioAndDenuncia(Integer idUsuario, Integer idDenuncia);
 }

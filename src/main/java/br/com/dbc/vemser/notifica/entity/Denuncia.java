@@ -43,9 +43,6 @@ public class Denuncia {
     @Enumerated(EnumType.ORDINAL)
     private Categoria categoria;
 
-    @Column(name = "curtida")
-    private Integer curtidas;
-
     @Column(name = "tipo_denuncia")
     @Enumerated(EnumType.ORDINAL)
     private TipoDenuncia tipoDenuncia;
@@ -64,4 +61,7 @@ public class Denuncia {
     @OneToOne(mappedBy = "denuncia", cascade = CascadeType.ALL, orphanRemoval = true)
     private Localizacao localizacao;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "denuncia", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Curtida> curtidas;
 }

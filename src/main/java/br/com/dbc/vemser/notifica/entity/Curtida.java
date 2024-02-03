@@ -48,4 +48,10 @@ public class Curtida {
         this.comentario = comentario;
         this.dataHora = dataHora;
     }
+
+    public Curtida(Usuario usuario, Denuncia denuncia, LocalDateTime dataHora){
+        this.usuario = usuario;
+        this.denuncia = denuncia;
+        this.dataHora = dataHora;
+    }
 }
