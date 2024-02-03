@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.notifica.controller;
 
+import br.com.dbc.vemser.notifica.controller.documentacao.ICurtidaController;
 import br.com.dbc.vemser.notifica.dto.curtida.CurtidaDto;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.repository.ICurtidaRepository;
@@ -10,12 +11,9 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/apoiar")
-public class CurtidaController {
+public class CurtidaController implements ICurtidaController {
     private final CurtidaService curtidaService;
 
-
-    // receber id do comentário pelo body
-    // receber id do usuário pelo body
     @PostMapping()
     public void apoiar(@RequestBody CurtidaDto curtidaDto) throws Exception {
         curtidaService.apoiar(curtidaDto);
