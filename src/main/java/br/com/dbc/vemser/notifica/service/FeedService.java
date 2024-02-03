@@ -61,7 +61,7 @@ public class FeedService {
 
         comentarioDTO.setIdComentario(comentario.getIdComentario());
         comentarioDTO.setComentario(comentario.getComentario());
-        comentarioDTO.setCurtida(comentario.getCurtida());
+//        comentarioDTO.setCurtida(comentario.getCurtida());
         comentarioDTO.setUsuario(objectMapper.convertValue(comentario.getUsuario(), UsuarioDTO.class));
         comentarioDTO.setDenuncia(objectMapper.convertValue(comentario.getDenuncia(), DenunciaDTO.class));
 

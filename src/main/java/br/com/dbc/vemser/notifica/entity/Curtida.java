@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @AllArgsConstructor
@@ -16,21 +17,18 @@ import java.util.List;
 @Getter
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Comentario {
+public class Curtida {
     @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="comentario_sequence")
-    @SequenceGenerator(name="comentario_sequence", sequenceName="seq_comentario", allocationSize = 1)
-    @Column(name = "id_comentario")
-    private Integer idComentario;
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="curtida_sequence")
+    @SequenceGenerator(name="curtida_sequence", sequenceName="seq_curtida", allocationSize = 1)
+    @Column(name = "id_curtida")
+    private Integer idCurtida;
 
     @Column
-    private String comentario;
+    private LocalDateTime dataHora;
+
 
     @JsonIgnore
-    @OneToMany(mappedBy = "comentario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Curtida> curtidas;
-
-
     @ManyToOne
     @JoinColumn(name = "id_denuncia", referencedColumnName = "id_denuncia")
     private Denuncia denuncia;
@@ -39,4 +37,15 @@ public class Comentario {
     @ManyToOne
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     private Usuario usuario;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "id_comentario", referencedColumnName = "id_comentario")
+    private Comentario comentario;
+
+    public Curtida(Usuario usuario, Comentario comentario, LocalDateTime dataHora){
+        this.usuario = usuario;
+        this.comentario = comentario;
+        this.dataHora = dataHora;
+    }
 }
