@@ -6,6 +6,7 @@ import br.com.dbc.vemser.notifica.entity.Localizacao;
 import br.com.dbc.vemser.notifica.repository.ILocalicacaoRepository;
 import br.com.dbc.vemser.notifica.service.DenunciaService;
 import br.com.dbc.vemser.notifica.service.LocalizacaoService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
+@Tag(name = "Localização Controller")
 @RequestMapping("/localizacao")
 public class LocalizacaoController {
     private final LocalizacaoService localizacaoService;

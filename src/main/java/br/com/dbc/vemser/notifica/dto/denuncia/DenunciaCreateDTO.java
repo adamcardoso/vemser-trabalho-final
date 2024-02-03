@@ -5,6 +5,7 @@ import br.com.dbc.vemser.notifica.entity.enums.Categoria;
 import br.com.dbc.vemser.notifica.entity.enums.StatusDenuncia;
 import br.com.dbc.vemser.notifica.entity.enums.TipoDenuncia;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;

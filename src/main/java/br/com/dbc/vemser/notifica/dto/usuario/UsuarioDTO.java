@@ -17,11 +17,9 @@ public class UsuarioDTO {
     private String nomeUsuario;
     private String emailUsuario;
     private String numeroCelular;
-    //private String senhaUsuario;
     private Etnia etniaUsuario;
     private LocalDate dataNascimento;
     private ClasseSocial classeSocial;
     private Genero generoUsuario;
-    private TipoUsuario tipoUsuario;
 
 }

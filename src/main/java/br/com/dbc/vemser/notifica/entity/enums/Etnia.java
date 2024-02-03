@@ -1,5 +1,8 @@
 package br.com.dbc.vemser.notifica.entity.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum Etnia {
     PRETO(0),
     PARDO(1),

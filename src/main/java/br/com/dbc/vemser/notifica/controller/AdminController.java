@@ -6,6 +6,7 @@ import br.com.dbc.vemser.notifica.dto.usuario.UsuarioCreateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioUpdateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import br.com.dbc.vemser.notifica.service.UsuarioAdminService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import java.util.List;
 @RequestMapping("/admin")
 @Validated
 @AllArgsConstructor
+@Tag(name = "Admin Controller")
 public class AdminController implements IAdminController {
     private final UsuarioAdminService usuarioAdminService;
 

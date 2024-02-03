@@ -8,6 +8,8 @@ import br.com.dbc.vemser.notifica.entity.enums.StatusDenuncia;
 import br.com.dbc.vemser.notifica.entity.enums.TipoDenuncia;
 import feign.Param;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -21,4 +23,6 @@ import java.util.List;
 public interface DenunciaRepository extends JpaRepository<Denuncia, Integer> {
 
     List<Denuncia> findAllByUsuario_IdUsuario(Integer idUsuario);
+
+
 }

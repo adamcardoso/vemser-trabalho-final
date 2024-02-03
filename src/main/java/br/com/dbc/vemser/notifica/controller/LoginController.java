@@ -5,6 +5,7 @@ import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioLoginDTO;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.service.LoginService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/login")
 @AllArgsConstructor
+@Tag(name = "Login Controller")
 @CrossOrigin(origins = "*")
 public class LoginController implements ILoginController{
 

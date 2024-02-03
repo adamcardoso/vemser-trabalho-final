@@ -19,17 +19,18 @@ import java.util.Optional;
 public interface IDenunciaController {
 
 
-    @Operation(summary = "Obter denúncia por ID", description = "Esse Método Obtém uma denúncia pelo ID")
+    @Operation(summary = "Obter denúncia por ID", description = "Esse Método Obtém uma denúncia pelo ID, Retorna o Usuario e Os Comentários.")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Retorna a denúncia",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = DenunciaDTO.class))),
-                    @ApiResponse(responseCode = "401", description = "message: Denúncia não encontrada com o ID fornecido.",
+                    @ApiResponse(responseCode = "400", description = "Denúncia não encontrada com o ID fornecido.",
                             content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<Denuncia> obterDenunciaById(@PathVariable("id") Integer id) throws Exception;
+    public ResponseEntity<DenunciaDTO> obterDenunciaById(@PathVariable("id") Integer id) throws Exception;
+
 
     @Operation(summary = "Listar denúncias por ID de usuário", description = "Esse Método Lista denúncias por ID de usuário")
     @ApiResponses(
@@ -49,6 +50,8 @@ public interface IDenunciaController {
                     @ApiResponse(responseCode = "201", description = "Denúncia criada com sucesso",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = DenunciaCreateDTO.class))),
                     @ApiResponse(responseCode = "400", description = "message: ID Usuário desconhecido.",
+                            content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class))),
+                    @ApiResponse(responseCode = "400", description = "errors: titulo: A Denúncia precisa ter um Título!",
                             content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
             }
     )
@@ -63,6 +66,8 @@ public interface IDenunciaController {
                     @ApiResponse(responseCode = "400", description = "message: Denúncia não encontrada com o ID fornecido.",
                             content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class))),
                     @ApiResponse(responseCode = "400 ", description = "message: A denúncia não pertence ao usuário com o ID fornecido.",
+                            content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class))),
+                    @ApiResponse(responseCode = "400", description = "errors: titulo: A Denúncia precisa ter um Título!",
                             content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
             }
     )
