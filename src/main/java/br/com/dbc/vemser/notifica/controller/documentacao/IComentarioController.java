@@ -3,7 +3,6 @@ package br.com.dbc.vemser.notifica.controller.documentacao;
 import br.com.dbc.vemser.notifica.dto.comentario.ComentarioDTO;
 import br.com.dbc.vemser.notifica.dto.comentario.ComentarioCreateDTO;
 import br.com.dbc.vemser.notifica.dto.comentario.ComentarioUpdateDTO;
-import br.com.dbc.vemser.notifica.exceptions.Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

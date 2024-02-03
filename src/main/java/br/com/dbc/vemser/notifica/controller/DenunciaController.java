@@ -5,24 +5,28 @@ import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaCreateDTO;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
 import br.com.dbc.vemser.notifica.entity.Denuncia;
 import br.com.dbc.vemser.notifica.service.DenunciaService;
+import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Denúncia Controller")
 @RequestMapping("/denuncia")
 public class DenunciaController implements IDenunciaController{
 
     private final DenunciaService denunciaService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Denuncia> obterDenunciaById(@PathVariable("id") Integer id) throws Exception {
-        Denuncia denunciaDTO = denunciaService.obterDenunciaById(id);
+    public ResponseEntity<DenunciaDTO> obterDenunciaById(@PathVariable("id") Integer id) throws Exception {
+        DenunciaDTO denunciaDTO = denunciaService.obterDenunciaById(id);
         return ResponseEntity.ok(denunciaDTO);
     }
 

@@ -5,9 +5,7 @@ import br.com.dbc.vemser.notifica.entity.enums.Etnia;
 import br.com.dbc.vemser.notifica.entity.enums.Genero;
 import br.com.dbc.vemser.notifica.entity.enums.TipoUsuario;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -15,7 +13,8 @@ import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity(name = "USUARIO")
 public class Usuario {
     @Id

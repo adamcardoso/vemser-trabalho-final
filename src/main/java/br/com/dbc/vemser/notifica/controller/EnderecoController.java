@@ -5,6 +5,7 @@ import br.com.dbc.vemser.notifica.dto.endereco.EnderecoCreateDTO;
 import br.com.dbc.vemser.notifica.dto.endereco.EnderecoDTO;
 import br.com.dbc.vemser.notifica.dto.endereco.EnderecoUpdateDTO;
 import br.com.dbc.vemser.notifica.service.EnderecoService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @RestController
+@Tag(name = "Endereço Controller")
 @RequestMapping("/endereco")
 public class EnderecoController implements IEnderecoController {
     private final EnderecoService enderecoService;
