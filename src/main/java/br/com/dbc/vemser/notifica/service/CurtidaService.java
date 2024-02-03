@@ -32,7 +32,7 @@ public class CurtidaService implements ICurtidaService {
         if(cuOpt.isPresent())
             this.removerApoio(cuOpt.get().getIdCurtida());
         else
-            this.adicionarApoio(curtidaDto);
+            this.adicionarApoioComentario(curtidaDto);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class CurtidaService implements ICurtidaService {
             this.adicionarApoioDenuncia(curtidaDto);
     }
 
-    private void adicionarApoio(CurtidaDto curtidaDto) throws Exception {
+    private void adicionarApoioComentario(CurtidaDto curtidaDto) throws Exception {
         Usuario u = usuarioRepository.findById(curtidaDto.getIdUsuario()).orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado!"));
         Comentario c = comentarioRepository.findById(curtidaDto.getIdComentario()).orElseThrow(() -> new RegraDeNegocioException("Comentário não encontrado!"));
         curtidaRepository.save(new Curtida(u, c, LocalDateTime.now()));
