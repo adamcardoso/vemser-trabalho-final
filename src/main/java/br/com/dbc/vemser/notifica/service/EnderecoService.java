@@ -42,8 +42,8 @@ public class EnderecoService{
                 .map(this::returnEnderecoDto)
                 .collect(Collectors.toList());
     }
-    public EnderecoDTO adicionarEndereco(EnderecoCreateDTO enderecoDto) throws Exception{
-        Usuario u = usuarioRepository.findById(enderecoDto.getIdUsuario()).orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado!"));
+    public EnderecoDTO adicionarEndereco(Integer idUsuario, EnderecoCreateDTO enderecoDto) throws Exception {
+        Usuario u = usuarioRepository.findById(idUsuario).orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado!"));
         Endereco e = objectMapper.convertValue(enderecoDto, Endereco.class);
         e.setUsuario(u);
 
@@ -51,12 +51,13 @@ public class EnderecoService{
         eDto.setIdUsuario(u.getIdUsuario());
         return eDto;
     }
-    public EnderecoDTO atualizarEndereco(Integer id, EnderecoUpdateDTO enderecoDto) throws Exception {
-        enderecoRepository.findById(id).orElseThrow(() -> new RegraDeNegocioException("Endereço não encontrado!"));
 
-        Usuario u = usuarioRepository.findById(enderecoDto.getIdUsuario()).orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado!"));
+    public EnderecoDTO atualizarEndereco(Integer idEndereco, Integer idUsuario, EnderecoUpdateDTO enderecoDto) throws Exception {
+        enderecoRepository.findById(idEndereco).orElseThrow(() -> new RegraDeNegocioException("Endereço não encontrado!"));
+
+        Usuario u = usuarioRepository.findById(idUsuario).orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado!"));
         Endereco e = objectMapper.convertValue(enderecoDto, Endereco.class);
-        e.setIdEndereco(id);
+        e.setIdEndereco(idEndereco);
         e.setUsuario(u);
 
         EnderecoDTO eDto = objectMapper.convertValue(enderecoRepository.save(cepRequest(e)), EnderecoDTO.class);
@@ -74,22 +75,28 @@ public class EnderecoService{
         return enderecoDTO;
     }
 
-    private Endereco cepRequest(Endereco endereco){
+    private Endereco cepRequest(Endereco endereco) throws RegraDeNegocioException {
         RestTemplate restTemplate = new RestTemplate();
 
         String apiUrl = """
-                https://viacep.com.br/ws/%s/json/
-                """.formatted(endereco.getCep());
-        ResponseEntity<String> response = restTemplate.getForEntity(apiUrl, String.class);
+            https://viacep.com.br/ws/%s/json/
+            """.formatted(endereco.getCep());
 
-        String[] jason = Objects.requireNonNull(response.getBody()).replace("[{}\\\"]", "").split(",");
+        try {
+            ResponseEntity<String> response = restTemplate.getForEntity(apiUrl, String.class);
 
-        List<String> el = new ArrayList<>();
-        for(String item: jason)
-            el.add(item.replace("\\", "").split(": ")[1]);
+            String[] jason = Objects.requireNonNull(response.getBody()).replace("[{}\\\"]", "").split(",");
 
-        return new Endereco(endereco.getIdEndereco(), endereco.getTipoEndereco(), el.get(1).replace("\"", ""),
-                endereco.getNumero(), endereco.getComplemento(), endereco.getCep(), el.get(4).replace("\"", ""),
-                el.get(5).replace("\"", ""), endereco.getPais(), endereco.getUsuario());
+            List<String> el = new ArrayList<>();
+            for (String item : jason)
+                el.add(item.replace("\\", "").split(": ")[1]);
+
+            return new Endereco(endereco.getIdEndereco(), endereco.getTipoEndereco(), el.get(1).replace("\"", ""),
+                    endereco.getNumero(), endereco.getComplemento(), endereco.getCep(), el.get(4).replace("\"", ""),
+                    el.get(5).replace("\"", ""), endereco.getPais(), endereco.getUsuario());
+        } catch (Exception e) {
+            throw new RegraDeNegocioException("CEP Inválido!");
+        }
     }
+
 }
