@@ -47,6 +47,7 @@ public class Denuncia {
     @Enumerated(EnumType.ORDINAL)
     private TipoDenuncia tipoDenuncia;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     private Usuario usuario;
@@ -54,7 +55,6 @@ public class Denuncia {
     @Formula("id_usuario")
     private Integer idUsuario;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "denuncia", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comentario> comentarios;
 
