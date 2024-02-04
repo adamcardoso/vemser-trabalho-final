@@ -19,7 +19,7 @@ public interface ILoginController {
             value = {
                     @ApiResponse(responseCode = "200", description = "Retorna os Dados do usuário que Logou.",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioCreateDTO.class))),
-                    @ApiResponse(responseCode = "401", description = "message: Credenciais inválidas, Usuário ou Senha Incorretos!",
+                    @ApiResponse(responseCode = "400", description = "message: Credenciais inválidas, Usuário ou Senha Incorretos!",
                             content = @Content(schema = @Schema(hidden = false, implementation = ErrorResponse.class))),
             }
 

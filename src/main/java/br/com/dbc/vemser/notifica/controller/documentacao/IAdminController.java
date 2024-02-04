@@ -4,7 +4,10 @@ import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioCreateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioUpdateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
+import br.com.dbc.vemser.notifica.exceptions.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +21,8 @@ public interface IAdminController {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Retorna os usuários"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+                    @ApiResponse(responseCode = "400", description = "Usuario não encontrado!",
+                    content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
             }
     )
     @GetMapping("/list-usuario")
@@ -28,7 +32,6 @@ public interface IAdminController {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Retorna os usuários"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
     @GetMapping("/list-admin")
@@ -37,9 +40,9 @@ public interface IAdminController {
     @Operation(summary = "Obter usuário por ID", description = "Obtém um usuário pelo ID")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna o usuário"),
-                    @ApiResponse(responseCode = "400", description = "Usuário não encontrado"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+                    @ApiResponse(responseCode = "200", description = "Retorna os usuários"),
+                    @ApiResponse(responseCode = "400", description = "Usuario não encontrado!",
+                            content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class))),
             }
     )
     @GetMapping("/{idUsuario}")
@@ -50,8 +53,8 @@ public interface IAdminController {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Usuário criado com sucesso"),
-                    @ApiResponse(responseCode = "400", description = "Object: não deve ser nulo"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+                    @ApiResponse(responseCode = "400", description = "Object: não deve ser nulo",
+                            content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class))),
             }
     )
     @PostMapping
@@ -60,9 +63,9 @@ public interface IAdminController {
     @Operation(summary = "Atualizar Admin", description = "Atualiza um Admin pelo ID")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna o usuário atualizado"),
-                    @ApiResponse(responseCode = "400", description = "Object: não deve ser nulo"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+                    @ApiResponse(responseCode = "200", description = "Usuário removido com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Usuário não encontrado",
+                            content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class))),
             }
     )
     @PutMapping("/{idUsuario}")
@@ -72,8 +75,8 @@ public interface IAdminController {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Usuário removido com sucesso"),
-                    @ApiResponse(responseCode = "400", description = "Usuário não encontrado"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+                    @ApiResponse(responseCode = "400", description = "Usuário não encontrado",
+                            content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
             }
     )
     @DeleteMapping("/{idUsuario}")
@@ -83,7 +86,8 @@ public interface IAdminController {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Usuário removido com sucesso"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+                    @ApiResponse(responseCode = "400", description = "Usuário não encontrado",
+                            content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
             }
     )
     @DeleteMapping("/{idUsuario}")
@@ -93,8 +97,8 @@ public interface IAdminController {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "denuncia removido com sucesso"),
-                    @ApiResponse(responseCode = "400", description = "denuncia não encontrado"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+                    @ApiResponse(responseCode = "400", description = "Denuncia não encontrado!",
+                            content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
             }
     )
     @DeleteMapping("/{idDenuncia}")
@@ -103,9 +107,9 @@ public interface IAdminController {
     @Operation(summary = "Lista denuncia", description = "Lista denuncia por id")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Usuário removido com sucesso"),
-                    @ApiResponse(responseCode = "400", description = "Usuário não encontrado"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+                    @ApiResponse(responseCode = "200", description = "denuncia removido com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Denuncia não encontrado!",
+                            content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
             }
     )
     @GetMapping("/{idDenuncia}")
