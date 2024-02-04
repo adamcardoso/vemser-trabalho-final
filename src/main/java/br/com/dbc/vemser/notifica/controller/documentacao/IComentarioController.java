@@ -3,7 +3,10 @@ package br.com.dbc.vemser.notifica.controller.documentacao;
 import br.com.dbc.vemser.notifica.dto.comentario.ComentarioDTO;
 import br.com.dbc.vemser.notifica.dto.comentario.ComentarioCreateDTO;
 import br.com.dbc.vemser.notifica.dto.comentario.ComentarioUpdateDTO;
+import br.com.dbc.vemser.notifica.exceptions.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +21,8 @@ public interface IComentarioController {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Retorna o comentário"),
-                    @ApiResponse(responseCode = "404", description = "Comentário não encontrado"),
-                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+                    @ApiResponse(responseCode = "400", description = "Comentário não encontrado",
+                            content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
             }
     )
     @GetMapping("/{id}")
@@ -30,9 +32,8 @@ public interface IComentarioController {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Retorna a lista de comentários filtrada por ID de denúncia"),
-                    @ApiResponse(responseCode = "404", description = "Denúncia não encontrada"),
-                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+                    @ApiResponse(responseCode = "400", description = "Denúncia não encontrada",
+                            content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
             }
     )
     @GetMapping("/{id}/denuncia")

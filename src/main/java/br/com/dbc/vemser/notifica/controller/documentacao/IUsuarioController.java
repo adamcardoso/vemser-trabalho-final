@@ -21,22 +21,18 @@ public interface IUsuarioController {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Retorna o usuário"),
-                    @ApiResponse(responseCode = "400", description = "Usuário não encontrado"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+                    @ApiResponse(responseCode = "400", description = "Usuário não encontrado",
+                            content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
             }
     )
     @GetMapping("/{idUsuario}")
     public ResponseEntity<UsuarioDTO> obterUsuarioById(@PathVariable("idUsuario") Integer idUsuario) throws Exception;
 
-
     @Operation(summary = "Criar usuário", description = "Cria um novo usuário")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna a o Usuário criado!",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = DenunciaCreateDTO.class))),
-                    @ApiResponse(responseCode = "500 ", description = "Internal Server Error",
-                            content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class))),
-                    @ApiResponse(responseCode = "400 ", description = "message: Object: não deve ser nulo",
+                    @ApiResponse(responseCode = "200", description = "Retorna a o Usuário criado!"),
+                    @ApiResponse(responseCode = "400 ", description = "Object: não deve ser nulo",
                             content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
 
             }
@@ -48,9 +44,7 @@ public interface IUsuarioController {
             value = {
                     @ApiResponse(responseCode = "200", description = "Retorna a o Usuário criado!",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = DenunciaCreateDTO.class))),
-                    @ApiResponse(responseCode = "500 ", description = "Internal Server Error",
-                            content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class))),
-                    @ApiResponse(responseCode = "400 ", description = "message: Object: não deve ser nulo",
+                    @ApiResponse(responseCode = "400 ", description = "Object: não deve ser nulo",
                             content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
             }
     )
@@ -60,8 +54,8 @@ public interface IUsuarioController {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Usuário removido com sucesso"),
-                    @ApiResponse(responseCode = "400", description = "Usuário não encontrado"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+                    @ApiResponse(responseCode = "400", description = "Usuário não encontrado",
+                            content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
             }
     )
     @DeleteMapping("/{idUsuario}")
