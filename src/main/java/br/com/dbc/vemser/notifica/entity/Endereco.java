@@ -13,8 +13,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Setter
 @Getter
-@Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Entity(name = "ENDERECO")
 public class Endereco {
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="endereco_sequence")

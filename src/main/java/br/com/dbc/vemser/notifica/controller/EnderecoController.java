@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @Tag(name = "Endereço Controller")
 @RequestMapping("/endereco")
-public class EnderecoController implements IEnderecoController {
+public class EnderecoController  {
     private final EnderecoService enderecoService;
     @GetMapping("/{id}")
     public ResponseEntity<EnderecoDTO>  obterEnderecoById(@PathVariable("id") Integer id) throws Exception {
@@ -30,15 +30,15 @@ public class EnderecoController implements IEnderecoController {
         return new ResponseEntity<>(enderecoService.obterEnderecosByIdUsuario(id), HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<EnderecoDTO> adicionarEndereco(@Valid @RequestBody EnderecoCreateDTO enderecoDto) throws Exception {
-        return new ResponseEntity<>(enderecoService.adicionarEndereco(enderecoDto), HttpStatus.CREATED);
+    @PostMapping("/{idUsuario}")
+    public ResponseEntity<EnderecoDTO> adicionarEndereco(@PathVariable("idUsuario") Integer idUsuario,
+                                                         @Valid @RequestBody EnderecoCreateDTO enderecoDto) throws Exception {
+        return new ResponseEntity<>(enderecoService.adicionarEndereco(idUsuario, enderecoDto), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<EnderecoDTO> atualizarEndereco(@PathVariable("id") Integer id,
-                                                         @Valid @RequestBody EnderecoUpdateDTO enderecoDto) throws Exception {
-        return new ResponseEntity<>(enderecoService.atualizarEndereco(id, enderecoDto), HttpStatus.OK);
+    @PutMapping("/{idUsuario}/{idEndereco}")
+    public ResponseEntity<EnderecoDTO> atualizarEndereco(@PathVariable("idEndereco") Integer idEndereco, @PathVariable("idUsuario") Integer idUsuario, @Valid @RequestBody EnderecoUpdateDTO enderecoDto) throws Exception {
+        return new ResponseEntity<>(enderecoService.atualizarEndereco(idEndereco, idUsuario, enderecoDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
