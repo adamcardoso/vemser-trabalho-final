@@ -2,6 +2,7 @@ package br.com.dbc.vemser.notifica.service;
 
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaCreateDTO;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
+import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import br.com.dbc.vemser.notifica.entity.Denuncia;
 import br.com.dbc.vemser.notifica.entity.Usuario;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
@@ -34,6 +35,17 @@ public class DenunciaService {
                 .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado com ID: " + idUsuario));
         return usuario;
     }
+    public DenunciaDTO retornarDTO(Denuncia entity) {
+        DenunciaDTO dto = objectMapper.convertValue(entity, DenunciaDTO.class);
+
+        // Verifica se o tipo de denúncia é "ANONIMA" antes de converter o usuário
+        if (entity.getTipoDenuncia().getIdTipoDenuncia() == 0) {
+            dto.setUsuario(objectMapper.convertValue(entity.getUsuario(), UsuarioDTO.class));
+        }
+
+        return dto;
+    }
+
 
     public List<DenunciaDTO> listByIdUsuario(Integer idUsuario) throws Exception {
         List<Denuncia> denuncias = denunciaRepository.findAllByUsuario_IdUsuario(idUsuario);
@@ -48,10 +60,7 @@ public class DenunciaService {
     public DenunciaDTO criarDenuncia(DenunciaCreateDTO denunciaCreateDTO, Integer idUsuario) throws Exception {
         Usuario usuario = ObterUsuarioById(idUsuario);
 
-        Denuncia denuncia = converterCreateDTO(denunciaCreateDTO);
-
-        denuncia.setUsuario(objectMapper.convertValue(usuario, Usuario.class));
-
+        Denuncia denuncia = converterCreateDTO(denunciaCreateDTO, usuario);
         denuncia.setDataHora(LocalDateTime.now());
         denuncia.setIdUsuario(idUsuario);
 
@@ -61,14 +70,19 @@ public class DenunciaService {
         return retornarDTO(d);
     }
 
+
     public DenunciaDTO editarDenuncia(DenunciaCreateDTO denunciaCreateDTO, Integer idDenuncia, Integer idUsuario) throws Exception {
         Usuario usuario = ObterUsuarioById(idUsuario);
 
         Denuncia denuncia = objectMapper.convertValue(obterDenunciaById(idDenuncia), Denuncia.class);
 
-        if (!denuncia.getUsuario().equals(usuario)) {
+        if ((denuncia.getIdUsuario() != idUsuario && denuncia.getIdUsuario() != null) ||
+                (denuncia.getUsuario() != null && denuncia.getUsuario().equals(usuario))) {
             throw new RegraDeNegocioException("Usuário não tem permissão para editar esta denúncia.");
         }
+
+        denuncia.setIdUsuario(idUsuario);
+        denuncia.setUsuario(usuario);
 
         denuncia.setDescricao(denunciaCreateDTO.getDescricao());
         denuncia.setTitulo(denunciaCreateDTO.getTitulo());
@@ -84,7 +98,7 @@ public class DenunciaService {
 
         Denuncia denuncia = objectMapper.convertValue(obterDenunciaById(idDenuncia), Denuncia.class);
 
-        if (!denuncia.getUsuario().equals(usuario)) {
+        if (denuncia.getIdUsuario() != idUsuario) {
             throw new RegraDeNegocioException("Usuário não tem permissão para excluir esta denúncia.");
         }
 
@@ -96,9 +110,12 @@ public class DenunciaService {
     public Denuncia converterDTO(DenunciaDTO dto) {
         return objectMapper.convertValue(dto, Denuncia.class);
     }
-    public DenunciaDTO retornarDTO(Denuncia entity) {
-        return objectMapper.convertValue(entity, DenunciaDTO.class);
+
+    public Denuncia converterCreateDTO(DenunciaCreateDTO createDTO, Usuario usuario) {
+        Denuncia denuncia = objectMapper.convertValue(createDTO, Denuncia.class);
+        denuncia.setUsuario(usuario);
+        return denuncia;
     }
-    public Denuncia converterCreateDTO(DenunciaCreateDTO createDTO) {return objectMapper.convertValue(createDTO, Denuncia.class);}
+
 
 }

@@ -2,6 +2,7 @@ package br.com.dbc.vemser.notifica.dto.denuncia;
 
 import br.com.dbc.vemser.notifica.dto.comentario.ComentarioDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
+import br.com.dbc.vemser.notifica.entity.Curtida;
 import br.com.dbc.vemser.notifica.entity.Localizacao;
 import br.com.dbc.vemser.notifica.entity.enums.Categoria;
 import br.com.dbc.vemser.notifica.entity.enums.StatusDenuncia;
@@ -22,17 +23,20 @@ public class DenunciaDTO {
         private String titulo;
         private LocalDateTime dataHora;
         private StatusDenuncia statusDenuncia;
-        private Integer curtidas;
+        private List<Curtida> curtidas;
         private Categoria categoria;
         @JsonInclude(JsonInclude.Include.NON_NULL)
         private List<ComentarioDTO> comentarios;
         private TipoDenuncia tipoDenuncia;
-
+        @JsonInclude(JsonInclude.Include.NON_NULL)
         private UsuarioDTO usuario;
-
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        private Integer idUsuario;
+        @JsonInclude(JsonInclude.Include.NON_NULL)
         private Localizacao localizacao;
 
-        public DenunciaDTO(Integer idDenuncia, String descricao, String titulo, LocalDateTime dataHora, StatusDenuncia statusDenuncia, Integer curtidas, Categoria categoria, List<ComentarioDTO> comentarios, TipoDenuncia tipoDenuncia, UsuarioDTO usuario, Localizacao localizacao) {
+
+        public DenunciaDTO(Integer idDenuncia, String descricao, String titulo, LocalDateTime dataHora, StatusDenuncia statusDenuncia, List<Curtida> curtidas, Categoria categoria, List<ComentarioDTO> comentarios, TipoDenuncia tipoDenuncia, UsuarioDTO usuario, Integer idUsuario, Localizacao localizacao) {
                 this.idDenuncia = idDenuncia;
                 this.descricao = descricao;
                 this.titulo = titulo;
@@ -43,12 +47,12 @@ public class DenunciaDTO {
                 this.comentarios = comentarios;
                 this.tipoDenuncia = tipoDenuncia;
                 this.usuario = usuario;
-
-                if (curtidas == null){
-                        this.curtidas = 0;
+                this.idUsuario = null;
+                if(tipoDenuncia.getIdTipoDenuncia() == 0){
+                        this.usuario = null;
+                        this.idUsuario = idUsuario;
                 }
 
                 this.localizacao = localizacao;
         }
-
 }

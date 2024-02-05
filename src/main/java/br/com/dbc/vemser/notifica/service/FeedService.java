@@ -26,7 +26,7 @@ public class FeedService {
     public Page<FeedDenunciasDto> listarTodasDenuncias(Pageable pageable) throws Exception {
         return denunciaRepository.findAll(pageable).map(d ->
                 new FeedDenunciasDto(d.getIdDenuncia(), d.getDescricao(), d.getTitulo(), d.getDataHora(),
-                        d.getStatusDenuncia(), d.getCategoria(), d.getTipoDenuncia(), d.getCurtidas().size(), d.getUsuario(), d.getLocalizacao()));
+                        d.getStatusDenuncia(), d.getCategoria(), d.getTipoDenuncia(), d.getCurtidas().size(), d.getUsuario(), d.getIdUsuario(), d.getLocalizacao()));
     }
     public DenunciaDTO retornarDTO(Denuncia entity) {
         return objectMapper.convertValue(entity, DenunciaDTO.class);

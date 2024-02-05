@@ -42,9 +42,6 @@ public class DenunciaCreateDTO {
     @Schema(description = "Tipo da Denúncia", example = "ANONIMA", allowableValues = {"PUBLICA", "ANONIMA"})
     private TipoDenuncia tipoDenuncia;
 
-    @Schema(description = "ID do Usuário que fez a Denúncia", example = "1")
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    @Schema(description = "Usuário que fez a Denúncia", example = "1")
     private UsuarioDTO usuario;
 }
