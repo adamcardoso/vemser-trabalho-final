@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -32,12 +33,12 @@ public class ComentarioController implements IComentarioController {
     }
 
     @PostMapping
-    public ResponseEntity<ComentarioDTO> adicionarComentario(@RequestBody ComentarioCreateDTO comentarioDto) throws Exception{
+    public ResponseEntity<ComentarioDTO> adicionarComentario(@Valid @RequestBody ComentarioCreateDTO comentarioDto){
         return new ResponseEntity<>(comentarioService.criarComentario(comentarioDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ComentarioDTO> atualizarComentario(@PathVariable("id") Integer id, @RequestBody ComentarioUpdateDTO comentarioDto) throws Exception{
+    public ResponseEntity<ComentarioDTO> atualizarComentario(@PathVariable("id") Integer id, @Valid @RequestBody ComentarioUpdateDTO comentarioDto) throws Exception{
         return new ResponseEntity<>(comentarioService.editarComentario(id, comentarioDto), HttpStatus.OK);
     }
 

@@ -60,6 +60,12 @@ public class AdminController implements IAdminController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/denuncia/{idDenuncia}")
+    public ResponseEntity<DenunciaDTO> obterDenunciaById(@PathVariable("idDenuncia") Integer idDenuncia) throws Exception {
+        DenunciaDTO denunciaDTO = usuarioAdminService.denunciaById(idDenuncia);
+        return ResponseEntity.ok(denunciaDTO);
+    }
+
     @GetMapping("/list-denuncias")
     public ResponseEntity<List<DenunciaDTO>> listarTodasDenuncias() throws Exception {
         List<DenunciaDTO> denunciaDTOS = usuarioAdminService.listarTodasDenuncias() ;
@@ -70,11 +76,5 @@ public class AdminController implements IAdminController {
     public ResponseEntity<Object> deletarDenuncia(@PathVariable Integer idDenuncia) throws Exception {
         usuarioAdminService.deletarDenuncia(idDenuncia);
         return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/denuncia/{idDenuncia}")
-    public ResponseEntity<DenunciaDTO> obterDenunciaById(@PathVariable("idDenuncia") Integer idDenuncia) throws Exception {
-        DenunciaDTO denunciaDTO = usuarioAdminService.denunciaById(idDenuncia);
-        return ResponseEntity.ok(denunciaDTO);
     }
 }
