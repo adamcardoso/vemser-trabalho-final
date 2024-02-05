@@ -1,10 +1,10 @@
 package br.com.dbc.vemser.notifica.entity.enums;
 
 public enum Categoria {
-    AGUA_POTAVEL(1),
-    SANEAMENTO_BASICO(2),
-    GESTAO_RESIDUOS(3),
-    EDUCACAO_HIGIENE(4);
+    AGUA_POTAVEL(0),
+    SANEAMENTO_BASICO(1),
+    GESTAO_RESIDUOS(2),
+    EDUCACAO_HIGIENE(3);
 
     private final Integer valor;
 

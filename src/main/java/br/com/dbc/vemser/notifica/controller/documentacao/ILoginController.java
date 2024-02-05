@@ -3,6 +3,7 @@ package br.com.dbc.vemser.notifica.controller.documentacao;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioCreateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioLoginDTO;
 import br.com.dbc.vemser.notifica.exceptions.ErrorResponse;
+import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,12 +19,12 @@ public interface ILoginController {
             value = {
                     @ApiResponse(responseCode = "200", description = "Retorna os Dados do usuário que Logou.",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioCreateDTO.class))),
-                    @ApiResponse(responseCode = "401", description = "message: Credenciais inválidas, Usuário ou Senha Incorretos!",
+                    @ApiResponse(responseCode = "400", description = "message: Credenciais inválidas, Usuário ou Senha Incorretos!",
                             content = @Content(schema = @Schema(hidden = false, implementation = ErrorResponse.class))),
             }
 
     )
     @PostMapping
-    public ResponseEntity<Object> login(@RequestBody UsuarioLoginDTO usuarioLoginDTO);
+    public ResponseEntity<Object> login(@RequestBody UsuarioLoginDTO usuarioLoginDTO) throws RegraDeNegocioException;
 }
 

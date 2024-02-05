@@ -3,7 +3,12 @@ package br.com.dbc.vemser.notifica.controller;
 import br.com.dbc.vemser.notifica.controller.documentacao.IDenunciaController;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaCreateDTO;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
+import br.com.dbc.vemser.notifica.entity.Denuncia;
 import br.com.dbc.vemser.notifica.service.DenunciaService;
+import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,16 +18,11 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Denúncia Controller")
 @RequestMapping("/denuncia")
-public class DenunciaController implements IDenunciaController {
+public class DenunciaController implements IDenunciaController{
 
     private final DenunciaService denunciaService;
-
-    @GetMapping
-    public ResponseEntity<List<DenunciaDTO>> listarTodasDenuncias() throws Exception {
-        List<DenunciaDTO> denunciaDTOS = denunciaService.listarTodasDenuncias();
-        return ResponseEntity.ok(denunciaDTOS);
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<DenunciaDTO> obterDenunciaById(@PathVariable("id") Integer id) throws Exception {
@@ -51,6 +51,6 @@ public class DenunciaController implements IDenunciaController {
     @DeleteMapping("/{idDenuncia}/{idUsuario}")
     public ResponseEntity<Object> deletarDenuncia(@PathVariable("idDenuncia") Integer idDenuncia, @PathVariable("idUsuario") Integer idUsuario) throws Exception {
         String deleted = denunciaService.deletarDenuncia(idDenuncia, idUsuario);
-        return ResponseEntity.ok(deleted);
+        return ResponseEntity.noContent().build();
     }
 }

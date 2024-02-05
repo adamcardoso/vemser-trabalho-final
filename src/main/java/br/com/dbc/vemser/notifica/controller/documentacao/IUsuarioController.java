@@ -21,48 +21,41 @@ public interface IUsuarioController {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Retorna o usuário"),
-                    @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
-                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+                    @ApiResponse(responseCode = "400", description = "Usuário não encontrado",
+                            content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
             }
     )
     @GetMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDTO> obterUsuarioById(@PathVariable("idUsuario") Integer idUsuario)throws Exception;
-
+    public ResponseEntity<UsuarioDTO> obterUsuarioById(@PathVariable("idUsuario") Integer idUsuario) throws Exception;
 
     @Operation(summary = "Criar usuário", description = "Cria um novo usuário")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna a o Usuário criado!",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = DenunciaCreateDTO.class))),
-                    @ApiResponse(responseCode = "400", description = "message: Celular já Cadastrado!",
-                            content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class))),
-                    @ApiResponse(responseCode = "400 ", description = "message: E-mail já Cadastrado!",
+                    @ApiResponse(responseCode = "200", description = "Retorna a o Usuário criado!"),
+                    @ApiResponse(responseCode = "400 ", description = "Object: não deve ser nulo",
                             content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
+
             }
     )
     @PostMapping
-    public ResponseEntity<UsuarioDTO> criarUsuario(@Valid @RequestBody UsuarioCreateDTO novoUsuario)throws Exception;
-
+    public ResponseEntity<UsuarioDTO> criarUsuario(@Valid @RequestBody UsuarioCreateDTO novoUsuario) throws Exception;
     @Operation(summary = "Atualizar usuário", description = "Atualiza um usuário pelo ID")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna o usuário atualizado"),
-                    @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
-                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+                    @ApiResponse(responseCode = "200", description = "Retorna a o Usuário criado!",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = DenunciaCreateDTO.class))),
+                    @ApiResponse(responseCode = "400 ", description = "Object: não deve ser nulo",
+                            content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
             }
     )
     @PutMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDTO> atualizarUsuario(@PathVariable("idUsuario") Integer idUsuario, @Valid @RequestBody UsuarioUpdateDTO novoUsuario)throws Exception;
-
+    public ResponseEntity<UsuarioDTO> atualizarUsuario(@PathVariable("idUsuario") Integer idUsuario,@RequestBody UsuarioUpdateDTO novoUsuario) throws Exception;
     @Operation(summary = "Remover usuário", description = "Remove um usuário pelo ID")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Usuário removido com sucesso"),
-                    @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
-                    @ApiResponse(responseCode = "400", description = "Requisição inválida"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+                    @ApiResponse(responseCode = "400", description = "Usuário não encontrado",
+                            content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
             }
     )
     @DeleteMapping("/{idUsuario}")

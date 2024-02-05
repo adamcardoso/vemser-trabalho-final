@@ -61,17 +61,17 @@ public class EmailService {
     }
 
     private String obterConteudoDoTemplate(String template, String nomePessoa, Integer idDenuncia) throws IOException, TemplateException, SQLException {
-        Denuncia denuncia = denunciaRepository.obterDenunciaById(idDenuncia);
+        Optional<Denuncia> denuncia = denunciaRepository.findById(idDenuncia);
 
         Map<String, Object> dados = new HashMap<>();
         dados.put("nome", nomePessoa);
 
         if (denuncia != null) {
-            dados.put("status", denuncia.getStatusDenuncia());
-            dados.put("categoria", denuncia.getCategoria());
-            dados.put("descricao", denuncia.getDescricao());
-            dados.put("titulo", denuncia.getTitulo());
-            dados.put("tipo_denuncia", denuncia.getTipoDenuncia());
+//            dados.put("status", denuncia.get());
+//            dados.put("categoria", denuncia.getCategoria());
+//            dados.put("descricao", denuncia.getDescricao());
+//            dados.put("titulo", denuncia.getTitulo());
+//            dados.put("tipo_denuncia", denuncia.getTipoDenuncia());
         }
         Template templateFreemarker = configuracaoFreemarker.getTemplate(template);
         return FreeMarkerTemplateUtils.processTemplateIntoString(templateFreemarker, dados);

@@ -27,7 +27,7 @@ public class EnderecoCreateDTO {
     private String complemento;
 
     @Size(min = 8, max = 8, message = "Cep deve conter 8 dígitos")
-    @Schema(description = "CEP do Endereço", example = "12345678")
+    @Schema(description = "CEP do Endereço", example = "94090320")
     private String cep;
 
     @NotEmpty(message = "País não pode ser nulo")
@@ -35,5 +35,5 @@ public class EnderecoCreateDTO {
     private String pais;
 
     @Schema(description = "ID da Pessoa associada ao Endereço", example = "1")
-    private Integer idPessoa;
+    private Integer idUsuario;
 }
