@@ -30,7 +30,7 @@ public class Comentario {
     @OneToMany(mappedBy = "comentario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Curtida> curtidas;
 
-
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_denuncia", referencedColumnName = "id_denuncia")
     private Denuncia denuncia;
