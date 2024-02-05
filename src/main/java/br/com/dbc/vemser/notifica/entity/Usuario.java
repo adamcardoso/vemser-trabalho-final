@@ -56,13 +56,13 @@ public class Usuario {
 
     @JsonIgnore
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<Endereco> enderecos;
+    private List<Endereco> enderecos;
 
     @JsonIgnore
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<Comentario> comentarios;
+    private List<Denuncia> denuncias;
 
     @JsonIgnore
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<Denuncia> denuncias;
+    private List<Comentario> comentarios;
 }

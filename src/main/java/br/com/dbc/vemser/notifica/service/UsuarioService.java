@@ -1,6 +1,7 @@
 package br.com.dbc.vemser.notifica.service;
 
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioCreateDTO;
+import br.com.dbc.vemser.notifica.dto.usuario.UsuarioRelatorioDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioUpdateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import br.com.dbc.vemser.notifica.entity.Usuario;
@@ -9,6 +10,9 @@ import br.com.dbc.vemser.notifica.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -24,7 +28,13 @@ public class UsuarioService {
         Usuario usuarioCriado = converterDTO(novoUsuario);
         return retornarDTO(usuarioRepository.save(usuarioCriado));
     }
-//
+
+    public List<UsuarioRelatorioDTO> relatorioUsuario(){
+        return usuarioRepository.RelatorioUsuario().stream()
+                .map(usuario -> objectMapper.convertValue(usuario,UsuarioRelatorioDTO.class))
+                .collect(Collectors.toList());
+    }
+
     public UsuarioDTO atualizarUsuario(Integer idUsuario, UsuarioUpdateDTO novoUsuario) throws Exception {
         Usuario usuarioRecuperado = getUsuario(idUsuario);
         usuarioRecuperado.setEmailUsuario(novoUsuario.getEmailUsuario());

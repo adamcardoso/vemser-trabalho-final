@@ -2,6 +2,7 @@ package br.com.dbc.vemser.notifica.service;
 
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaCreateDTO;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
+import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaRelatorioDTO;
 import br.com.dbc.vemser.notifica.entity.Denuncia;
 import br.com.dbc.vemser.notifica.entity.Usuario;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
@@ -42,6 +43,12 @@ public class DenunciaService {
         }
         return denuncias.stream()
                 .map(this::retornarDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<DenunciaRelatorioDTO> denunciaRelatorio(){
+        return denunciaRepository.RelatorioDenuncia().stream()
+                .map(denuncia -> objectMapper.convertValue(denuncia, DenunciaRelatorioDTO.class))
                 .collect(Collectors.toList());
     }
 

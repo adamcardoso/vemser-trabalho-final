@@ -23,6 +23,12 @@ import java.util.List;
 public interface DenunciaRepository extends JpaRepository<Denuncia, Integer> {
 
     List<Denuncia> findAllByUsuario_IdUsuario(Integer idUsuario);
+    @Query(value = """
+                SELECT d FROM DENUNCIA d 
+                LEFT JOIN USUARIO u ON d.idUsuario = u.idUsuario 
+                LEFT JOIN COMENTARIO c ON d.idDenuncia = c.idDenuncia
+                """)
+    List<Denuncia> RelatorioDenuncia();
 
 
 }

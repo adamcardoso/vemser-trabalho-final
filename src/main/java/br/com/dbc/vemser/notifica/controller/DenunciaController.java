@@ -3,6 +3,8 @@ package br.com.dbc.vemser.notifica.controller;
 import br.com.dbc.vemser.notifica.controller.documentacao.IDenunciaController;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaCreateDTO;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
+import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaRelatorioDTO;
+import br.com.dbc.vemser.notifica.dto.usuario.UsuarioRelatorioDTO;
 import br.com.dbc.vemser.notifica.entity.Denuncia;
 import br.com.dbc.vemser.notifica.service.DenunciaService;
 import io.swagger.annotations.Api;
@@ -34,6 +36,11 @@ public class DenunciaController implements IDenunciaController{
     public ResponseEntity<List<DenunciaDTO>> listByIdUsuario(@PathVariable("idUsuario") Integer idUsuario) throws Exception {
         List<DenunciaDTO> denunciaDTOS = denunciaService.listByIdUsuario(idUsuario);
         return ResponseEntity.ok(denunciaDTOS);
+    }
+
+    @GetMapping("/relatorio")
+    public ResponseEntity<List<DenunciaRelatorioDTO>> relatorioDenuncia() throws Exception {
+        return new ResponseEntity<>(denunciaService.denunciaRelatorio(), HttpStatus.OK);
     }
 
     @PostMapping("/{idUsuario}")

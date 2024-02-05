@@ -26,6 +26,9 @@ public class Denuncia {
     @Column(name = "id_denuncia")
     private Integer idDenuncia;
 
+    @Column(name = "id_usuario", insertable = false, updatable = false)
+    private Integer idUsuario;
+
     @Column(name = "descricao")
     private String descricao;
 
@@ -51,9 +54,6 @@ public class Denuncia {
     @ManyToOne
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     private Usuario usuario;
-
-    @Formula("id_usuario")
-    private Integer idUsuario;
 
     @OneToMany(mappedBy = "denuncia", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comentario> comentarios;

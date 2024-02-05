@@ -2,6 +2,7 @@ package br.com.dbc.vemser.notifica.controller;
 
 import br.com.dbc.vemser.notifica.controller.documentacao.IUsuarioController;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioCreateDTO;
+import br.com.dbc.vemser.notifica.dto.usuario.UsuarioRelatorioDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioUpdateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import br.com.dbc.vemser.notifica.service.UsuarioService;
@@ -13,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/usuario")
@@ -26,6 +28,11 @@ public class UsuarioController  {
     public ResponseEntity<UsuarioDTO> obterUsuarioById(@PathVariable("idUsuario") Integer idUsuario) throws Exception {
         UsuarioDTO usuario = usuarioService.obterUsuarioById(idUsuario);
         return new ResponseEntity<>(usuario, HttpStatus.OK);
+    }
+
+    @GetMapping("/relatorio")
+    public ResponseEntity<List<UsuarioRelatorioDTO>> usuarioRelatorio() throws Exception {
+        return new ResponseEntity<>(usuarioService.relatorioUsuario(), HttpStatus.OK);
     }
 
     @PostMapping
