@@ -91,9 +91,9 @@ public class EnderecoService{
             for (String item : jason)
                 el.add(item.replace("\\", "").split(": ")[1]);
 
-            return new Endereco(endereco.getIdEndereco(), endereco.getTipoEndereco(), el.get(1).replace("\"", ""),
+            return new Endereco(endereco.getIdEndereco(), endereco.getIdUsuario(), endereco.getTipoEndereco(), el.get(1).replace("\"", ""),
                     endereco.getNumero(), endereco.getComplemento(), endereco.getCep(), el.get(4).replace("\"", ""),
-                    el.get(5).replace("\"", ""), endereco.getPais(), endereco.getUsuario());
+                    el.get(5).replace("\"", ""),  endereco.getPais(), endereco.getUsuario());
         } catch (Exception e) {
             throw new RegraDeNegocioException("CEP Inválido!");
         }

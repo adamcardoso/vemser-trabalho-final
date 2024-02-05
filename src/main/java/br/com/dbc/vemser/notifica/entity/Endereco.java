@@ -22,28 +22,31 @@ public class Endereco {
     @Column(name = "id_endereco")
     private Integer idEndereco;
 
-    @Column
+    @Column(name = "id_usuario", insertable = false, updatable = false)
+    private Integer idUsuario;
+
+    @Column(name = "tipo_endereco")
     private TipoEndereco tipoEndereco;
 
-    @Column
+    @Column(name = "logradouro")
     private String logradouro;
 
-    @Column
+    @Column(name = "numero")
     private Integer numero;
 
-    @Column
+    @Column(name = "complemento")
     private String complemento;
 
-    @Column
+    @Column(name = "cep")
     private String cep;
 
-    @Column
+    @Column(name = "cidade")
     private String cidade;
 
-    @Column
+    @Column(name = "estado")
     private String estado;
 
-    @Column
+    @Column(name = "pais")
     private String pais;
 
     @ManyToOne
