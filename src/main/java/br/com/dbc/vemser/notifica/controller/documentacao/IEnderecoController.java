@@ -71,5 +71,5 @@ public interface IEnderecoController {
             }
     )
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> removerEndereco(@PathVariable("id") Integer id) throws Exception;
+    public ResponseEntity<Void> removerEndereco(@PathVariable("id") Integer id) throws Exception;
 }

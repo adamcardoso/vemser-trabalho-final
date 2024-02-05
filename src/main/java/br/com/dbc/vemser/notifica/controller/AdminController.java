@@ -6,6 +6,7 @@ import br.com.dbc.vemser.notifica.dto.usuario.UsuarioCreateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioUpdateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import br.com.dbc.vemser.notifica.service.UsuarioAdminService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,18 +20,19 @@ import java.util.List;
 @RequestMapping("/admin")
 @Validated
 @AllArgsConstructor
+@Tag(name = "Admin Controller")
 public class AdminController implements IAdminController {
     private final UsuarioAdminService usuarioAdminService;
 
     @GetMapping("/list-usuario")
-    public ResponseEntity<List<UsuarioDTO>> listarUsuarios() throws Exception {
-        List<UsuarioDTO> usuarios = usuarioAdminService.listarUsuarios();
+    public ResponseEntity<List<UsuarioDTO>> listarUsuarios() {
+        List<UsuarioDTO> usuarios = usuarioAdminService.list();
         return new ResponseEntity<>(usuarios, HttpStatus.OK);
     }
 
     @GetMapping("/list-admin")
-    public ResponseEntity<List<UsuarioDTO>> listarAdmins() throws Exception {
-        List<UsuarioDTO> usuarios = usuarioAdminService.listarAdmins();
+    public ResponseEntity<List<UsuarioDTO>> listarAdmins() {
+        List<UsuarioDTO> usuarios = usuarioAdminService.listUsuariosAdmin();
         return new ResponseEntity<>(usuarios, HttpStatus.OK);
     }
 
@@ -42,37 +44,37 @@ public class AdminController implements IAdminController {
 
     @PostMapping
     public ResponseEntity<UsuarioDTO> criarUsuarioAdmin(@Valid @RequestBody UsuarioCreateDTO novoUsuario) throws Exception {
-        UsuarioDTO usuarios = usuarioAdminService.criarUsuarioAdmin(novoUsuario);
+        UsuarioDTO usuarios = usuarioAdminService.criarUsuario(novoUsuario);
         return new ResponseEntity<>(usuarios, HttpStatus.CREATED);
     }
 
     @PutMapping("/{idUsuario}")
     public ResponseEntity<UsuarioDTO> atualizarAdmin(@PathVariable("idUsuario") Integer idUsuario, @Valid @RequestBody UsuarioUpdateDTO novoUsuario) throws Exception {
-        UsuarioDTO usuarios = usuarioAdminService.atualizarAdmin(idUsuario, novoUsuario);
+        UsuarioDTO usuarios = usuarioAdminService.atualizarUsuario(idUsuario, novoUsuario);
         return new ResponseEntity<>(usuarios, HttpStatus.OK);
     }
 
     @DeleteMapping("/usuario/{idUsuario}")
     public ResponseEntity<Object> removerUsuario(@PathVariable("idUsuario") Integer idUsuario) throws Exception {
-        String deleted = usuarioAdminService.removerUsuario(idUsuario);
-        return ResponseEntity.ok(deleted);
+        usuarioAdminService.removerUsuario(idUsuario);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/list-denuncias")
     public ResponseEntity<List<DenunciaDTO>> listarTodasDenuncias() throws Exception {
-        List<DenunciaDTO> denunciaDTOS = usuarioAdminService.listarTodasDenuncias();
+        List<DenunciaDTO> denunciaDTOS = usuarioAdminService.listarTodasDenuncias() ;
         return ResponseEntity.ok(denunciaDTOS);
     }
 
     @DeleteMapping("/denuncia/{idDenuncia}")
     public ResponseEntity<Object> deletarDenuncia(@PathVariable Integer idDenuncia) throws Exception {
-        String deleted = usuarioAdminService.deletarDenuncia(idDenuncia);
-        return ResponseEntity.ok(deleted);
+        usuarioAdminService.deletarDenuncia(idDenuncia);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/denuncia/{idDenuncia}")
     public ResponseEntity<DenunciaDTO> obterDenunciaById(@PathVariable("idDenuncia") Integer idDenuncia) throws Exception {
-        DenunciaDTO denunciaDTO = usuarioAdminService.obterDenunciaById(idDenuncia);
+        DenunciaDTO denunciaDTO = usuarioAdminService.denunciaById(idDenuncia);
         return ResponseEntity.ok(denunciaDTO);
     }
 }

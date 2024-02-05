@@ -14,8 +14,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Data
 public class UsuarioCreateDTO {
-    @Schema(description = "ID do Usuário", example = "1")
-    private Integer idUsuario;
 
     @NotNull
     @NotEmpty

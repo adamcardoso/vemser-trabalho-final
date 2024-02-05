@@ -1,11 +1,11 @@
 package br.com.dbc.vemser.notifica.entity.enums;
 
 public enum StatusDenuncia {
-    ABERTO(1),
-    EM_ANALISE(2),
-    EM_ANDAMENTO(3),
-    RESOLVIDO(4),
-    FECHADO(5);
+    ABERTO(0),
+    EM_ANALISE(1),
+    EM_ANDAMENTO(2),
+    RESOLVIDO(3),
+    FECHADO(4);
 
     private final int valor;
 

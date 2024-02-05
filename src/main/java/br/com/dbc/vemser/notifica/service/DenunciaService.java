@@ -12,85 +12,110 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class DenunciaService {
     private final DenunciaRepository denunciaRepository;
     private final EmailService emailService;
-    private final UsuarioService usuarioService;
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
-
-    public List<DenunciaDTO> listarTodasDenuncias() throws Exception {
-        return denunciaRepository.listarTodasDenuncias();
-    }
-
-    public List<DenunciaDTO> listByIdUsuario(Integer idUsuario) throws Exception {
-        List<Denuncia> denuncias = denunciaRepository.listByIdUsuario(idUsuario);
-        if (!denuncias.isEmpty()) {
-            List<DenunciaDTO> denunciaDTOS = new ArrayList<>();
-            for (Denuncia d : denuncias)
-                denunciaDTOS.add(objectMapper.convertValue(d, DenunciaDTO.class));
-
-            return denunciaDTOS;
-        }
-        throw new RegraDeNegocioException("Nenhuma denúncia encontrada para o usuário com ID fornecido.");
-    }
+    private final LocalizacaoService localizacaoService;
 
     public DenunciaDTO obterDenunciaById(Integer idDenuncia) throws Exception {
-        Denuncia denuncia = denunciaRepository.obterDenunciaById(idDenuncia);
+        Denuncia denuncia = denunciaRepository.findById(idDenuncia)
+                .orElseThrow(() -> new RegraDeNegocioException("Denúncia não encontrada com ID: " + idDenuncia));
+        return objectMapper.convertValue(denuncia, DenunciaDTO.class);
+    }
+    public Usuario ObterUsuarioById(Integer idUsuario) throws RegraDeNegocioException {
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado com ID: " + idUsuario));
+        return usuario;
+    }
+    public DenunciaDTO retornarDTO(Denuncia entity) {
+        DenunciaDTO dto = objectMapper.convertValue(entity, DenunciaDTO.class);
 
-        if (denuncia != null) {
-            return objectMapper.convertValue(denuncia, DenunciaDTO.class);
+        // Verifica se o tipo de denúncia é "ANONIMA" antes de converter o usuário
+        if (entity.getTipoDenuncia().getIdTipoDenuncia() == 0) {
+            dto.setUsuario(objectMapper.convertValue(entity.getUsuario(), UsuarioDTO.class));
         }
 
-        throw new RegraDeNegocioException("Denúncia não encontrada com o ID fornecido.");
+        return dto;
     }
 
-    public DenunciaDTO criarDenuncia(DenunciaCreateDTO denunciaDTO, Integer idUsuario) throws Exception {
-        Usuario usuario = usuarioRepository.obterUsuarioById(idUsuario);
-        if (usuario.getEmailUsuario() != null) {
-                Denuncia d = objectMapper.convertValue(denunciaDTO, Denuncia.class);
-                UsuarioDTO usuarioDTO = usuarioService.obterUsuarioById(idUsuario);
-                DenunciaDTO denuncia = objectMapper.convertValue(denunciaRepository.criarDenuncia(d, idUsuario), DenunciaDTO.class);
-                emailService.enviarEmailCriacaoDenuncia(usuarioDTO.getEmailUsuario(), usuarioDTO.getNomeUsuario(), denuncia.getIdDenuncia());
-            return denuncia;
-        }else {
-            throw new RegraDeNegocioException("ID Usuário desconhecido.");
+
+    public List<DenunciaDTO> listByIdUsuario(Integer idUsuario) throws Exception {
+        List<Denuncia> denuncias = denunciaRepository.findAllByUsuario_IdUsuario(idUsuario);
+        if (denuncias.isEmpty()) {
+            throw new RegraDeNegocioException("Nenhuma denúncia encontrada para o usuário com ID: " + idUsuario);
         }
+        return denuncias.stream()
+                .map(this::retornarDTO)
+                .collect(Collectors.toList());
     }
+
+    public DenunciaDTO criarDenuncia(DenunciaCreateDTO denunciaCreateDTO, Integer idUsuario) throws Exception {
+        Usuario usuario = ObterUsuarioById(idUsuario);
+
+        Denuncia denuncia = converterCreateDTO(denunciaCreateDTO, usuario);
+        denuncia.setDataHora(LocalDateTime.now());
+        denuncia.setIdUsuario(idUsuario);
+
+        Denuncia d = denunciaRepository.save(denuncia);
+        localizacaoService.criarLocalizacao(d);
+
+        return retornarDTO(d);
+    }
+
 
     public DenunciaDTO editarDenuncia(DenunciaCreateDTO denunciaCreateDTO, Integer idDenuncia, Integer idUsuario) throws Exception {
-        Denuncia denuncia = denunciaRepository.obterDenunciaById(idDenuncia);
-        if (denuncia != null) {
-            if (denuncia.getIdUsuario().equals(idUsuario)) {
-                Denuncia d = objectMapper.convertValue(denunciaCreateDTO, Denuncia.class);
-                UsuarioDTO usuario = usuarioService.obterUsuarioById(idUsuario);
-                DenunciaDTO denunciaDTO = objectMapper.convertValue(denunciaRepository.editarDenuncia(idDenuncia, d, idUsuario), DenunciaDTO.class);
+        Usuario usuario = ObterUsuarioById(idUsuario);
 
-                emailService.enviarEmailEdicaoEndereco(usuario.getEmailUsuario(), usuario.getNomeUsuario(), denunciaDTO.getIdDenuncia());
+        Denuncia denuncia = objectMapper.convertValue(obterDenunciaById(idDenuncia), Denuncia.class);
 
-                return denunciaDTO;
-            } else {
-                throw new RegraDeNegocioException("A denúncia não pertence ao usuário com o ID fornecido.");
-            }
-        } else {
-            throw new RegraDeNegocioException("Denúncia não encontrada com o ID fornecido.");
+        if ((denuncia.getIdUsuario() != idUsuario && denuncia.getIdUsuario() != null) ||
+                (denuncia.getUsuario() != null && denuncia.getUsuario().equals(usuario))) {
+            throw new RegraDeNegocioException("Usuário não tem permissão para editar esta denúncia.");
         }
+
+        denuncia.setIdUsuario(idUsuario);
+        denuncia.setUsuario(usuario);
+
+        denuncia.setDescricao(denunciaCreateDTO.getDescricao());
+        denuncia.setTitulo(denunciaCreateDTO.getTitulo());
+        denuncia.setStatusDenuncia(denunciaCreateDTO.getStatusDenuncia());
+        denuncia.setCategoria(denunciaCreateDTO.getCategoria());
+        denuncia.setTipoDenuncia(denunciaCreateDTO.getTipoDenuncia());
+
+        return retornarDTO(denunciaRepository.save(denuncia));
     }
 
-    public String deletarDenuncia(Integer idDenuncia, Integer idUsuario) throws Exception{
-        Usuario usuario = usuarioRepository.obterUsuarioById(idUsuario);
-        if (usuario.getEmailUsuario() != null) {
-            if (denunciaRepository.deletarDenuncia(idDenuncia, idUsuario)) {
-                return "Denúncia Excluída!";
-            }
-            throw new RegraDeNegocioException("Denúncia não encontrada com o ID fornecido.");
-        }else {
-            throw new RegraDeNegocioException("ID Usuário desconhecido.");
+    public String deletarDenuncia(Integer idDenuncia, Integer idUsuario) throws Exception {
+        Usuario usuario = ObterUsuarioById(idUsuario);
+
+        Denuncia denuncia = objectMapper.convertValue(obterDenunciaById(idDenuncia), Denuncia.class);
+
+        if (denuncia.getIdUsuario() != idUsuario) {
+            throw new RegraDeNegocioException("Usuário não tem permissão para excluir esta denúncia.");
         }
+
+        denunciaRepository.deleteById(idDenuncia);
+
+        return "Denúncia excluída com sucesso.";
     }
+
+    public Denuncia converterDTO(DenunciaDTO dto) {
+        return objectMapper.convertValue(dto, Denuncia.class);
+    }
+
+    public Denuncia converterCreateDTO(DenunciaCreateDTO createDTO, Usuario usuario) {
+        Denuncia denuncia = objectMapper.convertValue(createDTO, Denuncia.class);
+        denuncia.setUsuario(usuario);
+        return denuncia;
+    }
+
+
 }

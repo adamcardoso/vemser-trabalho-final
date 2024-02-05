@@ -1,8 +1,8 @@
 package br.com.dbc.vemser.notifica.entity.enums;
 
 public enum TipoUsuario {
-    ADMIN(1),
-    COMUM(2);
+    ADMIN(0),
+    COMUM(1);
 
     private final int id;
 

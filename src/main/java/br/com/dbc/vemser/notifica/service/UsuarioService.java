@@ -17,32 +17,44 @@ public class UsuarioService {
     private final ObjectMapper objectMapper;
 
     public UsuarioDTO obterUsuarioById(Integer idUsuario) throws Exception {
-        Usuario usuario = usuarioRepository.obterUsuarioById(idUsuario);
-        if(usuario.getEmailUsuario()!=null){
-            return objectMapper.convertValue(usuario, UsuarioDTO.class);
-        }else {
-            throw new RegraDeNegocioException("Usuário não encontrado");
-        }
-
+       return retornarDTO(getUsuario(idUsuario));
     }
 
-    public UsuarioDTO criarUsuario(UsuarioCreateDTO novoUsuario) throws Exception {
-        Usuario novoUsuarioEntity = objectMapper.convertValue(novoUsuario, Usuario.class);
-        Usuario usuarioCriado = usuarioRepository.criarUsuario(novoUsuarioEntity);
-
-        return objectMapper.convertValue(usuarioCriado, UsuarioDTO.class);
+    public UsuarioDTO criarUsuario(UsuarioCreateDTO novoUsuario) {
+        Usuario usuarioCriado = converterDTO(novoUsuario);
+        return retornarDTO(usuarioRepository.save(usuarioCriado));
     }
-
+//
     public UsuarioDTO atualizarUsuario(Integer idUsuario, UsuarioUpdateDTO novoUsuario) throws Exception {
-        //TODO Será verificado se o usuario editado é o mesmo que o usuario logado
-        Usuario novoUsuarioEntity = objectMapper.convertValue(novoUsuario, Usuario.class);
-        Usuario usuarioAtualizado = usuarioRepository.atualizarUsuario(idUsuario, novoUsuarioEntity);
+        Usuario usuarioRecuperado = getUsuario(idUsuario);
+        usuarioRecuperado.setEmailUsuario(novoUsuario.getEmailUsuario());
+        usuarioRecuperado.setEtniaUsuario(novoUsuario.getEtniaUsuario());
+        usuarioRecuperado.setGeneroUsuario(novoUsuario.getGeneroUsuario());
+        usuarioRecuperado.setNomeUsuario(novoUsuario.getNomeUsuario());
+        usuarioRecuperado.setSenhaUsuario(novoUsuario.getSenhaUsuario());
+        usuarioRecuperado.setTipoUsuario(novoUsuario.getTipoUsuario());
+        usuarioRecuperado.setClasseSocial(novoUsuario.getClasseSocial());
+        usuarioRecuperado.setDataNascimento(novoUsuario.getDataNascimento());
+        usuarioRecuperado.setNumeroCelular(novoUsuario.getNumeroCelular());
 
-        return objectMapper.convertValue(usuarioAtualizado, UsuarioDTO.class);
+        return retornarDTO(usuarioRepository.save(usuarioRecuperado));
     }
 
     public void removerUsuario(Integer idUsuario) throws Exception {
-        //TODO Será verificado se o usuario deletado é o mesmo que o usuario logado
-        usuarioRepository.removerUsuario(idUsuario);
+        Usuario usuarioDeletado = getUsuario(idUsuario);
+        usuarioRepository.delete(usuarioDeletado);
+    }
+
+    private Usuario getUsuario(Integer id) throws RegraDeNegocioException {
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado!"));
+    }
+
+    private Usuario converterDTO(UsuarioCreateDTO dto) {
+        return objectMapper.convertValue(dto, Usuario.class);
+    }
+
+    private UsuarioDTO retornarDTO(Usuario entity) {
+        return objectMapper.convertValue(entity, UsuarioDTO.class);
     }
 }

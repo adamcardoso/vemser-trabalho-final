@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.notifica.service;
 
+import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaCreateDTO;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioCreateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioUpdateDTO;
@@ -8,79 +9,101 @@ import br.com.dbc.vemser.notifica.entity.Denuncia;
 import br.com.dbc.vemser.notifica.entity.Usuario;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.repository.AdminRepository;
+import br.com.dbc.vemser.notifica.repository.DenunciaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class UsuarioAdminService {
     private final AdminRepository adminRepository;
+    private final DenunciaRepository denunciaRepository;
     private final ObjectMapper objectMapper;
 
+    public List<UsuarioDTO> list(){
+        return adminRepository.findAll().stream()
+                .map(usuario -> retornarDTO(usuario))
+                .collect(Collectors.toList());
+    }
+
+    public List<UsuarioDTO> listUsuariosAdmin(){
+        return adminRepository.usuariosAdmin().stream()
+                .map(usuario -> retornarDTO(usuario))
+                .collect(Collectors.toList());
+    }
 
     public UsuarioDTO obterUsuarioById(Integer idUsuario) throws Exception {
-        return objectMapper.convertValue(getUsuario(idUsuario), UsuarioDTO.class);
+        return retornarDTO(getUsuario(idUsuario));
     }
 
-    public List<UsuarioDTO> listarUsuarios() throws Exception {
-        List<Usuario> usuarios = adminRepository.listarUsuarios();
-        return objectMapper.convertValue(usuarios, objectMapper.getTypeFactory().constructCollectionType(List.class, UsuarioDTO.class));
+    public UsuarioDTO criarUsuario(UsuarioCreateDTO novoUsuario) {
+        Usuario usuarioCriado = converterDTO(novoUsuario);
+        return retornarDTO(adminRepository.save(usuarioCriado));
+    }
+    //
+    public UsuarioDTO atualizarUsuario(Integer idUsuario, UsuarioUpdateDTO novoUsuario) throws Exception {
+        Usuario usuarioRecuperado = getUsuario(idUsuario);
+        usuarioRecuperado.setEmailUsuario(novoUsuario.getEmailUsuario());
+        usuarioRecuperado.setEtniaUsuario(novoUsuario.getEtniaUsuario());
+        usuarioRecuperado.setGeneroUsuario(novoUsuario.getGeneroUsuario());
+        usuarioRecuperado.setNomeUsuario(novoUsuario.getNomeUsuario());
+        usuarioRecuperado.setSenhaUsuario(novoUsuario.getSenhaUsuario());
+        usuarioRecuperado.setTipoUsuario(novoUsuario.getTipoUsuario());
+        usuarioRecuperado.setClasseSocial(novoUsuario.getClasseSocial());
+        usuarioRecuperado.setDataNascimento(novoUsuario.getDataNascimento());
+        usuarioRecuperado.setNumeroCelular(novoUsuario.getNumeroCelular());
+
+        return retornarDTO(adminRepository.save(usuarioRecuperado));
     }
 
-    public List<UsuarioDTO> listarAdmins() throws Exception {
-        List<Usuario> usuarios = adminRepository.listarAdmins();
-        return objectMapper.convertValue(usuarios, objectMapper.getTypeFactory().constructCollectionType(List.class, UsuarioDTO.class));
+    public void removerUsuario(Integer idUsuario) throws Exception {
+        Usuario usuarioDeletado = getUsuario(idUsuario);
+        adminRepository.delete(usuarioDeletado);
     }
 
-    public UsuarioDTO criarUsuarioAdmin(UsuarioCreateDTO novoUsuario) throws Exception {
-        Usuario novoUsuarioEntity = objectMapper.convertValue(novoUsuario, Usuario.class);
-        Usuario usuarioCriado = adminRepository.criarUsuarioAdmin(novoUsuarioEntity);
-
-        return objectMapper.convertValue(usuarioCriado, UsuarioDTO.class);
+    public List<DenunciaDTO> listarTodasDenuncias(){
+        return denunciaRepository.findAll().stream()
+                .map(denuncia -> retornarDTODenuncia(denuncia))
+                .collect(Collectors.toList());
     }
 
-    public UsuarioDTO atualizarAdmin(Integer idUsuario, UsuarioUpdateDTO novoUsuario) throws Exception {
-        Usuario novoUsuarioEntity = objectMapper.convertValue(novoUsuario, Usuario.class);
-        Usuario usuarioAtualizado = adminRepository.atualizarAdmin(idUsuario, novoUsuarioEntity);
-
-        return objectMapper.convertValue(usuarioAtualizado, UsuarioDTO.class);
+    public DenunciaDTO denunciaById(Integer id) throws RegraDeNegocioException {
+        return retornarDTODenuncia(getUsuarioDenuncia(id));
     }
 
-    public String removerUsuario(Integer idUsuario) throws Exception {
-        if (adminRepository.removerUsuario(idUsuario)) {
-            return "Usuário excluído com sucesso!";
-        }
-        throw new RegraDeNegocioException("Usuário não encontrado com o ID fornecido.");
+    public void deletarDenuncia(Integer id) throws RegraDeNegocioException {
+        Denuncia denunciaDeletada = getUsuarioDenuncia(id);
+        denunciaRepository.delete(denunciaDeletada);
     }
 
-
-    private Usuario getUsuario(Integer id) throws Exception {
-        Usuario usuarioRecuperado = adminRepository.listarUsuarios().stream()
-                .filter(usuario -> usuario.getIdUsuario() == id)
-                .findFirst()
-                .orElseThrow(() -> new RegraDeNegocioException("Pessoa não encontrada!"));
-        return usuarioRecuperado;
+    private Usuario getUsuario(Integer id) throws RegraDeNegocioException {
+        return adminRepository.findById(id)
+                .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado!"));
     }
 
-    public List<DenunciaDTO> listarTodasDenuncias() throws Exception {
-        return adminRepository.listarTodasDenuncias();
+    private Usuario converterDTO(UsuarioCreateDTO dto) {
+        return objectMapper.convertValue(dto, Usuario.class);
     }
 
-    public String deletarDenuncia(Integer idDenuncia) throws Exception{
-        if (adminRepository.deletarDenuncia(idDenuncia)) {
-            return "Denúncia excluído com sucesso!";
-        }
-        throw new RegraDeNegocioException("Denúncia não encontrada com o ID fornecido.");
+    private UsuarioDTO retornarDTO(Usuario entity) {
+        return objectMapper.convertValue(entity, UsuarioDTO.class);
     }
 
-    public DenunciaDTO obterDenunciaById(Integer idDenuncia) throws Exception {
-        Denuncia denuncia = adminRepository.obterDenunciaById(idDenuncia);
-        if (denuncia != null) {
-            return objectMapper.convertValue(denuncia, DenunciaDTO.class);
-        }
-        throw new RegraDeNegocioException("Denúncia não encontrada com o ID fornecido.");
+    private Denuncia getUsuarioDenuncia(Integer id) throws RegraDeNegocioException {
+        return denunciaRepository.findById(id)
+                .orElseThrow(() -> new RegraDeNegocioException("Denuncia não encontrado!"));
     }
+
+    private Denuncia converterDTODenuncia(DenunciaCreateDTO dto) {
+        return objectMapper.convertValue(dto, Denuncia.class);
+    }
+
+    private DenunciaDTO retornarDTODenuncia(Denuncia entity) {
+        return objectMapper.convertValue(entity, DenunciaDTO.class);
+    }
+
 }

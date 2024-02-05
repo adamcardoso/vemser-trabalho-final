@@ -1,47 +1,43 @@
 package br.com.dbc.vemser.notifica.service;
 
 import br.com.dbc.vemser.notifica.dto.estatistica.EstatisticaDTO;
-import br.com.dbc.vemser.notifica.entity.Estatistica;
+import br.com.dbc.vemser.notifica.entity.enums.ClasseSocial;
+import br.com.dbc.vemser.notifica.entity.enums.Etnia;
+import br.com.dbc.vemser.notifica.entity.enums.Genero;
 import br.com.dbc.vemser.notifica.repository.EstatisticaRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class EstatisticaService {
     private final EstatisticaRepository estatisticaRepository;
-    private final ObjectMapper objectMapper;
 
-    public Optional<HashMap<String, List<EstatisticaDTO>>> obterEstatistica(List<String> colunas) throws Exception{
-        try {
-            List<String> cols = new ArrayList<>(Arrays.asList("etnia", "genero", "classe_social"));
-            cols.retainAll(colunas);
+    public EstatisticaDTO gerarEstatisticas() {
+        EstatisticaDTO estatisticaDTO = new EstatisticaDTO();
 
-            if(cols.isEmpty())
-                return Optional.empty();
+        estatisticaDTO.setEtniaUsuario(calcularPercentagensEnum(estatisticaRepository.countByEtnia()));
+        estatisticaDTO.setGeneroUsuario(calcularPercentagensEnum(estatisticaRepository.countByGenero()));
+        estatisticaDTO.setClasseSocial(calcularPercentagensEnum(estatisticaRepository.countByClasseSocial()));
 
-            Optional<HashMap<String, List<Estatistica>>> mapOpt = estatisticaRepository.obterEstatistica(cols);
+        estatisticaDTO.setUltimaDataCadastro(estatisticaRepository.ultimaCriacaoDenuncia());
 
-            if(mapOpt.isPresent()){
-                HashMap<String, List<Estatistica>> estatisticas = mapOpt.get();
-                HashMap<String, List<EstatisticaDTO>> hashEstatisticasDto = new HashMap<>();
+        return estatisticaDTO;
+    }
 
-                for(Map.Entry<String, List<Estatistica>> es: estatisticas.entrySet()) {
-                    List<EstatisticaDTO> estatisticasDto = new ArrayList<>();
-                    for (Estatistica estatistica : es.getValue())
-                        estatisticasDto.add(objectMapper.convertValue(estatistica, EstatisticaDTO.class));
+    private <T extends Enum<T>> Map<T, Double> calcularPercentagensEnum(List<Object[]> resultados) {//retorno de um map de enums
+        Map<T, Long> contagens = resultados.stream()
+                .collect(Collectors.toMap(result -> (T) result[0], result -> (Long) result[1])); //pega o enum(T) e dps a quantidade(Long)
 
-                    hashEstatisticasDto.put(es.getKey(), estatisticasDto);
-                }
+        long total = contagens.values().stream().mapToLong(Long::longValue).sum(); //calcula o total da quantidade(long)
 
-                return Optional.of(hashEstatisticasDto);
-            }
-            return Optional.empty();
-        } catch (Exception e){
-            throw new Exception();
-        }
+        return contagens.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, entry -> (entry.getValue().doubleValue() / total) * 100));
+                                              //enum       ,          //valor
     }
 }
