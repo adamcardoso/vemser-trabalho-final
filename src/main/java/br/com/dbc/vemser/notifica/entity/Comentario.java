@@ -27,7 +27,7 @@ public class Comentario {
     private String comentario;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "comentario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "comentario", cascade = CascadeType.ALL)
     private List<Curtida> curtidas;
 
     @JsonIgnore

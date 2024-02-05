@@ -61,7 +61,6 @@ public class Denuncia {
     @OneToOne(mappedBy = "denuncia", cascade = CascadeType.ALL, orphanRemoval = true)
     private Localizacao localizacao;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "denuncia", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "denuncia")
     private List<Curtida> curtidas;
 }
