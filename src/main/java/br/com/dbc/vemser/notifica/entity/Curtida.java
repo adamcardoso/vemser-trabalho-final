@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Getter
-@Entity
+@Entity(name = "CURTIDA")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Curtida {
     @Id
@@ -24,9 +24,15 @@ public class Curtida {
     @Column(name = "id_curtida")
     private Integer idCurtida;
 
-    @Column
-    private LocalDateTime dataHora;
+    @Column(name = "id_denuncia", insertable = false, updatable = false)
+    private Integer idDenuncia;
+    @Column(name = "id_usuario", insertable = false, updatable = false)
+    private Integer idUsuario;
+    @Column(name = "id_comentario", insertable = false, updatable = false)
+    private Integer idComentario;
 
+    @Column(name = "data_hora")
+    private LocalDateTime dataHora;
 
     @JsonIgnore
     @ManyToOne

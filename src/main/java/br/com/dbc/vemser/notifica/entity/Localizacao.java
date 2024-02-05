@@ -20,11 +20,14 @@ public class Localizacao {
     @Column(name = "id_localizacao")
     private Integer idLocalizacao;
 
-    @Column
+    @Column(name = "latitude ")
     private String latitude;
 
-    @Column
+    @Column(name = "longitude ")
     private String longitude;
+
+    @Column(name = "id_denuncia", insertable = false, updatable = false)
+    private Integer idDenuncia;
 
     @JsonIgnore
     @OneToOne
