@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -37,20 +38,20 @@ public class DenunciaController implements IDenunciaController{
     }
 
     @PostMapping("/{idUsuario}")
-    public ResponseEntity<DenunciaDTO> criarDenuncia(@PathVariable("idUsuario") Integer idUsuario, @RequestBody DenunciaCreateDTO denunciaCreateDTO) throws Exception {
+    public ResponseEntity<DenunciaDTO> criarDenuncia(@PathVariable("idUsuario") Integer idUsuario, @Valid @RequestBody DenunciaCreateDTO denunciaCreateDTO) throws Exception {
         DenunciaDTO denunciaDTO = denunciaService.criarDenuncia(denunciaCreateDTO, idUsuario);
         return ResponseEntity.status(HttpStatus.CREATED).body(denunciaDTO);
     }
 
-    @PutMapping("/{idDenuncia}/{idUsuario}")
-    public ResponseEntity<DenunciaDTO> editarDenuncia(@PathVariable("idDenuncia") Integer idDenuncia, @RequestBody DenunciaCreateDTO denunciaCreateDTO, @PathVariable("idUsuario") Integer idUsuario) throws Exception {
+    @PutMapping("/att-denuncia")
+    public ResponseEntity<DenunciaDTO> editarDenuncia(@RequestParam Integer idDenuncia, @RequestParam("idUsuario") Integer idUsuario, @Valid @RequestBody DenunciaCreateDTO denunciaCreateDTO) throws Exception {
         DenunciaDTO denunciaDTO = denunciaService.editarDenuncia(denunciaCreateDTO, idDenuncia, idUsuario);
         return ResponseEntity.ok(denunciaDTO);
     }
 
-    @DeleteMapping("/{idDenuncia}/{idUsuario}")
-    public ResponseEntity<Object> deletarDenuncia(@PathVariable("idDenuncia") Integer idDenuncia, @PathVariable("idUsuario") Integer idUsuario) throws Exception {
-        String deleted = denunciaService.deletarDenuncia(idDenuncia, idUsuario);
+    @DeleteMapping("/delete-denuncia")
+    public ResponseEntity<Object> deletarDenuncia(@RequestParam Integer idDenuncia, @RequestParam Integer idUsuario) throws Exception {
+        denunciaService.deletarDenuncia(idDenuncia, idUsuario);
         return ResponseEntity.noContent().build();
     }
 }

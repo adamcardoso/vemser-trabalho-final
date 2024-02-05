@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
+
 @Controller
 @RequestMapping("/login")
 @AllArgsConstructor
@@ -24,7 +26,7 @@ public class LoginController implements ILoginController{
     private final LoginService loginService;
 
     @PostMapping
-    public ResponseEntity<Object> login(@RequestBody UsuarioLoginDTO usuarioLoginDTO) throws RegraDeNegocioException {
+    public ResponseEntity<Object> login(@Valid @RequestBody UsuarioLoginDTO usuarioLoginDTO) throws RegraDeNegocioException {
         UsuarioDTO usuario = loginService.autenticarUsuario(usuarioLoginDTO.getEmailUsuario(), usuarioLoginDTO.getSenhaUsuario());
         return ResponseEntity.ok().body(usuario);
     }

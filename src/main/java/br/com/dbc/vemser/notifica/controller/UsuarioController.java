@@ -29,7 +29,7 @@ public class UsuarioController  {
     }
 
     @PostMapping
-    public ResponseEntity<UsuarioDTO> criarUsuario(@Valid @RequestBody UsuarioCreateDTO novoUsuario) throws Exception {
+    public ResponseEntity<UsuarioDTO> criarUsuario(@Valid @RequestBody UsuarioCreateDTO novoUsuario){
         UsuarioDTO usuarios = usuarioService.criarUsuario(novoUsuario);
         return new ResponseEntity<>(usuarios, HttpStatus.OK);
     }

@@ -36,8 +36,8 @@ public class EnderecoController  {
         return new ResponseEntity<>(enderecoService.adicionarEndereco(idUsuario, enderecoDto), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{idUsuario}/{idEndereco}")
-    public ResponseEntity<EnderecoDTO> atualizarEndereco(@PathVariable("idEndereco") Integer idEndereco, @PathVariable("idUsuario") Integer idUsuario, @Valid @RequestBody EnderecoUpdateDTO enderecoDto) throws Exception {
+    @PutMapping("/att-endereco")
+    public ResponseEntity<EnderecoDTO> atualizarEndereco(@RequestParam Integer idEndereco, @RequestParam Integer idUsuario, @Valid @RequestBody EnderecoUpdateDTO enderecoDto) throws Exception {
         return new ResponseEntity<>(enderecoService.atualizarEndereco(idEndereco, idUsuario, enderecoDto), HttpStatus.OK);
     }
 
