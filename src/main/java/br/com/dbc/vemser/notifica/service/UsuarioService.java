@@ -20,11 +20,6 @@ public class UsuarioService {
        return retornarDTO(getUsuario(idUsuario));
     }
 
-    public UsuarioDTO criarUsuario(UsuarioCreateDTO novoUsuario) {
-        Usuario usuarioCriado = converterDTO(novoUsuario);
-        return retornarDTO(usuarioRepository.save(usuarioCriado));
-    }
-//
     public UsuarioDTO atualizarUsuario(Integer idUsuario, UsuarioUpdateDTO novoUsuario) throws Exception {
         Usuario usuarioRecuperado = getUsuario(idUsuario);
         usuarioRecuperado.setEmailUsuario(novoUsuario.getEmailUsuario());
