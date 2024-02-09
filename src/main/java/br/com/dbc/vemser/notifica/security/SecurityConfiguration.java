@@ -29,7 +29,7 @@ public class SecurityConfiguration {
                 .cors().and()
                 .csrf().disable()
                 .authorizeHttpRequests((authz) -> authz
-                        .antMatchers("/login", "/login/cadastrar", "/relatorio", "/feed").permitAll()
+                        .antMatchers("/login", "/login/cadastrar", "/estatistica", "/feed").permitAll()
                         .antMatchers("/admin/**").hasAuthority(TipoUsuario.ADMIN.getRoleName())
                         .antMatchers("/login/usuario-logado").hasAuthority(TipoUsuario.COMUM.getRoleName())
                         .anyRequest().authenticated()
