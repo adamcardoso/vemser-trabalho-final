@@ -7,6 +7,8 @@ import br.com.dbc.vemser.notifica.dto.usuario.UsuarioUpdateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import br.com.dbc.vemser.notifica.entity.Denuncia;
 import br.com.dbc.vemser.notifica.entity.Usuario;
+import br.com.dbc.vemser.notifica.entity.enums.StatusDenuncia;
+import br.com.dbc.vemser.notifica.entity.enums.UsuarioAtivo;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.repository.AdminRepository;
 import br.com.dbc.vemser.notifica.repository.DenunciaRepository;
@@ -27,14 +29,26 @@ public class AdminService {
     private final DenunciaRepository denunciaRepository;
     private final ObjectMapper objectMapper;
 
-    public Page<UsuarioDTO> list(Pageable pageable) {
+    public Page<UsuarioDTO> listUsuariosAtivos(Pageable pageable) {
         List<UsuarioDTO> usuarioDTOList = adminRepository.findAll(pageable)
                 .stream()
+                .filter(usuario -> UsuarioAtivo.SIM.equals(usuario.getUsuarioAtivo()))
                 .map(usuario -> retornarDTO(usuario))
                 .collect(Collectors.toList());
 
         return new PageImpl<>(usuarioDTOList, pageable, usuarioDTOList.size());
     }
+
+    public Page<UsuarioDTO> listUsuariosInativos(Pageable pageable) {
+        List<UsuarioDTO> usuarioDTOList = adminRepository.findAll(pageable)
+                .stream()
+                .filter(usuario -> UsuarioAtivo.NAO.equals(usuario.getUsuarioAtivo()))
+                .map(usuario -> retornarDTO(usuario))
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(usuarioDTOList, pageable, usuarioDTOList.size());
+    }
+
 
     public List<UsuarioDTO> listUsuariosAdmin(){
         return adminRepository.usuariosAdmin().stream()
@@ -71,8 +85,9 @@ public class AdminService {
         adminRepository.delete(usuarioDeletado);
     }
 
-    public List<DenunciaDTO> listarTodasDenuncias(){
+    public List<DenunciaDTO> listarTodasDenunciasAtivas(){
         return denunciaRepository.findAll().stream()
+                .filter(usuario -> !StatusDenuncia.FECHADO.equals(usuario.getStatusDenuncia()))
                 .map(denuncia -> retornarDTODenuncia(denuncia))
                 .collect(Collectors.toList());
     }

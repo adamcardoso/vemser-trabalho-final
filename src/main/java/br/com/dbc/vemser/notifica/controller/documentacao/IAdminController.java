@@ -18,7 +18,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 public interface IAdminController {
-    @Operation(summary = "Listar Usuários", description = "Listar Usuários")
+    @Operation(summary = "Listar Usuários Ativos", description = "Listar Usuários Ativos")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Retorna os usuários"),
@@ -26,8 +26,19 @@ public interface IAdminController {
                     content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
             }
     )
-    @GetMapping("/list-usuario")
-    public ResponseEntity<Page<UsuarioDTO>> listarUsuariosPaginados(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size);
+    @GetMapping("/list-usuario-ativos")
+    public ResponseEntity<Page<UsuarioDTO>> listarUsuariosPaginadosAtivos(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size);
+
+    @Operation(summary = "Listar Usuários Inativos", description = "Listar Usuários Inativo")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Retorna os usuários"),
+                    @ApiResponse(responseCode = "400", description = "Usuario não encontrado!",
+                            content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
+            }
+    )
+    @GetMapping("/list-usuario-inativos")
+    public ResponseEntity<Page<UsuarioDTO>> listarUsuariosPaginadosInativos(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size);
 
     @Operation(summary = "Listar Admins", description = "Listar Admins")
     @ApiResponses(
@@ -83,16 +94,16 @@ public interface IAdminController {
     @DeleteMapping("/{idUsuario}")
     public ResponseEntity<Object> removerUsuario(@PathVariable("idUsuario") Integer idUsuario) throws Exception;
 
-    @Operation(summary = "Listar todas Denúncias", description = "Lista todas Denúncias")
+    @Operation(summary = "Listar todas Denúncias Ativas", description = "Lista todas Denúncias Ativas")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Usuário removido com sucesso"),
-                    @ApiResponse(responseCode = "400", description = "Usuário não encontrado",
+                    @ApiResponse(responseCode = "200", description = "Retorna as Denuncias Ativas"),
+                    @ApiResponse(responseCode = "400", description = "Denuncias não encontradas",
                             content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
             }
     )
-    @DeleteMapping("/{idUsuario}")
-    public ResponseEntity<List<DenunciaDTO>> listarTodasDenuncias() throws Exception;
+    @GetMapping("/list-denuncias-ativas")
+    public ResponseEntity<List<DenunciaDTO>> listarTodasDenunciasAtivas() throws Exception;
 
     @Operation(summary = "Deletar Denúncia", description = "Deleta denuncia por id")
     @ApiResponses(

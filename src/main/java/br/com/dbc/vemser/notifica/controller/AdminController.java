@@ -27,11 +27,30 @@ import java.util.List;
 public class AdminController implements IAdminController {
     private final AdminService adminService;
 
-    @GetMapping("/list-usuarios")
-    public ResponseEntity<Page<UsuarioDTO>> listarUsuariosPaginados(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+    @GetMapping("/list-usuarios-ativos")
+    public ResponseEntity<Page<UsuarioDTO>> listarUsuariosPaginadosAtivos(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<UsuarioDTO> usuarios = adminService.list(pageable);
+        Page<UsuarioDTO> usuarios = adminService.listUsuariosAtivos(pageable);
+
+        Page<UsuarioDTO> usuarioDTOs = usuarios.map(usuario -> new UsuarioDTO(
+                usuario.getIdUsuario(),
+                usuario.getNomeUsuario(),
+                usuario.getEmailUsuario(),
+                usuario.getNumeroCelular(),
+                usuario.getEtniaUsuario(),
+                usuario.getDataNascimento(),
+                usuario.getClasseSocial(),
+                usuario.getGeneroUsuario()
+        ));
+
+        return ResponseEntity.ok(usuarioDTOs);
+    }
+    @GetMapping("/list-usuarios-inativos")
+    public ResponseEntity<Page<UsuarioDTO>> listarUsuariosPaginadosInativos(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<UsuarioDTO> usuarios = adminService.listUsuariosInativos(pageable);
 
         Page<UsuarioDTO> usuarioDTOs = usuarios.map(usuario -> new UsuarioDTO(
                 usuario.getIdUsuario(),
@@ -83,9 +102,9 @@ public class AdminController implements IAdminController {
         return ResponseEntity.ok(denunciaDTO);
     }
 
-    @GetMapping("/list-denuncias")
-    public ResponseEntity<List<DenunciaDTO>> listarTodasDenuncias() throws Exception {
-        List<DenunciaDTO> denunciaDTOS = adminService.listarTodasDenuncias() ;
+    @GetMapping("/list-denuncias-ativas")
+    public ResponseEntity<List<DenunciaDTO>> listarTodasDenunciasAtivas() throws Exception {
+        List<DenunciaDTO> denunciaDTOS = adminService.listarTodasDenunciasAtivas() ;
         return ResponseEntity.ok(denunciaDTOS);
     }
 

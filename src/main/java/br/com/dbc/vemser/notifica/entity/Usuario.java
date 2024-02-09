@@ -1,9 +1,6 @@
 package br.com.dbc.vemser.notifica.entity;
 
-import br.com.dbc.vemser.notifica.entity.enums.ClasseSocial;
-import br.com.dbc.vemser.notifica.entity.enums.Etnia;
-import br.com.dbc.vemser.notifica.entity.enums.Genero;
-import br.com.dbc.vemser.notifica.entity.enums.TipoUsuario;
+import br.com.dbc.vemser.notifica.entity.enums.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.FetchMode;
@@ -58,6 +55,10 @@ public class Usuario implements UserDetails {
     @Column(name = "tipo_usuario")
     @Enumerated(EnumType.ORDINAL)
     private TipoUsuario tipoUsuario;
+
+    @Column(name = "ativo")
+    @Enumerated(EnumType.ORDINAL)
+    private UsuarioAtivo usuarioAtivo;
 
     @JsonIgnore
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
