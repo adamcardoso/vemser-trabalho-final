@@ -2,6 +2,7 @@ package br.com.dbc.vemser.notifica.controller.documentacao;
 
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioCreateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioLoginDTO;
+import br.com.dbc.vemser.notifica.entity.Usuario;
 import br.com.dbc.vemser.notifica.exceptions.ErrorResponse;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,6 +26,29 @@ public interface ILoginController {
 
     )
     @PostMapping
-    public ResponseEntity<Object> login(@RequestBody UsuarioLoginDTO usuarioLoginDTO) throws RegraDeNegocioException;
+    public ResponseEntity<String> login(@RequestBody UsuarioLoginDTO usuarioLoginDTO) throws RegraDeNegocioException;
+
+    @Operation(summary = "Fazer Cadastro", description = "Fazer Cadastro com Email e Senha, se os dados não forem existentes no banco de dados ira Cadastrar.")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Retorna os Dados do usuário que Cadastrou.",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioCreateDTO.class))),
+                    @ApiResponse(responseCode = "400", description = "message: Credenciais inválidas, Usuário Já Cadastrado!",
+                            content = @Content(schema = @Schema(hidden = false, implementation = ErrorResponse.class))),
+            }
+
+    )
+    @PostMapping
+    public ResponseEntity<String> cadastrar(@RequestBody UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException ;
+
+    @Operation(summary = "Pegar Cadastro", description = "Pegar os Dados do Usuário que está logado.")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Retorna os Dados do usuário.",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioCreateDTO.class)))
+            }
+
+    )
+    public ResponseEntity<Usuario> usuarioLogado() throws RegraDeNegocioException;
 }
 

@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface IRelatorioUsuarioRepository extends JpaRepository<Usuario, Integer> {
+
     @Query(value = """
             SELECT * FROM VS_13_EQUIPE_7.USUARIO u
             LEFT JOIN VS_13_EQUIPE_7.ENDERECO e

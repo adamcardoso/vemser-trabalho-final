@@ -6,6 +6,7 @@ import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.repository.LoginRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -28,7 +29,33 @@ public class LoginService {
         if (usuario.isPresent()) {
             return objectMapper.convertValue(usuario, UsuarioDTO.class);
         } else {
-            throw new RegraDeNegocioException("Credenciais inválidas, Usuário ou Senha Incorretos!");
+            return null;
+        }
+    }
+
+    public Optional<Usuario> findById(Integer idUsuario) {
+        return loginRepository.findByIdUsuario(idUsuario);
+    }
+
+    public Optional<Usuario> findByEmailUsuario(String username) {
+        return loginRepository.findByEmailUsuario(username);
+    }
+
+    public Integer getIdLoggedUser() {
+        return Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+    }
+
+    public Usuario getLoggedUser() throws RegraDeNegocioException {
+        return findById(getIdLoggedUser()).orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado"));
+    }
+
+    public UsuarioDTO findByNumeroCelular(String numeroCelular) throws RegraDeNegocioException {
+        Optional<Usuario> usuario = loginRepository.findByNumeroCelular(numeroCelular);
+
+        if (usuario.isPresent()) {
+            return objectMapper.convertValue(usuario, UsuarioDTO.class);
+        } else {
+            return null;
         }
     }
 }

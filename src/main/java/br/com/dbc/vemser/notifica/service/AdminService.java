@@ -12,6 +12,9 @@ import br.com.dbc.vemser.notifica.repository.AdminRepository;
 import br.com.dbc.vemser.notifica.repository.DenunciaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,15 +22,18 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class UsuarioAdminService {
+public class AdminService {
     private final AdminRepository adminRepository;
     private final DenunciaRepository denunciaRepository;
     private final ObjectMapper objectMapper;
 
-    public List<UsuarioDTO> list(){
-        return adminRepository.findAll().stream()
+    public Page<UsuarioDTO> list(Pageable pageable) {
+        List<UsuarioDTO> usuarioDTOList = adminRepository.findAll(pageable)
+                .stream()
                 .map(usuario -> retornarDTO(usuario))
                 .collect(Collectors.toList());
+
+        return new PageImpl<>(usuarioDTOList, pageable, usuarioDTOList.size());
     }
 
     public List<UsuarioDTO> listUsuariosAdmin(){
