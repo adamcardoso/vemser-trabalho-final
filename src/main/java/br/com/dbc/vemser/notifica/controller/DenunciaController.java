@@ -5,6 +5,7 @@ import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaCreateDTO;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
 import br.com.dbc.vemser.notifica.entity.Denuncia;
 import br.com.dbc.vemser.notifica.service.DenunciaService;
+import br.com.dbc.vemser.notifica.service.LoginService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -21,37 +22,39 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "Denúncia Controller")
 @RequestMapping("/denuncia")
-public class DenunciaController implements IDenunciaController{
+public class DenunciaController{
 
     private final DenunciaService denunciaService;
+    private final LoginService loginService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<DenunciaDTO> obterDenunciaById(@PathVariable("id") Integer id) throws Exception {
-        DenunciaDTO denunciaDTO = denunciaService.obterDenunciaById(id);
+
+    @GetMapping("/denuncia-por-id")
+    public ResponseEntity<DenunciaDTO> obterDenunciaById() throws Exception {
+        DenunciaDTO denunciaDTO = denunciaService.obterDenunciaById(loginService.getIdLoggedUser());
         return ResponseEntity.ok(denunciaDTO);
     }
 
-    @GetMapping("/usuario/{idUsuario}")
-    public ResponseEntity<List<DenunciaDTO>> listByIdUsuario(@PathVariable("idUsuario") Integer idUsuario) throws Exception {
-        List<DenunciaDTO> denunciaDTOS = denunciaService.listByIdUsuario(idUsuario);
+    @GetMapping("/minhas-denuncias")
+    public ResponseEntity<List<DenunciaDTO>> listByIdUsuario() throws Exception {
+        List<DenunciaDTO> denunciaDTOS = denunciaService.listByIdUsuario(loginService.getIdLoggedUser());
         return ResponseEntity.ok(denunciaDTOS);
     }
 
-    @PostMapping("/{idUsuario}")
-    public ResponseEntity<DenunciaDTO> criarDenuncia(@PathVariable("idUsuario") Integer idUsuario, @Valid @RequestBody DenunciaCreateDTO denunciaCreateDTO) throws Exception {
-        DenunciaDTO denunciaDTO = denunciaService.criarDenuncia(denunciaCreateDTO, idUsuario);
+    @PostMapping("/criar-denuncia")
+    public ResponseEntity<DenunciaDTO> criarDenuncia(@Valid @RequestBody DenunciaCreateDTO denunciaCreateDTO) throws Exception {
+        DenunciaDTO denunciaDTO = denunciaService.criarDenuncia(denunciaCreateDTO, loginService.getIdLoggedUser());
         return ResponseEntity.status(HttpStatus.CREATED).body(denunciaDTO);
     }
 
     @PutMapping("/att-denuncia")
-    public ResponseEntity<DenunciaDTO> editarDenuncia(@RequestParam Integer idDenuncia, @RequestParam("idUsuario") Integer idUsuario, @Valid @RequestBody DenunciaCreateDTO denunciaCreateDTO) throws Exception {
-        DenunciaDTO denunciaDTO = denunciaService.editarDenuncia(denunciaCreateDTO, idDenuncia, idUsuario);
+    public ResponseEntity<DenunciaDTO> editarDenuncia(@RequestParam Integer idDenuncia, @Valid @RequestBody DenunciaCreateDTO denunciaCreateDTO) throws Exception {
+        DenunciaDTO denunciaDTO = denunciaService.editarDenuncia(denunciaCreateDTO, idDenuncia, loginService.getIdLoggedUser());
         return ResponseEntity.ok(denunciaDTO);
     }
 
-    @DeleteMapping("/delete-denuncia")
-    public ResponseEntity<Object> deletarDenuncia(@RequestParam Integer idDenuncia, @RequestParam Integer idUsuario) throws Exception {
-        denunciaService.deletarDenuncia(idDenuncia, idUsuario);
+    @DeleteMapping("/delete-denuncia/{idDenuncia}")
+    public ResponseEntity<Object> deletarDenuncia(@PathVariable("idDenuncia") Integer idDenuncia) throws Exception {
+        denunciaService.deletarDenuncia(idDenuncia, loginService.getIdLoggedUser());
         return ResponseEntity.noContent().build();
     }
 }

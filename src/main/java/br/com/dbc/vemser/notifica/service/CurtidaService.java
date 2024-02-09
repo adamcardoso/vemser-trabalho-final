@@ -7,7 +7,7 @@ import br.com.dbc.vemser.notifica.entity.Denuncia;
 import br.com.dbc.vemser.notifica.entity.Usuario;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.repository.DenunciaRepository;
-import br.com.dbc.vemser.notifica.repository.IComentarioRepository;
+import br.com.dbc.vemser.notifica.repository.ComentarioRepository;
 import br.com.dbc.vemser.notifica.repository.ICurtidaRepository;
 import br.com.dbc.vemser.notifica.repository.UsuarioRepository;
 import br.com.dbc.vemser.notifica.service.interfaces.ICurtidaService;
@@ -22,7 +22,7 @@ import java.util.Optional;
 public class CurtidaService implements ICurtidaService {
     private final ICurtidaRepository curtidaRepository;
     private final UsuarioRepository usuarioRepository;
-    private final IComentarioRepository comentarioRepository;
+    private final ComentarioRepository comentarioRepository;
     private final DenunciaRepository denunciaRepository;
 
     @Override

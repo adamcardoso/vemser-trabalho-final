@@ -4,6 +4,7 @@ import br.com.dbc.vemser.notifica.dto.usuario.UsuarioCreateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioUpdateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import br.com.dbc.vemser.notifica.entity.Usuario;
+import br.com.dbc.vemser.notifica.entity.enums.UsuarioAtivo;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,7 +38,7 @@ public class UsuarioService {
 
     public void removerUsuario(Integer idUsuario) throws Exception {
         Usuario usuarioDeletado = getUsuario(idUsuario);
-        usuarioRepository.delete(usuarioDeletado);
+        usuarioDeletado.setUsuarioAtivo(UsuarioAtivo.SIM);
     }
 
     private Usuario getUsuario(Integer id) throws RegraDeNegocioException {

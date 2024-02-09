@@ -19,18 +19,8 @@ import java.util.List;
 @RestController
 @Tag(name = "Comentário Controller")
 @RequestMapping("/comentario")
-public class ComentarioController implements IComentarioController {
+public class ComentarioController {
     private final ComentarioService comentarioService;
-
-    @GetMapping("/{id}")
-    public ResponseEntity<ComentarioDTO> obterComentarioById(@PathVariable("id") Integer id) throws Exception {
-        return new ResponseEntity<>(comentarioService.obterComentarioById(id), HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}/denuncia")
-    public ResponseEntity<List<ComentarioDTO>> listarComentariosByIdDenuncia(@PathVariable("id") Integer id) throws Exception {
-        return new ResponseEntity<>(comentarioService.listarComentariosByIdDenuncia(id), HttpStatus.OK);
-    }
 
     @PostMapping
     public ResponseEntity<ComentarioDTO> adicionarComentario(@Valid @RequestBody ComentarioCreateDTO comentarioDto){
