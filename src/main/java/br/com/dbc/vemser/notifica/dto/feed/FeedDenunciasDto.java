@@ -1,6 +1,7 @@
 package br.com.dbc.vemser.notifica.dto.feed;
 
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
+import br.com.dbc.vemser.notifica.dto.usuario.UsuarioFeedDTO;
 import br.com.dbc.vemser.notifica.entity.Comentario;
 import br.com.dbc.vemser.notifica.entity.Localizacao;
 import br.com.dbc.vemser.notifica.entity.Usuario;
@@ -35,7 +36,7 @@ public class FeedDenunciasDto {
 
     private Integer curtidas;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Usuario usuario;
+    private UsuarioFeedDTO usuario;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer idUsuario;
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -44,7 +45,7 @@ public class FeedDenunciasDto {
     private Localizacao localizacao;
     public FeedDenunciasDto(Integer idDenuncia, String descricao, String titulo, LocalDateTime dataHora,
                             StatusDenuncia statusDenuncia, Categoria categoria, TipoDenuncia tipoDenuncia,
-                            Integer curtidas, Usuario usuario, Integer idUsuario, Localizacao localizacao){
+                            Integer curtidas, UsuarioFeedDTO usuario, Integer idUsuario, Localizacao localizacao){
         this.idDenuncia = idDenuncia;
         this.descricao = descricao;
         this.titulo = titulo;
@@ -60,7 +61,7 @@ public class FeedDenunciasDto {
 
     public FeedDenunciasDto(Integer idDenuncia, String descricao, String titulo, LocalDateTime dataHora,
                             StatusDenuncia statusDenuncia, Categoria categoria, TipoDenuncia tipoDenuncia,
-                            Integer curtidas, Usuario usuario, List<Comentario> comentarios, Localizacao localizacao){
+                            Integer curtidas, UsuarioFeedDTO usuario, List<Comentario> comentarios, Localizacao localizacao){
         this.idDenuncia = idDenuncia;
         this.descricao = descricao;
         this.titulo = titulo;
@@ -73,4 +74,5 @@ public class FeedDenunciasDto {
         this.comentarios = comentarios;
         this.localizacao = localizacao;
     }
+
 }

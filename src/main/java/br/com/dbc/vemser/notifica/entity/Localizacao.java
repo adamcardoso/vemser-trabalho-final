@@ -26,17 +26,11 @@ public class Localizacao {
     @Column(name = "longitude ")
     private String longitude;
 
-    @Column(name = "id_denuncia", insertable = false, updatable = false)
-    private Integer idDenuncia;
-
     @JsonIgnore
     @OneToOne
-    @JoinColumn(name = "id_denuncia", referencedColumnName = "id_denuncia", unique = true)
+    @JoinColumn(name = "id_denuncia", referencedColumnName = "id_denuncia", insertable = false, updatable = false)
     private Denuncia denuncia;
 
-    public Localizacao(String latitude, String longitude, Denuncia denuncia){
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.denuncia = denuncia;
-    }
+    @Column(name = "id_denuncia ")
+    private Integer idDenuncia;
 }

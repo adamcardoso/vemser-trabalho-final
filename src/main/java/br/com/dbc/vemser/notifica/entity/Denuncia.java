@@ -55,9 +55,6 @@ public class Denuncia {
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     private Usuario usuario;
 
-//    @Formula("id_usuario")
-//    private Integer idUsuario;
-
     @OneToMany(mappedBy = "denuncia", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comentario> comentarios;
 

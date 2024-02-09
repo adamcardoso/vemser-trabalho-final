@@ -1,39 +1,38 @@
 package br.com.dbc.vemser.notifica.service;
 
-import br.com.dbc.vemser.notifica.dto.localizacao.LocalizacaoDto;
-import br.com.dbc.vemser.notifica.entity.Denuncia;
+import br.com.dbc.vemser.notifica.dto.localizacao.LocalizacaoCreateDTO;
 import br.com.dbc.vemser.notifica.entity.Localizacao;
 import br.com.dbc.vemser.notifica.repository.ILocalicacaoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import java.text.DecimalFormat;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class LocalizacaoService {
     private final ILocalicacaoRepository localicacaoRepository;
+    private final RestTemplate restTemplate;
 
-    public List<LocalizacaoDto> listarLocalizacao(){
+    @Value("${google.geocoding.api.key}")
+    private String apiKey; // Adicione a sua chave de API do Google Geocoding no arquivo application.properties
+
+    public List<LocalizacaoCreateDTO> listarLocalizacao() {
         return localicacaoRepository.findAll()
                 .stream()
                 .map(this::retornaLocalizacaoDto)
                 .collect(Collectors.toList());
     }
-
-    public void criarLocalizacao(Denuncia d){
-        localicacaoRepository.save(new Localizacao(coordenadas(-90, 90), coordenadas(-180, 180), d));
+    public String obterLinkGoogleMaps(String latitude, String longitude) {
+        String baseGoogleMapsUrl = "https://www.google.com/maps/place/";
+        String formattedCoordinates = String.format("%s,%s", latitude, longitude);
+        return baseGoogleMapsUrl + formattedCoordinates;
     }
 
-    private String coordenadas(int min, int max){
-        DecimalFormat decimal = new DecimalFormat("#.####");
-        return decimal.format(min + (max - min) * new Random().nextDouble());
-    }
-
-    private LocalizacaoDto retornaLocalizacaoDto(Localizacao l){
-        return new LocalizacaoDto(l.getIdLocalizacao(), l.getLatitude(), l.getLongitude(), l.getDenuncia() != null ? l.getDenuncia().getIdDenuncia(): null);
+    private LocalizacaoCreateDTO retornaLocalizacaoDto(Localizacao l) {
+        return new LocalizacaoCreateDTO(l.getLatitude(), l.getLongitude());
     }
 }
