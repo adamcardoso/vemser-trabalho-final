@@ -1,6 +1,7 @@
 package br.com.dbc.vemser.notifica.entity;
 
 import br.com.dbc.vemser.notifica.entity.enums.TipoEndereco;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -50,6 +51,7 @@ public class Endereco {
     private String pais;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     private Usuario usuario;
 }

@@ -2,6 +2,11 @@ package br.com.dbc.vemser.notifica.entity;
 
 import br.com.dbc.vemser.notifica.entity.enums.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.*;
 import org.hibernate.FetchMode;
 import org.hibernate.annotations.Fetch;
@@ -18,6 +23,7 @@ import java.util.*;
 @Getter
 @Setter
 @Entity(name = "USUARIO")
+@Table(name = "Usuario")
 public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USUARIO_SEQ")
@@ -64,12 +70,10 @@ public class Usuario implements UserDetails {
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Endereco> enderecos;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Comentario> comentarios;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     List<Denuncia> denuncias;
 
     @Override
