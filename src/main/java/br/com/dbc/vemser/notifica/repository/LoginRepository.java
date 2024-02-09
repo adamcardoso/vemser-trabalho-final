@@ -14,4 +14,6 @@ public interface LoginRepository extends JpaRepository<Usuario, Integer> {
     Optional<Usuario> findByEmailUsuario(String email);
 
     Optional<Usuario> findByIdUsuario(Integer idUsuario);
+
+    Optional<Usuario> findByNumeroCelular(String numeroCelular);
 }

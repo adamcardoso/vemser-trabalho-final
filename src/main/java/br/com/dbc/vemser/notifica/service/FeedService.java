@@ -15,13 +15,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class FeedService {
     private final DenunciaRepository denunciaRepository;
-    private final IFeedRepository feedRepository;
     private final ObjectMapper objectMapper;
     public Page<FeedDenunciasDto> listarTodasDenuncias(Pageable pageable) throws Exception {
         return denunciaRepository.findAll(pageable).map(d ->

@@ -52,7 +52,4 @@ public class UsuarioCreateDTO {
     @Schema(description = "Gênero do Usuário", required = true, example = "MASCULINO", allowableValues = {"MASCULINO", "FEMININO", "OUTRO"})
     private Genero generoUsuario;
 
-    @NotNull
-    @Schema(description = "Tipo de Usuário", required = true, example = "COMUM", allowableValues = {"COMUM", "ADMIN"})
-    private TipoUsuario tipoUsuario;
 }

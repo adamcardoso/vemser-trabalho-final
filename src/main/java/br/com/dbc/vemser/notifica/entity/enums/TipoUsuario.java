@@ -13,6 +13,9 @@ public enum TipoUsuario {
     public int getIdTipoUsuario() {
         return id;
     }
+    public String getRoleName() {
+        return "ROLE_" + this.name();
+    }
 
     public static TipoUsuario fromInt(int value) {
         for (TipoUsuario tipoUsuario : TipoUsuario.values()) {

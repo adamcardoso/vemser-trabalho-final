@@ -36,7 +36,7 @@ public class TokenService {
         Date now = new Date();
         Date expirationDate = new Date(now.getTime() + Long.parseLong(expiration));
 
-        List<String> cargos = Arrays.asList("ROLE_"+usuarioEntity.getTipoUsuario().name());
+        List<String> cargos = List.of(usuarioEntity.getTipoUsuario().getRoleName());
 
         return TOKEN_PREFIX + " " +
                 Jwts.builder()

@@ -29,7 +29,7 @@ public class LoginService {
         if (usuario.isPresent()) {
             return objectMapper.convertValue(usuario, UsuarioDTO.class);
         } else {
-            throw new RegraDeNegocioException("Credenciais inválidas, Usuário ou Senha Incorretos!");
+            return null;
         }
     }
 
@@ -47,6 +47,16 @@ public class LoginService {
 
     public Usuario getLoggedUser() throws RegraDeNegocioException {
         return findById(getIdLoggedUser()).orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado"));
+    }
+
+    public UsuarioDTO findByNumeroCelular(String numeroCelular) throws RegraDeNegocioException {
+        Optional<Usuario> usuario = loginRepository.findByNumeroCelular(numeroCelular);
+
+        if (usuario.isPresent()) {
+            return objectMapper.convertValue(usuario, UsuarioDTO.class);
+        } else {
+            return null;
+        }
     }
 }
 

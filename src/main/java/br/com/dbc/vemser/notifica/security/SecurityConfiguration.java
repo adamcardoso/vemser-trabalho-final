@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -30,15 +29,17 @@ public class SecurityConfiguration {
                 .cors().and()
                 .csrf().disable()
                 .authorizeHttpRequests((authz) -> authz
-                        .antMatchers(HttpMethod.POST, "/login/cadastrar").permitAll()
-                        .antMatchers("/admin/list-usuario").hasRole(TipoUsuario.ADMIN.toString())
-                        .antMatchers("/login", "/", "/cadastrar").permitAll()
+                        .antMatchers("/login", "/login/cadastrar", "/estatistica", "/feed").permitAll()
+                        .antMatchers("/admin/**").hasAuthority(TipoUsuario.ADMIN.getRoleName())
+                        .antMatchers("/login/usuario-logado").hasAuthority(TipoUsuario.COMUM.getRoleName())
                         .anyRequest().authenticated()
                 );
+
         http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -64,14 +65,7 @@ public class SecurityConfiguration {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-
-//    @Bean
-//    public Argon2PasswordEncoder bCryptPasswordEncoder() {
-//        return new Argon2PasswordEncoder();
-//    }
-
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    public Argon2PasswordEncoder argon2PasswordEncoder() {return new Argon2PasswordEncoder();}
+
 }

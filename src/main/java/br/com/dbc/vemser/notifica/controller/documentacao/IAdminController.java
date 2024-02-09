@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,7 @@ public interface IAdminController {
             }
     )
     @GetMapping("/list-usuario")
-    public ResponseEntity<List<UsuarioDTO>> listarUsuarios() throws Exception;
+    public ResponseEntity<Page<UsuarioDTO>> listarUsuariosPaginados(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size);
 
     @Operation(summary = "Listar Admins", description = "Listar Admins")
     @ApiResponses(
