@@ -6,6 +6,7 @@ import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.repository.LoginRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -30,6 +31,22 @@ public class LoginService {
         } else {
             throw new RegraDeNegocioException("Credenciais inválidas, Usuário ou Senha Incorretos!");
         }
+    }
+
+    public Optional<Usuario> findById(Integer idUsuario) {
+        return loginRepository.findByIdUsuario(idUsuario);
+    }
+
+    public Optional<Usuario> findByEmailUsuario(String username) {
+        return loginRepository.findByEmailUsuario(username);
+    }
+
+    public Integer getIdLoggedUser() {
+        return Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+    }
+
+    public Usuario getLoggedUser() throws RegraDeNegocioException {
+        return findById(getIdLoggedUser()).orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado"));
     }
 }
 

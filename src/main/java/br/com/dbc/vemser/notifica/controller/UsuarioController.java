@@ -28,12 +28,6 @@ public class UsuarioController  {
         return new ResponseEntity<>(usuario, HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<UsuarioDTO> criarUsuario(@Valid @RequestBody UsuarioCreateDTO novoUsuario){
-        UsuarioDTO usuarios = usuarioService.criarUsuario(novoUsuario);
-        return new ResponseEntity<>(usuarios, HttpStatus.OK);
-    }
-
     @PutMapping("/{idUsuario}")
     public ResponseEntity<UsuarioDTO> atualizarUsuario(@PathVariable("idUsuario") Integer idUsuario,@Valid @RequestBody UsuarioUpdateDTO novoUsuario) throws Exception {
         UsuarioDTO usuarios = usuarioService.atualizarUsuario(idUsuario, novoUsuario);
