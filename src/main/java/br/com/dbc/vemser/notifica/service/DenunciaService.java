@@ -55,7 +55,7 @@ public class DenunciaService {
         denuncia.setDataHora(LocalDateTime.now());
         denuncia.setIdUsuario(idUsuario);
 
-        Denuncia d = denunciaRepository.save(denuncia); // Salvando a denúncia para obter o idDenuncia gerado
+        Denuncia d = denunciaRepository.save(denuncia);
 
         if (denunciaCreateDTO.getLocalizacao() != null
                 && denunciaCreateDTO.getLocalizacao().getLatitude() != null
@@ -64,13 +64,13 @@ public class DenunciaService {
             Localizacao localizacao = new Localizacao();
             localizacao.setLatitude(denunciaCreateDTO.getLocalizacao().getLatitude());
             localizacao.setLongitude(denunciaCreateDTO.getLocalizacao().getLongitude());
-            localizacao.setIdDenuncia(d.getIdDenuncia()); // Usando o idDenuncia gerado
+            localizacao.setIdDenuncia(d.getIdDenuncia());
 
-            localizacao.setDenuncia(d); // Configurando a relação bidirecional
+            localizacao.setDenuncia(d);
             d.setLocalizacao(localizacao);
         }
 
-        Denuncia savedDenuncia = denunciaRepository.save(d); // Salvando novamente para persistir as alterações
+        Denuncia savedDenuncia = denunciaRepository.save(d);
 
         return retornarDTO(savedDenuncia);
     }
