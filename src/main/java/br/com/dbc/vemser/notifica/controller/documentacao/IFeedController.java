@@ -3,6 +3,8 @@ package br.com.dbc.vemser.notifica.controller.documentacao;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
 import br.com.dbc.vemser.notifica.dto.feed.FeedDenunciasDto;
 import br.com.dbc.vemser.notifica.exceptions.ErrorResponse;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,6 +21,14 @@ import java.util.List;
 
 public interface IFeedController {
     @Operation(summary = "Listar todas as denúncias", description = "Esse Método é o Feed que Lista todas as denúncias sem os comentários")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query",
+                    value = "Pagina a ser carregada", defaultValue = "0"),
+            @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query",
+                    value = "Quantidade de registros", defaultValue = "5"),
+            @ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query",
+                    value = "Ordenacao dos registros")}
+    )
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Retorna a lista de denúncias",
@@ -26,7 +36,7 @@ public interface IFeedController {
             }
     )
     @GetMapping
-    ResponseEntity<Page<FeedDenunciasDto>> listarTodasDenuncias(@PageableDefault(size = 10, page = 10)  Pageable pageable) throws Exception;
+    ResponseEntity<Page<FeedDenunciasDto>> listarTodasDenuncias(@PageableDefault(size = 5, page = 10)  Pageable pageable) throws Exception;
 
     @Operation(summary = "Listar todas as denúncias com comentários", description = "Esse Método é o Feed que Lista todas as denúncias com os comentários")
     @ApiResponses(

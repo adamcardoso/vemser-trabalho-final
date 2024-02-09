@@ -24,7 +24,7 @@ public class FeedController implements IFeedController {
     private final FeedService feedService;
 
     @GetMapping
-    public ResponseEntity<Page<FeedDenunciasDto>> listarTodasDenuncias(@PageableDefault(size = 10, page = 0) Pageable pageable) throws Exception{
+    public ResponseEntity<Page<FeedDenunciasDto>> listarTodasDenuncias(@PageableDefault(size = 5, page = 0) Pageable pageable) throws Exception{
         return new ResponseEntity<>(feedService.listarTodasDenuncias(pageable), HttpStatus.OK);
     }
 

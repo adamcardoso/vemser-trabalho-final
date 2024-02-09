@@ -33,7 +33,7 @@ public interface ILoginController {
             value = {
                     @ApiResponse(responseCode = "200", description = "Retorna os Dados do usuário que Cadastrou.",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioCreateDTO.class))),
-                    @ApiResponse(responseCode = "400", description = "message: Credenciais inválidas, Usuário ou Senha Já Cadastrados!",
+                    @ApiResponse(responseCode = "400", description = "message: Credenciais inválidas, Usuário Já Cadastrado!",
                             content = @Content(schema = @Schema(hidden = false, implementation = ErrorResponse.class))),
             }
 

@@ -20,6 +20,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ public class LoginController implements ILoginController{
     public final AuthenticationManager authenticationManager;
     public final UsuarioService usuarioService;
     public final UsuarioRepository usuarioRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final Argon2PasswordEncoder argon2PasswordEncoder;
     private final LoginService loginService;
 
     @PostMapping
@@ -60,18 +61,20 @@ public class LoginController implements ILoginController{
         }
     }
 
-
     @PostMapping("/cadastrar")
     public ResponseEntity<String> cadastrar(@RequestBody @Valid UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
         if (loginService.findByEmailUsuario(usuarioCreateDTO.getEmailUsuario()).isPresent()) {
-            throw new RegraDeNegocioException("Insira um Cadastro Válido!");
+            throw new RegraDeNegocioException("Credenciais inválidas, Usuário Já Cadastrado!");
         }
 
-        String senhaCriptografada = bCryptPasswordEncoder.encode(usuarioCreateDTO.getSenhaUsuario());
+        String senhaCriptografada = argon2PasswordEncoder.encode(usuarioCreateDTO.getSenhaUsuario());
 
         Usuario usuarioEntity = new Usuario();
         usuarioEntity.setNomeUsuario(usuarioCreateDTO.getNomeUsuario());
         usuarioEntity.setEmailUsuario(usuarioCreateDTO.getEmailUsuario());
+        if (loginService.findByNumeroCelular(usuarioCreateDTO.getNumeroCelular())!=null) {
+            throw new RegraDeNegocioException("Esse Número Já Está Cadastrado!");
+        }
         usuarioEntity.setNumeroCelular(usuarioCreateDTO.getNumeroCelular());
         usuarioEntity.setSenhaUsuario(senhaCriptografada);
         usuarioEntity.setEtniaUsuario(usuarioCreateDTO.getEtniaUsuario());
@@ -92,5 +95,3 @@ public class LoginController implements ILoginController{
         return new ResponseEntity<>(usuario, HttpStatus.OK);
     }
 }
-
-
