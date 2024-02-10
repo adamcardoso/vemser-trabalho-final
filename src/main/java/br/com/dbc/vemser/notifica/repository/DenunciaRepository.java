@@ -24,5 +24,15 @@ public interface DenunciaRepository extends JpaRepository<Denuncia, Integer> {
 
     List<Denuncia> findAllByUsuario_IdUsuario(Integer idUsuario);
 
+    @Query(value = """
+        SELECT d FROM DENUNCIA d
+        WHERE d.statusDenuncia != 4 AND d.idDenuncia = ?1
+        """)
+    Denuncia getDenunciaAtiva(Integer idUsuario);
 
+    @Query(value = """
+        SELECT d FROM DENUNCIA d
+        WHERE d.statusDenuncia != 4
+        """)
+    List<Denuncia> getDenuncias();
 }

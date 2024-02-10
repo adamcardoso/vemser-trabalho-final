@@ -2,6 +2,7 @@ package br.com.dbc.vemser.notifica.controller;
 
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioUpdateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
+import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.service.LoginService;
 import br.com.dbc.vemser.notifica.service.UsuarioService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,6 +33,12 @@ public class UsuarioController  {
     public ResponseEntity<UsuarioDTO> atualizarUsuario(@Valid @RequestBody UsuarioUpdateDTO novoUsuario) throws Exception {
         UsuarioDTO usuarios = usuarioService.atualizarUsuario(loginService.getIdLoggedUser(), novoUsuario);
         return new ResponseEntity<>(usuarios, HttpStatus.OK);
+    }
+
+    @PutMapping("/atualizar-senha")
+    public ResponseEntity<String> atualizarSenha(@RequestParam String senhaAtual, @RequestParam String novaSenha) throws RegraDeNegocioException {
+        String token = usuarioService.attSenha(loginService.getIdLoggedUser(), senhaAtual, novaSenha);
+        return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
     @DeleteMapping("/desativar-perfil")
