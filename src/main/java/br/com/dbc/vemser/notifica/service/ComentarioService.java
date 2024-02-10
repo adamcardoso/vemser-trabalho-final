@@ -7,7 +7,7 @@ import br.com.dbc.vemser.notifica.entity.Comentario;
 import br.com.dbc.vemser.notifica.entity.Denuncia;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.repository.DenunciaRepository;
-import br.com.dbc.vemser.notifica.repository.IComentarioRepository;
+import br.com.dbc.vemser.notifica.repository.ComentarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class ComentarioService {
-    private final IComentarioRepository comentarioRepository;
+    private final ComentarioRepository comentarioRepository;
     private final DenunciaRepository denunciaRepository;
     private final ObjectMapper objectMapper;
 

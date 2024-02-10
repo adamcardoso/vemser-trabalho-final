@@ -5,6 +5,7 @@ import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioCreateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioUpdateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
+import br.com.dbc.vemser.notifica.entity.Comentario;
 import br.com.dbc.vemser.notifica.entity.Denuncia;
 import br.com.dbc.vemser.notifica.entity.Usuario;
 import br.com.dbc.vemser.notifica.entity.enums.StatusDenuncia;
@@ -12,6 +13,7 @@ import br.com.dbc.vemser.notifica.entity.enums.UsuarioAtivo;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.repository.AdminRepository;
 import br.com.dbc.vemser.notifica.repository.DenunciaRepository;
+import br.com.dbc.vemser.notifica.repository.ComentarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,6 +29,7 @@ import java.util.stream.Collectors;
 public class AdminService {
     private final AdminRepository adminRepository;
     private final DenunciaRepository denunciaRepository;
+    private final ComentarioRepository comentarioRepository;
     private final ObjectMapper objectMapper;
 
     public Page<UsuarioDTO> listUsuariosAtivos(Pageable pageable) {
@@ -82,7 +85,7 @@ public class AdminService {
 
     public void removerUsuario(Integer idUsuario) throws Exception {
         Usuario usuarioDeletado = getUsuario(idUsuario);
-        adminRepository.delete(usuarioDeletado);
+        usuarioDeletado.setUsuarioAtivo(UsuarioAtivo.NAO);
     }
 
     public List<DenunciaDTO> listarTodasDenunciasAtivas(){
@@ -98,7 +101,12 @@ public class AdminService {
 
     public void deletarDenuncia(Integer id) throws RegraDeNegocioException {
         Denuncia denunciaDeletada = getUsuarioDenuncia(id);
-        denunciaRepository.delete(denunciaDeletada);
+        denunciaDeletada.setStatusDenuncia(StatusDenuncia.FECHADO);
+    }
+
+    public void deletarComentario(Integer idComentario){
+        Comentario comentarioExcluido = comentarioRepository.findById(idComentario).get();
+        comentarioRepository.delete(comentarioExcluido);
     }
 
     private Usuario getUsuario(Integer id) throws RegraDeNegocioException {
@@ -126,5 +134,4 @@ public class AdminService {
     private DenunciaDTO retornarDTODenuncia(Denuncia entity) {
         return objectMapper.convertValue(entity, DenunciaDTO.class);
     }
-
 }

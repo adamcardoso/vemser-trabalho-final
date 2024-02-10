@@ -5,6 +5,7 @@ import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import br.com.dbc.vemser.notifica.entity.Denuncia;
 import br.com.dbc.vemser.notifica.entity.Usuario;
+import br.com.dbc.vemser.notifica.entity.enums.StatusDenuncia;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.repository.DenunciaRepository;
 import br.com.dbc.vemser.notifica.repository.UsuarioRepository;
@@ -93,18 +94,9 @@ public class DenunciaService {
         return retornarDTO(denunciaRepository.save(denuncia));
     }
 
-    public String deletarDenuncia(Integer idDenuncia, Integer idUsuario) throws Exception {
-        Usuario usuario = ObterUsuarioById(idUsuario);
-
+    public void deletarDenuncia(Integer idDenuncia, Integer idUsuario) throws Exception {
         Denuncia denuncia = objectMapper.convertValue(obterDenunciaById(idDenuncia), Denuncia.class);
-
-        if (denuncia.getIdUsuario() != idUsuario) {
-            throw new RegraDeNegocioException("Usuário não tem permissão para excluir esta denúncia.");
-        }
-
-        denunciaRepository.deleteById(idDenuncia);
-
-        return "Denúncia excluída com sucesso.";
+        denuncia.setStatusDenuncia(StatusDenuncia.FECHADO);
     }
 
     public Denuncia converterDTO(DenunciaDTO dto) {

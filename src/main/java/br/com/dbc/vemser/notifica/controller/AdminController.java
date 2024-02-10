@@ -1,11 +1,11 @@
 package br.com.dbc.vemser.notifica.controller;
 
-import br.com.dbc.vemser.notifica.controller.documentacao.IAdminController;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioCreateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioUpdateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import br.com.dbc.vemser.notifica.service.AdminService;
+import br.com.dbc.vemser.notifica.service.LoginService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,8 +24,10 @@ import java.util.List;
 @Validated
 @AllArgsConstructor
 @Tag(name = "Admin Controller")
-public class AdminController implements IAdminController {
+public class AdminController {
     private final AdminService adminService;
+    private final LoginService loginService;
+
 
     @GetMapping("/list-usuarios-ativos")
     public ResponseEntity<Page<UsuarioDTO>> listarUsuariosPaginadosAtivos(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
@@ -66,7 +68,7 @@ public class AdminController implements IAdminController {
         return ResponseEntity.ok(usuarioDTOs);
     }
 
-    @GetMapping("/list-admin")
+    @GetMapping("/list-admins")
     public ResponseEntity<List<UsuarioDTO>> listarAdmins() {
         List<UsuarioDTO> usuarios = adminService.listUsuariosAdmin();
         return new ResponseEntity<>(usuarios, HttpStatus.OK);
@@ -84,9 +86,9 @@ public class AdminController implements IAdminController {
         return new ResponseEntity<>(usuarios, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDTO> atualizarAdmin(@PathVariable("idUsuario") Integer idUsuario, @Valid @RequestBody UsuarioUpdateDTO novoUsuario) throws Exception {
-        UsuarioDTO usuarios = adminService.atualizarUsuario(idUsuario, novoUsuario);
+    @PutMapping("/editar-usuario-admin")
+    public ResponseEntity<UsuarioDTO> atualizarAdmin( @Valid @RequestBody UsuarioUpdateDTO novoUsuario) throws Exception {
+        UsuarioDTO usuarios = adminService.atualizarUsuario(loginService.getIdLoggedUser(), novoUsuario);
         return new ResponseEntity<>(usuarios, HttpStatus.OK);
     }
 
@@ -109,8 +111,14 @@ public class AdminController implements IAdminController {
     }
 
     @DeleteMapping("/denuncia/{idDenuncia}")
-    public ResponseEntity<Object> deletarDenuncia(@PathVariable Integer idDenuncia) throws Exception {
+    public ResponseEntity<Object> deletarDenuncia(@PathVariable("idDenuncia") Integer idDenuncia) throws Exception {
         adminService.deletarDenuncia(idDenuncia);
         return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deletarComentario(@RequestParam Integer idComentario){
+        adminService.deletarComentario(idComentario);
+        return ResponseEntity.ok().build();
     }
 }
