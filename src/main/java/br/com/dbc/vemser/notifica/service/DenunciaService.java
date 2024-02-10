@@ -2,8 +2,10 @@ package br.com.dbc.vemser.notifica.service;
 
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaCreateDTO;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
+import br.com.dbc.vemser.notifica.dto.localizacao.LocalizacaoDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import br.com.dbc.vemser.notifica.entity.Denuncia;
+import br.com.dbc.vemser.notifica.entity.Localizacao;
 import br.com.dbc.vemser.notifica.entity.Usuario;
 import br.com.dbc.vemser.notifica.entity.enums.StatusDenuncia;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
@@ -36,17 +38,6 @@ public class DenunciaService {
                 .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado com ID: " + idUsuario));
         return usuario;
     }
-    public DenunciaDTO retornarDTO(Denuncia entity) {
-        DenunciaDTO dto = objectMapper.convertValue(entity, DenunciaDTO.class);
-
-        // Verifica se o tipo de denúncia é "ANONIMA" antes de converter o usuário
-        if (entity.getTipoDenuncia().getIdTipoDenuncia() == 0) {
-            dto.setUsuario(objectMapper.convertValue(entity.getUsuario(), UsuarioDTO.class));
-        }
-
-        return dto;
-    }
-
 
     public List<DenunciaDTO> listByIdUsuario(Integer idUsuario) throws Exception {
         List<Denuncia> denuncias = denunciaRepository.findAllByUsuario_IdUsuario(idUsuario);
@@ -66,9 +57,23 @@ public class DenunciaService {
         denuncia.setIdUsuario(idUsuario);
 
         Denuncia d = denunciaRepository.save(denuncia);
-        localizacaoService.criarLocalizacao(d);
 
-        return retornarDTO(d);
+        if (denunciaCreateDTO.getLocalizacao() != null
+                && denunciaCreateDTO.getLocalizacao().getLatitude() != null
+                && denunciaCreateDTO.getLocalizacao().getLongitude() != null) {
+
+            Localizacao localizacao = new Localizacao();
+            localizacao.setLatitude(denunciaCreateDTO.getLocalizacao().getLatitude());
+            localizacao.setLongitude(denunciaCreateDTO.getLocalizacao().getLongitude());
+            localizacao.setIdDenuncia(d.getIdDenuncia());
+
+            localizacao.setDenuncia(d);
+            d.setLocalizacao(localizacao);
+        }
+
+        Denuncia savedDenuncia = denunciaRepository.save(d);
+
+        return retornarDTO(savedDenuncia);
     }
 
 
@@ -107,6 +112,21 @@ public class DenunciaService {
         Denuncia denuncia = objectMapper.convertValue(createDTO, Denuncia.class);
         denuncia.setUsuario(usuario);
         return denuncia;
+    }
+
+    public DenunciaDTO retornarDTO(Denuncia entity) {
+        DenunciaDTO dto = objectMapper.convertValue(entity, DenunciaDTO.class);
+
+        if (entity.getTipoDenuncia().getIdTipoDenuncia() == 0) {
+            dto.setUsuario(objectMapper.convertValue(entity.getUsuario(), UsuarioDTO.class));
+        }
+
+        if (entity.getLocalizacao() != null) {
+            LocalizacaoDTO localizacaoDTO = objectMapper.convertValue(entity.getLocalizacao(), LocalizacaoDTO.class);
+            dto.setLocalizacao(localizacaoDTO);
+        }
+
+        return dto;
     }
 
 
