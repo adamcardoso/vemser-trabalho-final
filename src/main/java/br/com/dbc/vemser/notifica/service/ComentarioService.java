@@ -22,51 +22,53 @@ public class ComentarioService {
     private final DenunciaRepository denunciaRepository;
     private final ObjectMapper objectMapper;
 
-    public ComentarioDTO obterComentarioById(Integer id) throws Exception{
-        return comentarioRepository.findById(id)
-                .map(this::returnComentarioDto)
-                .orElseThrow(() -> new RegraDeNegocioException("Comentário não encontrado"));
+
+    public ComentarioDTO criarComentario(Integer idUsuario, Integer idDenuncia, String comentario) throws RegraDeNegocioException {
+        Denuncia denuncia = getDenuncia(idDenuncia);
+        Comentario comentarioCriado = new Comentario(idDenuncia,idUsuario,comentario,0);
+        comentarioCriado = comentarioRepository.save(comentarioCriado);
+        denuncia.getComentarios().add(comentarioCriado);
+        return retornaComentarioDTO(comentarioCriado);
     }
 
-    public List<ComentarioDTO> listarComentariosByIdDenuncia(Integer id) throws Exception{
-        return comentarioRepository.listarComentariosByIdDenuncia(id)
-                .stream()
-                .map(this::returnComentarioDto)
-                .collect(Collectors.toList());
+    public ComentarioDTO editarComentario(Integer idUsuario, Integer idComentario,
+                                          String comentarioAtualizado) throws RegraDeNegocioException {
+        Comentario comentario = getComentario(idComentario);
+        if(comentario.getIdUsuario().equals(idComentario)){
+            comentario.setComentario(comentarioAtualizado);
+            return retornaComentarioDTO(comentarioRepository.save(comentario));
+        }
+
+        throw new RegraDeNegocioException("você so pode editar seus comentarios!");
+
     }
 
-    public ComentarioDTO criarComentario(ComentarioCreateDTO comentarioDto) {
-        Denuncia d = denunciaRepository.getById(comentarioDto.getIdDenuncia());
-        Comentario c = objectMapper.convertValue(comentarioDto, Comentario.class);
-        c.setDenuncia(d);
+    public void deletarComentario(Integer idUsuario, Integer idComentario) throws RegraDeNegocioException{
+        Comentario comentario = getComentario(idComentario);
+        if(comentario.getIdUsuario().equals(idComentario)){
+            comentarioRepository.delete(comentario);
+        }
 
-        ComentarioDTO cDto =objectMapper.convertValue(comentarioRepository.save(c), ComentarioDTO.class);
-        cDto.setIdDenuncia(d.getIdDenuncia());
-        return cDto;
+        throw new RegraDeNegocioException("você so pode excluir seus comentarios!");
     }
 
-    public ComentarioDTO editarComentario(Integer id, ComentarioUpdateDTO comentarioDto) throws Exception{
-        comentarioRepository.findById(id).orElseThrow(() -> new RegraDeNegocioException("Comentário não encontrado!"));
-
-        Denuncia d = denunciaRepository.getById(comentarioDto.getIdDenuncia());
-        Comentario c = objectMapper.convertValue(comentarioDto, Comentario.class);
-        c.setIdComentario(id);
-        c.setDenuncia(d);
-
-        ComentarioDTO cDto = returnComentarioDto(comentarioRepository.save(c));
-        cDto.setIdDenuncia(d.getIdDenuncia());
-        return cDto;
+    private Comentario getComentario(Integer idComentario) throws RegraDeNegocioException {
+        Comentario comentario = comentarioRepository.findById(idComentario).get();
+        if (comentario == null){
+            throw new RegraDeNegocioException("Comentario não encontrado!");
+        }
+        return comentario;
     }
 
-    public void deletarComentario(Integer id) throws Exception{
-        comentarioRepository.findById(id).orElseThrow(() -> new RegraDeNegocioException("Comentário não encontrado!"));
-        comentarioRepository.deleteById(id);
+    private Denuncia getDenuncia(Integer idDenuncia) throws RegraDeNegocioException {
+        Denuncia denuncia = denunciaRepository.getDenunciaAtiva(idDenuncia);
+        if (denuncia == null){
+            throw new RegraDeNegocioException("Denuncia não encontrada!");
+        }
+        return denuncia;
     }
 
-    private ComentarioDTO returnComentarioDto(Comentario c){
-        ComentarioDTO comentarioDTO = objectMapper.convertValue(c, ComentarioDTO.class);
-        comentarioDTO.setIdDenuncia(c.getDenuncia().getIdDenuncia());
-        comentarioDTO.setIdUsuario(c.getUsuario().getIdUsuario());
-        return comentarioDTO;
+    private ComentarioDTO retornaComentarioDTO(Comentario comentario){
+        return objectMapper.convertValue(comentario, ComentarioDTO.class);
     }
 }

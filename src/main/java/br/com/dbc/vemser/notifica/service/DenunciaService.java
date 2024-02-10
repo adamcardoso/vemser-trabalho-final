@@ -55,6 +55,7 @@ public class DenunciaService {
         Denuncia denuncia = converterCreateDTO(denunciaCreateDTO, usuario);
         denuncia.setDataHora(LocalDateTime.now());
         denuncia.setIdUsuario(idUsuario);
+        denuncia.setNumeroCurtidas(0);
 
         Denuncia d = denunciaRepository.save(denuncia);
 

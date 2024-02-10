@@ -49,6 +49,8 @@ public class Denuncia {
     @Enumerated(EnumType.ORDINAL)
     private TipoDenuncia tipoDenuncia;
 
+    private Integer numeroCurtidas;
+
     @Column(name = "id_usuario", insertable = false, updatable = false)
     private Integer idUsuario;
 

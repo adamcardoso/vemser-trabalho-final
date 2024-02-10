@@ -11,8 +11,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public class ComentarioCreateDTO {
-    @Schema(description = "ID do Comentário", example = "1")
-    private Integer idComentario;
 
     @Schema(description = "Texto do Comentário", example = "Isso é um comentário")
     private String comentario;
