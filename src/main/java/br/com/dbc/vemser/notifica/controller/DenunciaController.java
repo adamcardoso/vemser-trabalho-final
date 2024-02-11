@@ -28,16 +28,10 @@ public class DenunciaController{
     private final LoginService loginService;
 
 
-    @GetMapping("/denuncia-por-id")
-    public ResponseEntity<DenunciaDTO> obterDenunciaById() throws Exception {
-        DenunciaDTO denunciaDTO = denunciaService.obterDenunciaById(loginService.getIdLoggedUser());
-        return ResponseEntity.ok(denunciaDTO);
-    }
-
     @GetMapping("/minhas-denuncias")
     public ResponseEntity<List<DenunciaDTO>> listByIdUsuario() throws Exception {
         List<DenunciaDTO> denunciaDTOS = denunciaService.listByIdUsuario(loginService.getIdLoggedUser());
-        return ResponseEntity.ok(denunciaDTOS);
+        return new ResponseEntity<>(denunciaDTOS,HttpStatus.OK);
     }
 
     @PostMapping("/criar-denuncia")
@@ -46,15 +40,15 @@ public class DenunciaController{
         return ResponseEntity.status(HttpStatus.CREATED).body(denunciaDTO);
     }
 
-    @PutMapping("/att-denuncia")
-    public ResponseEntity<DenunciaDTO> editarDenuncia(@RequestParam Integer idDenuncia, @Valid @RequestBody DenunciaCreateDTO denunciaCreateDTO) throws Exception {
+    @PutMapping("/{idDenuncia}/att-denuncia")
+    public ResponseEntity<DenunciaDTO> editarDenuncia(@PathVariable("idDenuncia") Integer idDenuncia, @Valid @RequestBody DenunciaCreateDTO denunciaCreateDTO) throws Exception {
         DenunciaDTO denunciaDTO = denunciaService.editarDenuncia(denunciaCreateDTO, idDenuncia, loginService.getIdLoggedUser());
-        return ResponseEntity.ok(denunciaDTO);
+        return new ResponseEntity<>(denunciaDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete-denuncia/{idDenuncia}")
     public ResponseEntity<Object> deletarDenuncia(@PathVariable("idDenuncia") Integer idDenuncia) throws Exception {
         denunciaService.deletarDenuncia(idDenuncia, loginService.getIdLoggedUser());
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 }
