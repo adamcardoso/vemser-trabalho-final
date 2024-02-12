@@ -6,6 +6,7 @@ import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioLoginDTO;
 import br.com.dbc.vemser.notifica.entity.Usuario;
 import br.com.dbc.vemser.notifica.entity.enums.TipoUsuario;
+import br.com.dbc.vemser.notifica.entity.enums.UsuarioAtivo;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.repository.LoginRepository;
 import br.com.dbc.vemser.notifica.repository.UsuarioRepository;
@@ -82,6 +83,7 @@ public class LoginController implements ILoginController{
         usuarioEntity.setClasseSocial(usuarioCreateDTO.getClasseSocial());
         usuarioEntity.setGeneroUsuario(usuarioCreateDTO.getGeneroUsuario());
         usuarioEntity.setTipoUsuario(TipoUsuario.COMUM);
+        usuarioEntity.setUsuarioAtivo(UsuarioAtivo.SIM);
 
         usuarioRepository.save(usuarioEntity);
 

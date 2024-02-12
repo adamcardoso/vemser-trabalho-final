@@ -2,15 +2,14 @@ package br.com.dbc.vemser.notifica.controller;
 
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioCreateDTO;
+import br.com.dbc.vemser.notifica.dto.usuario.admin_dto.DenunciaListDTO;
+import br.com.dbc.vemser.notifica.dto.usuario.admin_dto.UsuarioListDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioUpdateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import br.com.dbc.vemser.notifica.service.AdminService;
 import br.com.dbc.vemser.notifica.service.LoginService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -29,48 +28,21 @@ public class AdminController {
     private final LoginService loginService;
 
 
-    @GetMapping("/list-usuarios-ativos")
-    public ResponseEntity<Page<UsuarioDTO>> listarUsuariosPaginadosAtivos(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-
-        Pageable pageable = PageRequest.of(page, size);
-        Page<UsuarioDTO> usuarios = adminService.listUsuariosAtivos(pageable);
-
-        Page<UsuarioDTO> usuarioDTOs = usuarios.map(usuario -> new UsuarioDTO(
-                usuario.getIdUsuario(),
-                usuario.getNomeUsuario(),
-                usuario.getEmailUsuario(),
-                usuario.getNumeroCelular(),
-                usuario.getEtniaUsuario(),
-                usuario.getDataNascimento(),
-                usuario.getClasseSocial(),
-                usuario.getGeneroUsuario()
-        ));
-
-        return ResponseEntity.ok(usuarioDTOs);
+    @GetMapping("/meu-usuario")
+    public ResponseEntity<UsuarioDTO> usuario() throws Exception {
+        UsuarioDTO usuario = adminService.obterUsuarioById(loginService.getIdLoggedUser());
+        return new ResponseEntity<>(usuario, HttpStatus.OK);
     }
-    @GetMapping("/list-usuarios-inativos")
-    public ResponseEntity<Page<UsuarioDTO>> listarUsuariosPaginadosInativos(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 
-        Pageable pageable = PageRequest.of(page, size);
-        Page<UsuarioDTO> usuarios = adminService.listUsuariosInativos(pageable);
-
-        Page<UsuarioDTO> usuarioDTOs = usuarios.map(usuario -> new UsuarioDTO(
-                usuario.getIdUsuario(),
-                usuario.getNomeUsuario(),
-                usuario.getEmailUsuario(),
-                usuario.getNumeroCelular(),
-                usuario.getEtniaUsuario(),
-                usuario.getDataNascimento(),
-                usuario.getClasseSocial(),
-                usuario.getGeneroUsuario()
-        ));
-
-        return ResponseEntity.ok(usuarioDTOs);
+    @GetMapping("/listar-usuarios")
+    public ResponseEntity<List<UsuarioListDTO>> listAll() {
+        List<UsuarioListDTO> usuarios = adminService.listAll();
+        return new ResponseEntity<>(usuarios, HttpStatus.OK);
     }
 
     @GetMapping("/list-admins")
-    public ResponseEntity<List<UsuarioDTO>> listarAdmins() {
-        List<UsuarioDTO> usuarios = adminService.listUsuariosAdmin();
+    public ResponseEntity<List<UsuarioListDTO>> listarAdmins() {
+        List<UsuarioListDTO> usuarios = adminService.listUsuariosAdmin();
         return new ResponseEntity<>(usuarios, HttpStatus.OK);
     }
 
@@ -80,16 +52,26 @@ public class AdminController {
         return new ResponseEntity<>(usuario, HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/criar-admin")
     public ResponseEntity<UsuarioDTO> criarUsuarioAdmin(@Valid @RequestBody UsuarioCreateDTO novoUsuario) throws Exception {
         UsuarioDTO usuarios = adminService.criarUsuario(novoUsuario);
         return new ResponseEntity<>(usuarios, HttpStatus.CREATED);
     }
 
-    @PutMapping("/editar-usuario-admin")
+    @PutMapping("/editar-usuario")
     public ResponseEntity<UsuarioDTO> atualizarAdmin( @Valid @RequestBody UsuarioUpdateDTO novoUsuario) throws Exception {
         UsuarioDTO usuarios = adminService.atualizarUsuario(loginService.getIdLoggedUser(), novoUsuario);
         return new ResponseEntity<>(usuarios, HttpStatus.OK);
+    }
+
+    @PutMapping("/editar-senha")
+    public ResponseEntity<String> editarSenha(@RequestParam(required = false) Integer idUsuario,
+                                              @RequestParam String senhaAtual, @RequestParam String novaSenha) throws Exception {
+        if (idUsuario == null){
+            idUsuario = loginService.getIdLoggedUser();
+        }
+        String token = adminService.attSenha(idUsuario, senhaAtual, novaSenha);
+        return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
     @DeleteMapping("/usuario/{idUsuario}")
@@ -105,8 +87,8 @@ public class AdminController {
     }
 
     @GetMapping("/list-denuncias-ativas")
-    public ResponseEntity<List<DenunciaDTO>> listarTodasDenunciasAtivas() throws Exception {
-        List<DenunciaDTO> denunciaDTOS = adminService.listarTodasDenunciasAtivas() ;
+    public ResponseEntity<List<DenunciaListDTO>> listarTodasDenunciasAtivas(){
+        List<DenunciaListDTO> denunciaDTOS = adminService.listarTodasDenunciasAtivas() ;
         return ResponseEntity.ok(denunciaDTOS);
     }
 

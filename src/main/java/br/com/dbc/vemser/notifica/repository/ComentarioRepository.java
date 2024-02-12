@@ -10,4 +10,5 @@ import java.util.List;
 public interface ComentarioRepository extends JpaRepository<Comentario, Integer> {
     @Query(value = "SELECT * FROM VS_13_EQUIPE_7.COMENTARIO c WHERE c.ID_DENUNCIA=?1", nativeQuery = true)
     List<Comentario> listarComentariosByIdDenuncia(Integer id) throws Exception;
+
 }

@@ -6,10 +6,7 @@
     import br.com.dbc.vemser.notifica.entity.Comentario;
     import br.com.dbc.vemser.notifica.entity.Denuncia;
     import br.com.dbc.vemser.notifica.entity.Endereco;
-    import br.com.dbc.vemser.notifica.entity.enums.ClasseSocial;
-    import br.com.dbc.vemser.notifica.entity.enums.Etnia;
-    import br.com.dbc.vemser.notifica.entity.enums.Genero;
-    import br.com.dbc.vemser.notifica.entity.enums.TipoUsuario;
+    import br.com.dbc.vemser.notifica.entity.enums.*;
     import com.fasterxml.jackson.annotation.JsonIgnore;
     import com.fasterxml.jackson.annotation.JsonInclude;
     import lombok.*;
@@ -29,6 +26,7 @@
         private LocalDate dataNascimento;
         private ClasseSocial classeSocial;
         private Genero generoUsuario;
+        private UsuarioAtivo usuarioAtivo;
         @JsonInclude(JsonInclude.Include.NON_NULL)
         List<EnderecoDTO> enderecos;
         @JsonInclude(JsonInclude.Include.NON_NULL)

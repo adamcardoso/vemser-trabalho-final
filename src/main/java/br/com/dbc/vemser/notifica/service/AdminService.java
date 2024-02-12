@@ -3,22 +3,28 @@ package br.com.dbc.vemser.notifica.service;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaCreateDTO;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioCreateDTO;
+import br.com.dbc.vemser.notifica.dto.usuario.admin_dto.DenunciaListDTO;
+import br.com.dbc.vemser.notifica.dto.usuario.admin_dto.UsuarioListDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioUpdateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import br.com.dbc.vemser.notifica.entity.Comentario;
 import br.com.dbc.vemser.notifica.entity.Denuncia;
 import br.com.dbc.vemser.notifica.entity.Usuario;
 import br.com.dbc.vemser.notifica.entity.enums.StatusDenuncia;
+import br.com.dbc.vemser.notifica.entity.enums.TipoUsuario;
 import br.com.dbc.vemser.notifica.entity.enums.UsuarioAtivo;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.repository.AdminRepository;
 import br.com.dbc.vemser.notifica.repository.DenunciaRepository;
 import br.com.dbc.vemser.notifica.repository.ComentarioRepository;
+import br.com.dbc.vemser.notifica.security.TokenService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,52 +36,46 @@ public class AdminService {
     private final AdminRepository adminRepository;
     private final DenunciaRepository denunciaRepository;
     private final ComentarioRepository comentarioRepository;
+    private final AuthenticationManager authenticationManager;
+    private final Argon2PasswordEncoder argon2PasswordEncoder;
+    private final TokenService tokenService;
     private final ObjectMapper objectMapper;
 
-    public Page<UsuarioDTO> listUsuariosAtivos(Pageable pageable) {
-        List<UsuarioDTO> usuarioDTOList = adminRepository.findAll(pageable)
-                .stream()
-                .filter(usuario -> UsuarioAtivo.SIM.equals(usuario.getUsuarioAtivo()))
-                .map(usuario -> retornarDTO(usuario))
-                .collect(Collectors.toList());
-
-        return new PageImpl<>(usuarioDTOList, pageable, usuarioDTOList.size());
-    }
-
-    public Page<UsuarioDTO> listUsuariosInativos(Pageable pageable) {
-        List<UsuarioDTO> usuarioDTOList = adminRepository.findAll(pageable)
-                .stream()
-                .filter(usuario -> UsuarioAtivo.NAO.equals(usuario.getUsuarioAtivo()))
-                .map(usuario -> retornarDTO(usuario))
-                .collect(Collectors.toList());
-
-        return new PageImpl<>(usuarioDTOList, pageable, usuarioDTOList.size());
-    }
-
-
-    public List<UsuarioDTO> listUsuariosAdmin(){
+    public List<UsuarioListDTO> listUsuariosAdmin(){
         return adminRepository.usuariosAdmin().stream()
-                .map(usuario -> retornarDTO(usuario))
+                .map(usuario -> retornarListDTO(usuario))
+                .collect(Collectors.toList());
+    }
+
+    public List<UsuarioListDTO> listAll(){
+        return adminRepository.listAll().stream()
+                .map(usuario -> retornarListDTO(usuario))
                 .collect(Collectors.toList());
     }
 
     public UsuarioDTO obterUsuarioById(Integer idUsuario) throws Exception {
-        return retornarDTO(getUsuario(idUsuario));
+        return retornarDTO(getusuario(idUsuario));
     }
 
     public UsuarioDTO criarUsuario(UsuarioCreateDTO novoUsuario) {
+        Usuario usuarioDesativado = adminRepository.usuarioInativoCadastrado(novoUsuario.getNumeroCelular(),
+                novoUsuario.getEmailUsuario());
+        if(usuarioDesativado != null){
+            usuarioDesativado.setUsuarioAtivo(UsuarioAtivo.SIM);
+            return retornarDTO(adminRepository.save(usuarioDesativado));
+        }
         Usuario usuarioCriado = converterDTO(novoUsuario);
+        usuarioCriado.setTipoUsuario(TipoUsuario.ADMIN);
+        usuarioCriado.setUsuarioAtivo(UsuarioAtivo.SIM);
         return retornarDTO(adminRepository.save(usuarioCriado));
     }
-    //
+
     public UsuarioDTO atualizarUsuario(Integer idUsuario, UsuarioUpdateDTO novoUsuario) throws Exception {
-        Usuario usuarioRecuperado = getUsuario(idUsuario);
+        Usuario usuarioRecuperado = getUsuarioAtivo(idUsuario);
         usuarioRecuperado.setEmailUsuario(novoUsuario.getEmailUsuario());
         usuarioRecuperado.setEtniaUsuario(novoUsuario.getEtniaUsuario());
         usuarioRecuperado.setGeneroUsuario(novoUsuario.getGeneroUsuario());
         usuarioRecuperado.setNomeUsuario(novoUsuario.getNomeUsuario());
-        usuarioRecuperado.setSenhaUsuario(novoUsuario.getSenhaUsuario());
-        usuarioRecuperado.setTipoUsuario(novoUsuario.getTipoUsuario());
         usuarioRecuperado.setClasseSocial(novoUsuario.getClasseSocial());
         usuarioRecuperado.setDataNascimento(novoUsuario.getDataNascimento());
         usuarioRecuperado.setNumeroCelular(novoUsuario.getNumeroCelular());
@@ -83,25 +83,47 @@ public class AdminService {
         return retornarDTO(adminRepository.save(usuarioRecuperado));
     }
 
-    public void removerUsuario(Integer idUsuario) throws Exception {
-        Usuario usuarioDeletado = getUsuario(idUsuario);
-        usuarioDeletado.setUsuarioAtivo(UsuarioAtivo.NAO);
+    public String attSenha(Integer idUsuario, String senha, String novaSenha) throws RegraDeNegocioException {
+        try {
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                    new UsernamePasswordAuthenticationToken(
+                            getUsuarioAtivo(idUsuario).getEmailUsuario(),
+                            senha
+                    );
+
+            Authentication authentication =
+                    authenticationManager.authenticate(
+                            usernamePasswordAuthenticationToken);
+
+            Usuario usuarioValidado = (Usuario) authentication.getPrincipal();
+            usuarioValidado.setSenhaUsuario(argon2PasswordEncoder.encode(novaSenha));
+            adminRepository.save(usuarioValidado);
+            return tokenService.generateToken(usuarioValidado);
+        } catch (AuthenticationException ex) {
+            throw new RegraDeNegocioException("Senha incorreta!");
+        }
     }
 
-    public List<DenunciaDTO> listarTodasDenunciasAtivas(){
-        return denunciaRepository.findAll().stream()
-                .filter(usuario -> !StatusDenuncia.FECHADO.equals(usuario.getStatusDenuncia()))
-                .map(denuncia -> retornarDTODenuncia(denuncia))
+    public void removerUsuario(Integer idUsuario) {
+        Usuario usuarioDeletado = adminRepository.getUsuarioAtivo(idUsuario);
+        usuarioDeletado.setUsuarioAtivo(UsuarioAtivo.NAO);
+        adminRepository.save(usuarioDeletado);
+    }
+
+    public List<DenunciaListDTO> listarTodasDenunciasAtivas(){
+        return denunciaRepository.getDenuncias().stream()
+                .map(denuncia -> retornaListDenunciaDTO(denuncia))
                 .collect(Collectors.toList());
     }
 
     public DenunciaDTO denunciaById(Integer id) throws RegraDeNegocioException {
-        return retornarDTODenuncia(getUsuarioDenuncia(id));
+        return retornarDTODenuncia(getDenuncia(id));
     }
 
     public void deletarDenuncia(Integer id) throws RegraDeNegocioException {
-        Denuncia denunciaDeletada = getUsuarioDenuncia(id);
+        Denuncia denunciaDeletada = getDenuncia(id);
         denunciaDeletada.setStatusDenuncia(StatusDenuncia.FECHADO);
+        denunciaRepository.save(denunciaDeletada);
     }
 
     public void deletarComentario(Integer idComentario){
@@ -109,8 +131,16 @@ public class AdminService {
         comentarioRepository.delete(comentarioExcluido);
     }
 
-    private Usuario getUsuario(Integer id) throws RegraDeNegocioException {
-        return adminRepository.findById(id)
+    private Usuario getUsuarioAtivo(Integer id) throws RegraDeNegocioException {
+        Usuario usuario = adminRepository.getUsuarioAtivo(id);
+        if (usuario == null) {
+            throw new RegraDeNegocioException("Usuário não encontrado!");
+        }
+        return usuario;
+    }
+
+    private Usuario getusuario(Integer idUsuario) throws RegraDeNegocioException {
+        return adminRepository.findById(idUsuario)
                 .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado!"));
     }
 
@@ -122,13 +152,20 @@ public class AdminService {
         return objectMapper.convertValue(entity, UsuarioDTO.class);
     }
 
-    private Denuncia getUsuarioDenuncia(Integer id) throws RegraDeNegocioException {
-        return denunciaRepository.findById(id)
-                .orElseThrow(() -> new RegraDeNegocioException("Denuncia não encontrado!"));
+    private UsuarioListDTO retornarListDTO(Usuario entity) {
+        return objectMapper.convertValue(entity, UsuarioListDTO.class);
     }
 
-    private Denuncia converterDTODenuncia(DenunciaCreateDTO dto) {
-        return objectMapper.convertValue(dto, Denuncia.class);
+    private Denuncia getDenuncia(Integer id) throws RegraDeNegocioException {
+        Denuncia denuncia = denunciaRepository.getDenunciaAtiva(id);
+        if (denuncia == null){
+            throw new RegraDeNegocioException("Denuncia não encontrado!");
+        }
+        return denuncia;
+    }
+
+    private DenunciaListDTO retornaListDenunciaDTO(Denuncia denuncia) {
+        return objectMapper.convertValue(denuncia, DenunciaListDTO.class);
     }
 
     private DenunciaDTO retornarDTODenuncia(Denuncia entity) {

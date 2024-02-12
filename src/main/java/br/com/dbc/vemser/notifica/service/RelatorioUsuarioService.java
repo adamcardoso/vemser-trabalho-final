@@ -1,12 +1,9 @@
 package br.com.dbc.vemser.notifica.service;
 
-import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
-import br.com.dbc.vemser.notifica.dto.endereco.EnderecoDTO;
 import br.com.dbc.vemser.notifica.dto.relatorio.RelatorioDto;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
-import br.com.dbc.vemser.notifica.entity.Endereco;
 import br.com.dbc.vemser.notifica.entity.Usuario;
-import br.com.dbc.vemser.notifica.repository.ICurtidaRepository;
+import br.com.dbc.vemser.notifica.repository.CurtidaRepository;
 import br.com.dbc.vemser.notifica.repository.IRelatorioUsuarioRepository;
 import br.com.dbc.vemser.notifica.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,14 +12,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @RequiredArgsConstructor
 @Service
 public class RelatorioUsuarioService {
     private final IRelatorioUsuarioRepository relatorioUsuarioRepository;
-    private final ICurtidaRepository curtidaRepository;
+    private final CurtidaRepository curtidaRepository;
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
 
