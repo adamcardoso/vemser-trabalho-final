@@ -102,6 +102,9 @@ public class DenunciaService {
 
     public void deletarDenuncia(Integer idDenuncia, Integer idUsuario) throws Exception {
         Denuncia denuncia = objectMapper.convertValue(obterDenunciaById(idDenuncia), Denuncia.class);
+        if ((denuncia.getIdUsuario() != idUsuario && denuncia.getIdUsuario() != null)) {
+            throw new RegraDeNegocioException("Usuário não tem permissão para editar esta denúncia.");
+        }
         denuncia.setStatusDenuncia(StatusDenuncia.FECHADO);
     }
 
