@@ -108,7 +108,7 @@ public class DenunciaService {
     public Denuncia getDenuncia(Integer idDenuncia) throws RegraDeNegocioException {
         Denuncia denuncia = denunciaRepository.getDenunciaAtiva(idDenuncia);
 
-        if (denuncia != null){
+        if (denuncia == null){
             throw new RegraDeNegocioException("Denuncia não encontrada!");
         }
         return denuncia;
