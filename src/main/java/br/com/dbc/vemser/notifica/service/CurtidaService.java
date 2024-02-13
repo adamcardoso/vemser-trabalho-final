@@ -9,6 +9,7 @@ import br.com.dbc.vemser.notifica.repository.ComentarioRepository;
 import br.com.dbc.vemser.notifica.repository.CurtidaRepository;
 import br.com.dbc.vemser.notifica.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -28,11 +29,13 @@ public class CurtidaService{
         if(curtidaRepository.findByIdUsuarioAndDenuncia(idUsuario, idDenuncia).isPresent()){
            Curtida curtidaExistente = curtidaRepository.findByIdUsuarioAndDenuncia(idUsuario, idDenuncia).get();
            curtidaRepository.delete(curtidaExistente);
-           return "dislike";
+            denuncia.setNumeroCurtidas(curtidaRepository.numereCurtidasByDenuncia(idDenuncia));
+            denunciaRepository.save(denuncia);
+            return "dislike";
        }
        Curtida curtida = new Curtida(usuarioRepository.findById(idUsuario).get(), denuncia, LocalDateTime.now());
         curtidaRepository.save(curtida);
-        denuncia.setNumeroCurtidas(curtidaRepository.curtidasDenuncia(idDenuncia));
+        denuncia.setNumeroCurtidas(curtidaRepository.numereCurtidasByDenuncia(idDenuncia));
         denunciaRepository.save(denuncia);
         return "Like";
     }
@@ -42,21 +45,23 @@ public class CurtidaService{
         if(curtidaRepository.findByIdUsuarioAndIdComentario(idUsuario, idComentario).isPresent()){
             Curtida curtidaExistente = curtidaRepository.findByIdUsuarioAndIdComentario(idUsuario, idComentario).get();
             curtidaRepository.delete(curtidaExistente);
+            comentario.setNumeroCurtidas(curtidaRepository.numereCurtidasByComentario(idComentario));
+            comentarioRepository.save(comentario);
             return "dislike";
         }
         Curtida curtida = new Curtida(usuarioRepository.findById(idUsuario).get(), comentario, LocalDateTime.now());
         curtidaRepository.save(curtida);
-        comentario.setNumeroCurtidas(curtidaRepository.curtidasComentario(idComentario));
+        comentario.setNumeroCurtidas(curtidaRepository.numereCurtidasByComentario(idComentario));
         comentarioRepository.save(comentario);
         return "Like";
     }
 
     public Comentario getComentario(Integer idComentario) throws RegraDeNegocioException {
-        Comentario comentario = comentarioRepository.findById(idComentario).get();
-        if (comentario == null){
+        Optional<Comentario> comentario = comentarioRepository.findById(idComentario);
+        if (comentario.isEmpty()){
             throw new RegraDeNegocioException("Comentario não encontrado!");
         }
-        return comentario;
+        return comentario.get();
     }
 
     public Denuncia getDenuncia(Integer idDenuncia) throws RegraDeNegocioException {
