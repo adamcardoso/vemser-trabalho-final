@@ -30,19 +30,8 @@ public class LoginService {
     private final LoginRepository loginRepository;
     private final ObjectMapper objectMapper;
     private final UsuarioRepository usuarioRepository;
-    private final IEnderecoRepository iEnderecoRepository;
     private final Argon2PasswordEncoder argon2PasswordEncoder = new Argon2PasswordEncoder();
     private final InstituicaoRepository instituicaoRepository;
-
-    public UsuarioDTO autenticarUsuario(String email, String senha) throws RegraDeNegocioException {
-        Optional<Usuario> usuario = loginRepository.findByEmailUsuarioAndSenhaUsuario(email, senha);
-
-        if (usuario.isPresent()) {
-            return objectMapper.convertValue(usuario, UsuarioDTO.class);
-        } else {
-            return null;
-        }
-    }
 
     public UsuarioDTO createUsuario(UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
         Usuario usuarioDesativado = usuarioRepository.usuarioInativoCadastrado(usuarioCreateDTO.getNumeroCelular(),
@@ -50,6 +39,12 @@ public class LoginService {
         if(usuarioDesativado != null){
             usuarioDesativado.setUsuarioAtivo(UsuarioAtivo.SIM);
             return objectMapper.convertValue(usuarioRepository.save(usuarioDesativado),UsuarioDTO.class);
+        }
+        if (loginRepository.findByEmailUsuario(usuarioCreateDTO.getEmailUsuario()).isPresent()) {
+            throw new RegraDeNegocioException("Credenciais inválidas, Usuário Já Cadastrado!");
+        }
+        if (loginRepository.findByNumeroCelular(usuarioCreateDTO.getNumeroCelular()).isPresent()) {
+            throw new RegraDeNegocioException("Esse Número Já Está Cadastrado!");
         }
         Usuario usuarioCriado = objectMapper.convertValue(usuarioCreateDTO, Usuario.class);
         usuarioCriado.setSenhaUsuario(argon2PasswordEncoder.encode(usuarioCriado.getPassword()));
@@ -79,15 +74,6 @@ public class LoginService {
         return findById(getIdLoggedUser()).orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado"));
     }
 
-    public UsuarioDTO findByNumeroCelular(String numeroCelular) throws RegraDeNegocioException {
-        Optional<Usuario> usuario = loginRepository.findByNumeroCelular(numeroCelular);
-
-        if (usuario.isPresent()) {
-            return objectMapper.convertValue(usuario, UsuarioDTO.class);
-        } else {
-            return null;
-        }
-    }
 
     public Optional<Instituicao> findByEmailInstituicao(String emailInstituicao) {
         return instituicaoRepository.findByEmailInstituicao(emailInstituicao);

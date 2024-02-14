@@ -99,7 +99,6 @@ public class AvisosService {
         }
     }
 
-
     private void enviarEmailParaUsuario(String emailUsuario, Avisos aviso) throws Exception {
         String assunto = "Novo Aviso na Sua Localização";
         String corpo = "Olá,\n\n"
