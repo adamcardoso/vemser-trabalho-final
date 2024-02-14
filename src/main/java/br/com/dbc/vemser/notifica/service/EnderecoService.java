@@ -11,6 +11,7 @@ import br.com.dbc.vemser.notifica.entity.Usuario;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.repository.IEnderecoRepository;
 import br.com.dbc.vemser.notifica.repository.UsuarioRepository;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -78,22 +79,23 @@ public class EnderecoService{
     private Endereco cepRequest(Endereco endereco) throws RegraDeNegocioException {
         RestTemplate restTemplate = new RestTemplate();
 
-        String apiUrl = """
-            https://viacep.com.br/ws/%s/json/
-            """.formatted(endereco.getCep());
+        String apiUrl = "https://viacep.com.br/ws/{cep}/json/";
 
         try {
-            ResponseEntity<String> response = restTemplate.getForEntity(apiUrl, String.class);
+            ResponseEntity<String> response = restTemplate.getForEntity(apiUrl, String.class, endereco.getCep());
 
-            String[] jason = Objects.requireNonNull(response.getBody()).replace("[{}\\\"]", "").split(",");
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(response.getBody());
 
-            List<String> el = new ArrayList<>();
-            for (String item : jason)
-                el.add(item.replace("\\", "").split(": ")[1]);
+            String logradouro = jsonNode.get("logradouro").asText();
+            String bairro = jsonNode.get("bairro").asText();
+            String cidade = jsonNode.get("localidade").asText();
+            String estado = jsonNode.get("uf").asText();
+            String pais = "Brasil";  // Pode ajustar conforme necessário
 
-            return new Endereco(endereco.getIdEndereco(), endereco.getTipoEndereco(), el.get(1).replace("\"", ""),
-                    endereco.getNumero(), endereco.getComplemento(), endereco.getCep(), el.get(4).replace("\"", ""),
-                    el.get(5).replace("\"", ""), endereco.getPais(), endereco.getUsuario());
+            return new Endereco(endereco.getIdEndereco(), endereco.getIdUsuario(), endereco.getTipoEndereco(),
+                    logradouro, endereco.getNumero(), endereco.getComplemento(), endereco.getCep(),
+                    bairro, cidade, estado, pais, endereco.getUsuario());
         } catch (Exception e) {
             throw new RegraDeNegocioException("CEP Inválido!");
         }

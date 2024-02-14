@@ -1,9 +1,9 @@
 package br.com.dbc.vemser.notifica.controller;
 
-import br.com.dbc.vemser.notifica.controller.documentacao.IUsuarioController;
-import br.com.dbc.vemser.notifica.dto.usuario.UsuarioCreateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioUpdateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
+import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
+import br.com.dbc.vemser.notifica.service.LoginService;
 import br.com.dbc.vemser.notifica.service.UsuarioService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -21,28 +21,29 @@ import javax.validation.Valid;
 @Tag(name = "Usuário Controller")
 public class UsuarioController  {
     private final UsuarioService usuarioService;
+    private final LoginService loginService;
 
-    @GetMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDTO> obterUsuarioById(@PathVariable("idUsuario") Integer idUsuario) throws Exception {
-        UsuarioDTO usuario = usuarioService.obterUsuarioById(idUsuario);
+    @GetMapping("/meu-perfil")
+    public ResponseEntity<UsuarioDTO> obterUsuarioById() throws Exception {
+        UsuarioDTO usuario = usuarioService.obterUsuarioById(loginService.getIdLoggedUser());
         return new ResponseEntity<>(usuario, HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<UsuarioDTO> criarUsuario(@Valid @RequestBody UsuarioCreateDTO novoUsuario) throws Exception {
-        UsuarioDTO usuarios = usuarioService.criarUsuario(novoUsuario);
+    @PutMapping("/atualizar-perfil")
+    public ResponseEntity<UsuarioDTO> atualizarUsuario(@Valid @RequestBody UsuarioUpdateDTO novoUsuario) throws Exception {
+        UsuarioDTO usuarios = usuarioService.atualizarUsuario(loginService.getIdLoggedUser(), novoUsuario);
         return new ResponseEntity<>(usuarios, HttpStatus.OK);
     }
 
-    @PutMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDTO> atualizarUsuario(@PathVariable("idUsuario") Integer idUsuario,@Valid @RequestBody UsuarioUpdateDTO novoUsuario) throws Exception {
-        UsuarioDTO usuarios = usuarioService.atualizarUsuario(idUsuario, novoUsuario);
-        return new ResponseEntity<>(usuarios, HttpStatus.OK);
+    @PutMapping("/atualizar-senha")
+    public ResponseEntity<String> atualizarSenha(@RequestParam String senhaAtual, @RequestParam String novaSenha) throws RegraDeNegocioException {
+        String token = usuarioService.attSenha(loginService.getIdLoggedUser(), senhaAtual, novaSenha);
+        return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{idUsuario}")
-    public ResponseEntity<Void> removerUsuario(@PathVariable("idUsuario") Integer idUsuario) throws Exception {
-        usuarioService.removerUsuario(idUsuario);
+    @DeleteMapping("/desativar-perfil")
+    public ResponseEntity<Void> removerUsuario() throws Exception {
+        usuarioService.removerUsuario(loginService.getIdLoggedUser());
         return ResponseEntity.noContent().build();
     }
 }

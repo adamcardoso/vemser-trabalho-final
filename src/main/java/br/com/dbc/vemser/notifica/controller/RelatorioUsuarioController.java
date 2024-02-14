@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/relatorio")
@@ -26,5 +28,10 @@ public class RelatorioUsuarioController {
     @GetMapping("/quantidade-curtidas")
     public ResponseEntity<Page<RelatorioDto>> obterCurtidasUsuarios(@PageableDefault(size = 10, page = 0) Pageable pageable){
         return new ResponseEntity<>(relatorioUsuarioService.obterCurtidasUsuarios(pageable), HttpStatus.OK);
+    }
+
+    @GetMapping("/por-cidade")
+    public ResponseEntity<Page<UsuarioDTO>> usuarioPorCidade(@RequestParam("cidade") String cidade, @PageableDefault(size = 10, page = 0) Pageable pageable){
+        return new ResponseEntity<>(relatorioUsuarioService.usuariosPorCidade(cidade, pageable), HttpStatus.OK);
     }
 }

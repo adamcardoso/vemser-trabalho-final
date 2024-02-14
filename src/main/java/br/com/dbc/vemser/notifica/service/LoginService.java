@@ -1,35 +1,86 @@
 package br.com.dbc.vemser.notifica.service;
 
+import br.com.dbc.vemser.notifica.dto.endereco.EnderecoCreateDTO;
+import br.com.dbc.vemser.notifica.dto.usuario.UsuarioCreateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
+import br.com.dbc.vemser.notifica.entity.Endereco;
+import br.com.dbc.vemser.notifica.entity.Instituicao;
 import br.com.dbc.vemser.notifica.entity.Usuario;
+import br.com.dbc.vemser.notifica.entity.enums.TipoUsuario;
+import br.com.dbc.vemser.notifica.entity.enums.UsuarioAtivo;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
+import br.com.dbc.vemser.notifica.repository.IEnderecoRepository;
+import br.com.dbc.vemser.notifica.repository.InstituicaoRepository;
 import br.com.dbc.vemser.notifica.repository.LoginRepository;
+import br.com.dbc.vemser.notifica.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class LoginService {
 
     private final LoginRepository loginRepository;
     private final ObjectMapper objectMapper;
+    private final UsuarioRepository usuarioRepository;
+    private final Argon2PasswordEncoder argon2PasswordEncoder = new Argon2PasswordEncoder();
+    private final InstituicaoRepository instituicaoRepository;
 
-    @Autowired
-    public LoginService(LoginRepository loginRepository, ObjectMapper objectMapper) {
-        this.loginRepository = loginRepository;
-        this.objectMapper = objectMapper;
+    public UsuarioDTO createUsuario(UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
+        Usuario usuarioDesativado = usuarioRepository.usuarioInativoCadastrado(usuarioCreateDTO.getNumeroCelular(),
+                usuarioCreateDTO.getEmailUsuario());
+        if(usuarioDesativado != null){
+            usuarioDesativado.setUsuarioAtivo(UsuarioAtivo.SIM);
+            return objectMapper.convertValue(usuarioRepository.save(usuarioDesativado),UsuarioDTO.class);
+        }
+        if (loginRepository.findByEmailUsuario(usuarioCreateDTO.getEmailUsuario()).isPresent()) {
+            throw new RegraDeNegocioException("Credenciais inválidas, Usuário Já Cadastrado!");
+        }
+        if (loginRepository.findByNumeroCelular(usuarioCreateDTO.getNumeroCelular()).isPresent()) {
+            throw new RegraDeNegocioException("Esse Número Já Está Cadastrado!");
+        }
+        Usuario usuarioCriado = objectMapper.convertValue(usuarioCreateDTO, Usuario.class);
+        usuarioCriado.setSenhaUsuario(argon2PasswordEncoder.encode(usuarioCriado.getPassword()));
+        usuarioCriado.setTipoUsuario(TipoUsuario.COMUM);
+        usuarioCriado.setUsuarioAtivo(UsuarioAtivo.SIM);
+        usuarioRepository.save(usuarioCriado);
+
+        return objectMapper.convertValue(usuarioCriado,UsuarioDTO.class);
     }
 
-    public UsuarioDTO autenticarUsuario(String email, String senha) throws RegraDeNegocioException {
-        Optional<Usuario> usuario = loginRepository.findByEmailUsuarioAndSenhaUsuario(email, senha);
+    public Optional<Usuario> findById(Integer idUsuario) {
+        return loginRepository.findByIdUsuario(idUsuario);
+    }
+    public Optional<Instituicao> findByIdIntituicao(Integer idInstituicao) {
+        return instituicaoRepository.findByIdInstituicao(idInstituicao);
+    }
 
-        if (usuario.isPresent()) {
-            return objectMapper.convertValue(usuario, UsuarioDTO.class);
-        } else {
-            throw new RegraDeNegocioException("Credenciais inválidas, Usuário ou Senha Incorretos!");
-        }
+    public Optional<Usuario> findByEmailUsuario(String username) {
+        return loginRepository.findByEmailUsuario(username);
+    }
+
+    public Integer getIdLoggedUser() {
+        return Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+    }
+
+    public Usuario getLoggedUser() throws RegraDeNegocioException {
+        return findById(getIdLoggedUser()).orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado"));
+    }
+
+
+    public Optional<Instituicao> findByEmailInstituicao(String emailInstituicao) {
+        return instituicaoRepository.findByEmailInstituicao(emailInstituicao);
+    }
+
+    public Instituicao getLoggedInstituicao() throws RegraDeNegocioException {
+        return findByIdIntituicao(getIdLoggedUser()).orElseThrow(() -> new RegraDeNegocioException("Instituição não encontrado"));
     }
 }
 

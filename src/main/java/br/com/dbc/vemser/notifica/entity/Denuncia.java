@@ -4,6 +4,8 @@ import br.com.dbc.vemser.notifica.entity.enums.Categoria;
 import br.com.dbc.vemser.notifica.entity.enums.StatusDenuncia;
 import br.com.dbc.vemser.notifica.entity.enums.TipoDenuncia;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,17 +49,22 @@ public class Denuncia {
     @Enumerated(EnumType.ORDINAL)
     private TipoDenuncia tipoDenuncia;
 
+    @Column(name = "numero_curtidas")
+    private Integer numeroCurtidas;
+
+    @Column(name = "id_usuario", insertable = false, updatable = false)
+    private Integer idUsuario;
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     private Usuario usuario;
 
-    @Formula("id_usuario")
-    private Integer idUsuario;
-
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @OneToMany(mappedBy = "denuncia", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comentario> comentarios;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @OneToOne(mappedBy = "denuncia", cascade = CascadeType.ALL, orphanRemoval = true)
     private Localizacao localizacao;
 

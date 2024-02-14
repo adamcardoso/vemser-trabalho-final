@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,20 +22,23 @@ public class Localizacao {
     @Column(name = "id_localizacao")
     private Integer idLocalizacao;
 
-    @Column
+    @Column(name = "latitude ")
     private String latitude;
 
-    @Column
+    @Column(name = "longitude ")
     private String longitude;
 
     @JsonIgnore
     @OneToOne
-    @JoinColumn(name = "id_denuncia", referencedColumnName = "id_denuncia", unique = true)
+    @JoinColumn(name = "id_denuncia", referencedColumnName = "id_denuncia", insertable = false, updatable = false)
     private Denuncia denuncia;
 
-    public Localizacao(String latitude, String longitude, Denuncia denuncia){
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.denuncia = denuncia;
-    }
+    @Column(name = "id_denuncia ")
+    private Integer idDenuncia;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "localizacao", cascade = CascadeType.ALL)
+    private List<Avisos> avisos = new ArrayList<>();
+
+
 }
