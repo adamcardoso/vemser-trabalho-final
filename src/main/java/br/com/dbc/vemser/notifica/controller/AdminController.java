@@ -1,6 +1,8 @@
 package br.com.dbc.vemser.notifica.controller;
 
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
+import br.com.dbc.vemser.notifica.dto.instituicao.InstitucaoCreateDTO;
+import br.com.dbc.vemser.notifica.dto.instituicao.InstituicaoDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioCreateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.admin_dto.DenunciaListDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.admin_dto.UsuarioListDTO;
@@ -54,8 +56,14 @@ public class AdminController {
 
     @PostMapping("/criar-admin")
     public ResponseEntity<UsuarioDTO> criarUsuarioAdmin(@Valid @RequestBody UsuarioCreateDTO novoUsuario) throws Exception {
-        UsuarioDTO usuarios = adminService.criarUsuario(novoUsuario);
+        UsuarioDTO usuarios = adminService.criarUsuarioAdmin(novoUsuario);
         return new ResponseEntity<>(usuarios, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/criar-instituicao")
+    public ResponseEntity<InstituicaoDTO> criarInstituicao(@Valid @RequestBody InstitucaoCreateDTO novaInstituicao) throws Exception {
+        InstituicaoDTO instituicao = adminService.criarUsuarioInstitucao(novaInstituicao);
+        return new ResponseEntity<>(instituicao, HttpStatus.CREATED);
     }
 
     @PutMapping("/editar-usuario")

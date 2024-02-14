@@ -3,6 +3,7 @@ package br.com.dbc.vemser.notifica.controller.documentacao;
 import br.com.dbc.vemser.notifica.dto.endereco.EnderecoCreateDTO;
 import br.com.dbc.vemser.notifica.dto.instituicao.LoginInstituicaoDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioCreateDTO;
+import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioLoginDTO;
 import br.com.dbc.vemser.notifica.entity.Usuario;
 import br.com.dbc.vemser.notifica.exceptions.ErrorResponse;
@@ -53,7 +54,7 @@ public interface ILoginController {
             }
 
     )
-    public ResponseEntity<String> cadastrar(@RequestBody @Valid UsuarioCreateDTO usuarioCreateDTO, @RequestBody @Valid EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException;
+    public ResponseEntity<UsuarioDTO> cadastrar(@RequestBody @Valid UsuarioCreateDTO usuarioCreateDTO, @RequestBody @Valid EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException;
 
     @Operation(summary = "Pegar Cadastro", description = "Pegar os Dados do Usuário que está logado.")
     @ApiResponses(
