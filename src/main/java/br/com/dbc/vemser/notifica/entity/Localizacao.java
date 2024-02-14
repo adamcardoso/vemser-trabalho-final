@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,4 +35,10 @@ public class Localizacao {
 
     @Column(name = "id_denuncia ")
     private Integer idDenuncia;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "localizacao", cascade = CascadeType.ALL)
+    private List<Avisos> avisos = new ArrayList<>();
+
+
 }

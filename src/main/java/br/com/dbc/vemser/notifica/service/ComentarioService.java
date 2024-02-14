@@ -26,8 +26,9 @@ public class ComentarioService {
     public ComentarioDTO criarComentario(Integer idUsuario, Integer idDenuncia, String comentario) throws RegraDeNegocioException {
         Denuncia denuncia = getDenuncia(idDenuncia);
         Comentario comentarioCriado = new Comentario(idDenuncia,idUsuario,comentario,0);
-        comentarioCriado = comentarioRepository.save(comentarioCriado);
+        comentarioRepository.save(comentarioCriado);
         denuncia.getComentarios().add(comentarioCriado);
+        denunciaRepository.save(denuncia);
         return retornaComentarioDTO(comentarioCriado);
     }
 

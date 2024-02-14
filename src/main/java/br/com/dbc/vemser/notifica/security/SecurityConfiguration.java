@@ -29,9 +29,11 @@ public class SecurityConfiguration {
                 .cors().and()
                 .csrf().disable()
                 .authorizeHttpRequests((authz) -> authz
-                        .antMatchers("/","/login", "/login/cadastrar", "/estatistica", "/feed").permitAll()
-                        .antMatchers("/admin/**").hasAuthority(TipoUsuario.ADMIN.getRoleName())
-                        .antMatchers("/login/usuario-logado").hasAuthority(TipoUsuario.COMUM.getRoleName())
+                        .antMatchers("/","/login/usuario","/login/instituicao", "/login/cadastrar", "/estatistica", "/feed/**").permitAll()
+                        .antMatchers("/admin/**", "/relatorio/**").hasAuthority(TipoUsuario.ADMIN.getRoleName())
+                        .antMatchers("/avisos/**").hasAuthority(TipoUsuario.INSTITUICAO.getRoleName())
+                        .antMatchers("/login/usuario-logado", "/usuario/**", "/apoiar/**", "/denuncia/**", "/endereco/**", "/comentario/**").hasAuthority(TipoUsuario.COMUM.getRoleName())
+                        .antMatchers("/denuncia/criar-denuncia").hasAuthority(TipoUsuario.COMUM.getRoleName())
                         .anyRequest().authenticated()
                 );
 

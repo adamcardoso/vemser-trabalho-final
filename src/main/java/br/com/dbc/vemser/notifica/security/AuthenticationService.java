@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.notifica.security;
 
+import br.com.dbc.vemser.notifica.entity.Instituicao;
 import br.com.dbc.vemser.notifica.entity.Usuario;
 import br.com.dbc.vemser.notifica.service.LoginService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,15 @@ public class AuthenticationService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Usuario> usuarioEntityOptional = loginService.findByEmailUsuario(username);
-        return usuarioEntityOptional
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario inválido"));
+        if (usuarioEntityOptional.isPresent()) {
+            return usuarioEntityOptional.get();
+        }
+
+        Optional<Instituicao> instituicaoEntityOptional = loginService.findByEmailInstituicao(username);
+        if (instituicaoEntityOptional.isPresent()) {
+            return instituicaoEntityOptional.get();
+        }
+
+        throw new UsernameNotFoundException("Usuário ou Instituição inválidos");
     }
 }

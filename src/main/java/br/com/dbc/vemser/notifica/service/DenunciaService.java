@@ -26,7 +26,6 @@ public class DenunciaService {
     private final EmailService emailService;
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
-    private final LocalizacaoService localizacaoService;
 
     public DenunciaDTO obterDenunciaById(Integer idDenuncia) throws Exception {
         Denuncia denuncia = denunciaRepository.findById(idDenuncia)

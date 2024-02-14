@@ -1,13 +1,18 @@
 package br.com.dbc.vemser.notifica.controller;
 
 import br.com.dbc.vemser.notifica.controller.documentacao.ILoginController;
+import br.com.dbc.vemser.notifica.dto.endereco.EnderecoCreateDTO;
+import br.com.dbc.vemser.notifica.dto.instituicao.LoginInstituicaoDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioCreateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioLoginDTO;
+import br.com.dbc.vemser.notifica.entity.Endereco;
+import br.com.dbc.vemser.notifica.entity.Instituicao;
 import br.com.dbc.vemser.notifica.entity.Usuario;
 import br.com.dbc.vemser.notifica.entity.enums.TipoUsuario;
 import br.com.dbc.vemser.notifica.entity.enums.UsuarioAtivo;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
+import br.com.dbc.vemser.notifica.repository.IEnderecoRepository;
 import br.com.dbc.vemser.notifica.repository.LoginRepository;
 import br.com.dbc.vemser.notifica.repository.UsuarioRepository;
 import br.com.dbc.vemser.notifica.security.TokenService;
@@ -21,6 +26,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -38,10 +44,32 @@ public class LoginController implements ILoginController{
     public final AuthenticationManager authenticationManager;
     public final UsuarioService usuarioService;
     public final UsuarioRepository usuarioRepository;
+    private final IEnderecoRepository enderecoRepository;
     private final Argon2PasswordEncoder argon2PasswordEncoder;
     private final LoginService loginService;
 
-    @PostMapping
+    @PostMapping("/instituicao")
+    public ResponseEntity<String> loginInstituicao(@RequestBody @Valid LoginInstituicaoDTO loginInstituicaoDTO) throws RegraDeNegocioException {
+        try {
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                    new UsernamePasswordAuthenticationToken(
+                            loginInstituicaoDTO.getEmailInstituicao(),
+                            loginInstituicaoDTO.getSenhaInstituicao()
+                    );
+
+            Authentication authentication =
+                    authenticationManager.authenticate(
+                            usernamePasswordAuthenticationToken);
+
+            Instituicao instituicao = (Instituicao) authentication.getPrincipal();
+
+            return ResponseEntity.ok(tokenService.generateToken(instituicao));
+        } catch (AuthenticationException ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email ou Senha Incorretos!");
+        }
+    }
+
+    @PostMapping("/usuario")
     public ResponseEntity<String> login(@RequestBody @Valid UsuarioLoginDTO loginDTO) throws RegraDeNegocioException {
         try {
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
@@ -63,21 +91,22 @@ public class LoginController implements ILoginController{
     }
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<String> cadastrar(@RequestBody @Valid UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
+    public ResponseEntity<String> cadastrar(@RequestBody @Valid UsuarioCreateDTO usuarioCreateDTO,
+                                            @RequestBody @Valid EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
+
         if (loginService.findByEmailUsuario(usuarioCreateDTO.getEmailUsuario()).isPresent()) {
             throw new RegraDeNegocioException("Credenciais inválidas, Usuário Já Cadastrado!");
         }
 
-        String senhaCriptografada = argon2PasswordEncoder.encode(usuarioCreateDTO.getSenhaUsuario());
+        if (loginService.findByNumeroCelular(usuarioCreateDTO.getNumeroCelular()) != null) {
+            throw new RegraDeNegocioException("Esse Número Já Está Cadastrado!");
+        }
 
         Usuario usuarioEntity = new Usuario();
         usuarioEntity.setNomeUsuario(usuarioCreateDTO.getNomeUsuario());
         usuarioEntity.setEmailUsuario(usuarioCreateDTO.getEmailUsuario());
-        if (loginService.findByNumeroCelular(usuarioCreateDTO.getNumeroCelular())!=null) {
-            throw new RegraDeNegocioException("Esse Número Já Está Cadastrado!");
-        }
         usuarioEntity.setNumeroCelular(usuarioCreateDTO.getNumeroCelular());
-        usuarioEntity.setSenhaUsuario(senhaCriptografada);
+        usuarioEntity.setSenhaUsuario(argon2PasswordEncoder.encode(usuarioCreateDTO.getSenhaUsuario()));
         usuarioEntity.setEtniaUsuario(usuarioCreateDTO.getEtniaUsuario());
         usuarioEntity.setDataNascimento(usuarioCreateDTO.getDataNascimento());
         usuarioEntity.setClasseSocial(usuarioCreateDTO.getClasseSocial());
@@ -87,8 +116,14 @@ public class LoginController implements ILoginController{
 
         usuarioRepository.save(usuarioEntity);
 
+        if (enderecoCreateDTO.isEnderecoInformado()) {
+            Endereco enderecoEntity = new Endereco(usuarioEntity.getIdUsuario(), enderecoCreateDTO);
+            enderecoRepository.save(enderecoEntity);
+        }
+
         return ResponseEntity.ok("Cadastro feito com Sucesso!");
     }
+
 
 
     @GetMapping("/usuario-logado")
