@@ -28,11 +28,6 @@ public class UsuarioUpdateDTO {
     private String numeroCelular;
 
     @NotNull
-    @NotEmpty
-    @NotBlank
-    private String senhaUsuario;
-
-    @NotNull
     private Etnia etniaUsuario;
 
     @NotNull
@@ -44,6 +39,4 @@ public class UsuarioUpdateDTO {
     @NotNull
     private Genero generoUsuario;
 
-    @NotNull
-    private TipoUsuario tipoUsuario;
 }

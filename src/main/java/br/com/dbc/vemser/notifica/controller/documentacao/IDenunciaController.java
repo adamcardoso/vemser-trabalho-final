@@ -71,8 +71,8 @@ public interface IDenunciaController {
                             content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
             }
     )
-    @PutMapping("/{idDenuncia}")
-    public ResponseEntity<DenunciaDTO>editarDenuncia(@PathVariable("idDenuncia") Integer idDenuncia, @Valid @RequestBody DenunciaCreateDTO denunciaCreateDTO, @PathVariable("idUsuario") Integer idUsuario) throws Exception;
+    @PutMapping("/att-denuncia")
+    public ResponseEntity<DenunciaDTO> editarDenuncia(@RequestParam Integer idDenuncia, @RequestParam("idUsuario") Integer idUsuario, @RequestBody DenunciaCreateDTO denunciaCreateDTO) throws Exception;
 
     @Operation(summary = "Deletar denúncia", description = "Esse Método Deleta uma denúncia pelo idDenuncia e idUsuario dono dela.")
     @ApiResponses(
@@ -85,7 +85,7 @@ public interface IDenunciaController {
                             content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
             }
     )
-    @DeleteMapping("/{idDenuncia}")
-    public ResponseEntity<Object> deletarDenuncia(@PathVariable("idDenuncia") Integer idDenuncia, @PathVariable("idUsuario") Integer idUsuario) throws Exception;
+    @DeleteMapping("/delete-denuncia")
+    public ResponseEntity<Object> deletarDenuncia(@RequestParam Integer idDenuncia, @RequestParam Integer idUsuario) throws Exception;
 }
 

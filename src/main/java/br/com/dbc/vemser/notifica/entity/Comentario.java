@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Getter
-@Entity
+@Entity(name = "COMENTARIO")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Comentario {
     @Id
@@ -22,9 +22,13 @@ public class Comentario {
     @SequenceGenerator(name="comentario_sequence", sequenceName="seq_comentario", allocationSize = 1)
     @Column(name = "id_comentario")
     private Integer idComentario;
-
-    @Column
+    @Column(name = "id_denuncia", insertable = false, updatable = false)
+    private Integer idDenuncia;
+    @Column(name = "id_usuario", insertable = false, updatable = false)
+    private Integer idUsuario;
+    @Column(name = "comentario")
     private String comentario;
+    private Integer numeroCurtidas;
 
     @JsonIgnore
     @OneToMany(mappedBy = "comentario", cascade = CascadeType.ALL)
@@ -39,4 +43,5 @@ public class Comentario {
     @ManyToOne
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     private Usuario usuario;
+
 }

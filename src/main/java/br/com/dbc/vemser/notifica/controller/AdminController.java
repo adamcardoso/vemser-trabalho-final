@@ -1,11 +1,15 @@
 package br.com.dbc.vemser.notifica.controller;
 
-import br.com.dbc.vemser.notifica.controller.documentacao.IAdminController;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
+import br.com.dbc.vemser.notifica.dto.instituicao.InstitucaoCreateDTO;
+import br.com.dbc.vemser.notifica.dto.instituicao.InstituicaoDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioCreateDTO;
+import br.com.dbc.vemser.notifica.dto.usuario.admin_dto.DenunciaListDTO;
+import br.com.dbc.vemser.notifica.dto.usuario.admin_dto.UsuarioListDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioUpdateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
-import br.com.dbc.vemser.notifica.service.UsuarioAdminService;
+import br.com.dbc.vemser.notifica.service.AdminService;
+import br.com.dbc.vemser.notifica.service.LoginService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,60 +25,90 @@ import java.util.List;
 @Validated
 @AllArgsConstructor
 @Tag(name = "Admin Controller")
-public class AdminController implements IAdminController {
-    private final UsuarioAdminService usuarioAdminService;
+public class AdminController {
+    private final AdminService adminService;
+    private final LoginService loginService;
 
-    @GetMapping("/list-usuario")
-    public ResponseEntity<List<UsuarioDTO>> listarUsuarios() {
-        List<UsuarioDTO> usuarios = usuarioAdminService.list();
+
+    @GetMapping("/meu-usuario")
+    public ResponseEntity<UsuarioDTO> usuario() throws Exception {
+        UsuarioDTO usuario = adminService.obterUsuarioById(loginService.getIdLoggedUser());
+        return new ResponseEntity<>(usuario, HttpStatus.OK);
+    }
+
+    @GetMapping("/listar-usuarios")
+    public ResponseEntity<List<UsuarioListDTO>> listAll() {
+        List<UsuarioListDTO> usuarios = adminService.listAll();
         return new ResponseEntity<>(usuarios, HttpStatus.OK);
     }
 
-    @GetMapping("/list-admin")
-    public ResponseEntity<List<UsuarioDTO>> listarAdmins() {
-        List<UsuarioDTO> usuarios = usuarioAdminService.listUsuariosAdmin();
+    @GetMapping("/list-admins")
+    public ResponseEntity<List<UsuarioListDTO>> listarAdmins() {
+        List<UsuarioListDTO> usuarios = adminService.listUsuariosAdmin();
         return new ResponseEntity<>(usuarios, HttpStatus.OK);
     }
 
     @GetMapping("/usuario/{idUsuario}")
     public ResponseEntity<UsuarioDTO> obterUsuarioById(@PathVariable("idUsuario") Integer idUsuario) throws Exception {
-        UsuarioDTO usuario = usuarioAdminService.obterUsuarioById(idUsuario);
+        UsuarioDTO usuario = adminService.obterUsuarioById(idUsuario);
         return new ResponseEntity<>(usuario, HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/criar-admin")
     public ResponseEntity<UsuarioDTO> criarUsuarioAdmin(@Valid @RequestBody UsuarioCreateDTO novoUsuario) throws Exception {
-        UsuarioDTO usuarios = usuarioAdminService.criarUsuario(novoUsuario);
+        UsuarioDTO usuarios = adminService.criarUsuarioAdmin(novoUsuario);
         return new ResponseEntity<>(usuarios, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDTO> atualizarAdmin(@PathVariable("idUsuario") Integer idUsuario, @Valid @RequestBody UsuarioUpdateDTO novoUsuario) throws Exception {
-        UsuarioDTO usuarios = usuarioAdminService.atualizarUsuario(idUsuario, novoUsuario);
+    @PostMapping("/criar-instituicao")
+    public ResponseEntity<InstituicaoDTO> criarInstituicao(@Valid @RequestBody InstitucaoCreateDTO novaInstituicao) throws Exception {
+        InstituicaoDTO instituicao = adminService.criarUsuarioInstitucao(novaInstituicao);
+        return new ResponseEntity<>(instituicao, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/editar-usuario")
+    public ResponseEntity<UsuarioDTO> atualizarAdmin( @Valid @RequestBody UsuarioUpdateDTO novoUsuario) throws Exception {
+        UsuarioDTO usuarios = adminService.atualizarUsuario(loginService.getIdLoggedUser(), novoUsuario);
         return new ResponseEntity<>(usuarios, HttpStatus.OK);
+    }
+
+    @PutMapping("/editar-senha")
+    public ResponseEntity<String> editarSenha(@RequestParam(required = false) Integer idUsuario,
+                                              @RequestParam String senhaAtual, @RequestParam String novaSenha) throws Exception {
+        if (idUsuario == null){
+            idUsuario = loginService.getIdLoggedUser();
+        }
+        String token = adminService.attSenha(idUsuario, senhaAtual, novaSenha);
+        return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
     @DeleteMapping("/usuario/{idUsuario}")
     public ResponseEntity<Object> removerUsuario(@PathVariable("idUsuario") Integer idUsuario) throws Exception {
-        usuarioAdminService.removerUsuario(idUsuario);
+        adminService.removerUsuario(idUsuario);
         return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/list-denuncias")
-    public ResponseEntity<List<DenunciaDTO>> listarTodasDenuncias() throws Exception {
-        List<DenunciaDTO> denunciaDTOS = usuarioAdminService.listarTodasDenuncias() ;
-        return ResponseEntity.ok(denunciaDTOS);
-    }
-
-    @DeleteMapping("/denuncia/{idDenuncia}")
-    public ResponseEntity<Object> deletarDenuncia(@PathVariable Integer idDenuncia) throws Exception {
-        usuarioAdminService.deletarDenuncia(idDenuncia);
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/denuncia/{idDenuncia}")
     public ResponseEntity<DenunciaDTO> obterDenunciaById(@PathVariable("idDenuncia") Integer idDenuncia) throws Exception {
-        DenunciaDTO denunciaDTO = usuarioAdminService.denunciaById(idDenuncia);
+        DenunciaDTO denunciaDTO = adminService.denunciaById(idDenuncia);
         return ResponseEntity.ok(denunciaDTO);
+    }
+
+    @GetMapping("/list-denuncias-ativas")
+    public ResponseEntity<List<DenunciaListDTO>> listarTodasDenunciasAtivas(){
+        List<DenunciaListDTO> denunciaDTOS = adminService.listarTodasDenunciasAtivas() ;
+        return ResponseEntity.ok(denunciaDTOS);
+    }
+
+    @DeleteMapping("/denuncia/{idDenuncia}")
+    public ResponseEntity<Object> deletarDenuncia(@PathVariable("idDenuncia") Integer idDenuncia) throws Exception {
+        adminService.deletarDenuncia(idDenuncia);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deletarComentario(@RequestParam Integer idComentario){
+        adminService.deletarComentario(idComentario);
+        return ResponseEntity.ok().build();
     }
 }

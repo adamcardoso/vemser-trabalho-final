@@ -1,6 +1,7 @@
 package br.com.dbc.vemser.notifica.dto.denuncia;
 
 import br.com.dbc.vemser.notifica.dto.comentario.ComentarioDTO;
+import br.com.dbc.vemser.notifica.dto.localizacao.LocalizacaoDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import br.com.dbc.vemser.notifica.entity.Curtida;
 import br.com.dbc.vemser.notifica.entity.Localizacao;
@@ -11,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
+import javax.persistence.Column;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,6 +26,7 @@ public class DenunciaDTO {
         private LocalDateTime dataHora;
         private StatusDenuncia statusDenuncia;
         private List<Curtida> curtidas;
+        private Integer numeroCurtidas;
         private Categoria categoria;
         @JsonInclude(JsonInclude.Include.NON_NULL)
         private List<ComentarioDTO> comentarios;
@@ -33,10 +36,9 @@ public class DenunciaDTO {
         @JsonInclude(JsonInclude.Include.NON_NULL)
         private Integer idUsuario;
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        private Localizacao localizacao;
+        private LocalizacaoDTO localizacao;
 
-
-        public DenunciaDTO(Integer idDenuncia, String descricao, String titulo, LocalDateTime dataHora, StatusDenuncia statusDenuncia, List<Curtida> curtidas, Categoria categoria, List<ComentarioDTO> comentarios, TipoDenuncia tipoDenuncia, UsuarioDTO usuario, Integer idUsuario, Localizacao localizacao) {
+        public DenunciaDTO(Integer idDenuncia, String descricao, String titulo, LocalDateTime dataHora, StatusDenuncia statusDenuncia, List<Curtida> curtidas, Categoria categoria, List<ComentarioDTO> comentarios, TipoDenuncia tipoDenuncia, UsuarioDTO usuario, Integer idUsuario, LocalizacaoDTO localizacao) {
                 this.idDenuncia = idDenuncia;
                 this.descricao = descricao;
                 this.titulo = titulo;
@@ -52,7 +54,6 @@ public class DenunciaDTO {
                         this.usuario = null;
                         this.idUsuario = idUsuario;
                 }
-
                 this.localizacao = localizacao;
         }
 }

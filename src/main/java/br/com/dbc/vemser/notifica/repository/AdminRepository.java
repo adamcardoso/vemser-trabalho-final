@@ -11,7 +11,28 @@ import java.util.List;
 
 @Repository
 public interface AdminRepository extends JpaRepository<Usuario, Integer> {
-    @Query(value = "SELECT u FROM USUARIO u WHERE u.tipoUsuario = 0")
+    @Query(value = "SELECT u FROM USUARIO u WHERE u.tipoUsuario = 0 AND u.usuarioAtivo = 1")
     List<Usuario> usuariosAdmin();
+
+    @Query(value = """
+            SELECT u FROM USUARIO u
+            WHERE (u.numeroCelular = ?1 OR u.emailUsuario = ?2) 
+            AND u.usuarioAtivo = 0 AND u.tipoUsuario = 0
+            """)
+    Usuario usuarioInativoCadastrado(String numeroCelular, String emailUsuario);
+
+    @Query(value = """
+            SELECT u FROM USUARIO u
+            WHERE u.usuarioAtivo = 1 AND u.idUsuario = ?1
+            """)
+    Usuario getUsuarioAtivo(Integer idUsuario);
+
+
+    @Query(value = """
+        SELECT u FROM USUARIO u
+        WHERE u.tipoUsuario = 1
+        ORDER BY u.usuarioAtivo desc
+        """)
+    List<Usuario>listAll();
 
 }

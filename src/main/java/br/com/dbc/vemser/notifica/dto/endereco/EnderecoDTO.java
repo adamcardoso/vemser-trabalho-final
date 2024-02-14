@@ -36,4 +36,14 @@ public class EnderecoDTO {
     private String pais;
 
     private Integer idUsuario;
+
+    public EnderecoDTO(String logradouro, Integer numero, String complemento, String cep, String cidade, String estado, String pais) {
+        this.logradouro = logradouro;
+        this.numero = numero;
+        this.complemento = complemento;
+        this.cep = cep;
+        this.cidade = cidade;
+        this.estado = estado;
+        this.pais = pais;
+    }
 }

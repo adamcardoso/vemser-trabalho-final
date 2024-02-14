@@ -20,7 +20,7 @@ public interface IUsuarioController {
     @Operation(summary = "Obter usuário por ID", description = "Obtém um usuário pelo ID")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna o usuário"),
+                    @ApiResponse(responseCode = "200", description = "Retorna o Token"),
                     @ApiResponse(responseCode = "400", description = "Usuário não encontrado",
                             content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
             }

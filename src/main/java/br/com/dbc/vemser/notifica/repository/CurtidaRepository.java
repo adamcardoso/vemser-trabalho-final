@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
-public interface ICurtidaRepository extends JpaRepository<Curtida, Integer> {
+public interface CurtidaRepository extends JpaRepository<Curtida, Integer> {
     @Query(value = "SELECT * FROM VS_13_EQUIPE_7.CURTIDA cu WHERE cu.ID_USUARIO=?1 AND cu.ID_COMENTARIO=?2", nativeQuery = true)
     Optional<Curtida> findByIdUsuarioAndIdComentario(Integer idUsuario, Integer idComentario);
 
@@ -18,4 +18,16 @@ public interface ICurtidaRepository extends JpaRepository<Curtida, Integer> {
 
     @Query(value = "SELECT COUNT(*) FROM VS_13_EQUIPE_7.curtida cu WHERE cu.id_usuario = ?1 AND cu.id_comentario IS NOT null ", nativeQuery = true)
     Integer curtidasComentario(Integer id);
+
+    @Query(value = """
+            SELECT COUNT(c) FROM CURTIDA c
+            WHERE c.idDenuncia = ?1
+            """)
+    Integer numereCurtidasByDenuncia(Integer idDenuncia);
+
+    @Query(value = """
+            SELECT COUNT(c) FROM CURTIDA c
+            WHERE c.idComentario = ?1
+            """)
+    Integer numereCurtidasByComentario(Integer idComentario);
 }
