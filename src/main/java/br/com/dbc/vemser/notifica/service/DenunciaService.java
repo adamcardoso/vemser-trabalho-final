@@ -34,13 +34,13 @@ public class DenunciaService {
     }
 
     public DenunciaDTO criarDenuncia(DenunciaCreateDTO denunciaCreateDTO, Integer idUsuario) throws Exception {
-//        Usuario usuario = getUsuario(idUsuario);
+        Usuario usuario = getUsuario(idUsuario);
         Denuncia denuncia = converterCreateDTO(denunciaCreateDTO);
         denuncia.setDataHora(LocalDateTime.now());
         denuncia.setIdUsuario(idUsuario);
         denuncia.setNumeroCurtidas(0);
+        denuncia.setUsuario(usuario);
 
-//        denuncia = denunciaRepository.save(denuncia);
 
         if (denunciaCreateDTO.getLocalizacao() != null
                 && denunciaCreateDTO.getLocalizacao().getLatitude() != null
@@ -55,6 +55,7 @@ public class DenunciaService {
             denuncia.setLocalizacao(localizacao);
         }
 
+
         Denuncia savedDenuncia = denunciaRepository.save(denuncia);
 
         return retornarDTO(savedDenuncia);
@@ -66,20 +67,19 @@ public class DenunciaService {
 
         Denuncia denuncia = getDenuncia(idDenuncia);
 
-        if (!denuncia.getIdUsuario().equals(idUsuario)) {
-            throw new RegraDeNegocioException("Usuário não tem permissão para editar esta denúncia.");
+        if (denuncia.getIdUsuario().equals(idUsuario)) {
+            denuncia.setIdUsuario(idUsuario);
+            denuncia.setUsuario(usuario);
+
+            denuncia.setDescricao(denunciaCreateDTO.getDescricao());
+            denuncia.setTitulo(denunciaCreateDTO.getTitulo());
+            denuncia.setStatusDenuncia(denunciaCreateDTO.getStatusDenuncia());
+            denuncia.setCategoria(denunciaCreateDTO.getCategoria());
+            denuncia.setTipoDenuncia(denunciaCreateDTO.getTipoDenuncia());
+
+            return retornarDTO(denunciaRepository.save(denuncia));
         }
-
-        denuncia.setIdUsuario(idUsuario);
-        denuncia.setUsuario(usuario);
-
-        denuncia.setDescricao(denunciaCreateDTO.getDescricao());
-        denuncia.setTitulo(denunciaCreateDTO.getTitulo());
-        denuncia.setStatusDenuncia(denunciaCreateDTO.getStatusDenuncia());
-        denuncia.setCategoria(denunciaCreateDTO.getCategoria());
-        denuncia.setTipoDenuncia(denunciaCreateDTO.getTipoDenuncia());
-
-        return retornarDTO(denunciaRepository.save(denuncia));
+        throw new RegraDeNegocioException("Usuário não tem permissão para editar esta denúncia.");
     }
 
     public void deletarDenuncia(Integer idDenuncia, Integer idUsuario) throws RegraDeNegocioException {
@@ -87,6 +87,7 @@ public class DenunciaService {
         if (denuncia.getIdUsuario().equals(idUsuario)){
             denuncia.setStatusDenuncia(StatusDenuncia.FECHADO);
             denunciaRepository.save(denuncia);
+            return;
         }
         throw new RegraDeNegocioException("Não é possivel excluir uma denuncia de outro usuario!");
     }

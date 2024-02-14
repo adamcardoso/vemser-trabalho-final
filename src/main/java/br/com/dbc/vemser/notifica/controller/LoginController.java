@@ -6,15 +6,9 @@ import br.com.dbc.vemser.notifica.dto.instituicao.LoginInstituicaoDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioCreateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioLoginDTO;
-import br.com.dbc.vemser.notifica.entity.Endereco;
 import br.com.dbc.vemser.notifica.entity.Instituicao;
 import br.com.dbc.vemser.notifica.entity.Usuario;
-import br.com.dbc.vemser.notifica.entity.enums.TipoUsuario;
-import br.com.dbc.vemser.notifica.entity.enums.UsuarioAtivo;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
-import br.com.dbc.vemser.notifica.repository.IEnderecoRepository;
-import br.com.dbc.vemser.notifica.repository.LoginRepository;
-import br.com.dbc.vemser.notifica.repository.UsuarioRepository;
 import br.com.dbc.vemser.notifica.security.TokenService;
 import br.com.dbc.vemser.notifica.service.LoginService;
 import br.com.dbc.vemser.notifica.service.UsuarioService;
@@ -26,9 +20,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,14 +29,11 @@ import javax.validation.Valid;
 @RequestMapping("/login")
 @AllArgsConstructor
 @Tag(name = "Login Controller")
-public class LoginController implements ILoginController{
+public class LoginController {
 
     private final TokenService tokenService;
     public final AuthenticationManager authenticationManager;
     public final UsuarioService usuarioService;
-    public final UsuarioRepository usuarioRepository;
-    private final IEnderecoRepository enderecoRepository;
-    private final Argon2PasswordEncoder argon2PasswordEncoder;
     private final LoginService loginService;
 
     @PostMapping("/instituicao")
@@ -91,40 +79,10 @@ public class LoginController implements ILoginController{
     }
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<String> cadastrar(@RequestBody @Valid UsuarioCreateDTO usuarioCreateDTO,
-                                            @RequestBody @Valid EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
-
-        if (loginService.findByEmailUsuario(usuarioCreateDTO.getEmailUsuario()).isPresent()) {
-            throw new RegraDeNegocioException("Credenciais inválidas, Usuário Já Cadastrado!");
-        }
-
-        if (loginService.findByNumeroCelular(usuarioCreateDTO.getNumeroCelular()) != null) {
-            throw new RegraDeNegocioException("Esse Número Já Está Cadastrado!");
-        }
-
-        Usuario usuarioEntity = new Usuario();
-        usuarioEntity.setNomeUsuario(usuarioCreateDTO.getNomeUsuario());
-        usuarioEntity.setEmailUsuario(usuarioCreateDTO.getEmailUsuario());
-        usuarioEntity.setNumeroCelular(usuarioCreateDTO.getNumeroCelular());
-        usuarioEntity.setSenhaUsuario(argon2PasswordEncoder.encode(usuarioCreateDTO.getSenhaUsuario()));
-        usuarioEntity.setEtniaUsuario(usuarioCreateDTO.getEtniaUsuario());
-        usuarioEntity.setDataNascimento(usuarioCreateDTO.getDataNascimento());
-        usuarioEntity.setClasseSocial(usuarioCreateDTO.getClasseSocial());
-        usuarioEntity.setGeneroUsuario(usuarioCreateDTO.getGeneroUsuario());
-        usuarioEntity.setTipoUsuario(TipoUsuario.COMUM);
-        usuarioEntity.setUsuarioAtivo(UsuarioAtivo.SIM);
-
-        usuarioRepository.save(usuarioEntity);
-
-        if (enderecoCreateDTO.isEnderecoInformado()) {
-            Endereco enderecoEntity = new Endereco(usuarioEntity.getIdUsuario(), enderecoCreateDTO);
-            enderecoRepository.save(enderecoEntity);
-        }
-
-        return ResponseEntity.ok("Cadastro feito com Sucesso!");
+    public ResponseEntity<UsuarioDTO> cadastrar(@RequestBody @Valid UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
+        UsuarioDTO usuarioCriado = loginService.createUsuario(usuarioCreateDTO);
+        return new ResponseEntity<>(usuarioCriado, HttpStatus.OK);
     }
-
-
 
     @GetMapping("/usuario-logado")
     public ResponseEntity<Usuario> usuarioLogado() throws RegraDeNegocioException {
