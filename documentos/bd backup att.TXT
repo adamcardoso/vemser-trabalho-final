@@ -1,0 +1,276 @@
+ALTER TABLE VS_13_EQUIPE_7.CURTIDA DROP CONSTRAINT fk_id_denuncia_curtida;
+ALTER TABLE VS_13_EQUIPE_7.CURTIDA DROP CONSTRAINT fk_id_usuario_curtida;
+ALTER TABLE VS_13_EQUIPE_7.CURTIDA DROP CONSTRAINT fk_id_comentario_curtida;
+ALTER TABLE VS_13_EQUIPE_7.LOCALIZACAO DROP CONSTRAINT fk_id_denuncia_localizacao;
+ALTER TABLE VS_13_EQUIPE_7.ENDERECO DROP CONSTRAINT fk_id_usuario_endereco;
+
+DROP TABLE VS_13_EQUIPE_7.CURTIDA CASCADE CONSTRAINTS;
+DROP TABLE VS_13_EQUIPE_7.LOCALIZACAO CASCADE CONSTRAINTS;
+DROP TABLE VS_13_EQUIPE_7.COMENTARIO;
+DROP TABLE VS_13_EQUIPE_7.DENUNCIA;
+DROP TABLE VS_13_EQUIPE_7.USUARIO CASCADE CONSTRAINTS;
+DROP TABLE VS_13_EQUIPE_7.ENDERECO CASCADE CONSTRAINTS;
+DROP TABLE VS_13_EQUIPE_7.AVISOS;
+DROP TABLE VS_13_EQUIPE_7.INSTITUICAO CASCADE CONSTRAINTS;
+
+CREATE TABLE VS_13_EQUIPE_7.INSTITUICAO (
+	id_instituicao NUMBER PRIMARY KEY,
+	nome_instituicao VARCHAR2(50) NOT NULL,
+	email_instituicao VARCHAR2(100) UNIQUE NOT NULL,
+	celular_instituicao VARCHAR2(11) UNIQUE NOT NULL,
+	senha_instituicao VARCHAR2(100) NOT NULL,
+	tipo_usuario CHAR(1)
+);
+
+CREATE TABLE VS_13_EQUIPE_7.USUARIO (
+	id_usuario NUMBER PRIMARY KEY,
+	nome_usuario VARCHAR2(50) NOT NULL,
+	email_usuario VARCHAR2(100) UNIQUE NOT NULL,
+	celular_usuario VARCHAR2(11) UNIQUE NOT NULL,
+	senha_usuario VARCHAR2(100) NOT NULL,
+	data_nascimento DATE,
+	etnia CHAR(1),
+	classe_social CHAR(1),
+	genero CHAR(1),
+	tipo_usuario CHAR(1),
+	ativo CHAR(1)
+);
+
+
+CREATE TABLE VS_13_EQUIPE_7.DENUNCIA(
+	id_denuncia NUMBER PRIMARY KEY,
+	titulo VARCHAR2(50) NOT NULL,
+	descricao VARCHAR2(255) NOT NULL,
+	data_hora TIMESTAMP NOT NULL,
+	status_denuncia NUMBER,
+	categoria NUMBER,
+	tipo_denuncia NUMBER,
+	numero_curtidas NUMBER,
+	id_usuario NUMBER,
+	CONSTRAINT fk_id_usuario FOREIGN KEY(id_usuario) REFERENCES USUARIO (id_usuario)
+);
+
+CREATE TABLE VS_13_EQUIPE_7.COMENTARIO (
+	id_comentario NUMBER (30) PRIMARY KEY NOT NULL,
+	comentario VARCHAR(255) NOT NULL,
+	numero_curtidas NUMBER,
+	id_denuncia NUMBER,
+	id_usuario NUMBER,
+	CONSTRAINT fk_id_denuncia FOREIGN KEY(id_denuncia) REFERENCES DENUNCIA (id_denuncia),
+	CONSTRAINT fk_id_usuario_comentario FOREIGN KEY(id_usuario) REFERENCES USUARIO (id_usuario)
+);
+
+CREATE TABLE VS_13_EQUIPE_7.LOCALIZACAO (
+    id_localizacao NUMBER PRIMARY KEY NOT NULL,
+    latitude VARCHAR2(15),
+    longitude VARCHAR2(15),
+    id_denuncia NUMBER,
+    CONSTRAINT fk_id_denuncia_localizacao FOREIGN KEY(id_denuncia) REFERENCES DENUNCIA (id_denuncia)
+);
+
+CREATE TABLE VS_13_EQUIPE_7.AVISOS (
+    id_aviso NUMBER PRIMARY KEY,
+    message VARCHAR2(255) NOT NULL,
+    data DATE NOT NULL,
+    hora VARCHAR2(10) NOT NULL,
+    id_localizacao NUMBER,
+    id_instituicao NUMBER,
+    CONSTRAINT fk_id_localizacao_aviso FOREIGN KEY(id_localizacao) REFERENCES LOCALIZACAO (id_localizacao),
+    CONSTRAINT fk_id_instituicao_aviso FOREIGN KEY(id_instituicao) REFERENCES INSTITUICAO (id_instituicao)
+);
+
+
+CREATE TABLE VS_13_EQUIPE_7.CURTIDA(
+	id_curtida NUMBER PRIMARY KEY NOT NULL,
+	data_hora DATE,
+	id_denuncia NUMBER,
+	id_usuario NUMBER,
+	id_comentario NUMBER,
+	CONSTRAINT fk_id_denuncia_curtida FOREIGN KEY(id_denuncia) REFERENCES DENUNCIA (id_denuncia),
+	CONSTRAINT fk_id_usuario_curtida FOREIGN KEY(id_usuario) REFERENCES USUARIO (id_usuario),
+	CONSTRAINT fk_id_comentario_curtida FOREIGN KEY(id_comentario) REFERENCES COMENTARIO (id_comentario)
+);
+
+CREATE TABLE ENDERECO(
+	id_endereco NUMBER PRIMARY KEY,
+	tipo_endereco CHAR(1),
+	logradouro VARCHAR2(50), 
+	numero NUMBER,
+	complemento VARCHAR2(50), 
+	bairro VARCHAR2(50), 
+	cep CHAR(8),
+	cidade VARCHAR2(50),
+	estado CHAR(2),
+    pais CHAR(2),
+    latitude VARCHAR2(15),
+    longitude VARCHAR2(15),
+	id_usuario NUMBER,
+	CONSTRAINT fk_id_usuario_endereco FOREIGN KEY(id_usuario) REFERENCES USUARIO (id_usuario)
+);
+
+DROP SEQUENCE VS_13_EQUIPE_7.SEQ_CURTIDA;
+DROP SEQUENCE VS_13_EQUIPE_7.SEQ_LOCALIZACAO;
+DROP SEQUENCE VS_13_EQUIPE_7.SEQ_ENDERECO;
+DROP SEQUENCE VS_13_EQUIPE_7.SEQ_COMENTARIO;
+DROP SEQUENCE VS_13_EQUIPE_7.SEQ_DENUNCIA;
+DROP SEQUENCE VS_13_EQUIPE_7.SEQ_USUARIO;
+DROP SEQUENCE VS_13_EQUIPE_7.SEQ_INSTITUICAO;
+DROP SEQUENCE VS_13_EQUIPE_7.SEQ_AVISOS;
+
+
+CREATE SEQUENCE VS_13_EQUIPE_7.SEQ_AVISOS
+  START WITH 1
+  INCREMENT BY 1
+  NOCACHE
+  NOCYCLE;
+
+CREATE SEQUENCE VS_13_EQUIPE_7.SEQ_INSTITUICAO
+  START WITH 1
+  INCREMENT BY 1
+  NOCACHE
+  NOCYCLE;
+ 
+CREATE SEQUENCE VS_13_EQUIPE_7.SEQ_USUARIO
+  START WITH 1
+  INCREMENT BY 1
+  NOCACHE
+  NOCYCLE;
+
+CREATE SEQUENCE VS_13_EQUIPE_7.SEQ_LOCALIZACAO
+  START WITH 1
+  INCREMENT BY 1
+  NOCACHE
+  NOCYCLE;
+ 
+CREATE SEQUENCE VS_13_EQUIPE_7.SEQ_ENDERECO 
+  START WITH 1 
+  INCREMENT BY 1 
+  NOCACHE 
+  NOCYCLE;
+
+CREATE SEQUENCE VS_13_EQUIPE_7.SEQ_DENUNCIA
+  START WITH 1
+  INCREMENT BY 1
+  NOCACHE
+  NOCYCLE;
+
+CREATE SEQUENCE VS_13_EQUIPE_7.SEQ_COMENTARIO
+  START WITH 1
+  INCREMENT BY 1
+  NOCACHE
+  NOCYCLE;
+ 
+ CREATE SEQUENCE VS_13_EQUIPE_7.SEQ_CURTIDA
+  START WITH 1
+  INCREMENT BY 1
+  NOCACHE
+  NOCYCLE;
+
+DELETE FROM VS_13_EQUIPE_7.CURTIDA;
+DELETE FROM VS_13_EQUIPE_7.LOCALIZACAO;
+DELETE FROM VS_13_EQUIPE_7.COMENTARIO;
+DELETE FROM VS_13_EQUIPE_7.DENUNCIA;
+DELETE FROM VS_13_EQUIPE_7.USUARIO;
+
+-- Inserir admins na tabela USUARIO
+INSERT INTO VS_13_EQUIPE_7.USUARIO (id_usuario, nome_usuario, email_usuario, celular_usuario, senha_usuario, data_nascimento, etnia, classe_social, genero, tipo_usuario, ativo)
+VALUES (VS_13_EQUIPE_7.SEQ_USUARIO.NEXTVAL, 'Renata', 'renata.schafer@dbccompany.com.br','51981811011', '$argon2id$v=19$m=4096,t=3,p=1$C07W8gudeN47XTxO7vrOHw$JPkNbiSoHvFC0Wvh+BEe/UeXePs7eW2IiA2L+O6+6VY', TO_DATE('15/12/1990', 'DD/MM/YYYY'), '1', '3', '1', '1','1');
+
+
+INSERT INTO VS_13_EQUIPE_7.USUARIO (id_usuario, nome_usuario,email_usuario, celular_usuario, senha_usuario, data_nascimento, etnia, classe_social, genero, tipo_usuario, ativo)
+VALUES (VS_13_EQUIPE_7.SEQ_USUARIO.NEXTVAL, 'Leonardo', 'leonardo@dbccompany.com.br', '51981811004', '$argon2id$v=19$m=4096,t=3,p=1$C07W8gudeN47XTxO7vrOHw$JPkNbiSoHvFC0Wvh+BEe/UeXePs7eW2IiA2L+O6+6VY', TO_DATE('15/12/1993', 'DD/MM/YYYY'), '4', '4', '0', '1','0');
+
+INSERT INTO VS_13_EQUIPE_7.USUARIO (id_usuario, nome_usuario,email_usuario, celular_usuario, senha_usuario, data_nascimento, etnia, classe_social, genero, tipo_usuario, ativo)
+VALUES (VS_13_EQUIPE_7.SEQ_USUARIO.NEXTVAL, 'Andre', 'andre@dbccompany.com.br', '51981811005', '$argon2id$v=19$m=4096,t=3,p=1$C07W8gudeN47XTxO7vrOHw$JPkNbiSoHvFC0Wvh+BEe/UeXePs7eW2IiA2L+O6+6VY', TO_DATE('15/12/1994', 'DD/MM/YYYY'), '0', '3', '2', '1','1');
+
+INSERT INTO VS_13_EQUIPE_7.USUARIO (id_usuario, nome_usuario,email_usuario, celular_usuario, senha_usuario, data_nascimento, etnia, classe_social, genero, tipo_usuario, ativo)
+VALUES (VS_13_EQUIPE_7.SEQ_USUARIO.NEXTVAL, 'Usuario', 'usuario@example.com', '51981911009', '$argon2id$v=19$m=4096,t=3,p=1$C07W8gudeN47XTxO7vrOHw$JPkNbiSoHvFC0Wvh+BEe/UeXePs7eW2IiA2L+O6+6VY', TO_DATE('15/12/1994', 'DD/MM/YYYY'), '0', '3', '2', '1','1');
+
+INSERT INTO VS_13_EQUIPE_7.USUARIO (id_usuario, nome_usuario,email_usuario, celular_usuario, senha_usuario, data_nascimento, etnia, classe_social, genero, tipo_usuario, ativo)
+VALUES (VS_13_EQUIPE_7.SEQ_USUARIO.NEXTVAL, 'Admin', 'admin@example.com', '51981911999', '$argon2id$v=19$m=4096,t=3,p=1$C07W8gudeN47XTxO7vrOHw$JPkNbiSoHvFC0Wvh+BEe/UeXePs7eW2IiA2L+O6+6VY', TO_DATE('15/12/1994', 'DD/MM/YYYY'), '0', '3', '2', '0','1');
+
+-- Inserir endereço
+INSERT INTO VS_13_EQUIPE_7.ENDERECO (id_endereco, latitude, longitude, id_usuario)
+VALUES (VS_13_EQUIPE_7.SEQ_ENDERECO.NEXTVAL, '-29.972077', '-51.72825', 1);
+
+INSERT INTO VS_13_EQUIPE_7.ENDERECO (id_endereco, tipo_endereco, logradouro, numero, complemento, cep, cidade, estado, pais, id_usuario)
+VALUES (VS_13_EQUIPE_7.SEQ_ENDERECO.NEXTVAL, '1', '1', '456', 'Casa 2', '87654321', 'Cidade B', 'SC', 'BR', '2');
+
+INSERT INTO VS_13_EQUIPE_7.ENDERECO (id_endereco, tipo_endereco, logradouro, numero, complemento, cep, cidade, estado, pais, id_usuario)
+VALUES (VS_13_EQUIPE_7.SEQ_ENDERECO.NEXTVAL, '1', '1', '789', 'Sobrado 3', '98765432', 'Cidade C', 'RS', 'BR', '3');
+
+
+
+-- Usuário 1 Denúncia 1 e 2
+INSERT INTO VS_13_EQUIPE_7.DENUNCIA (id_denuncia, titulo, descricao, data_hora, status_denuncia, categoria, tipo_denuncia, id_usuario)
+VALUES (VS_13_EQUIPE_7.SEQ_DENUNCIA.NEXTVAL, 'Sem Água a 3 Dias', 'Estou sem água a 3 dias, e nada de arrumarem o problema!', CURRENT_TIMESTAMP, '1', '1', '1', '1');
+INSERT INTO VS_13_EQUIPE_7.COMENTARIO (id_comentario, comentario, id_denuncia, id_usuario)
+VALUES (VS_13_EQUIPE_7.SEQ_COMENTARIO.NEXTVAL, 'Comentário sobre a denúncia 1', '1', '1');
+INSERT INTO VS_13_EQUIPE_7.DENUNCIA (id_denuncia, titulo, descricao, data_hora, status_denuncia, categoria, tipo_denuncia, id_usuario)
+VALUES (VS_13_EQUIPE_7.SEQ_DENUNCIA.NEXTVAL, 'Título da Denúncia 2', 'Descrição da Denúncia 2', CURRENT_TIMESTAMP, '2', '1', '1', '1');
+INSERT INTO VS_13_EQUIPE_7.COMENTARIO (id_comentario, comentario, id_denuncia, id_usuario)
+VALUES (VS_13_EQUIPE_7.SEQ_COMENTARIO.NEXTVAL, 'Comentário sobre a denúncia 2', '2', '1');
+INSERT INTO VS_13_EQUIPE_7.LOCALIZACAO (id_localizacao, latitude, longitude, id_denuncia)
+VALUES (VS_13_EQUIPE_7.SEQ_LOCALIZACAO.NEXTVAL, '-29.972077', '-51.72825', 1);
+
+
+-- Usuário 2 Denúncia 3 e 4
+INSERT INTO VS_13_EQUIPE_7.DENUNCIA (id_denuncia, titulo, descricao, data_hora, status_denuncia, categoria, tipo_denuncia, id_usuario)
+VALUES (VS_13_EQUIPE_7.SEQ_DENUNCIA.NEXTVAL, 'Título da Denúncia 3', 'Descrição da Denúncia 3', CURRENT_TIMESTAMP, '3', '3', '0', '2');
+INSERT INTO VS_13_EQUIPE_7.COMENTARIO (id_comentario, comentario, id_denuncia, id_usuario)
+VALUES (VS_13_EQUIPE_7.SEQ_COMENTARIO.NEXTVAL, 'Comentário sobre a denúncia 3', '3', '2');
+INSERT INTO VS_13_EQUIPE_7.DENUNCIA (id_denuncia, titulo, descricao, data_hora, status_denuncia, categoria, tipo_denuncia, id_usuario)
+VALUES (VS_13_EQUIPE_7.SEQ_DENUNCIA.NEXTVAL, 'Título da Denúncia 4', 'Descrição da Denúncia 4', CURRENT_TIMESTAMP, '4', '3', '1', '2');
+INSERT INTO VS_13_EQUIPE_7.COMENTARIO (id_comentario, comentario, id_denuncia, id_usuario)
+VALUES (VS_13_EQUIPE_7.SEQ_COMENTARIO.NEXTVAL, 'Comentário sobre a denúncia 4', '4', '2');
+
+
+-- Usuário 3 Denúncia 5 e 6
+INSERT INTO VS_13_EQUIPE_7.DENUNCIA (id_denuncia, titulo, descricao, data_hora, status_denuncia, categoria, tipo_denuncia, id_usuario)
+VALUES (VS_13_EQUIPE_7.SEQ_DENUNCIA.NEXTVAL, 'Título da Denúncia 5', 'Descrição da Denúncia 5', CURRENT_TIMESTAMP, '1', '3', '0', '3');
+INSERT INTO VS_13_EQUIPE_7.COMENTARIO (id_comentario, comentario, id_denuncia, id_usuario)
+VALUES (VS_13_EQUIPE_7.SEQ_COMENTARIO.NEXTVAL, 'Comentário sobre a denúncia 5', '5', '3');
+INSERT INTO VS_13_EQUIPE_7.DENUNCIA (id_denuncia, titulo, descricao, data_hora, status_denuncia, categoria, tipo_denuncia, id_usuario)
+VALUES (VS_13_EQUIPE_7.SEQ_DENUNCIA.NEXTVAL, 'Título da Denúncia 6', 'Descrição da Denúncia 6', CURRENT_TIMESTAMP, '2', '3', '1', '3');
+INSERT INTO VS_13_EQUIPE_7.COMENTARIO (id_comentario, comentario, id_denuncia, id_usuario)
+VALUES (VS_13_EQUIPE_7.SEQ_COMENTARIO.NEXTVAL, 'Comentário sobre a denúncia 6', '6', '3');
+
+
+-- Usuário 4 Denúncia 7 e 8
+INSERT INTO VS_13_EQUIPE_7.DENUNCIA (id_denuncia, titulo, descricao, data_hora, status_denuncia, categoria, tipo_denuncia, id_usuario)
+VALUES (VS_13_EQUIPE_7.SEQ_DENUNCIA.NEXTVAL, 'Título da Denúncia 7', 'Descrição da Denúncia 7', CURRENT_TIMESTAMP, '3', '2', '1', '1');
+INSERT INTO VS_13_EQUIPE_7.COMENTARIO (id_comentario, comentario, id_denuncia, id_usuario)
+VALUES (VS_13_EQUIPE_7.SEQ_COMENTARIO.NEXTVAL, 'Comentário sobre a denúncia 7', '7', '1');
+INSERT INTO VS_13_EQUIPE_7.DENUNCIA (id_denuncia, titulo, descricao, data_hora, status_denuncia, categoria, tipo_denuncia, id_usuario)
+VALUES (VS_13_EQUIPE_7.SEQ_DENUNCIA.NEXTVAL, 'Título da Denúncia 8', 'Descrição da Denúncia 8', CURRENT_TIMESTAMP, '4', '2', '0', '1');
+INSERT INTO VS_13_EQUIPE_7.COMENTARIO (id_comentario, comentario, id_denuncia, id_usuario)
+VALUES (VS_13_EQUIPE_7.SEQ_COMENTARIO.NEXTVAL, 'Comentário sobre a denúncia 8', '8', '1');
+
+
+-- Usuário 5 Denúncia 9 e 10
+INSERT INTO VS_13_EQUIPE_7.DENUNCIA (id_denuncia, titulo, descricao, data_hora, status_denuncia, categoria, tipo_denuncia, id_usuario)
+VALUES (VS_13_EQUIPE_7.SEQ_DENUNCIA.NEXTVAL, 'Título da Denúncia 9', 'Descrição da Denúncia 9', CURRENT_TIMESTAMP, '1', '1', '1', '2');
+INSERT INTO VS_13_EQUIPE_7.COMENTARIO (id_comentario, comentario, id_denuncia, id_usuario)
+VALUES (VS_13_EQUIPE_7.SEQ_COMENTARIO.NEXTVAL, 'Comentário sobre a denúncia 9', '9', '2');
+INSERT INTO VS_13_EQUIPE_7.DENUNCIA (id_denuncia, titulo, descricao, data_hora, status_denuncia, categoria, tipo_denuncia, id_usuario)
+VALUES (VS_13_EQUIPE_7.SEQ_DENUNCIA.NEXTVAL, 'Título da Denúncia 10', 'Descrição da Denúncia 10', CURRENT_TIMESTAMP, '1', '1', '0', '2');
+INSERT INTO VS_13_EQUIPE_7.COMENTARIO (id_comentario, comentario, id_denuncia, id_usuario)
+VALUES (VS_13_EQUIPE_7.SEQ_COMENTARIO.NEXTVAL, 'Comentário sobre a denúncia 10', '10', '2');
+
+-- Usuário 4 Denúncia 11
+INSERT INTO VS_13_EQUIPE_7.DENUNCIA (id_denuncia, titulo, descricao, data_hora, status_denuncia, categoria, tipo_denuncia, id_usuario)
+VALUES (VS_13_EQUIPE_7.SEQ_DENUNCIA.NEXTVAL, 'Título da Denúncia 11', 'Descrição da Denúncia 11', CURRENT_TIMESTAMP, '1', '1', '1', '4');
+
+-- Instituição Corsan
+INSERT INTO VS_13_EQUIPE_7.INSTITUICAO (id_instituicao, nome_instituicao, email_instituicao, celular_instituicao, senha_instituicao, tipo_usuario)
+VALUES (VS_13_EQUIPE_7.SEQ_INSTITUICAO.NEXTVAL, 'Corsan', 'corsan@example.com', '51987654321', '$argon2id$v=19$m=4096,t=3,p=1$nnuSRTw61Ic4TZSyXHO9JQ$1BavPiLPLCPCVI6wTX0pr4eD4x9pXx6xNYhfiFdzcks', '2');
+
+
+SELECT * FROM VS_13_EQUIPE_7.INSTITUICAO;
+SELECT * FROM VS_13_EQUIPE_7.AVISOS;
+SELECT * FROM VS_13_EQUIPE_7.USUARIO;
+SELECT * FROM VS_13_EQUIPE_7.DENUNCIA;
+SELECT * FROM VS_13_EQUIPE_7.COMENTARIO;
+SELECT * FROM VS_13_EQUIPE_7.LOCALIZACAO;
+SELECT * FROM VS_13_EQUIPE_7.ENDERECO;
+--SELECT * FROM VS_13_EQUIPE_7.CURTIDA;
