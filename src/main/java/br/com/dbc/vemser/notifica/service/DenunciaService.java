@@ -26,7 +26,6 @@ public class DenunciaService {
     private final EmailService emailService;
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
-    private final LocalizacaoService localizacaoService;
 
     public List<DenunciaDTO> listByIdUsuario(Integer idUsuario) throws Exception {
        return getDenunciasByIdUsuario(idUsuario).stream()

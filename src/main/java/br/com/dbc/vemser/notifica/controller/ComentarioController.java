@@ -27,12 +27,12 @@ public class ComentarioController {
 
     @PostMapping("/{idDenuncia}/denuncia")
     public ResponseEntity<ComentarioDTO> adicionarComentario(@PathVariable("idDenuncia") Integer idDenuncia,
-                                                             @RequestParam String comentario) throws RegraDeNegocioException {
+                                                             @RequestBody String comentario) throws RegraDeNegocioException {
         return new ResponseEntity<>(comentarioService.criarComentario(loginService.getIdLoggedUser(), idDenuncia, comentario), HttpStatus.CREATED);
     }
 
     @PutMapping("/{idComentario}")
-    public ResponseEntity<ComentarioDTO> atualizarComentario(@PathVariable("idComentario") Integer idComentario, @RequestParam String comentario) throws Exception{
+    public ResponseEntity<ComentarioDTO> atualizarComentario(@PathVariable("idComentario") Integer idComentario, @RequestBody String comentario) throws Exception{
         return new ResponseEntity<>(comentarioService.editarComentario(loginService.getIdLoggedUser(), idComentario, comentario), HttpStatus.OK);
     }
 

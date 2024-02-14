@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.notifica.repository;
 
+import br.com.dbc.vemser.notifica.entity.Instituicao;
 import br.com.dbc.vemser.notifica.entity.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

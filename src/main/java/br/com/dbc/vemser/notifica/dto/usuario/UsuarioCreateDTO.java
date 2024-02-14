@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.notifica.dto.usuario;
 
+import br.com.dbc.vemser.notifica.dto.endereco.EnderecoCreateDTO;
 import br.com.dbc.vemser.notifica.entity.enums.ClasseSocial;
 import br.com.dbc.vemser.notifica.entity.enums.Etnia;
 import br.com.dbc.vemser.notifica.entity.enums.Genero;
@@ -22,7 +23,7 @@ public class UsuarioCreateDTO {
 
     @NotNull
     @NotEmpty
-    @Schema(description = "E-mail do Usuário", required = true, example = "renata.schafer@dbccompany.com.br")
+    @Schema(description = "E-mail do Usuário", required = true, example = "renata2.schafer@dbccompany.com.br")
     private String emailUsuario;
 
     @NotBlank
@@ -52,4 +53,6 @@ public class UsuarioCreateDTO {
     @Schema(description = "Gênero do Usuário", required = true, example = "MASCULINO", allowableValues = {"MASCULINO", "FEMININO", "OUTRO"})
     private Genero generoUsuario;
 
+    @Schema(description = "Endereço do Usuário")
+    private EnderecoCreateDTO enderecoUsuario;
 }

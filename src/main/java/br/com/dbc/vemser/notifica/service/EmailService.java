@@ -36,15 +36,7 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String remetente;
 
-    public void enviarEmailCriacaoDenuncia(String destinatario, String nomePessoa, Integer idDenuncia) throws Exception {
-        enviarEmail(destinatario, "Nova Denúncia criada para " + nomePessoa, "email-criacao-denuncia.ftl", nomePessoa, idDenuncia);
-    }
-
-    public void enviarEmailEdicaoEndereco(String destinatario, String nomePessoa, Integer idDenuncia) throws Exception {
-        enviarEmail(destinatario, "Denúncia editada para " + nomePessoa, "email-edicao-denuncia.ftl", nomePessoa, idDenuncia);
-    }
-
-    private void enviarEmail(String destinatario, String assunto, String template, String nomePessoa, Integer idDenuncia) throws Exception {
+    public void enviarEmail(String destinatario, String assunto, String aviso) throws Exception {
         MimeMessage mensagemMime = remetenteEmail.createMimeMessage();
         try {
             MimeMessageHelper auxiliarMensagemMime = new MimeMessageHelper(mensagemMime, true);
@@ -52,29 +44,12 @@ public class EmailService {
             auxiliarMensagemMime.setFrom(remetente);
             auxiliarMensagemMime.setTo(destinatario);
             auxiliarMensagemMime.setSubject(assunto);
-            auxiliarMensagemMime.setText(obterConteudoDoTemplate(template, nomePessoa, idDenuncia), true);
+            auxiliarMensagemMime.setText(aviso);
             remetenteEmail.send(auxiliarMensagemMime.getMimeMessage());
-        } catch (MessagingException | IOException | TemplateException e) {
+        } catch (MessagingException e) {
             e.printStackTrace();
             throw new Exception(e.getMessage());
         }
-    }
-
-    private String obterConteudoDoTemplate(String template, String nomePessoa, Integer idDenuncia) throws IOException, TemplateException, SQLException {
-        Optional<Denuncia> denuncia = denunciaRepository.findById(idDenuncia);
-
-        Map<String, Object> dados = new HashMap<>();
-        dados.put("nome", nomePessoa);
-
-        if (denuncia != null) {
-//            dados.put("status", denuncia.get());
-//            dados.put("categoria", denuncia.getCategoria());
-//            dados.put("descricao", denuncia.getDescricao());
-//            dados.put("titulo", denuncia.getTitulo());
-//            dados.put("tipo_denuncia", denuncia.getTipoDenuncia());
-        }
-        Template templateFreemarker = configuracaoFreemarker.getTemplate(template);
-        return FreeMarkerTemplateUtils.processTemplateIntoString(templateFreemarker, dados);
     }
 
 }

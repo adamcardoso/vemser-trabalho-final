@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.notifica.security;
 
+import br.com.dbc.vemser.notifica.entity.Instituicao;
 import br.com.dbc.vemser.notifica.entity.Usuario;
 import br.com.dbc.vemser.notifica.service.LoginService;
 import br.com.dbc.vemser.notifica.entity.enums.TipoUsuario;
@@ -44,6 +45,24 @@ public class TokenService {
                         .claim(Claims.ID, usuarioEntity.getIdUsuario().toString())
                         .claim(CARGOS_CLAIM, cargos)
                         .setSubject(usuarioEntity.getEmailUsuario())
+                        .setIssuedAt(now)
+                        .setExpiration(expirationDate)
+                        .signWith(SignatureAlgorithm.HS256, secret)
+                        .compact();
+    }
+
+    public String generateToken(Instituicao usuarioEntity) {
+        Date now = new Date();
+        Date expirationDate = new Date(now.getTime() + Long.parseLong(expiration));
+
+        List<String> cargos = List.of(usuarioEntity.getTipoUsuario().getRoleName());
+
+        return TOKEN_PREFIX + " " +
+                Jwts.builder()
+                        .setIssuer("pessoa-api")
+                        .claim(Claims.ID, usuarioEntity.getIdInstituicao().toString())
+                        .claim(CARGOS_CLAIM, cargos)
+                        .setSubject(usuarioEntity.getEmailInstituicao())
                         .setIssuedAt(now)
                         .setExpiration(expirationDate)
                         .signWith(SignatureAlgorithm.HS256, secret)

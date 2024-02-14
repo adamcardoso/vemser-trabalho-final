@@ -16,24 +16,42 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 public class EnderecoCreateDTO {
-    @NotNull(message = "Tipo de Endereco não pode ser nulo")
-    @Schema(description = "Tipo de Endereço", required = true, example = "RESIDENCIAL", allowableValues = {"RESIDENCIAL", "COMERCIAL"})
+
+    @Schema(description = "Tipo de Endereço", example = "RESIDENCIAL", allowableValues = {"RESIDENCIAL", "COMERCIAL"})
     private TipoEndereco tipoEndereco;
 
-    @Schema(description = "Número do Endereço", example = "123")
+    @Schema(description = "Logradouro", example = "Rua das Flores")
+    private String logradouro;
+
+    @Schema(description = "Número", example = "123")
     private Integer numero;
 
-    @Schema(description = "Complemento do Endereço", example = "Apto 4")
+    @Schema(description = "Complemento", example = "Apto 4")
     private String complemento;
 
-    @Size(min = 8, max = 8, message = "Cep deve conter 8 dígitos")
-    @Schema(description = "CEP do Endereço", example = "94090320")
+    @Schema(description = "Bairro", example = "Centro")
+    private String bairro;
+
+    @Schema(description = "CEP", example = "12345-678")
     private String cep;
 
-    @NotEmpty(message = "País não pode ser nulo")
-    @Schema(description = "País do Endereço", required = true, example = "Brasil")
+    @Schema(description = "Cidade", example = "São Paulo")
+    private String cidade;
+
+    @Schema(description = "Estado", example = "SP")
+    private String estado;
+
+    @Schema(description = "País", example = "Brasil")
     private String pais;
 
-    @Schema(description = "ID da Pessoa associada ao Endereço", example = "1")
-    private Integer idUsuario;
+    @Schema(description = "Latitude", example = "-23.550520")
+    private String latitude;
+
+    @Schema(description = "Longitude", example = "-46.633308")
+    private String longitude;
+
+    public boolean isEnderecoInformado() {
+        return (logradouro != null && numero != null && bairro != null && cep != null && cidade != null && estado != null && pais != null) ||
+                (latitude != null && longitude != null);
+    }
 }
