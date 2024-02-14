@@ -5,6 +5,7 @@ import br.com.dbc.vemser.notifica.entity.enums.ClasseSocial;
 import br.com.dbc.vemser.notifica.entity.enums.Etnia;
 import br.com.dbc.vemser.notifica.entity.enums.Genero;
 import br.com.dbc.vemser.notifica.entity.enums.TipoUsuario;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -53,6 +54,7 @@ public class UsuarioCreateDTO {
     @Schema(description = "Gênero do Usuário", required = true, example = "MASCULINO", allowableValues = {"MASCULINO", "FEMININO", "OUTRO"})
     private Genero generoUsuario;
 
+    @JsonIgnore
     @Schema(description = "Endereço do Usuário")
     private EnderecoCreateDTO enderecoUsuario;
 }

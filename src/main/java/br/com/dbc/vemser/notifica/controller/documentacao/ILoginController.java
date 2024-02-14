@@ -54,7 +54,8 @@ public interface ILoginController {
             }
 
     )
-    public ResponseEntity<UsuarioDTO> cadastrar(@RequestBody @Valid UsuarioCreateDTO usuarioCreateDTO, @RequestBody @Valid EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException;
+    @PostMapping("/cadastrar")
+    public ResponseEntity<UsuarioDTO> cadastrar(@RequestBody @Valid UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException;
 
     @Operation(summary = "Pegar Cadastro", description = "Pegar os Dados do Usuário que está logado.")
     @ApiResponses(

@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
+import javax.persistence.Column;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,8 +25,8 @@ public class DenunciaDTO {
         private String titulo;
         private LocalDateTime dataHora;
         private StatusDenuncia statusDenuncia;
-        @JsonInclude(JsonInclude.Include.NON_NULL)
         private List<Curtida> curtidas;
+        private Integer numeroCurtidas;
         private Categoria categoria;
         @JsonInclude(JsonInclude.Include.NON_NULL)
         private List<ComentarioDTO> comentarios;

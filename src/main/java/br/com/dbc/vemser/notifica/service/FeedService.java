@@ -68,9 +68,14 @@ public class FeedService {
         comentarioDTO.setComentario(comentario.getComentario());
         comentarioDTO.setUsuario(objectMapper.convertValue(comentario.getUsuario(), UsuarioDTO.class));
         comentarioDTO.setDenuncia(objectMapper.convertValue(comentario.getDenuncia(), DenunciaDTO.class));
+        comentarioDTO.setCurtida(comentario.getCurtidas().size());
+
+        comentarioDTO.setIdDenuncia(comentario.getDenuncia().getIdDenuncia());
+        comentarioDTO.setIdUsuario(comentario.getUsuario().getIdUsuario());
 
         return comentarioDTO;
     }
+
 
 
     public DenunciaDTO listarDenunciaComComentarios(Integer idDenuncia) throws RegraDeNegocioException {

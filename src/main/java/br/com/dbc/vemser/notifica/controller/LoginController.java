@@ -29,7 +29,7 @@ import javax.validation.Valid;
 @RequestMapping("/login")
 @AllArgsConstructor
 @Tag(name = "Login Controller")
-public class LoginController {
+public class LoginController implements ILoginController{
 
     private final TokenService tokenService;
     public final AuthenticationManager authenticationManager;
