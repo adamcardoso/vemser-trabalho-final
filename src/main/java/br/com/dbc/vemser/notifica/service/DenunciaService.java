@@ -27,36 +27,20 @@ public class DenunciaService {
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
 
-    public DenunciaDTO obterDenunciaById(Integer idDenuncia) throws Exception {
-        Denuncia denuncia = denunciaRepository.findById(idDenuncia)
-                .orElseThrow(() -> new RegraDeNegocioException("Denúncia não encontrada com ID: " + idDenuncia));
-        return objectMapper.convertValue(denuncia, DenunciaDTO.class);
-    }
-    public Usuario ObterUsuarioById(Integer idUsuario) throws RegraDeNegocioException {
-        Usuario usuario = usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado com ID: " + idUsuario));
-        return usuario;
-    }
-
     public List<DenunciaDTO> listByIdUsuario(Integer idUsuario) throws Exception {
-        List<Denuncia> denuncias = denunciaRepository.findAllByUsuario_IdUsuario(idUsuario);
-        if (denuncias.isEmpty()) {
-            throw new RegraDeNegocioException("Nenhuma denúncia encontrada para o usuário com ID: " + idUsuario);
-        }
-        return denuncias.stream()
-                .map(this::retornarDTO)
-                .collect(Collectors.toList());
+       return getDenunciasByIdUsuario(idUsuario).stream()
+               .map(denuncia -> retornarDTO(denuncia))
+               .collect(Collectors.toList());
     }
 
     public DenunciaDTO criarDenuncia(DenunciaCreateDTO denunciaCreateDTO, Integer idUsuario) throws Exception {
-        Usuario usuario = ObterUsuarioById(idUsuario);
-
-        Denuncia denuncia = converterCreateDTO(denunciaCreateDTO, usuario);
+//        Usuario usuario = getUsuario(idUsuario);
+        Denuncia denuncia = converterCreateDTO(denunciaCreateDTO);
         denuncia.setDataHora(LocalDateTime.now());
         denuncia.setIdUsuario(idUsuario);
         denuncia.setNumeroCurtidas(0);
 
-        Denuncia d = denunciaRepository.save(denuncia);
+//        denuncia = denunciaRepository.save(denuncia);
 
         if (denunciaCreateDTO.getLocalizacao() != null
                 && denunciaCreateDTO.getLocalizacao().getLatitude() != null
@@ -65,25 +49,24 @@ public class DenunciaService {
             Localizacao localizacao = new Localizacao();
             localizacao.setLatitude(denunciaCreateDTO.getLocalizacao().getLatitude());
             localizacao.setLongitude(denunciaCreateDTO.getLocalizacao().getLongitude());
-            localizacao.setIdDenuncia(d.getIdDenuncia());
+            localizacao.setIdDenuncia(denuncia.getIdDenuncia());
 
-            localizacao.setDenuncia(d);
-            d.setLocalizacao(localizacao);
+            localizacao.setDenuncia(denuncia);
+            denuncia.setLocalizacao(localizacao);
         }
 
-        Denuncia savedDenuncia = denunciaRepository.save(d);
+        Denuncia savedDenuncia = denunciaRepository.save(denuncia);
 
         return retornarDTO(savedDenuncia);
     }
 
 
     public DenunciaDTO editarDenuncia(DenunciaCreateDTO denunciaCreateDTO, Integer idDenuncia, Integer idUsuario) throws Exception {
-        Usuario usuario = ObterUsuarioById(idUsuario);
+        Usuario usuario = getUsuario(idUsuario);
 
-        Denuncia denuncia = objectMapper.convertValue(obterDenunciaById(idDenuncia), Denuncia.class);
+        Denuncia denuncia = getDenuncia(idDenuncia);
 
-        if ((denuncia.getIdUsuario() != idUsuario && denuncia.getIdUsuario() != null) ||
-                (denuncia.getUsuario() != null && denuncia.getUsuario().equals(usuario))) {
+        if (!denuncia.getIdUsuario().equals(idUsuario)) {
             throw new RegraDeNegocioException("Usuário não tem permissão para editar esta denúncia.");
         }
 
@@ -99,34 +82,43 @@ public class DenunciaService {
         return retornarDTO(denunciaRepository.save(denuncia));
     }
 
-    public void deletarDenuncia(Integer idDenuncia, Integer idUsuario) throws Exception {
-        Denuncia denuncia = objectMapper.convertValue(obterDenunciaById(idDenuncia), Denuncia.class);
-        denuncia.setStatusDenuncia(StatusDenuncia.FECHADO);
+    public void deletarDenuncia(Integer idDenuncia, Integer idUsuario) throws RegraDeNegocioException {
+        Denuncia denuncia = getDenuncia(idDenuncia);
+        if (denuncia.getIdUsuario().equals(idUsuario)){
+            denuncia.setStatusDenuncia(StatusDenuncia.FECHADO);
+            denunciaRepository.save(denuncia);
+        }
+        throw new RegraDeNegocioException("Não é possivel excluir uma denuncia de outro usuario!");
     }
 
-    public Denuncia converterDTO(DenunciaDTO dto) {
-        return objectMapper.convertValue(dto, Denuncia.class);
-    }
 
-    public Denuncia converterCreateDTO(DenunciaCreateDTO createDTO, Usuario usuario) {
-        Denuncia denuncia = objectMapper.convertValue(createDTO, Denuncia.class);
-        denuncia.setUsuario(usuario);
-        return denuncia;
+    public Denuncia converterCreateDTO(DenunciaCreateDTO createDTO) {
+        return objectMapper.convertValue(createDTO, Denuncia.class);
     }
 
     public DenunciaDTO retornarDTO(Denuncia entity) {
-        DenunciaDTO dto = objectMapper.convertValue(entity, DenunciaDTO.class);
+        return objectMapper.convertValue(entity, DenunciaDTO.class);
+    }
 
-        if (entity.getTipoDenuncia().getIdTipoDenuncia() == 0) {
-            dto.setUsuario(objectMapper.convertValue(entity.getUsuario(), UsuarioDTO.class));
+    private Usuario getUsuario(Integer idUsuario){
+        return usuarioRepository.findById(idUsuario).get();
+    }
+
+    public Denuncia getDenuncia(Integer idDenuncia) throws RegraDeNegocioException {
+        Denuncia denuncia = denunciaRepository.getDenunciaAtiva(idDenuncia);
+
+        if (denuncia == null){
+            throw new RegraDeNegocioException("Denuncia não encontrada!");
         }
+        return denuncia;
+    }
+    private List<Denuncia> getDenunciasByIdUsuario(Integer idUsuario) throws RegraDeNegocioException {
+        List<Denuncia> denuncias = denunciaRepository.getDenunciaAtivaByIdUsuario(idUsuario);
 
-        if (entity.getLocalizacao() != null) {
-            LocalizacaoDTO localizacaoDTO = objectMapper.convertValue(entity.getLocalizacao(), LocalizacaoDTO.class);
-            dto.setLocalizacao(localizacaoDTO);
-        }
-
-        return dto;
+        denuncias.stream()
+                .findFirst()
+                .orElseThrow(() -> new RegraDeNegocioException("Nenhuma denuncia encontrada!"));
+        return denuncias;
     }
 
 

@@ -44,10 +44,4 @@ public class Comentario {
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     private Usuario usuario;
 
-    public Comentario(Integer idDenuncia, Integer idUsuario, String comentario, Integer numeroCurtidas) {
-        this.idDenuncia = idDenuncia;
-        this.idUsuario = idUsuario;
-        this.comentario = comentario;
-        this.numeroCurtidas = numeroCurtidas;
-    }
 }
