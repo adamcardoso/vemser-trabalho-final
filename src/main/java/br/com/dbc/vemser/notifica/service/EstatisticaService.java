@@ -30,7 +30,7 @@ public class EstatisticaService {
         return estatisticaDTO;
     }
 
-    private <T extends Enum<T>> Map<T, Double> calcularPercentagensEnum(List<Object[]> resultados) {//retorno de um map de enums
+    public  <T extends Enum<T>> Map<T, Double> calcularPercentagensEnum(List<Object[]> resultados) {//retorno de um map de enums
         Map<T, Long> contagens = resultados.stream()
                 .collect(Collectors.toMap(result -> (T) result[0], result -> (Long) result[1])); //pega o enum(T) e dps a quantidade(Long)
 

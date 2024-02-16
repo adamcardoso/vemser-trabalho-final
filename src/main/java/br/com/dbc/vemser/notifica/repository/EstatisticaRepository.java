@@ -9,16 +9,16 @@ import java.util.List;
 
 public interface EstatisticaRepository extends JpaRepository<Usuario, Integer> {
 
-    //Retorna o Enum e a quantidade de vzs q ele aparece
-    @Query("SELECT d.usuario.etniaUsuario, COUNT(d.usuario) FROM DENUNCIA d GROUP BY d.usuario.etniaUsuario")
+    // Retorna o Enum e a quantidade de vezes que ele aparece para usuários distintos
+    @Query("SELECT u.etniaUsuario, COUNT(u) FROM USUARIO u WHERE u IN (SELECT DISTINCT d.usuario FROM DENUNCIA d) GROUP BY u.etniaUsuario")
     List<Object[]> countByEtnia();
 
-    @Query("SELECT d.usuario.generoUsuario, COUNT(d.usuario) FROM DENUNCIA d GROUP BY d.usuario.generoUsuario")
+    @Query("SELECT u.generoUsuario, COUNT(u) FROM USUARIO u WHERE u IN (SELECT DISTINCT d.usuario FROM DENUNCIA d) GROUP BY u.generoUsuario")
     List<Object[]> countByGenero();
 
-    @Query("SELECT d.usuario.classeSocial, COUNT(d.usuario) FROM DENUNCIA d GROUP BY d.usuario.classeSocial")
+    @Query("SELECT u.classeSocial, COUNT(u) FROM USUARIO u WHERE u IN (SELECT DISTINCT d.usuario FROM DENUNCIA d) GROUP BY u.classeSocial")
     List<Object[]> countByClasseSocial();
 
-    @Query("SELECT MAX(c.dataHora) FROM DENUNCIA c")
+    @Query("SELECT MAX(d.dataHora) FROM DENUNCIA d")
     LocalDate ultimaCriacaoDenuncia();
 }
