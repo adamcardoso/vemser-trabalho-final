@@ -83,5 +83,5 @@ class EstatisticaServiceTest {
         assertEquals(25.0, percentagensClasseSocial.get(ClasseSocial.D));
         assertEquals(50.0, percentagensClasseSocial.get(ClasseSocial.E));
     }
-    
+
 }

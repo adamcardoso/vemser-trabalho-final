@@ -30,14 +30,21 @@ public class EstatisticaService {
         return estatisticaDTO;
     }
 
-    public  <T extends Enum<T>> Map<T, Double> calcularPercentagensEnum(List<Object[]> resultados) {//retorno de um map de enums
+    public <T extends Enum<T>> Map<T, Double> calcularPercentagensEnum(List<Object[]> resultados) {
         Map<T, Long> contagens = resultados.stream()
-                .collect(Collectors.toMap(result -> (T) result[0], result -> (Long) result[1])); //pega o enum(T) e dps a quantidade(Long)
+                .collect(Collectors.toMap(result -> (T) result[0], result -> (Long) result[1]));
 
-        long total = contagens.values().stream().mapToLong(Long::longValue).sum(); //calcula o total da quantidade(long)
+        long total = contagens.values().stream().mapToLong(Long::longValue).sum();
 
         return contagens.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, entry -> (entry.getValue().doubleValue() / total) * 100));
-                                              //enum       ,          //valor
+                .collect(Collectors.toMap(Map.Entry::getKey, entry -> Double.parseDouble(formatDoubleWithTwoDecimals((entry.getValue().doubleValue() / total) * 100))));
     }
+
+    private String formatDoubleWithTwoDecimals(double value) {
+        return String.format("%.2f", value).replace(",", ".");
+    }
+
+
+
+
 }
