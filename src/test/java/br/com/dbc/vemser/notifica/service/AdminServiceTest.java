@@ -165,6 +165,47 @@ class AdminServiceTest {
         assertNotEquals(usuarioAntigoMock.getEmailUsuario(), usuarioDTOretornado.getEmailUsuario());
     }
 
+//    @Test
+//    public void deveriaTrocaSenhaComSucesso() throws RegraDeNegocioException {
+//        // Arrange
+//        Usuario usuarioMock = usuarioMock();
+//        String senhaAntiga = usuarioMock.getSenhaUsuario();
+//        when(adminRepository.getUsuarioAtivo(anyInt())).thenReturn(usuarioMock);
+//
+//        // Mocking the authentication manager
+//        UsernamePasswordAuthenticationToken authRequest =
+//                new UsernamePasswordAuthenticationToken(
+//                        usuarioMock.getEmailUsuario(),
+//                        "Senha123@"
+//                );
+//        Authentication authentication = mock(Authentication.class);
+//        when(authenticationManager.authenticate(authRequest)).thenReturn(authentication);
+//
+//        // Mocking the argon2PasswordEncoder
+//        when(argon2PasswordEncoder.encode("senha123")).thenReturn("hashedNewPassword");
+//
+//        // Mocking the adminRepository.save method
+//        when(adminRepository.save(usuarioMock)).thenReturn(usuarioMock);
+//
+//        // Mocking the tokenService
+//        when(tokenService.generateToken(usuarioMock)).thenReturn("generatedToken");
+//
+//        // Act
+//        String trocasenha = adminService.attSenha(usuarioMock.getIdUsuario(), "Senha123@", "senha123");
+//
+//        // Assert
+//        assertNotEquals(senhaAntiga, usuarioMock.getSenhaUsuario());
+//        assertNotNull(usuarioMock.getSenhaUsuario());
+//        assertEquals("generatedToken", trocasenha);
+//
+//        // Verify interactions
+//        verify(adminRepository, times(1)).getUsuarioAtivo(anyInt());
+//        verify(authenticationManager, times(1)).authenticate(authRequest);
+//        verify(argon2PasswordEncoder, times(1)).encode("senha123");
+//        verify(adminRepository, times(1)).save(usuarioMock);
+//        verify(tokenService, times(1)).generateToken(usuarioMock);
+//    }
+
     @Test
     public void deveriaRetornarListaDenunciaAtivaoComSucesso(){
         List<Denuncia> listaMock = List.of(denunciaMock(), denunciaMock(), denunciaMock());

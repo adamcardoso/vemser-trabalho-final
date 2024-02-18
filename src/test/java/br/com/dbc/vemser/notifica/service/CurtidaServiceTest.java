@@ -53,7 +53,7 @@ class CurtidaServiceTest {
 
     private static Argon2PasswordEncoder argon2PasswordEncoder = new Argon2PasswordEncoder();
     @Test
-    void apoiarDenuncia() throws RegraDeNegocioException {
+    public void deveriaApoiarDenunciaComSucesso() throws RegraDeNegocioException {
         Optional<Usuario> usuarioMock = Optional.of(usuarioMock());
         Denuncia denunciaMock = denunciaMock();
         Integer numeroCurtida = denunciaMock.getNumeroCurtidas();
@@ -66,7 +66,7 @@ class CurtidaServiceTest {
     }
 
     @Test
-    void apoiarComentario() throws RegraDeNegocioException {
+    public void deveriaApoiarComentarioComSucesso() throws RegraDeNegocioException {
         Optional<Usuario> usuarioMock = Optional.of(usuarioMock());
         Optional<Comentario> comentarioMock = Optional.of(comentarioMock());
         Integer numeroCurtida = comentarioMock.get().getNumeroCurtidas();
@@ -75,6 +75,27 @@ class CurtidaServiceTest {
         curtidaService.apoiarComentario(usuarioMock.get().getIdUsuario(),comentarioMock.get().getIdComentario());
         assertNotEquals(numeroCurtida, comentarioMock.get().getNumeroCurtidas());
     }
+
+//    @Test
+//    public void deveriaDarDislikeEmDenunciaComSucesso() throws RegraDeNegocioException {
+//        Usuario usuario = usuarioMock();
+//        Denuncia denuncia = denunciaMock();
+//        Curtida curtidaExistente = new Curtida(usuario, denuncia, LocalDateTime.now());
+//
+//        // Configurações de Mock
+//        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuario));
+//        when(usuarioRepository.save(usuario)).thenReturn(usuario);
+//        when(denunciaRepository.getDenunciaAtiva(anyInt())).thenReturn(denuncia);
+//        when(denunciaRepository.save(denuncia)).thenReturn(denuncia);
+//        when(curtidaRepository.findByIdUsuarioAndDenuncia(usuario.getIdUsuario(), denuncia.getIdDenuncia())).thenReturn(Optional.of(curtidaExistente));
+//        when(curtidaRepository.numereCurtidasByDenuncia(denuncia.getIdDenuncia())).thenReturn(1);
+//        when(curtidaRepository.save(curtidaExistente)).thenReturn(curtidaExistente);
+//
+//        String resultado = curtidaService.apoiarDenuncia(usuario.getIdUsuario(), denuncia.getIdDenuncia());
+//
+//        assertEquals("dislike", resultado);
+//
+//    }
 
     @Test
     public void deveriaRetornarExceptionAoReceberIdNaoExistente() {
@@ -127,13 +148,11 @@ class CurtidaServiceTest {
         return comentario;
     }
 
-    public static Curtida curtidaDenunciaMock(){
-        Curtida curtida = new Curtida(usuarioMock(), denunciaMock(), LocalDateTime.now());
-        return curtida;
-    }
-
-    public static Curtida curtidaComentarioMock(){
-        Curtida curtida = new Curtida(usuarioMock(), comentarioMock(), LocalDateTime.now());
-        return curtida;
-    }
+//    public static Curtida curtidaDenunciaMock(){
+//        return new Curtida(usuarioMock(), denunciaMock(), LocalDateTime.now());
+//    }
+//
+//    public static Curtida curtidaComentarioMock(){
+//        return new Curtida(usuarioMock(), comentarioMock(), LocalDateTime.now());
+//    }
 }
