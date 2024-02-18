@@ -47,7 +47,7 @@ public class LoginService {
             throw new RegraDeNegocioException("Esse Número Já Está Cadastrado!");
         }
         Usuario usuarioCriado = objectMapper.convertValue(usuarioCreateDTO, Usuario.class);
-        usuarioCriado.setSenhaUsuario(argon2PasswordEncoder.encode(usuarioCriado.getPassword()));
+        usuarioCriado.setSenhaUsuario(argon2PasswordEncoder.encode(usuarioCreateDTO.getSenhaUsuario()));
         usuarioCriado.setTipoUsuario(TipoUsuario.COMUM);
         usuarioCriado.setUsuarioAtivo(UsuarioAtivo.SIM);
         usuarioRepository.save(usuarioCriado);
@@ -80,7 +80,7 @@ public class LoginService {
     }
 
     public Instituicao getLoggedInstituicao() throws RegraDeNegocioException {
-        return findByIdIntituicao(getIdLoggedUser()).orElseThrow(() -> new RegraDeNegocioException("Instituição não encontrado"));
+        return findByIdIntituicao(getIdLoggedUser()).orElseThrow(() -> new RegraDeNegocioException("Instituição não encontrado."));
     }
 }
 

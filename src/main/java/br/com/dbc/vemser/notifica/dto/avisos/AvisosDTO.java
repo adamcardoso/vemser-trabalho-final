@@ -11,7 +11,7 @@ import java.util.Date;
 @Getter
 public class AvisosDTO {
     private String message;
-    private Date data;
+    private String data;
     private String hora;
     private LocalizacaoDTO localizacao;
 }

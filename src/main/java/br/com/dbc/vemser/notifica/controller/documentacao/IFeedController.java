@@ -38,16 +38,6 @@ public interface IFeedController {
     @GetMapping
     ResponseEntity<Page<FeedDenunciasDto>> listarTodasDenuncias(@PageableDefault(size = 5, page = 10)  Pageable pageable) throws Exception;
 
-    @Operation(summary = "Listar todas as denúncias com comentários", description = "Esse Método é o Feed que Lista todas as denúncias com os comentários")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna a lista de denúncias",
-                            content = @Content(schema = @Schema(hidden = true)))
-            }
-    )
-    @GetMapping("/denuncias-com-comentarios")
-    ResponseEntity<Page<FeedDenunciasDto>> listarTodasDenunciasComComentarios(@PageableDefault(size = 10, page = 0) Pageable pageable) throws Exception;
-
     @Operation(summary = "Obter denúncia por ID", description = "Esse Método obtém uma denúncia pelo id")
     @ApiResponses(
             value = {
