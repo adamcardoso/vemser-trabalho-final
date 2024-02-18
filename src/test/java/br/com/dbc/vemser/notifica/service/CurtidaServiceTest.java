@@ -11,10 +11,7 @@ import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioUpdateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.admin_dto.DenunciaListDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.admin_dto.UsuarioListDTO;
-import br.com.dbc.vemser.notifica.entity.Comentario;
-import br.com.dbc.vemser.notifica.entity.Denuncia;
-import br.com.dbc.vemser.notifica.entity.Instituicao;
-import br.com.dbc.vemser.notifica.entity.Usuario;
+import br.com.dbc.vemser.notifica.entity.*;
 import br.com.dbc.vemser.notifica.entity.enums.*;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.repository.*;
@@ -60,6 +57,7 @@ class CurtidaServiceTest {
         Optional<Usuario> usuarioMock = Optional.of(usuarioMock());
         Denuncia denunciaMock = denunciaMock();
         Integer numeroCurtida = denunciaMock.getNumeroCurtidas();
+        when(denunciaRepository.getDenunciaAtiva(anyInt())).thenReturn(denunciaMock);
         when(denunciaRepository.getDenunciaAtiva(anyInt())).thenReturn(denunciaMock);
         when(usuarioRepository.findById(anyInt())).thenReturn(usuarioMock);
         curtidaService.apoiarDenuncia(usuarioMock.get().getIdUsuario(),denunciaMock.getIdDenuncia());
@@ -127,5 +125,15 @@ class CurtidaServiceTest {
         comentario.setNumeroCurtidas(1);
 
         return comentario;
+    }
+
+    public static Curtida curtidaDenunciaMock(){
+        Curtida curtida = new Curtida(usuarioMock(), denunciaMock(), LocalDateTime.now());
+        return curtida;
+    }
+
+    public static Curtida curtidaComentarioMock(){
+        Curtida curtida = new Curtida(usuarioMock(), comentarioMock(), LocalDateTime.now());
+        return curtida;
     }
 }

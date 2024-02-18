@@ -31,6 +31,8 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 
 import java.time.LocalDate;
@@ -56,7 +58,7 @@ class AdminServiceTest {
     @Mock
     private AuthenticationManager authenticationManager;
     @Mock
-    private static Argon2PasswordEncoder argon2PasswordEncoder;
+    private static Argon2PasswordEncoder argon2PasswordEncoder = new Argon2PasswordEncoder();
     @Mock
     private InstituicaoRepository instituicaoRepository;
     @Mock
