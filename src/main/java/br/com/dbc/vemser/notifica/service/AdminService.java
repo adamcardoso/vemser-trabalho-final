@@ -1,6 +1,5 @@
 package br.com.dbc.vemser.notifica.service;
 
-import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaCreateDTO;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
 import br.com.dbc.vemser.notifica.dto.instituicao.InstitucaoCreateDTO;
 import br.com.dbc.vemser.notifica.dto.instituicao.InstituicaoDTO;
@@ -58,7 +57,7 @@ public class AdminService {
                 .collect(Collectors.toList());
     }
 
-    public UsuarioDTO obterUsuarioById(Integer idUsuario) throws Exception {
+    public UsuarioDTO obterUsuarioById(Integer idUsuario) throws RegraDeNegocioException {
         return retornarDTO(getusuario(idUsuario));
     }
 

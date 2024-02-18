@@ -12,5 +12,4 @@ public class InstituicaoDTO {
     private String nomeInstituicao;
     private String emailInstituicao;
     private String celularInstituicao;
-    private String senhaInstituicao;
 }

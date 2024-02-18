@@ -68,6 +68,8 @@ public class SecurityConfiguration {
         return authenticationConfiguration.getAuthenticationManager();
     }
     @Bean
-    public Argon2PasswordEncoder argon2PasswordEncoder() {return new Argon2PasswordEncoder();}
+    public Argon2PasswordEncoder argon2PasswordEncoder() {
+        return new Argon2PasswordEncoder();
+    }
 
 }
