@@ -26,11 +26,11 @@ public class UsuarioService {
     private final TokenService tokenService;
     private final Argon2PasswordEncoder argon2PasswordEncoder;
 
-    public UsuarioDTO obterUsuarioById(Integer idUsuario) throws Exception {
+    public UsuarioDTO obterUsuarioById(Integer idUsuario) throws RegraDeNegocioException {
        return retornarDTO(getUsuario(idUsuario));
     }
 
-    public UsuarioDTO atualizarUsuario(Integer idUsuario, UsuarioUpdateDTO novoUsuario) throws Exception {
+    public UsuarioDTO atualizarUsuario(Integer idUsuario, UsuarioUpdateDTO novoUsuario) throws RegraDeNegocioException {
         Usuario usuarioRecuperado = getUsuario(idUsuario);
         usuarioRecuperado.setEmailUsuario(novoUsuario.getEmailUsuario());
         usuarioRecuperado.setEtniaUsuario(novoUsuario.getEtniaUsuario());
@@ -43,7 +43,7 @@ public class UsuarioService {
         return retornarDTO(usuarioRepository.save(usuarioRecuperado));
     }
 
-    public void removerUsuario(Integer idUsuario) throws Exception {
+    public void removerUsuario(Integer idUsuario) throws RegraDeNegocioException {
         Usuario usuarioDeletado = getUsuario(idUsuario);
         usuarioDeletado.setUsuarioAtivo(UsuarioAtivo.NAO);
         usuarioRepository.save(usuarioDeletado);
