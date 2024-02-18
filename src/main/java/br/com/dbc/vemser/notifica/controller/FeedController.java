@@ -28,11 +28,6 @@ public class FeedController implements IFeedController {
         return new ResponseEntity<>(feedService.listarTodasDenuncias(pageable), HttpStatus.OK);
     }
 
-    @GetMapping("/denuncias-com-comentarios")
-    public ResponseEntity<Page<FeedDenunciasDto>> listarTodasDenunciasComComentarios(@PageableDefault(size = 10, page = 0) Pageable pageable) throws Exception{
-        return new ResponseEntity<>(feedService.listarTodasDenunciasComComentarios(pageable), HttpStatus.OK);
-    }
-
     @GetMapping("/{idDenuncia}/com-comentarios")
     public ResponseEntity<DenunciaDTO> listarDenunciaComComentarios(@PathVariable("idDenuncia") Integer idDenuncia) throws Exception {
         DenunciaDTO denunciaDTOS = feedService.listarDenunciaComComentarios(idDenuncia);

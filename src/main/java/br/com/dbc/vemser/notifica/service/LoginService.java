@@ -80,7 +80,7 @@ public class LoginService {
     }
 
     public Instituicao getLoggedInstituicao() throws RegraDeNegocioException {
-        return findByIdIntituicao(getIdLoggedUser()).orElseThrow(() -> new RegraDeNegocioException("Instituição não encontrado"));
+        return findByIdIntituicao(getIdLoggedUser()).orElseThrow(() -> new RegraDeNegocioException("Instituição não encontrado."));
     }
 }
 

@@ -41,12 +41,6 @@ public class FeedService {
         return objectMapper.convertValue(entity, DenunciaDTO.class);
     }
 
-    public Page<FeedDenunciasDto> listarTodasDenunciasComComentarios(Pageable pageable) throws RegraDeNegocioException {
-        return denunciaRepository.findAll(pageable).map(d ->
-                new FeedDenunciasDto(d.getIdDenuncia(), d.getDescricao(), d.getTitulo(), d.getDataHora(),
-                        d.getStatusDenuncia(), d.getCategoria(), d.getTipoDenuncia(), d.getCurtidas().size(),
-                        convertUsuarioToUsuarioDTO(d.getUsuario()), d.getComentarios(), d.getLocalizacao()));
-    }
 
     private DenunciaDTO retornarComentariosDTOs(Denuncia denuncia) {
         DenunciaDTO denunciaDTO = retornarDTO(denuncia);
@@ -75,8 +69,6 @@ public class FeedService {
 
         return comentarioDTO;
     }
-
-
 
     public DenunciaDTO listarDenunciaComComentarios(Integer idDenuncia) throws RegraDeNegocioException {
         Optional<Denuncia> denunciaOptional = denunciaRepository.findById(idDenuncia);
