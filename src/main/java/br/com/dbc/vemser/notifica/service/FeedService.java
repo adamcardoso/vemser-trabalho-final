@@ -26,11 +26,31 @@ import java.util.Optional;
 public class FeedService {
     private final DenunciaRepository denunciaRepository;
     private final ObjectMapper objectMapper;
+
     public Page<FeedDenunciasDto> listarTodasDenuncias(Pageable pageable) throws Exception {
         return denunciaRepository.findAll(pageable).map(d ->
                 new FeedDenunciasDto(d.getIdDenuncia(), d.getDescricao(), d.getTitulo(), d.getDataHora(),
                         d.getStatusDenuncia(), d.getCategoria(), d.getTipoDenuncia(), d.getCurtidas().size(),
                         convertUsuarioToUsuarioDTO(d.getUsuario()), d.getIdUsuario(), d.getLocalizacao()));
+    }
+    public DenunciaDTO listarDenunciaComComentarios(Integer idDenuncia) throws RegraDeNegocioException {
+        Optional<Denuncia> denunciaOptional = denunciaRepository.findById(idDenuncia);
+
+        if (denunciaOptional.isPresent()) {
+            Denuncia denuncia = denunciaOptional.get();
+
+            List<ComentarioDTO> comentarioDTOList = new ArrayList<>();
+            for (Comentario comentario : denuncia.getComentarios()) {
+                comentarioDTOList.add(retornarComentarioDTO(comentario));
+            }
+
+            DenunciaDTO denunciaDTO = retornarDTO(denuncia);
+            denunciaDTO.setComentarios(comentarioDTOList);
+
+            return denunciaDTO;
+        } else {
+            throw new RegraDeNegocioException("Denúncia não Encontrada!");
+        }
     }
 
     private UsuarioFeedDTO convertUsuarioToUsuarioDTO(Usuario usuario) {
@@ -42,7 +62,7 @@ public class FeedService {
     }
 
 
-    private DenunciaDTO retornarComentariosDTOs(Denuncia denuncia) {
+    public DenunciaDTO retornarComentariosDTOs(Denuncia denuncia) {
         DenunciaDTO denunciaDTO = retornarDTO(denuncia);
 
         List<ComentarioDTO> comentarioDTOSet = new ArrayList<>();
@@ -68,26 +88,6 @@ public class FeedService {
         comentarioDTO.setIdUsuario(comentario.getUsuario().getIdUsuario());
 
         return comentarioDTO;
-    }
-
-    public DenunciaDTO listarDenunciaComComentarios(Integer idDenuncia) throws RegraDeNegocioException {
-        Optional<Denuncia> denunciaOptional = denunciaRepository.findById(idDenuncia);
-
-        if (denunciaOptional.isPresent()) {
-            Denuncia denuncia = denunciaOptional.get();
-
-            List<ComentarioDTO> comentarioDTOList = new ArrayList<>();
-            for (Comentario comentario : denuncia.getComentarios()) {
-                comentarioDTOList.add(retornarComentarioDTO(comentario));
-            }
-
-            DenunciaDTO denunciaDTO = retornarDTO(denuncia);
-            denunciaDTO.setComentarios(comentarioDTOList);
-
-            return denunciaDTO;
-        } else {
-            throw new RegraDeNegocioException("Denúncia não Encontrada!");
-        }
     }
 
 }

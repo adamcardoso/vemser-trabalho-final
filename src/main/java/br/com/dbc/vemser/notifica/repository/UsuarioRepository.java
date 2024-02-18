@@ -17,7 +17,7 @@ import java.time.LocalDate;
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     @Query(value = """
             SELECT u FROM USUARIO u
-            WHERE (u.numeroCelular = ?1 OR u.emailUsuario = ?2) 
+            WHERE (u.numeroCelular = ?1 OR u.emailUsuario = ?2)
             AND u.usuarioAtivo = 0
             """)
     Usuario usuarioInativoCadastrado(String numeroCelular, String emailUsuario);

@@ -53,7 +53,7 @@ class AvisosServiceTest {
 
     @Test
     @DisplayName("Deveria salvar aviso com sucesso")
-    void deveriaSalvarAvisoComSucesso() throws RegraDeNegocioException { //68% pois nao testei email
+    void deveriaSalvarAvisoComSucesso() throws RegraDeNegocioException { //78% pois nao testei email
         AvisosCreateDTO avisoCreateDTO = new AvisosCreateDTO();
         avisoCreateDTO.setMessage("Mensagem de teste");
         avisoCreateDTO.setData("Dia 12 de Abril");
