@@ -24,7 +24,7 @@ public class CurtidaService{
     private final DenunciaRepository denunciaRepository;
 
 
-    public String apoiarDenuncia(Integer idUsuario, Integer idDenuncia) throws Exception {
+    public String apoiarDenuncia(Integer idUsuario, Integer idDenuncia) throws RegraDeNegocioException {
         Denuncia denuncia = getDenuncia(idDenuncia);
         if(curtidaRepository.findByIdUsuarioAndDenuncia(idUsuario, idDenuncia).isPresent()){
            Curtida curtidaExistente = curtidaRepository.findByIdUsuarioAndDenuncia(idUsuario, idDenuncia).get();
@@ -40,7 +40,7 @@ public class CurtidaService{
         return "Like";
     }
 
-    public String apoiarComentario(Integer idUsuario, Integer idComentario) throws Exception {
+    public String apoiarComentario(Integer idUsuario, Integer idComentario) throws RegraDeNegocioException {
         Comentario comentario = getComentario(idComentario);
         if(curtidaRepository.findByIdUsuarioAndIdComentario(idUsuario, idComentario).isPresent()){
             Curtida curtidaExistente = curtidaRepository.findByIdUsuarioAndIdComentario(idUsuario, idComentario).get();
