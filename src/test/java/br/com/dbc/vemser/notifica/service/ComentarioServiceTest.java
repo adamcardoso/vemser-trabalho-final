@@ -9,6 +9,7 @@ import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.repository.ComentarioRepository;
 import br.com.dbc.vemser.notifica.repository.DenunciaRepository;
 import br.com.dbc.vemser.notifica.repository.UsuarioRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,11 +35,18 @@ class ComentarioServiceTest {
     @Spy
     @InjectMocks
     private ComentarioService comentarioService;
+    @Mock
+    private ObjectMapper objectMapper;
 
     @Test
     @DisplayName("Deveria criar um comentário relacionado com usuário e denúncia")
     void criarComentarioComsucesso() throws RegraDeNegocioException {
         // ARRANGE
+        Integer idUsuario = 1;
+        Integer idDenuncia = 1;
+        Integer idComentario = 1;
+        String comentario = "comentário editado";
+
         Comentario comentarioretornado = new Comentario();
         comentarioretornado.setIdUsuario(1);
         comentarioretornado.setIdDenuncia(1);
@@ -56,22 +64,19 @@ class ComentarioServiceTest {
         comentarioDTO.setIdDenuncia(1);
         comentarioDTO.setComentario("comentário");
 
-        given(comentarioRepository.save(comentarioCriado)).willReturn(comentarioretornado);
-        doReturn(comentarioDTO).when(comentarioService).criarComentario(1,1, "mensagem");
+        Denuncia denuncia = new Denuncia();
 
         // ACT
-        when(usuarioRepository.getById(1)).thenReturn(usuario);
-        when(comentarioRepository.save(comentarioCriado)).thenReturn(comentarioretornado);
-        Usuario u = usuarioRepository.getById(1);
-        Comentario c = comentarioRepository.save(comentarioCriado);
+        when(denunciaRepository.getDenunciaAtiva(idDenuncia)).thenReturn(denuncia);
+        when(usuarioRepository.getById(anyInt())).thenReturn(usuario);
+        when(comentarioRepository.save(any())).thenReturn(comentarioretornado);
+        when(objectMapper.convertValue(comentarioretornado, ComentarioDTO.class)).thenReturn(comentarioDTO);
 
-        ComentarioDTO cDTO = comentarioService.criarComentario(1, 1, "mensagem");
+        ComentarioDTO cDTO = comentarioService.criarComentario(idUsuario, idDenuncia, comentario);
 
         // ASSERT
         assertNotNull(cDTO);
-        assertEquals(c.getIdUsuario(), cDTO.getIdUsuario());
-        assertEquals(c.getIdDenuncia(), cDTO.getIdDenuncia());
-        assertEquals(c.getComentario(), cDTO.getComentario());
+        assertEquals(comentarioDTO, cDTO);
     }
 
     @Test
@@ -80,6 +85,7 @@ class ComentarioServiceTest {
         // ARRANGE
         Integer idUsuario = 1;
         Integer idDenuncia = 123;
+        String comentario = "comentario";
 
         Comentario comentarioCriado = new Comentario();
         comentarioCriado.setIdUsuario(1);
@@ -87,20 +93,11 @@ class ComentarioServiceTest {
         comentarioCriado.setComentario("comentário");
         comentarioCriado.setNumeroCurtidas(0);
 
-        doThrow(RuntimeException.class).when(comentarioService).criarComentario(1,1,"comentário");
-
         // ACT
         when(denunciaRepository.getDenunciaAtiva(idDenuncia)).thenReturn(null);
-        when(denunciaRepository.getDenunciaAtiva(idDenuncia)).thenThrow(new RuntimeException("Denuncia não encontrada!"));
-
 
         // ASSERT
-        assertThrows(RuntimeException.class, () -> comentarioService.criarComentario(idUsuario, idDenuncia, "comentario"),
-                "Denuncia não encontrada!");
-
-        assertThrows(RuntimeException.class, () -> denunciaRepository.getDenunciaAtiva(idDenuncia), "Denuncia não encontrada!");
-
-        assertThrows(RuntimeException.class, () -> comentarioService.criarComentario(1,1,"comentário"), "Denuncia não encontrada!");
+        assertThrows(RegraDeNegocioException.class, () -> comentarioService.criarComentario(idUsuario, idDenuncia, comentario), "Denuncia não encontrada!");
     }
 
 
@@ -128,21 +125,16 @@ class ComentarioServiceTest {
         comentarioDTO.setIdDenuncia(1);
         comentarioDTO.setComentario(comentario);
 
-        doReturn(comentarioDTO).when(comentarioService).editarComentario(idUsuario, idDenuncia, comentario);
         // ACT
-        when(comentarioRepository.findById(idComentario)).thenReturn(Optional.of(comentarioretornado));
-        when(comentarioRepository.save(comentarioCriado)).thenReturn(comentarioretornado);
-
-        Optional<Comentario> cOPT = comentarioRepository.findById(idComentario);
-        Comentario c = comentarioRepository.save(comentarioCriado);
+        when(comentarioRepository.findById(anyInt())).thenReturn(Optional.of(comentarioretornado));
+        when(comentarioRepository.save(any())).thenReturn(comentarioretornado);
+        when(objectMapper.convertValue(comentarioretornado, ComentarioDTO.class)).thenReturn(comentarioDTO);
 
         ComentarioDTO cDTO = comentarioService.editarComentario(idUsuario, idDenuncia, comentario);
 
         // ASSERT
         assertNotNull(cDTO);
-        assertEquals(c.getIdUsuario(), cDTO.getIdUsuario());
-        assertEquals(c.getIdDenuncia(), cDTO.getIdDenuncia());
-        assertEquals(c.getComentario(), cDTO.getComentario());
+        assertEquals(comentarioDTO, cDTO);
     }
 
     @Test
@@ -153,17 +145,14 @@ class ComentarioServiceTest {
         Integer idComentario = 123;
         String comentario = "comentário editado";
 
-        doThrow(new RuntimeException()).when(comentarioService).editarComentario(idUsuario, idComentario, comentario);
-
         // ACT
-        when(comentarioRepository.findById(idComentario)).thenReturn(Optional.of(new Comentario()));
-        Optional<Comentario> cOPT = comentarioRepository.findById(idComentario);
-        when(cOPT.isEmpty()).thenThrow(new RuntimeException());
+        when(comentarioRepository.findById(anyInt())).thenReturn(Optional.empty());
 
         // ASSERT
-        assertThrows(RuntimeException.class, () -> comentarioRepository.findById(idComentario), "Comentário não encontrado!");
-        assertThrows(RuntimeException.class, () -> comentarioService.editarComentario(idUsuario, idComentario, comentario), "você so pode editar seus comentarios!");
+        assertThrows(RegraDeNegocioException.class, () -> comentarioService.editarComentario(idUsuario, idComentario, comentario), "Comentário não encontrado!");
     }
+
+
 
     @Test
     @DisplayName("Deveria editar um comentário com sucesso")
@@ -171,6 +160,13 @@ class ComentarioServiceTest {
         // ARRANGE
         Integer idUsuario = 1;
         Integer idComentario = 1;
+        Integer idDenuncia = 1;
+        String comentario = "comentário";
+
+        Comentario comentarioCriado = new Comentario();
+        comentarioCriado.setIdUsuario(idUsuario);
+        comentarioCriado.setIdDenuncia(idDenuncia);
+        comentarioCriado.setComentario(comentario);
 
         doNothing().when(comentarioService).deletarComentario(idUsuario, idComentario);
 
@@ -185,17 +181,13 @@ class ComentarioServiceTest {
     void deletarComentarioComFalha() throws RegraDeNegocioException {
         // ARRANGE
         Integer idUsuario = 1;
-        Integer idComentario = 999;
-
-        doThrow(new RuntimeException()).when(comentarioService).deletarComentario(idUsuario, idComentario);
+        Integer idComentario = 123;
+        String comentario = "comentário editado";
 
         // ACT
-        when(comentarioRepository.findById(idComentario)).thenReturn(Optional.empty());
-        comentarioRepository.findById(idComentario);
+        when(comentarioRepository.findById(anyInt())).thenReturn(Optional.empty());
 
         // ASSERT
-        assertThrows(RuntimeException.class, () -> comentarioService.deletarComentario(idUsuario, idComentario),
-                "Comentário não encontrado");
-        assertThrows(RuntimeException.class, () -> comentarioService.deletarComentario(idUsuario, idComentario), "você so pode excluir seus comentarios!");
+        assertThrows(RegraDeNegocioException.class, () -> comentarioService.editarComentario(idUsuario, idComentario, comentario), "Comentário não encontrado!");
     }
 }
