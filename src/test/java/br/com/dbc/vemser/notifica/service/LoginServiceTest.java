@@ -225,6 +225,7 @@ class LoginServiceTest {
     private void mockAuthenticatedUser(int id) {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = mock(Authentication.class);
+
         when(authentication.getPrincipal()).thenReturn(String.valueOf(id));
         securityContext.setAuthentication(authentication);
     }

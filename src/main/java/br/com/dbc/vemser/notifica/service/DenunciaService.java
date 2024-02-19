@@ -62,7 +62,7 @@ public class DenunciaService {
     }
 
 
-    public DenunciaDTO editarDenuncia(DenunciaCreateDTO denunciaCreateDTO, Integer idDenuncia, Integer idUsuario) throws Exception {
+    public DenunciaDTO editarDenuncia(DenunciaCreateDTO denunciaCreateDTO, Integer idDenuncia, Integer idUsuario) throws RegraDeNegocioException {
         Usuario usuario = getUsuario(idUsuario);
 
         Denuncia denuncia = getDenuncia(idDenuncia);
@@ -79,6 +79,7 @@ public class DenunciaService {
 
             return retornarDTO(denunciaRepository.save(denuncia));
         }
+
         throw new RegraDeNegocioException("Usuário não tem permissão para editar esta denúncia.");
     }
 
@@ -113,7 +114,7 @@ public class DenunciaService {
         }
         return denuncia;
     }
-    private List<Denuncia> getDenunciasByIdUsuario(Integer idUsuario) throws RegraDeNegocioException {
+    public List<Denuncia> getDenunciasByIdUsuario(Integer idUsuario) throws RegraDeNegocioException {
         List<Denuncia> denuncias = denunciaRepository.getDenunciaAtivaByIdUsuario(idUsuario);
 
         denuncias.stream()
