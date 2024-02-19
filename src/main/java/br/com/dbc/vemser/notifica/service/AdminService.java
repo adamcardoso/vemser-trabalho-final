@@ -76,18 +76,18 @@ public class AdminService {
     }
 
     public InstituicaoDTO criarUsuarioInstitucao(InstitucaoCreateDTO novaInstituicao) throws RegraDeNegocioException {
-        for (Instituicao i: instituicaoRepository.findAll()){
-            if (i.getEmailInstituicao().equals(novaInstituicao.getEmailInstituicao())){
-                throw new RegraDeNegocioException("Email ja cadastrado!");
-            }
-            if (i.getCelularInstituicao().equals(novaInstituicao.getCelularInstituicao())){
-                throw new RegraDeNegocioException("Celular ja cadastrado!");
-            }
+        if (instituicaoRepository.getInstituicaoByEmail(novaInstituicao.getEmailInstituicao()).isPresent()) {
+            throw new RegraDeNegocioException("Email já cadastrado!");
         }
+        if (instituicaoRepository.getInstituicaoByCelular(novaInstituicao.getCelularInstituicao()).isPresent()) {
+            throw new RegraDeNegocioException("Celular já cadastrado!");
+        }
+
         Instituicao instituicao = objectMapper.convertValue(novaInstituicao, Instituicao.class);
         instituicao.setSenhaInstituicao(argon2PasswordEncoder.encode(instituicao.getSenhaInstituicao()));
         instituicao.setTipoUsuario(TipoUsuario.INSTITUICAO);
         instituicaoRepository.save(instituicao);
+
         return objectMapper.convertValue(instituicao, InstituicaoDTO.class);
     }
 

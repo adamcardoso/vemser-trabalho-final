@@ -17,7 +17,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@NoArgsConstructor
 public class UsuarioCreateDTO {
 
     @NotNull

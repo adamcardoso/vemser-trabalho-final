@@ -76,26 +76,37 @@ class CurtidaServiceTest {
         assertNotEquals(numeroCurtida, comentarioMock.get().getNumeroCurtidas());
     }
 
-//    @Test
-//    public void deveriaDarDislikeEmDenunciaComSucesso() throws RegraDeNegocioException {
-//        Usuario usuario = usuarioMock();
-//        Denuncia denuncia = denunciaMock();
-//        Curtida curtidaExistente = new Curtida(usuario, denuncia, LocalDateTime.now());
-//
-//        // Configurações de Mock
-//        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuario));
-//        when(usuarioRepository.save(usuario)).thenReturn(usuario);
-//        when(denunciaRepository.getDenunciaAtiva(anyInt())).thenReturn(denuncia);
-//        when(denunciaRepository.save(denuncia)).thenReturn(denuncia);
-//        when(curtidaRepository.findByIdUsuarioAndDenuncia(usuario.getIdUsuario(), denuncia.getIdDenuncia())).thenReturn(Optional.of(curtidaExistente));
-//        when(curtidaRepository.numereCurtidasByDenuncia(denuncia.getIdDenuncia())).thenReturn(1);
-//        when(curtidaRepository.save(curtidaExistente)).thenReturn(curtidaExistente);
-//
-//        String resultado = curtidaService.apoiarDenuncia(usuario.getIdUsuario(), denuncia.getIdDenuncia());
-//
-//        assertEquals("dislike", resultado);
-//
-//    }
+    @Test
+    public void deveriaDarDislikeEmDenunciaComSucesso() throws RegraDeNegocioException {
+        int id = 1;
+        Optional<Usuario> usuario = Optional.of(usuarioMock());
+        Denuncia denuncia = denunciaMock();
+        Curtida curtidaExistente = new Curtida(usuario.get(), denuncia, LocalDateTime.now());
+        when(denunciaRepository.getDenunciaAtiva(id)).thenReturn(denuncia);
+        when(curtidaRepository.findByIdUsuarioAndDenuncia(usuario.get().getIdUsuario(), denuncia.getIdDenuncia()))
+                .thenReturn(Optional.of(new Curtida()));
+
+        String result = curtidaService.apoiarDenuncia(id, id);
+
+        assertEquals(result, "dislike");
+        assertEquals(denuncia.getNumeroCurtidas(), 0);
+    }
+
+    @Test
+    public void deveriaDarDislikeEmComentarioComSucesso() throws RegraDeNegocioException {
+        int id = 1;
+        Optional<Usuario> usuario = Optional.of(usuarioMock());
+        Optional<Comentario> comentario = Optional.of(comentarioMock());
+        Curtida curtidaExistente = new Curtida(usuario.get(), comentario.get(), LocalDateTime.now());
+        when(comentarioRepository.findById(id)).thenReturn(comentario);
+        when(curtidaRepository.findByIdUsuarioAndIdComentario(usuario.get().getIdUsuario(), comentario.get().getIdComentario()))
+                .thenReturn(Optional.of(new Curtida()));
+
+        String result = curtidaService.apoiarComentario(id, id);
+
+        assertEquals(result, "dislike");
+        assertEquals(comentario.get().getNumeroCurtidas(), 0);
+    }
 
     @Test
     public void deveriaRetornarExceptionAoReceberIdNaoExistente() {

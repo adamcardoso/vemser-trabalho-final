@@ -217,6 +217,52 @@ class AdminServiceTest {
     }
 
     @Test
+    void deveriaReativarUsuarioAdminDesativado() {
+        UsuarioCreateDTO usuarioCreateDTO = usuarioCreateDTOMock();
+
+        Usuario usuarioDesativado = usuarioMock();
+        usuarioDesativado.setUsuarioAtivo(UsuarioAtivo.NAO);
+
+        when(adminRepository.usuarioInativoCadastrado(any(), any())).thenReturn(usuarioDesativado);
+
+        Usuario usuarioCriado = usuarioMock();
+
+
+        when(objectMapper.convertValue(any(), eq(UsuarioDTO.class))).thenReturn(new UsuarioDTO());
+        when(adminRepository.save(usuarioDesativado)).thenReturn(usuarioCriado);
+
+        UsuarioDTO result = adminService.criarUsuarioAdmin(usuarioCreateDTO);
+
+        assertNotNull(result);
+        assertEquals(UsuarioAtivo.SIM, usuarioDesativado.getUsuarioAtivo());
+    }
+
+    @Test
+    void nãodeveriacriarUsuarioInstituicao() throws RegraDeNegocioException {
+        InstitucaoCreateDTO instituicaoCreateDTO = instituicaoCreateDTOMock();
+
+        when(instituicaoRepository.getInstituicaoByEmail(instituicaoCreateDTO.getEmailInstituicao()))
+                .thenReturn(Optional.of(new Instituicao()));
+
+        assertThrows(RegraDeNegocioException.class,
+                () -> adminService.criarUsuarioInstitucao(instituicaoCreateDTO),
+                "Email já cadastrado!");
+
+    }
+
+    @Test
+    void deveriaFalharAoCriarUsuarioComNumeroCelularExistente() {
+        InstitucaoCreateDTO instituicaoCreateDTO = instituicaoCreateDTOMock();
+
+        when(instituicaoRepository.getInstituicaoByCelular(instituicaoCreateDTO.getCelularInstituicao()))
+                .thenReturn(Optional.of(new Instituicao()));
+
+        assertThrows(RegraDeNegocioException.class,
+                () -> adminService.criarUsuarioInstitucao(instituicaoCreateDTO),
+                "Celular Já Cadastrado!");
+    }
+
+    @Test
     public void deveriaDenunciaPorId() throws RegraDeNegocioException {
         Denuncia denunciaMock = denunciaMock();
         DenunciaDTO denunciaDTOMock = denunciaDTOMock();
