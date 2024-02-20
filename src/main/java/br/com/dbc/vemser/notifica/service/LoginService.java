@@ -53,7 +53,7 @@ public class LoginService {
         usuarioCriado.setUsuarioAtivo(UsuarioAtivo.SIM);
         usuarioRepository.save(usuarioCriado);
 
-//        createRegistrosService.insertCreateRegistro();
+        createRegistrosService.insertCreateRegistro();
         return objectMapper.convertValue(usuarioCriado,UsuarioDTO.class);
     }
 
