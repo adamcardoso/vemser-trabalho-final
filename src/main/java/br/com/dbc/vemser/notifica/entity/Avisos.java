@@ -25,7 +25,7 @@ public class Avisos {
     private String message;
 
     @Column(name = "data")
-    private Date data;
+    private String data;
 
     @Column(name = "hora")
     private String hora;

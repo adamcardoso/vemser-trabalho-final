@@ -26,11 +26,11 @@ public class UsuarioService {
     private final TokenService tokenService;
     private final Argon2PasswordEncoder argon2PasswordEncoder;
 
-    public UsuarioDTO obterUsuarioById(Integer idUsuario) throws Exception {
+    public UsuarioDTO obterUsuarioById(Integer idUsuario) throws RegraDeNegocioException {
        return retornarDTO(getUsuario(idUsuario));
     }
 
-    public UsuarioDTO atualizarUsuario(Integer idUsuario, UsuarioUpdateDTO novoUsuario) throws Exception {
+    public UsuarioDTO atualizarUsuario(Integer idUsuario, UsuarioUpdateDTO novoUsuario) throws RegraDeNegocioException {
         Usuario usuarioRecuperado = getUsuario(idUsuario);
         usuarioRecuperado.setEmailUsuario(novoUsuario.getEmailUsuario());
         usuarioRecuperado.setEtniaUsuario(novoUsuario.getEtniaUsuario());
@@ -43,31 +43,21 @@ public class UsuarioService {
         return retornarDTO(usuarioRepository.save(usuarioRecuperado));
     }
 
-    public void removerUsuario(Integer idUsuario) throws Exception {
+    public void removerUsuario(Integer idUsuario) throws RegraDeNegocioException {
         Usuario usuarioDeletado = getUsuario(idUsuario);
         usuarioDeletado.setUsuarioAtivo(UsuarioAtivo.NAO);
         usuarioRepository.save(usuarioDeletado);
     }
 
     public String attSenha(Integer idUsuario, String senha, String novaSenha) throws RegraDeNegocioException {
-        try {
-            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                    new UsernamePasswordAuthenticationToken(
-                            getUsuario(idUsuario).getEmailUsuario(),
-                            senha
-                    );
-
-            Authentication authentication =
-                    authenticationManager.authenticate(
-                            usernamePasswordAuthenticationToken);
-
-            Usuario usuarioValidado = (Usuario) authentication.getPrincipal();
-            usuarioValidado.setSenhaUsuario(argon2PasswordEncoder.encode(novaSenha));
-            usuarioRepository.save(usuarioValidado);
-            return tokenService.generateToken(usuarioValidado);
-        } catch (AuthenticationException ex) {
-            throw new RegraDeNegocioException("Senha incorreta!");
-        }
+            Usuario usuario = getUsuario(idUsuario);
+            String senhaIncriptada = argon2PasswordEncoder.encode(senha);
+            if (!(usuario.getSenhaUsuario().equals(senhaIncriptada))){
+                throw new RegraDeNegocioException("Senha incorreta!");
+            }
+            usuario.setSenhaUsuario(argon2PasswordEncoder.encode(novaSenha));
+            usuarioRepository.save(usuario);
+            return tokenService.generateToken(usuario);
     }
 
     private Usuario getUsuario(Integer id) throws RegraDeNegocioException {

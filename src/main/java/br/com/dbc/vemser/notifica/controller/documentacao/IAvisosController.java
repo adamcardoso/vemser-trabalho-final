@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -22,5 +23,5 @@ public interface IAvisosController {
             }
     )
     @PostMapping
-    public AvisosDTO createAviso(@RequestBody AvisosCreateDTO avisoDTO) throws Exception;
+    public ResponseEntity<AvisosDTO> createAviso(@RequestBody AvisosCreateDTO avisoDTO) throws Exception;
 }

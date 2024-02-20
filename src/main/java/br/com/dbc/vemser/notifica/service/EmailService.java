@@ -2,6 +2,7 @@ package br.com.dbc.vemser.notifica.service;
 
 import br.com.dbc.vemser.notifica.entity.Denuncia;
 import br.com.dbc.vemser.notifica.entity.enums.TipoDenuncia;
+import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.repository.DenunciaRepository;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -36,7 +37,7 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String remetente;
 
-    public void enviarEmail(String destinatario, String assunto, String aviso) throws Exception {
+    public void enviarEmail(String destinatario, String assunto, String aviso) throws RegraDeNegocioException {
         MimeMessage mensagemMime = remetenteEmail.createMimeMessage();
         try {
             MimeMessageHelper auxiliarMensagemMime = new MimeMessageHelper(mensagemMime, true);
@@ -48,7 +49,7 @@ public class EmailService {
             remetenteEmail.send(auxiliarMensagemMime.getMimeMessage());
         } catch (MessagingException e) {
             e.printStackTrace();
-            throw new Exception(e.getMessage());
+            throw new RegraDeNegocioException(e.getMessage());
         }
     }
 

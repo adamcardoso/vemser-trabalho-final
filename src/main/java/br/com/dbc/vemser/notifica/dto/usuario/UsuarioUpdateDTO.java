@@ -6,6 +6,7 @@ import br.com.dbc.vemser.notifica.entity.enums.Genero;
 import br.com.dbc.vemser.notifica.entity.enums.TipoUsuario;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 
 @AllArgsConstructor
 @Data
+@NoArgsConstructor
 public class UsuarioUpdateDTO {
     @NotNull
     @NotEmpty

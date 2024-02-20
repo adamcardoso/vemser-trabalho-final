@@ -1,6 +1,5 @@
 package br.com.dbc.vemser.notifica.service;
 
-import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaCreateDTO;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
 import br.com.dbc.vemser.notifica.dto.instituicao.InstitucaoCreateDTO;
 import br.com.dbc.vemser.notifica.dto.instituicao.InstituicaoDTO;
@@ -58,7 +57,7 @@ public class AdminService {
                 .collect(Collectors.toList());
     }
 
-    public UsuarioDTO obterUsuarioById(Integer idUsuario) throws Exception {
+    public UsuarioDTO obterUsuarioById(Integer idUsuario) throws RegraDeNegocioException {
         return retornarDTO(getusuario(idUsuario));
     }
 
@@ -77,18 +76,18 @@ public class AdminService {
     }
 
     public InstituicaoDTO criarUsuarioInstitucao(InstitucaoCreateDTO novaInstituicao) throws RegraDeNegocioException {
-        for (Instituicao i: instituicaoRepository.findAll()){
-            if (i.getEmailInstituicao().equals(novaInstituicao.getEmailInstituicao())){
-                throw new RegraDeNegocioException("Email ja cadastrado!");
-            }
-            if (i.getCelularInstituicao().equals(novaInstituicao.getCelularInstituicao())){
-                throw new RegraDeNegocioException("Celular ja cadastrado!");
-            }
+        if (instituicaoRepository.getInstituicaoByEmail(novaInstituicao.getEmailInstituicao()).isPresent()) {
+            throw new RegraDeNegocioException("Email já cadastrado!");
         }
+        if (instituicaoRepository.getInstituicaoByCelular(novaInstituicao.getCelularInstituicao()).isPresent()) {
+            throw new RegraDeNegocioException("Celular já cadastrado!");
+        }
+
         Instituicao instituicao = objectMapper.convertValue(novaInstituicao, Instituicao.class);
         instituicao.setSenhaInstituicao(argon2PasswordEncoder.encode(instituicao.getSenhaInstituicao()));
         instituicao.setTipoUsuario(TipoUsuario.INSTITUICAO);
         instituicaoRepository.save(instituicao);
+
         return objectMapper.convertValue(instituicao, InstituicaoDTO.class);
     }
 
@@ -106,24 +105,14 @@ public class AdminService {
     }
 
     public String attSenha(Integer idUsuario, String senha, String novaSenha) throws RegraDeNegocioException {
-        try {
-            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                    new UsernamePasswordAuthenticationToken(
-                            getUsuarioAtivo(idUsuario).getEmailUsuario(),
-                            senha
-                    );
-
-            Authentication authentication =
-                    authenticationManager.authenticate(
-                            usernamePasswordAuthenticationToken);
-
-            Usuario usuarioValidado = (Usuario) authentication.getPrincipal();
-            usuarioValidado.setSenhaUsuario(argon2PasswordEncoder.encode(novaSenha));
-            adminRepository.save(usuarioValidado);
-            return tokenService.generateToken(usuarioValidado);
-        } catch (AuthenticationException ex) {
+        Usuario usuario = getusuario(idUsuario);
+        String senhaIncriptada = argon2PasswordEncoder.encode(senha);
+        if (!(usuario.getSenhaUsuario().equals(senhaIncriptada))){
             throw new RegraDeNegocioException("Senha incorreta!");
         }
+        usuario.setSenhaUsuario(argon2PasswordEncoder.encode(novaSenha));
+        adminRepository.save(usuario);
+        return tokenService.generateToken(usuario);
     }
 
     public void removerUsuario(Integer idUsuario) {
