@@ -61,7 +61,7 @@ public class DenunciaService {
 
 
         Denuncia savedDenuncia = denunciaRepository.save(denuncia);
-//        denunciaRegistroService.inicioDenunciaRegistro();
+        denunciaRegistroService.inicioDenunciaRegistro();
         return retornarDTO(savedDenuncia);
     }
 
