@@ -34,6 +34,7 @@ public class SecurityConfiguration {
                         .antMatchers("/avisos/**").hasAuthority(TipoUsuario.INSTITUICAO.getRoleName())
                         .antMatchers("/login/usuario-logado", "/usuario/**", "/apoiar/**", "/denuncia/**", "/endereco/**", "/comentario/**").hasAuthority(TipoUsuario.COMUM.getRoleName())
                         .antMatchers("/denuncia/criar-denuncia").hasAuthority(TipoUsuario.COMUM.getRoleName())
+                        .antMatchers("/api/create-registros/**","/api/denuncia-registros").hasAuthority(TipoUsuario.ADMIN.getRoleName())
                         .anyRequest().authenticated()
                 );
 

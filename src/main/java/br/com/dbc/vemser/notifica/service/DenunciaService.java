@@ -5,9 +5,11 @@ import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
 import br.com.dbc.vemser.notifica.dto.localizacao.LocalizacaoDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import br.com.dbc.vemser.notifica.entity.Denuncia;
+import br.com.dbc.vemser.notifica.entity.DenunciaRegistros;
 import br.com.dbc.vemser.notifica.entity.Localizacao;
 import br.com.dbc.vemser.notifica.entity.Usuario;
 import br.com.dbc.vemser.notifica.entity.enums.StatusDenuncia;
+import br.com.dbc.vemser.notifica.entity.enums.TipoDenuncia;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.repository.DenunciaRepository;
 import br.com.dbc.vemser.notifica.repository.UsuarioRepository;
@@ -26,6 +28,7 @@ public class DenunciaService {
     private final EmailService emailService;
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
+    private final DenunciaRegistroService denunciaRegistroService;
 
     public List<DenunciaDTO> listByIdUsuario(Integer idUsuario) throws Exception {
        return getDenunciasByIdUsuario(idUsuario).stream()
@@ -53,11 +56,12 @@ public class DenunciaService {
 
             localizacao.setDenuncia(denuncia);
             denuncia.setLocalizacao(localizacao);
+
         }
 
 
         Denuncia savedDenuncia = denunciaRepository.save(denuncia);
-
+//        denunciaRegistroService.inicioDenunciaRegistro();
         return retornarDTO(savedDenuncia);
     }
 
@@ -76,7 +80,9 @@ public class DenunciaService {
             denuncia.setStatusDenuncia(denunciaCreateDTO.getStatusDenuncia());
             denuncia.setCategoria(denunciaCreateDTO.getCategoria());
             denuncia.setTipoDenuncia(denunciaCreateDTO.getTipoDenuncia());
-
+//            if(denuncia.getStatusDenuncia().equals(StatusDenuncia.FECHADO)){
+//                denunciaRegistroService.fechaDenunciaRegistro();
+//            }
             return retornarDTO(denunciaRepository.save(denuncia));
         }
 
@@ -88,6 +94,7 @@ public class DenunciaService {
         if (denuncia.getIdUsuario().equals(idUsuario)){
             denuncia.setStatusDenuncia(StatusDenuncia.FECHADO);
             denunciaRepository.save(denuncia);
+//            denunciaRegistroService.fechaDenunciaRegistro();
             return;
         }
         throw new RegraDeNegocioException("Não é possivel excluir uma denuncia de outro usuario!");

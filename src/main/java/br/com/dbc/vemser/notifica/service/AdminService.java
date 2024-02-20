@@ -105,24 +105,14 @@ public class AdminService {
     }
 
     public String attSenha(Integer idUsuario, String senha, String novaSenha) throws RegraDeNegocioException {
-        try {
-            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                    new UsernamePasswordAuthenticationToken(
-                            getUsuarioAtivo(idUsuario).getEmailUsuario(),
-                            senha
-                    );
-
-            Authentication authentication =
-                    authenticationManager.authenticate(
-                            usernamePasswordAuthenticationToken);
-
-            Usuario usuarioValidado = (Usuario) authentication.getPrincipal();
-            usuarioValidado.setSenhaUsuario(argon2PasswordEncoder.encode(novaSenha));
-            adminRepository.save(usuarioValidado);
-            return tokenService.generateToken(usuarioValidado);
-        } catch (AuthenticationException ex) {
+        Usuario usuario = getusuario(idUsuario);
+        String senhaIncriptada = argon2PasswordEncoder.encode(senha);
+        if (!(usuario.getSenhaUsuario().equals(senhaIncriptada))){
             throw new RegraDeNegocioException("Senha incorreta!");
         }
+        usuario.setSenhaUsuario(argon2PasswordEncoder.encode(novaSenha));
+        adminRepository.save(usuario);
+        return tokenService.generateToken(usuario);
     }
 
     public void removerUsuario(Integer idUsuario) {

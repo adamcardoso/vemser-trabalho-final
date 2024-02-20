@@ -15,6 +15,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 
 import java.time.LocalDate;
@@ -22,10 +24,8 @@ import java.util.Optional;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyObject;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UsuarioServiceTest {
@@ -44,17 +44,17 @@ class UsuarioServiceTest {
     private UsuarioService usuarioService;
     @Test
     void obterUsuarioById() throws RegraDeNegocioException {
-        Optional<Usuario> pessoaEntityMock = Optional.of(usuarioMock());
-        UsuarioDTO pessoaDTOMock = usuarioDTOmock();
+        Optional<Usuario> usuarioEntityMock = Optional.of(usuarioMock());
+        UsuarioDTO usuarioDTOMock = usuarioDTOmock();
         Integer idAleatorio = new Random().nextInt();
 
-        when(usuarioRepository.findById(anyInt())).thenReturn(pessoaEntityMock);
-        when(objectMapper.convertValue(pessoaEntityMock.get(), UsuarioDTO.class)).thenReturn(pessoaDTOMock);
+        when(usuarioRepository.findById(anyInt())).thenReturn(usuarioEntityMock);
+        when(objectMapper.convertValue(usuarioEntityMock.get(), UsuarioDTO.class)).thenReturn(usuarioDTOMock);
 
-        UsuarioDTO pessoaDTORetornada =  usuarioService.obterUsuarioById(idAleatorio);
+        UsuarioDTO usuarioDTORetornada =  usuarioService.obterUsuarioById(idAleatorio);
 
-        assertNotNull(pessoaDTORetornada);
-        assertEquals(pessoaDTORetornada, pessoaDTOMock);
+        assertNotNull(usuarioDTORetornada);
+        assertEquals(usuarioDTORetornada, usuarioDTOMock);
 
     }
 
@@ -77,11 +77,11 @@ class UsuarioServiceTest {
 
         UsuarioUpdateDTO usuarioUpdateDTOMock = usuarioUpdateDTOMock();
         Usuario usuarioEditado = usuarioMock();
-        UsuarioDTO pessoaDTOMock = usuarioDTOmock();
+        UsuarioDTO usuarioDTOMock = usuarioDTOmock();
 
         when(usuarioRepository.findById(anyInt())).thenReturn(usuarioMock);
         when(usuarioRepository.save(anyObject())).thenReturn(usuarioEditado);
-        when(objectMapper.convertValue(usuarioEditado, UsuarioDTO.class)).thenReturn(pessoaDTOMock);
+        when(objectMapper.convertValue(usuarioEditado, UsuarioDTO.class)).thenReturn(usuarioDTOMock);
 
         UsuarioDTO usuarioDTOretornado = usuarioService.atualizarUsuario(usuarioMock.get().getIdUsuario(), usuarioUpdateDTOMock);
 
@@ -105,9 +105,25 @@ class UsuarioServiceTest {
     }
 
     @Test
-    void attSenha() {
-    }
+    void deveriaTrocarSenhaComSucesso() throws RegraDeNegocioException {
+        Integer idUsuario = 1;
+        String novaSenha = "novaSenha";
+        String token = "tokenGerado";
 
+        Optional<Usuario> usuario = Optional.of(usuarioMock());
+        usuario.get().setEmailUsuario("email@usuario.com");
+
+        when(usuarioRepository.findById(idUsuario)).thenReturn(usuario);
+        when(argon2PasswordEncoder.encode("Senha123@")).thenReturn(usuario.get().getSenhaUsuario());
+        when(tokenService.generateToken(usuario.get())).thenReturn(token);
+        when(argon2PasswordEncoder.encode(novaSenha)).thenReturn("novaSenha");
+
+        String result = usuarioService.attSenha(idUsuario, "Senha123@", novaSenha);
+
+        assertEquals(usuario.get().getSenhaUsuario(), "novaSenha");
+        assertEquals(token, result);
+        verify(usuarioRepository).save(usuario.get());
+    }
     public static Usuario usuarioMock(){
         Usuario usuario = new Usuario();
         usuario.setIdUsuario(1);
@@ -119,7 +135,7 @@ class UsuarioServiceTest {
         usuario.setClasseSocial(ClasseSocial.B);
         usuario.setNumeroCelular("911111111");
         usuario.setTipoUsuario(TipoUsuario.COMUM);
-        usuario.setSenhaUsuario(argon2PasswordEncoder.encode("Senha123@"));
+        usuario.setSenhaUsuario("Senha123@");
         usuario.setDataNascimento(LocalDate.of(2000,12,20));
         return usuario;
     }
