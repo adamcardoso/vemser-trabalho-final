@@ -152,8 +152,6 @@ class ComentarioServiceTest {
         assertThrows(RegraDeNegocioException.class, () -> comentarioService.editarComentario(idUsuario, idComentario, comentario), "Comentário não encontrado!");
     }
 
-
-
     @Test
     @DisplayName("Deveria editar um comentário com sucesso")
     void deletarComentarioComSucesso() throws RegraDeNegocioException {
@@ -168,9 +166,8 @@ class ComentarioServiceTest {
         comentarioCriado.setIdDenuncia(idDenuncia);
         comentarioCriado.setComentario(comentario);
 
-        doNothing().when(comentarioService).deletarComentario(idUsuario, idComentario);
-
         // ACT
+        when(comentarioRepository.findById(anyInt())).thenReturn(Optional.of(comentarioCriado));
         comentarioService.deletarComentario(idUsuario, idComentario);
 
         // ASSERT
@@ -189,5 +186,20 @@ class ComentarioServiceTest {
 
         // ASSERT
         assertThrows(RegraDeNegocioException.class, () -> comentarioService.editarComentario(idUsuario, idComentario, comentario), "Comentário não encontrado!");
+    }
+
+    @Test
+    void deletarComentarioComFalha2() throws RegraDeNegocioException {
+        // ARRANGE
+        Integer idUsuario = 1; // ID de usuário inválido
+        Integer idComentario = 1; // ID de comentário qualquer
+        Comentario comentario = new Comentario();
+        comentario.setIdUsuario(2);
+
+        // ACT
+        when(comentarioRepository.findById(idComentario)).thenReturn(Optional.of(comentario));
+
+        // ASSERT
+        assertThrows(RegraDeNegocioException.class, () -> comentarioService.deletarComentario(idUsuario, idComentario));
     }
 }
