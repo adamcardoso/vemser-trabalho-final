@@ -2,6 +2,7 @@ package br.com.dbc.vemser.notifica.service;
 
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioCreateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
+import br.com.dbc.vemser.notifica.entity.CreateRegistros;
 import br.com.dbc.vemser.notifica.entity.Instituicao;
 import br.com.dbc.vemser.notifica.entity.Usuario;
 import br.com.dbc.vemser.notifica.entity.enums.UsuarioAtivo;
@@ -21,6 +22,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -46,6 +48,9 @@ class LoginServiceTest {
 
     @Mock
     private Argon2PasswordEncoder argon2PasswordEncoder;
+
+    @Mock
+    private CreateRegistrosService createRegistrosService;
 
     @InjectMocks
     private LoginService loginService;
@@ -76,6 +81,9 @@ class LoginServiceTest {
         when(usuarioRepository.save(usuarioCriado)).thenReturn(usuarioCriado);
 
         UsuarioDTO result = loginService.createUsuario(usuarioCreateDTO);
+
+        CreateRegistros createRegistros = new CreateRegistros();
+        createRegistros.setDataHora(LocalDate.now());
 
         assertNotNull(result);
         assertEquals(UsuarioAtivo.SIM, usuarioCriado.getUsuarioAtivo());
