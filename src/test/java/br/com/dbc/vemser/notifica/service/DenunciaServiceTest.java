@@ -4,11 +4,13 @@ import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaCreateDTO;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
 import br.com.dbc.vemser.notifica.dto.localizacao.LocalizacaoCreateDTO;
 import br.com.dbc.vemser.notifica.entity.Denuncia;
+import br.com.dbc.vemser.notifica.entity.DenunciaRegistros;
 import br.com.dbc.vemser.notifica.entity.Localizacao;
 import br.com.dbc.vemser.notifica.entity.Usuario;
 import br.com.dbc.vemser.notifica.entity.enums.Categoria;
 import br.com.dbc.vemser.notifica.entity.enums.StatusDenuncia;
 import br.com.dbc.vemser.notifica.entity.enums.TipoDenuncia;
+import br.com.dbc.vemser.notifica.entity.enums.TipoRegistro;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.repository.DenunciaRepository;
 import br.com.dbc.vemser.notifica.repository.UsuarioRepository;
@@ -20,6 +22,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -31,6 +34,8 @@ import static org.mockito.Mockito.*;
 class DenunciaServiceTest {
     @Mock
     private DenunciaRepository denunciaRepository;
+    @Mock
+    private DenunciaRegistroService denunciaRegistroService;
     @Mock
     private UsuarioRepository usuarioRepository;
     @Mock
@@ -79,9 +84,13 @@ class DenunciaServiceTest {
 
         DenunciaDTO resultado = denunciaService.criarDenuncia(denunciaCreateDTO, idUsuario);
 
+        DenunciaRegistros createRegistros = new DenunciaRegistros();
+        createRegistros.setDataHora(LocalDate.now());
+        createRegistros.setTipoRegistro(TipoRegistro.CRIACAO);
+
         verify(denunciaRepository, times(1)).save(any());
         verify(objectMapper, times(1)).convertValue(any(), eq(Denuncia.class));
-
+        verify(denunciaRegistroService, times(1)).inicioDenunciaRegistro();
         //assertEquals(denunciaCreateDTO, resultado);
 
     }

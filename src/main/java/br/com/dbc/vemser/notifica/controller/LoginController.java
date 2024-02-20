@@ -59,6 +59,7 @@ public class LoginController implements ILoginController{
 
     @PostMapping("/usuario")
     public ResponseEntity<String> login(@RequestBody @Valid UsuarioLoginDTO loginDTO) throws RegraDeNegocioException {
+
         try {
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                     new UsernamePasswordAuthenticationToken(
