@@ -77,27 +77,27 @@ class AdminServiceTest {
         when(adminRepository.save(any())).thenReturn(usuarioMock);
         when(objectMapper.convertValue(usuarioMock, UsuarioDTO.class)).thenReturn(usuarioMockDTO);
 
-        UsuarioDTO pessoaDTOCriada =  adminService.criarUsuarioAdmin(usuarioCreateMockDTO);
+        UsuarioDTO usuarioDTOCriada =  adminService.criarUsuarioAdmin(usuarioCreateMockDTO);
 
-        assertNotNull(pessoaDTOCriada);
-        assertEquals(pessoaDTOCriada, usuarioMockDTO);
+        assertNotNull(usuarioDTOCriada);
+        assertEquals(usuarioDTOCriada, usuarioMockDTO);
 
     }
 
 
     @Test
-    public void deveriaRetornarPessoaDTOPorId() throws RegraDeNegocioException {
-        Optional<Usuario> pessoaEntityMock = Optional.of(usuarioMock());
-        UsuarioDTO pessoaDTOMock = usuarioDTOmock();
+    public void deveriaRetornarUsuarioDTOPorId() throws RegraDeNegocioException {
+        Optional<Usuario> usuarioEntityMock = Optional.of(usuarioMock());
+        UsuarioDTO usuarioDTOMock = usuarioDTOmock();
         Integer idAleatorio = new Random().nextInt();
 
-        when(adminRepository.findById(anyInt())).thenReturn(pessoaEntityMock);
-        when(objectMapper.convertValue(pessoaEntityMock.get(), UsuarioDTO.class)).thenReturn(pessoaDTOMock);
+        when(adminRepository.findById(anyInt())).thenReturn(usuarioEntityMock);
+        when(objectMapper.convertValue(usuarioEntityMock.get(), UsuarioDTO.class)).thenReturn(usuarioDTOMock);
 
-        UsuarioDTO pessoaDTORetornada =  adminService.obterUsuarioById(idAleatorio);
+        UsuarioDTO usuarioDTORetornada =  adminService.obterUsuarioById(idAleatorio);
 
-        assertNotNull(pessoaDTORetornada);
-        assertEquals(pessoaDTORetornada, pessoaDTOMock);
+        assertNotNull(usuarioDTORetornada);
+        assertEquals(usuarioDTORetornada, usuarioDTOMock);
 
     }
 
@@ -134,7 +134,7 @@ class AdminServiceTest {
     }
 
     @Test
-    public void deveriaEditarPessoaComSucesso() throws Exception {
+    public void deveriaEditarUsuarioComSucesso() throws Exception {
         Usuario usuarioMock = new Usuario();
         usuarioMock.setIdUsuario(1);
         usuarioMock.setEmailUsuario("email@gmail.com");
@@ -152,11 +152,11 @@ class AdminServiceTest {
 
         UsuarioUpdateDTO usuarioUpdateDTOMock = usuarioUpdateDTOMock();
         Usuario usuarioEditado = usuarioMock();
-        UsuarioDTO pessoaDTOMock = usuarioDTOmock();
+        UsuarioDTO usuarioDTOMock = usuarioDTOmock();
 
         when(adminRepository.getUsuarioAtivo(anyInt())).thenReturn(usuarioMock);
         when(adminRepository.save(anyObject())).thenReturn(usuarioEditado);
-        when(objectMapper.convertValue(usuarioEditado, UsuarioDTO.class)).thenReturn(pessoaDTOMock);
+        when(objectMapper.convertValue(usuarioEditado, UsuarioDTO.class)).thenReturn(usuarioDTOMock);
 
         UsuarioDTO usuarioDTOretornado = adminService.atualizarUsuario(usuarioMock.getIdUsuario(), usuarioUpdateDTOMock);
 
@@ -165,46 +165,37 @@ class AdminServiceTest {
         assertNotEquals(usuarioAntigoMock.getEmailUsuario(), usuarioDTOretornado.getEmailUsuario());
     }
 
-//    @Test
-//    public void deveriaTrocaSenhaComSucesso() throws RegraDeNegocioException {
-//        // Arrange
-//        Usuario usuarioMock = usuarioMock();
-//        String senhaAntiga = usuarioMock.getSenhaUsuario();
-//        when(adminRepository.getUsuarioAtivo(anyInt())).thenReturn(usuarioMock);
-//
-//        // Mocking the authentication manager
-//        UsernamePasswordAuthenticationToken authRequest =
-//                new UsernamePasswordAuthenticationToken(
-//                        usuarioMock.getEmailUsuario(),
-//                        "Senha123@"
-//                );
-//        Authentication authentication = mock(Authentication.class);
-//        when(authenticationManager.authenticate(authRequest)).thenReturn(authentication);
-//
-//        // Mocking the argon2PasswordEncoder
-//        when(argon2PasswordEncoder.encode("senha123")).thenReturn("hashedNewPassword");
-//
-//        // Mocking the adminRepository.save method
-//        when(adminRepository.save(usuarioMock)).thenReturn(usuarioMock);
-//
-//        // Mocking the tokenService
-//        when(tokenService.generateToken(usuarioMock)).thenReturn("generatedToken");
-//
-//        // Act
-//        String trocasenha = adminService.attSenha(usuarioMock.getIdUsuario(), "Senha123@", "senha123");
-//
-//        // Assert
-//        assertNotEquals(senhaAntiga, usuarioMock.getSenhaUsuario());
-//        assertNotNull(usuarioMock.getSenhaUsuario());
-//        assertEquals("generatedToken", trocasenha);
-//
-//        // Verify interactions
-//        verify(adminRepository, times(1)).getUsuarioAtivo(anyInt());
-//        verify(authenticationManager, times(1)).authenticate(authRequest);
-//        verify(argon2PasswordEncoder, times(1)).encode("senha123");
-//        verify(adminRepository, times(1)).save(usuarioMock);
-//        verify(tokenService, times(1)).generateToken(usuarioMock);
-//    }
+    @Test
+    public void deveriaTrocaSenhaComSucesso() throws RegraDeNegocioException {
+        Integer idUsuario = 1;
+        String novaSenha = "novaSenha";
+        String token = "tokenGerado";
+
+        Optional<Usuario> usuario = Optional.of(new Usuario());
+        usuario.get().setIdUsuario(1);
+        usuario.get().setEmailUsuario("emailteste@gmail.com");
+        usuario.get().setEtniaUsuario(Etnia.BRANCO);
+        usuario.get().setNomeUsuario("Joao");
+        usuario.get().setGeneroUsuario(Genero.MASCULINO);
+        usuario.get().setUsuarioAtivo(UsuarioAtivo.SIM);
+        usuario.get().setClasseSocial(ClasseSocial.B);
+        usuario.get().setNumeroCelular("911111111");
+        usuario.get().setTipoUsuario(TipoUsuario.COMUM);
+        usuario.get().setSenhaUsuario("Senha123@");
+        usuario.get().setDataNascimento(LocalDate.of(2000,12,20));
+        usuario.get().setEmailUsuario("email@usuario.com");
+
+        when(adminRepository.findById(idUsuario)).thenReturn(usuario);
+        when(argon2PasswordEncoder.encode("Senha123@")).thenReturn(usuario.get().getSenhaUsuario());
+        when(tokenService.generateToken(usuario.get())).thenReturn(token);
+        when(argon2PasswordEncoder.encode(novaSenha)).thenReturn("novaSenha");
+
+        String result = adminService.attSenha(usuario.get().getIdUsuario(), "Senha123@", novaSenha);
+
+        assertEquals(usuario.get().getSenhaUsuario(), "novaSenha");
+        assertEquals(token, result);
+        verify(adminRepository).save(usuario.get());
+    }
 
     @Test
     public void deveriaRetornarListaDenunciaAtivaoComSucesso(){
