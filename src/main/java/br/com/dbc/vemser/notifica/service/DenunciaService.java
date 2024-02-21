@@ -59,7 +59,6 @@ public class DenunciaService {
 
         }
 
-
         Denuncia savedDenuncia = denunciaRepository.save(denuncia);
         denunciaRegistroService.inicioDenunciaRegistro();
         return retornarDTO(savedDenuncia);
@@ -80,9 +79,9 @@ public class DenunciaService {
             denuncia.setStatusDenuncia(denunciaCreateDTO.getStatusDenuncia());
             denuncia.setCategoria(denunciaCreateDTO.getCategoria());
             denuncia.setTipoDenuncia(denunciaCreateDTO.getTipoDenuncia());
-//            if(denuncia.getStatusDenuncia().equals(StatusDenuncia.FECHADO)){
-//                denunciaRegistroService.fechaDenunciaRegistro();
-//            }
+            if(denuncia.getStatusDenuncia().equals(StatusDenuncia.FECHADO)){
+                denunciaRegistroService.fechaDenunciaRegistro();
+            }
             return retornarDTO(denunciaRepository.save(denuncia));
         }
 
@@ -94,7 +93,7 @@ public class DenunciaService {
         if (denuncia.getIdUsuario().equals(idUsuario)){
             denuncia.setStatusDenuncia(StatusDenuncia.FECHADO);
             denunciaRepository.save(denuncia);
-//            denunciaRegistroService.fechaDenunciaRegistro();
+            denunciaRegistroService.fechaDenunciaRegistro();
             return;
         }
         throw new RegraDeNegocioException("Não é possivel excluir uma denuncia de outro usuario!");
