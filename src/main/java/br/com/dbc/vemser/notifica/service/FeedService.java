@@ -8,6 +8,7 @@ import br.com.dbc.vemser.notifica.dto.usuario.UsuarioFeedDTO;
 import br.com.dbc.vemser.notifica.entity.Comentario;
 import br.com.dbc.vemser.notifica.entity.Denuncia;
 import br.com.dbc.vemser.notifica.entity.Usuario;
+import br.com.dbc.vemser.notifica.entity.enums.StatusDenuncia;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.repository.DenunciaRepository;
 import br.com.dbc.vemser.notifica.repository.IFeedRepository;
@@ -28,13 +29,14 @@ public class FeedService {
     private final ObjectMapper objectMapper;
 
     public Page<FeedDenunciasDto> listarTodasDenuncias(Pageable pageable) throws Exception {
-        return denunciaRepository.findAll(pageable).map(d ->
+        return denunciaRepository.findByStatusDenunciaNot(StatusDenuncia.FECHADO, pageable).map(d ->
                 new FeedDenunciasDto(d.getIdDenuncia(), d.getDescricao(), d.getTitulo(), d.getDataHora(),
                         d.getStatusDenuncia(), d.getCategoria(), d.getTipoDenuncia(), d.getCurtidas().size(),
                         convertUsuarioToUsuarioDTO(d.getUsuario()), d.getIdUsuario(), d.getLocalizacao()));
     }
+
     public DenunciaDTO listarDenunciaComComentarios(Integer idDenuncia) throws RegraDeNegocioException {
-        Optional<Denuncia> denunciaOptional = denunciaRepository.findById(idDenuncia);
+        Optional<Denuncia> denunciaOptional = denunciaRepository.findByIdDenunciaAndStatusDenunciaNot(idDenuncia, StatusDenuncia.FECHADO);
 
         if (denunciaOptional.isPresent()) {
             Denuncia denuncia = denunciaOptional.get();

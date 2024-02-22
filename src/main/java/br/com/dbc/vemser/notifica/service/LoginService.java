@@ -1,22 +1,17 @@
 package br.com.dbc.vemser.notifica.service;
 
-import br.com.dbc.vemser.notifica.dto.endereco.EnderecoCreateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioCreateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
-import br.com.dbc.vemser.notifica.entity.Endereco;
 import br.com.dbc.vemser.notifica.entity.Instituicao;
 import br.com.dbc.vemser.notifica.entity.Usuario;
 import br.com.dbc.vemser.notifica.entity.enums.TipoUsuario;
 import br.com.dbc.vemser.notifica.entity.enums.UsuarioAtivo;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
-import br.com.dbc.vemser.notifica.repository.IEnderecoRepository;
 import br.com.dbc.vemser.notifica.repository.InstituicaoRepository;
 import br.com.dbc.vemser.notifica.repository.LoginRepository;
 import br.com.dbc.vemser.notifica.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -71,11 +66,6 @@ public class LoginService {
     public Integer getIdLoggedUser() {
         return Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
     }
-
-    public Usuario getLoggedUser() throws RegraDeNegocioException {
-        return findById(getIdLoggedUser()).orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado"));
-    }
-
 
     public Optional<Instituicao> findByEmailInstituicao(String emailInstituicao) {
         return instituicaoRepository.findByEmailInstituicao(emailInstituicao);

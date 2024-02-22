@@ -51,20 +51,13 @@ public interface ILoginController {
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioCreateDTO.class))),
                     @ApiResponse(responseCode = "400", description = "message: Credenciais inválidas, Usuário Já Cadastrado!",
                             content = @Content(schema = @Schema(hidden = false, implementation = ErrorResponse.class))),
+                    @ApiResponse(responseCode = "400", description = "message: Esse Número Já Está Cadastrado!",
+                            content = @Content(schema = @Schema(hidden = false, implementation = ErrorResponse.class))),
             }
 
     )
     @PostMapping("/cadastrar")
     public ResponseEntity<UsuarioDTO> cadastrar(@RequestBody @Valid UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException;
 
-    @Operation(summary = "Pegar Cadastro", description = "Pegar os Dados do Usuário que está logado.")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna os Dados do usuário.",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioCreateDTO.class)))
-            }
-
-    )
-    public ResponseEntity<Usuario> usuarioLogado() throws RegraDeNegocioException;
 }
 

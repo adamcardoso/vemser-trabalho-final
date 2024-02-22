@@ -85,9 +85,4 @@ public class LoginController implements ILoginController{
         return new ResponseEntity<>(usuarioCriado, HttpStatus.OK);
     }
 
-    @GetMapping("/usuario-logado")
-    public ResponseEntity<Usuario> usuarioLogado() throws RegraDeNegocioException {
-        Usuario usuario = loginService.getLoggedUser();
-        return new ResponseEntity<>(usuario, HttpStatus.OK);
-    }
 }

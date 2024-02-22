@@ -48,7 +48,7 @@ public interface IDenunciaController {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "201", description = "Denúncia criada com sucesso",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = DenunciaCreateDTO.class))),
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = DenunciaDTO.class))),
                     @ApiResponse(responseCode = "400", description = "message: ID Usuário desconhecido.",
                             content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class))),
                     @ApiResponse(responseCode = "400", description = "errors: titulo: A Denúncia precisa ter um Título!",
