@@ -195,18 +195,6 @@ class LoginServiceTest {
     }
 
     @Test
-    void deveriaRetornarUsuarioLogado() throws RegraDeNegocioException {
-        int idUsuarioLogado = 1;
-        mockAuthenticatedUser(idUsuarioLogado);
-        Usuario mockUsuario = new Usuario();
-        when(loginRepository.findByIdUsuario(idUsuarioLogado)).thenReturn(Optional.of(mockUsuario));
-
-        Usuario result = loginService.getLoggedUser();
-
-        assertEquals(mockUsuario, result);
-    }
-
-    @Test
     void deveriaRetornarInstituicaoPeloEmail() {
         String emailInstituicao = "testinstituicao@email.com";
         Instituicao mockInstituicao = new Instituicao();

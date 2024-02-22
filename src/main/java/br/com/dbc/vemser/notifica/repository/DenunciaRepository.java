@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 
@@ -41,4 +42,8 @@ public interface DenunciaRepository extends JpaRepository<Denuncia, Integer> {
         WHERE d.statusDenuncia != 4 AND d.idUsuario = ?1
         """)
     List<Denuncia> getDenunciaAtivaByIdUsuario(Integer idUsuario);
+
+    Page<Denuncia> findByStatusDenunciaNot(StatusDenuncia status, Pageable pageable);
+
+    Optional<Denuncia> findByIdDenunciaAndStatusDenunciaNot(Integer idDenuncia, StatusDenuncia status);
 }
