@@ -39,7 +39,6 @@ public class AdminService {
     private final AdminRepository adminRepository;
     private final DenunciaRepository denunciaRepository;
     private final ComentarioRepository comentarioRepository;
-    private final AuthenticationManager authenticationManager;
     private final Argon2PasswordEncoder argon2PasswordEncoder;
     private final InstituicaoRepository instituicaoRepository;
     private final TokenService tokenService;
@@ -91,7 +90,7 @@ public class AdminService {
         return objectMapper.convertValue(instituicao, InstituicaoDTO.class);
     }
 
-    public UsuarioDTO atualizarUsuario(Integer idUsuario, UsuarioUpdateDTO novoUsuario) throws Exception {
+    public UsuarioDTO atualizarUsuario(Integer idUsuario, UsuarioUpdateDTO novoUsuario) throws RegraDeNegocioException {
         Usuario usuarioRecuperado = getUsuarioAtivo(idUsuario);
         usuarioRecuperado.setEmailUsuario(novoUsuario.getEmailUsuario());
         usuarioRecuperado.setEtniaUsuario(novoUsuario.getEtniaUsuario());

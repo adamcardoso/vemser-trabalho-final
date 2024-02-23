@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.notifica.controller;
 
+import br.com.dbc.vemser.notifica.controller.documentacao.ICurtidaController;
 import br.com.dbc.vemser.notifica.service.CurtidaService;
 import br.com.dbc.vemser.notifica.service.LoginService;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/apoiar")
-public class CurtidaController {
+public class CurtidaController implements ICurtidaController {
     private final CurtidaService curtidaService;
     private final LoginService loginService;
 

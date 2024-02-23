@@ -1,10 +1,15 @@
 package br.com.dbc.vemser.notifica.controller.documentacao;
 
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
+import br.com.dbc.vemser.notifica.dto.instituicao.InstitucaoCreateDTO;
+import br.com.dbc.vemser.notifica.dto.instituicao.InstituicaoDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioCreateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioUpdateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
+import br.com.dbc.vemser.notifica.dto.usuario.admin_dto.DenunciaListDTO;
+import br.com.dbc.vemser.notifica.dto.usuario.admin_dto.UsuarioListDTO;
 import br.com.dbc.vemser.notifica.exceptions.ErrorResponse;
+import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,27 +23,24 @@ import javax.validation.Valid;
 import java.util.List;
 
 public interface IAdminController {
-    @Operation(summary = "Listar Usuários Ativos", description = "Listar Usuários Ativos")
+    @Operation(summary = "Listar Meu usuario", description = "Lista todos os dados do meu usuario")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna os usuários"),
-                    @ApiResponse(responseCode = "400", description = "Usuario não encontrado!",
-                    content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
-            }
-    )
-    @GetMapping("/list-usuario-ativos")
-    public ResponseEntity<Page<UsuarioDTO>> listarUsuariosPaginadosAtivos(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size);
+                    @ApiResponse(responseCode = "200", description = "Retorna os dados do usuario"),
 
-    @Operation(summary = "Listar Usuários Inativos", description = "Listar Usuários Inativo")
+            }
+    )
+    @GetMapping("/meu-usuario")
+    public ResponseEntity<UsuarioDTO> usuario() throws RegraDeNegocioException;
+
+    @Operation(summary = "Listar todos Usuários", description = "Listar todos os usuario")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Retorna os usuários"),
-                    @ApiResponse(responseCode = "400", description = "Usuario não encontrado!",
-                            content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
             }
     )
-    @GetMapping("/list-usuario-inativos")
-    public ResponseEntity<Page<UsuarioDTO>> listarUsuariosPaginadosInativos(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size);
+    @GetMapping("/listar-usuarios")
+    public ResponseEntity<List<UsuarioListDTO>> listAll();
 
     @Operation(summary = "Listar Admins", description = "Listar Admins")
     @ApiResponses(
@@ -46,8 +48,8 @@ public interface IAdminController {
                     @ApiResponse(responseCode = "200", description = "Retorna os usuários"),
             }
     )
-    @GetMapping("/list-admin")
-    public ResponseEntity<List<UsuarioDTO>> listarAdmins() throws Exception;
+    @GetMapping("/list-admins")
+    public ResponseEntity<List<UsuarioListDTO>> listarAdmins();
 
     @Operation(summary = "Obter usuário por ID", description = "Obtém um usuário pelo ID")
     @ApiResponses(
@@ -57,10 +59,8 @@ public interface IAdminController {
                             content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class))),
             }
     )
-    @GetMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDTO> obterUsuarioById(@PathVariable("idUsuario") Integer idUsuario)throws Exception;
-
-
+    @GetMapping("/usuario/{idUsuario}")
+    public ResponseEntity<UsuarioDTO> obterUsuarioById(@PathVariable("idUsuario") Integer idUsuario) throws RegraDeNegocioException;
     @Operation(summary = "Criar Admin", description = "Cria um novo Admin")
     @ApiResponses(
             value = {
@@ -69,43 +69,63 @@ public interface IAdminController {
                             content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class))),
             }
     )
-    @PostMapping
-    public ResponseEntity<UsuarioDTO> criarUsuarioAdmin(@Valid @RequestBody UsuarioCreateDTO novoUsuario)throws Exception;
+    @PostMapping("/criar-admin")
 
-    @Operation(summary = "Atualizar Admin", description = "Atualiza um Admin pelo ID")
+    public ResponseEntity<UsuarioDTO> criarUsuarioAdmin(@Valid @RequestBody UsuarioCreateDTO novoUsuario);
+    @Operation(summary = "Criar instituição", description = "Criar uma instituição")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Usuário removido com sucesso"),
-                    @ApiResponse(responseCode = "400", description = "Usuário não encontrado",
+                    @ApiResponse(responseCode = "200", description = "Instituição criada com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Object: não deve ser nulo",
                             content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class))),
             }
     )
-    @PutMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDTO> atualizarAdmin(@PathVariable("idUsuario") Integer idUsuario, @Valid @RequestBody UsuarioUpdateDTO novoUsuario)throws Exception;
+    @PostMapping("/criar-instituicao")
+    public ResponseEntity<InstituicaoDTO> criarInstituicao(@Valid @RequestBody InstitucaoCreateDTO novaInstituicao) throws RegraDeNegocioException;
 
-    @Operation(summary = "Remover usuário", description = "Remove um usuário pelo ID")
+    @Operation(summary = "atualizar usuário", description = "atualizar seu usuario admin")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Usuário removido com sucesso"),
-                    @ApiResponse(responseCode = "400", description = "Usuário não encontrado",
+                    @ApiResponse(responseCode = "200", description = "Admin atualizado com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Object: não deve ser nulo",
+                            content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class))),
+            }
+    )
+    @PutMapping("/editar-usuario")
+    public ResponseEntity<UsuarioDTO> atualizarAdmin( @Valid @RequestBody UsuarioUpdateDTO novoUsuario) throws RegraDeNegocioException;
+
+    @Operation(summary = "editarSenha", description = "editar sua senha")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Retorna token"),
+                    @ApiResponse(responseCode = "400", description = "senha incorreta",
                             content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
             }
     )
-    @DeleteMapping("/{idUsuario}")
-    public ResponseEntity<Object> removerUsuario(@PathVariable("idUsuario") Integer idUsuario) throws Exception;
+    @PutMapping("/editar-senha")
+    public ResponseEntity<String> editarSenha(@RequestParam(required = false) Integer idUsuario, @RequestParam String senhaAtual, @RequestParam String novaSenha) throws RegraDeNegocioException;
 
-    @Operation(summary = "Listar todas Denúncias Ativas", description = "Lista todas Denúncias Ativas")
+    @Operation(summary = "Obter Denúncia", description = "Obter denuncia por id")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna as Denuncias Ativas"),
-                    @ApiResponse(responseCode = "400", description = "Denuncias não encontradas",
+                    @ApiResponse(responseCode = "200", description = "denuncia retornada com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Denuncia não encontrado!",
                             content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
+            }
+    )
+    @GetMapping("/denuncia/{idDenuncia}")
+    public ResponseEntity<DenunciaDTO> obterDenunciaById(@PathVariable("idDenuncia") Integer idDenuncia) throws RegraDeNegocioException;
+
+    @Operation(summary = "Lista denuncia", description = "Lista denuncias ativas")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "retorna denuncias"),
             }
     )
     @GetMapping("/list-denuncias-ativas")
-    public ResponseEntity<List<DenunciaDTO>> listarTodasDenunciasAtivas() throws Exception;
+    public ResponseEntity<List<DenunciaListDTO>> listarTodasDenunciasAtivas();
 
-    @Operation(summary = "Deletar Denúncia", description = "Deleta denuncia por id")
+    @Operation(summary = "deletar denuncia", description = "deletar denuncia por id")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "denuncia removido com sucesso"),
@@ -113,17 +133,17 @@ public interface IAdminController {
                             content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
             }
     )
-    @DeleteMapping("/{idDenuncia}")
-    public ResponseEntity<Object> deletarDenuncia(@PathVariable("idDenuncia") Integer idDenuncia) throws Exception;
+    @DeleteMapping("/denuncia/{idDenuncia}")
+    public ResponseEntity<Object> deletarDenuncia(@PathVariable("idDenuncia") Integer idDenuncia) throws RegraDeNegocioException;
 
-    @Operation(summary = "Lista denuncia", description = "Lista denuncia por id")
+    @Operation(summary = "deletar comentario", description = "deletar comentario por id")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "denuncia removido com sucesso"),
-                    @ApiResponse(responseCode = "400", description = "Denuncia não encontrado!",
+                    @ApiResponse(responseCode = "200", description = "comentario removido com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "comentario não encontrado!",
                             content = @Content(mediaType = "application/json", schema = @Schema(hidden = false, implementation = ErrorResponse.class)))
             }
     )
-    @GetMapping("/{idDenuncia}")
-    public ResponseEntity<DenunciaDTO> obterDenunciaById(@PathVariable("idDenuncia") Integer idDenuncia) throws Exception;
+    @DeleteMapping
+    public ResponseEntity<Void> deletarComentario(@RequestParam Integer idComentario);
 }

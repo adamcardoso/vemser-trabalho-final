@@ -1,11 +1,15 @@
 package br.com.dbc.vemser.notifica.service;
 
+import br.com.dbc.vemser.notifica.dto.comentario.ComentarioDTO;
+import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioCreateDTO;
+import br.com.dbc.vemser.notifica.dto.usuario.UsuarioPerfilDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioUpdateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import br.com.dbc.vemser.notifica.entity.Usuario;
 import br.com.dbc.vemser.notifica.entity.enums.UsuarioAtivo;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
+import br.com.dbc.vemser.notifica.repository.ComentarioRepository;
 import br.com.dbc.vemser.notifica.repository.UsuarioRepository;
 import br.com.dbc.vemser.notifica.security.TokenService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,17 +21,33 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @AllArgsConstructor
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
-    private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
     private final Argon2PasswordEncoder argon2PasswordEncoder;
+    private final DenunciaService denunciaService;
+    private final ComentarioRepository comentarioRepository;
 
-    public UsuarioDTO obterUsuarioById(Integer idUsuario) throws RegraDeNegocioException {
-       return retornarDTO(getUsuario(idUsuario));
+    public UsuarioPerfilDTO obterUsuarioById(Integer idUsuario) throws RegraDeNegocioException {
+       return objectMapper.convertValue(getUsuario(idUsuario), UsuarioPerfilDTO.class);
+    }
+
+    public List<ComentarioDTO> listComentario(Integer idUsuario){
+        return comentarioRepository.listarComentariosByIdusuario(idUsuario).stream()
+                .map(comentario -> objectMapper.convertValue(comentario, ComentarioDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    public List<DenunciaDTO> listDenuncia(Integer idUsuario) throws RegraDeNegocioException {
+        return denunciaService.getDenunciasByIdUsuario(idUsuario).stream()
+                .map(denuncia -> objectMapper.convertValue(denuncia, DenunciaDTO.class))
+                .collect(Collectors.toList());
     }
 
     public UsuarioDTO atualizarUsuario(Integer idUsuario, UsuarioUpdateDTO novoUsuario) throws RegraDeNegocioException {

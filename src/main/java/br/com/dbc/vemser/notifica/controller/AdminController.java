@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.notifica.controller;
 
+import br.com.dbc.vemser.notifica.controller.documentacao.IAdminController;
 import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
 import br.com.dbc.vemser.notifica.dto.instituicao.InstitucaoCreateDTO;
 import br.com.dbc.vemser.notifica.dto.instituicao.InstituicaoDTO;
@@ -8,7 +9,9 @@ import br.com.dbc.vemser.notifica.dto.usuario.admin_dto.DenunciaListDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.admin_dto.UsuarioListDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioUpdateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
+import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.notifica.service.AdminService;
+import br.com.dbc.vemser.notifica.service.CreateRegistrosService;
 import br.com.dbc.vemser.notifica.service.LoginService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -25,13 +28,14 @@ import java.util.List;
 @Validated
 @AllArgsConstructor
 @Tag(name = "Admin Controller")
-public class AdminController {
+public class AdminController implements IAdminController {
     private final AdminService adminService;
     private final LoginService loginService;
+    private final CreateRegistrosService createRegistrosService;
 
 
     @GetMapping("/meu-usuario")
-    public ResponseEntity<UsuarioDTO> usuario() throws Exception {
+    public ResponseEntity<UsuarioDTO> usuario() throws RegraDeNegocioException {
         UsuarioDTO usuario = adminService.obterUsuarioById(loginService.getIdLoggedUser());
         return new ResponseEntity<>(usuario, HttpStatus.OK);
     }
@@ -49,32 +53,33 @@ public class AdminController {
     }
 
     @GetMapping("/usuario/{idUsuario}")
-    public ResponseEntity<UsuarioDTO> obterUsuarioById(@PathVariable("idUsuario") Integer idUsuario) throws Exception {
+    public ResponseEntity<UsuarioDTO> obterUsuarioById(@PathVariable("idUsuario") Integer idUsuario) throws RegraDeNegocioException {
         UsuarioDTO usuario = adminService.obterUsuarioById(idUsuario);
         return new ResponseEntity<>(usuario, HttpStatus.OK);
     }
 
     @PostMapping("/criar-admin")
-    public ResponseEntity<UsuarioDTO> criarUsuarioAdmin(@Valid @RequestBody UsuarioCreateDTO novoUsuario) throws Exception {
+    public ResponseEntity<UsuarioDTO> criarUsuarioAdmin(@Valid @RequestBody UsuarioCreateDTO novoUsuario) {
         UsuarioDTO usuarios = adminService.criarUsuarioAdmin(novoUsuario);
+        createRegistrosService.insertCreateRegistro();
         return new ResponseEntity<>(usuarios, HttpStatus.CREATED);
     }
 
     @PostMapping("/criar-instituicao")
-    public ResponseEntity<InstituicaoDTO> criarInstituicao(@Valid @RequestBody InstitucaoCreateDTO novaInstituicao) throws Exception {
+    public ResponseEntity<InstituicaoDTO> criarInstituicao(@Valid @RequestBody InstitucaoCreateDTO novaInstituicao) throws RegraDeNegocioException {
         InstituicaoDTO instituicao = adminService.criarUsuarioInstitucao(novaInstituicao);
         return new ResponseEntity<>(instituicao, HttpStatus.CREATED);
     }
 
     @PutMapping("/editar-usuario")
-    public ResponseEntity<UsuarioDTO> atualizarAdmin( @Valid @RequestBody UsuarioUpdateDTO novoUsuario) throws Exception {
+    public ResponseEntity<UsuarioDTO> atualizarAdmin( @Valid @RequestBody UsuarioUpdateDTO novoUsuario) throws RegraDeNegocioException {
         UsuarioDTO usuarios = adminService.atualizarUsuario(loginService.getIdLoggedUser(), novoUsuario);
         return new ResponseEntity<>(usuarios, HttpStatus.OK);
     }
 
     @PutMapping("/editar-senha")
     public ResponseEntity<String> editarSenha(@RequestParam(required = false) Integer idUsuario,
-                                              @RequestParam String senhaAtual, @RequestParam String novaSenha) throws Exception {
+                                              @RequestParam String senhaAtual, @RequestParam String novaSenha) throws RegraDeNegocioException {
         if (idUsuario == null){
             idUsuario = loginService.getIdLoggedUser();
         }
@@ -83,13 +88,13 @@ public class AdminController {
     }
 
     @DeleteMapping("/usuario/{idUsuario}")
-    public ResponseEntity<Object> removerUsuario(@PathVariable("idUsuario") Integer idUsuario) throws Exception {
+    public ResponseEntity<Object> removerUsuario(@PathVariable("idUsuario") Integer idUsuario) {
         adminService.removerUsuario(idUsuario);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/denuncia/{idDenuncia}")
-    public ResponseEntity<DenunciaDTO> obterDenunciaById(@PathVariable("idDenuncia") Integer idDenuncia) throws Exception {
+    public ResponseEntity<DenunciaDTO> obterDenunciaById(@PathVariable("idDenuncia") Integer idDenuncia) throws RegraDeNegocioException {
         DenunciaDTO denunciaDTO = adminService.denunciaById(idDenuncia);
         return ResponseEntity.ok(denunciaDTO);
     }
@@ -101,7 +106,7 @@ public class AdminController {
     }
 
     @DeleteMapping("/denuncia/{idDenuncia}")
-    public ResponseEntity<Object> deletarDenuncia(@PathVariable("idDenuncia") Integer idDenuncia) throws Exception {
+    public ResponseEntity<Object> deletarDenuncia(@PathVariable("idDenuncia") Integer idDenuncia) throws RegraDeNegocioException {
         adminService.deletarDenuncia(idDenuncia);
         return ResponseEntity.noContent().build();
     }

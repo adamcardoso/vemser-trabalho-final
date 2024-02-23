@@ -11,4 +11,10 @@ public interface ComentarioRepository extends JpaRepository<Comentario, Integer>
     @Query(value = "SELECT * FROM VS_13_EQUIPE_7.COMENTARIO c WHERE c.ID_DENUNCIA=?1", nativeQuery = true)
     List<Comentario> listarComentariosByIdDenuncia(Integer id) throws Exception;
 
+
+    @Query(value = """
+            SELECT c FROM COMENTARIO c
+            WHERE c.idUsuario = ?1
+            """)
+    public List<Comentario> listarComentariosByIdusuario(Integer idUsuario);
 }

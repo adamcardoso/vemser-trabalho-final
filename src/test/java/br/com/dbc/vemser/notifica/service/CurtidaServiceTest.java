@@ -106,6 +106,8 @@ class CurtidaServiceTest {
 
         assertEquals(result, "dislike");
         assertEquals(comentario.get().getNumeroCurtidas(), 0);
+
+        when(curtidaRepository.findByIdUsuarioAndDenuncia(anyInt(), anyInt()).isPresent()).thenReturn(true);
     }
 
     @Test

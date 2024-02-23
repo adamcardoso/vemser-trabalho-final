@@ -1,5 +1,8 @@
 package br.com.dbc.vemser.notifica.controller;
 
+import br.com.dbc.vemser.notifica.dto.comentario.ComentarioDTO;
+import br.com.dbc.vemser.notifica.dto.denuncia.DenunciaDTO;
+import br.com.dbc.vemser.notifica.dto.usuario.UsuarioPerfilDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioUpdateDTO;
 import br.com.dbc.vemser.notifica.dto.usuario.UsuarioDTO;
 import br.com.dbc.vemser.notifica.exceptions.RegraDeNegocioException;
@@ -13,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/usuario")
@@ -24,9 +28,21 @@ public class UsuarioController  {
     private final LoginService loginService;
 
     @GetMapping("/meu-perfil")
-    public ResponseEntity<UsuarioDTO> obterUsuarioById() throws Exception {
-        UsuarioDTO usuario = usuarioService.obterUsuarioById(loginService.getIdLoggedUser());
+    public ResponseEntity<UsuarioPerfilDTO> obterUsuarioById() throws Exception {
+        UsuarioPerfilDTO usuario = usuarioService.obterUsuarioById(loginService.getIdLoggedUser());
         return new ResponseEntity<>(usuario, HttpStatus.OK);
+    }
+
+    @GetMapping("/meus-comentarios")
+    public ResponseEntity<List<ComentarioDTO>> obterComentariosByIdUsuario() throws Exception {
+        List<ComentarioDTO> comentarios = usuarioService.listComentario(loginService.getIdLoggedUser());
+        return new ResponseEntity<>(comentarios, HttpStatus.OK);
+    }
+
+    @GetMapping("/minhas-denuncias")
+    public ResponseEntity<List<DenunciaDTO>> obterDenunciaByIdUsuario() throws Exception {
+        List<DenunciaDTO> denuncia = usuarioService.listDenuncia(loginService.getIdLoggedUser());
+        return new ResponseEntity<>(denuncia, HttpStatus.OK);
     }
 
     @PutMapping("/atualizar-perfil")
